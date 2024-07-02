@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-180187723-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-180187723-1');
+</script>
+<!-- End Google Analytics -->
+
+  
+  <title>winget を用いた Microsoft Store アプリのオフラインダウンロードについて (Preview) | Microsoft Japan Windows Technology Support Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="※ 本記事はマイクロソフト社員によって公開されております。 こんにちは。Windows プラットフォーム サポート担当の丸山です。 今回は、Microsoft.DesktopAppInstaller のプレビュー版パッケージを用いた Microsoft Store アプリのオフラインパッケージのダウンロードについて、ご紹介いたします。 背景Windows 10 や Windows 11 では、OS">
+<meta property="og:type" content="article">
+<meta property="og:title" content="winget を用いた Microsoft Store アプリのオフラインダウンロードについて (Preview)">
+<meta property="og:url" content="https://jpwinsup.github.io/blog/2024/06/10/UserInterfaceAndApps/winget-store-download/index.html">
+<meta property="og:site_name" content="Microsoft Japan Windows Technology Support Blog">
+<meta property="og:description" content="※ 本記事はマイクロソフト社員によって公開されております。 こんにちは。Windows プラットフォーム サポート担当の丸山です。 今回は、Microsoft.DesktopAppInstaller のプレビュー版パッケージを用いた Microsoft Store アプリのオフラインパッケージのダウンロードについて、ご紹介いたします。 背景Windows 10 や Windows 11 では、OS">
+<meta property="og:locale" content="ja_JP">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2024/06/10/UserInterfaceAndApps/winget-store-download/1.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2024/06/10/UserInterfaceAndApps/winget-store-download/2.png">
+<meta property="article:published_time" content="2024-06-10T03:00:00.000Z">
+<meta property="article:modified_time" content="2024-07-02T04:37:18.275Z">
+<meta property="article:author" content="Microsoft Japan Windows Technology Support Team">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://jpwinsup.github.io/blog/2024/06/10/UserInterfaceAndApps/winget-store-download/1.png">
+  
+    <link rel="alternate" href="/blog/atom.xml" title="Microsoft Japan Windows Technology Support Blog" type="application/atom+xml">
+  
+
+  <link rel="icon" href="/blog/favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="/blog/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/blog/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/blog/favicon-16x16.png">
+  <link rel="manifest" href="/blog/site.webmanifest">
+  <link rel="mask-icon" href="/blog/safari-pinned-tab.svg" color="#5bbad5">
+  <meta name="msapplication-TileColor" content="#ffffff">
+  <meta name="theme-color" content="#ffffff">
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/blog/css/style.css">
+
+<meta name="generator" content="Hexo 5.2.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="site-header-logo"></div>
+  <div id="site-header-blog-wrapper"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        <div id="ms-logo"></div>
+        
+          <a class="main-nav-link" href="/blog/">Home</a>
+        
+          <a class="main-nav-link" href="/blog/archives">Archives</a>
+        
+        <a class="main-nav-link" target="_blank" rel="noopener" href="https://cssjpn.github.io/">サポート情報</a>
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/blog/atom.xml" title="RSSフィード"></a>
+        
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//www.bing.com/search" method="get" accept-charset="UTF-8" name="bing-search" onsubmit="var f=this;if(f['q'].value){var searchUrl =  'https://www.bing.com/search?q=' +  encodeURIComponent(f['q'].value + ' site:' + f['sitesearch'].value) ;window.open(searchUrl, 'blank') };return false;" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="検索"><button type="submit" id="nav-search-btn" class="search-form-submit"></button><input type="hidden" name="sitesearch" value="https://jpwinsup.github.io/blog"></form>
+      </div>
+    </div>
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/blog/" id="logo">Microsoft Japan Windows Technology Support Blog</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/blog/" id="subtitle">日本マイクロソフト Windows Support チームによる、サポート情報 Blog です。</a>
+        </h2>
+      
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-UserInterfaceAndApps/winget-store-download" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    
+    
+      <header class="article-header-single">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      winget を用いた Microsoft Store アプリのオフラインダウンロードについて (Preview)
+    </h1>
+  
+
+      </header>
+      <div class="article-share">
+        Last Update: 
+        <a href="/blog/2024/06/10/UserInterfaceAndApps/winget-store-download/" class="article-date-single">
+  <time datetime="2024-06-10T03:00:00.000Z" itemprop="datePublished">2024-06-10</time>
+</a>
+        
+  <div class="article-category">
+    <a class="article-category-link" href="/blog/categories/User-Interface-and-Apps/">User Interface and Apps</a>►<a class="article-category-link" href="/blog/categories/User-Interface-and-Apps/Microsoft-Store/">Microsoft Store</a>
+  </div>
+
+        
+        <a href="https://github.com/jpwinsup/blog/issues/new?title=&body=%EF%BB%BF%0A%0A---%0A%0A%23%23%23%23+Document+Details%0A%0A*+Article+ID%3A+94a58060-ceb7-5c2b-bc05-13770429c024%0A*+TITLE%3A+winget+%E3%82%92%E7%94%A8%E3%81%84%E3%81%9F+Microsoft+Store+%E3%82%A2%E3%83%97%E3%83%AA%E3%81%AE%E3%82%AA%E3%83%95%E3%83%A9%E3%82%A4%E3%83%B3%E3%83%80%E3%82%A6%E3%83%B3%E3%83%AD%E3%83%BC%E3%83%89%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6+%28Preview%29%0A*+URL+https%3A%2F%2Fjpwinsup.github.io%2Fblog%2F2024%2F06%2F10%2FUserInterfaceAndApps%2Fwinget-store-download%2F%0A*+SourceFileName%3A+source%2F_posts%2FUserInterfaceAndApps%2Fwinget-store-download.md%0A" class="article-github-issue-link" target="_blank" rel="noopener noreferrer">feedback</a>
+        
+        <a data-url="https://jpwinsup.github.io/blog/2024/06/10/UserInterfaceAndApps/winget-store-download/" data-id="cly3xcngd003cgkoofq4r99fp" class="article-share-link">共有</a>
+      </div>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>※ 本記事はマイクロソフト社員によって公開されております。</p>
+<p>こんにちは。Windows プラットフォーム サポート担当の丸山です。</p>
+<p>今回は、Microsoft.DesktopAppInstaller のプレビュー版パッケージを用いた Microsoft Store アプリのオフラインパッケージのダウンロードについて、ご紹介いたします。</p>
+<h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>Windows 10 や Windows 11 では、OS 標準搭載の INBOX アプリを含め、様々なアプリケーションが Microsoft Store からダウンロードされるパッケージとして提供されております。</p>
+<p>Microsoft Store で提供されておりますこれらのパッケージは、Windows Update による月次の更新プログラムには含まれておりませんので、インターネットに接続されていない環境でこれらのパッケージの更新を行うためには、オフライン適用のためのパッケージを入手する必要がございました。</p>
+<p>弊社では、従来より、ビジネス向け Microsoft Store を用いたオフライン パッケージの入手方法をご紹介しておりましたが、このたび、Microsoft.DesktopAppInstaller のプレビュー版にて、Microsoft Store パッケージのダウンロードが可能となりましたので、本 BLOG にてその手順をご紹介したいと思います。</p>
+<p>参考情報 <a href="https://jpwinsup.github.io/blog/2020/10/19/UserInterfaceAndApps/MicrosoftStore/DownloadOfflinePackage/">https://jpwinsup.github.io/blog/2020/10/19/UserInterfaceAndApps/MicrosoftStore/DownloadOfflinePackage/</a></p>
+<h2 id="手順"><a href="#手順" class="headerlink" title="手順"></a>手順</h2><p>まずはインターネットに接続されている PC に Microsoft.DesktopAppInstaller のプレビュー版パッケージをインストールします。</p>
+<p>本 BLOG 記事執筆の時点では、Microsoft.DesktopAppInstaller のバージョン 1.9.1551-preview が最新版として公開されておりましたので、こちらのバージョンをダウンロードする手順にてご紹介いたします。</p>
+<ol>
+<li><p>インターネットに接続された端末にて以下の URL にアクセスし、Microsoft.DesktopAppInstaller のプレビュー版を入手します。<br><a target="_blank" rel="noopener" href="https://github.com/microsoft/winget-cli/releases/download/v1.9.1551-preview/Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle">https://github.com/microsoft/winget-cli/releases/download/v1.9.1551-preview/Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle</a></p>
+</li>
+<li><p>PowerShell 経由にて以下のコマンドを実行し、Microsoft.DesktopAppInstaller のパッケージをインストールします。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Add-AppxPackage Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle</span><br></pre></td></tr></table></figure>
+
+</li>
+</ol>
+<p>※コマンドを実行するフォルダーに Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle を配置するか、ファイル名を相対パス、あるいはフルパスで入力してください。</p>
+<p>※フレームワークの不足によるインストールのエラーが表示される場合<br>以下のように、フレームワークの不足によるインストールのエラーが表示されました場合、別途フレームワークの導入が必要です。</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">PS</span> C:\&gt; <span class="built_in">Add-AppxPackage</span> C:\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle</span><br><span class="line"><span class="built_in">Add-AppxPackage</span> : 次の HRESULT で展開に失敗しました: <span class="number">0</span>x80073CF3, パッケージの更新、依存関係、または競合の検証に失敗しま</span><br><span class="line">した。</span><br><span class="line">パッケージ Microsoft.DesktopAppInstaller_1.<span class="number">24.1551</span>.<span class="number">0</span>_x64__8wekyb3d8bbwe は、見つからないフレームワークに依存しているた</span><br><span class="line">めインストールできません。インストールするこのパッケージには、フレームワーク <span class="string">&quot;Microsoft.UI.Xaml.2.8&quot;</span> (公開元 <span class="string">&quot;CN=Micros</span></span><br><span class="line"><span class="string">oft Corporation, O=Microsoft Corporation, L=Redmond, S=Washington, C=US&quot;</span>、ニュートラルまたは x64 プロセッサ アーキテク</span><br><span class="line">チャ、最少バージョン <span class="number">8.2310</span>.<span class="number">30001.0</span>) が必要です。現在インストールされている <span class="string">&quot;Microsoft.UI.Xaml.2.8&quot;</span> という名前のフレー</span><br><span class="line">ムワークは次のとおりです: &#123;&#125;</span><br><span class="line">注: 詳細については、イベント ログで [<span class="type">ActivityId</span>] ebda7365<span class="literal">-baff</span><span class="literal">-0001</span><span class="literal">-d680</span><span class="literal">-daebffbada01</span> を検索するか、コマンド ラインの G</span><br><span class="line">et<span class="literal">-AppPackageLog</span><span class="literal">-ActivityId</span> ebda7365<span class="literal">-baff</span><span class="literal">-0001</span><span class="literal">-d680</span><span class="literal">-daebffbada01</span> を使用してください</span><br><span class="line">発生場所 行:<span class="number">1</span> 文字:<span class="number">1</span></span><br><span class="line">+ <span class="built_in">Add-AppxPackage</span> C:\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbu ...</span><br><span class="line">+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~</span><br><span class="line">    + CategoryInfo          : WriteError: (C:\Microsoft.De...bbwe.msixbundle:String) [<span class="built_in">Add-AppxPackage</span>], IOException</span><br><span class="line">    + FullyQualifiedErrorId : DeploymentError,Microsoft.Windows.Appx.PackageManager.Commands.AddAppxPackageCommand</span><br></pre></td></tr></table></figure>
+
+<p>フレームワークの不足によるインストールのエラーが表示されました場合には、以下の手順を実施してから、Microsoft.DesktopAppInstaller のインストールをやり直してください。</p>
+<ol>
+<li><p>以下の URL にアクセスして、Microsoft.VCLibs.x64.14.00.Desktop.appx を入手します。<br><a target="_blank" rel="noopener" href="https://aka.ms/Microsoft.VCLibs.x64.14.00.Desktop.appx">https://aka.ms/Microsoft.VCLibs.x64.14.00.Desktop.appx</a></p>
+</li>
+<li><p>PowerShell から以下のコマンドを実行し、Microsoft.VCLibs.x64.14.00.Desktop.appx をインストールします。<br>Add-AppxPackage Microsoft.VCLibs.x64.14.00.Desktop.appx -ForceApplicationShutdown</p>
+</li>
+<li><p>以下の URL にアクセスして、Microsoft.UI.Xaml.2.8.x64.appx を入手します。<br><a target="_blank" rel="noopener" href="https://github.com/microsoft/microsoft-ui-xaml/releases/download/v2.8.6/Microsoft.UI.Xaml.2.8.x64.appx">https://github.com/microsoft/microsoft-ui-xaml/releases/download/v2.8.6/Microsoft.UI.Xaml.2.8.x64.appx</a></p>
+</li>
+<li><p>PowerShell から以下のコマンドを実行し、Microsoft.UI.Xaml.2.8.x64.appx をインストールします。<br>Add-AppxPackage Microsoft.UI.Xaml.2.8.x64.appx -ForceApplicationShutdown</p>
+</li>
+</ol>
+<p>Microsoft DesktopAppInstaller のプレビュー版パッケージがインストールできましたら、次の手順にて storeDownload の機能を有効にします。</p>
+<ol>
+<li>コマンド プロンプトを開き、winget settings コマンドを実行します。<br>Setting.json ファイルを開こうとする旨、表示されますので、メモ帳などのテキストエディタを選択し、settings.json を開きます。</li>
+</ol>
+<p>※以下のようなメッセージが表示される場合、関連付けが必要です。”この PC のアプリで開く” をクリックし、”常にこのアプリを使って .json ファイルを開く” にチェックを入れてから、”メモ帳” 等のテキストエディタをクリックして開いてください。</p>
+<p><img src="./1.png" alt="関連付けが行われていない場合"></p>
+<ol start="2">
+<li><p>settings.json に以下のように記述して、上書き保存します。</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attr">&quot;$schema&quot;</span>: <span class="string">&quot;https://aka.ms/winget-settings.schema.json&quot;</span>,</span><br><span class="line"></span><br><span class="line">    <span class="attr">&quot;experimentalFeatures&quot;</span>: &#123;</span><br><span class="line">        <span class="attr">&quot;storeDownload&quot;</span>: <span class="literal">true</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>コマンドプロンプトから以下のコマンドを実行し、Microsot Store アプリのオフライン パッケージをダウンロードします。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">winget download &lt;PackageID&gt;</span><br></pre></td></tr></table></figure>
+
+</li>
+</ol>
+<p><strong>※コマンドの実行ダウンロードにあたりましては、License.xml の入手のため、Microsoft Entra ID の管理者アカウントでのログオンが要求されます。すでに端末にインストールされているパッケージの更新プログラムのダウンロードであれば、License.xml の入手は不要ですが、新規パッケージをオフラインで導入いただく場合には License.xml が必要になりますので、Microsoft Entra ID の管理者アカウントでのログオンが必要になります。</strong></p>
+<p><strong>※また、License.xml は再配布が出来ません。ライセンスを取得した組織外でのご利用につきましてはライセンス違反となりますので、ご注意ください。</strong></p>
+<p>実行例:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line">C:\&gt;winget download 9MZ95KL8MR0L</span><br><span class="line">見つかりました Snipping Tool [9MZ95KL8MR0L] バージョン Unknown</span><br><span class="line">このパッケージは Microsoft Store から提供されています。winget は、現在のユーザーに代わって Microsoft Store からパッケージを取得する必要がある場合があります。</span><br><span class="line">契約の対象 Snipping Tool [9MZ95KL8MR0L] バージョン Unknown</span><br><span class="line">バージョン: Unknown</span><br><span class="line">公開元: Microsoft Corporation</span><br><span class="line">発行元 URL: http:&#x2F;&#x2F;windows.microsoft.com</span><br><span class="line">発行元のサポート URL: https:&#x2F;&#x2F;go.microsoft.com&#x2F;fwlink&#x2F;?linkid&#x3D;2023133</span><br><span class="line">ライセンス: ms-windows-store:&#x2F;&#x2F;pdp&#x2F;?ProductId&#x3D;9MZ95KL8MR0L</span><br><span class="line">プライバシー URL: http:&#x2F;&#x2F;go.microsoft.com&#x2F;fwlink&#x2F;?LinkID&#x3D;521839</span><br><span class="line">著作権: (c) Microsoft Corporation</span><br><span class="line">契約:</span><br><span class="line">  Category: Utilities &amp; tools</span><br><span class="line">  Pricing: Free</span><br><span class="line">  Free Trial: No</span><br><span class="line">  Terms of Transaction: https:&#x2F;&#x2F;aka.ms&#x2F;microsoft-store-terms-of-transaction</span><br><span class="line">  Seizure Warning: https:&#x2F;&#x2F;aka.ms&#x2F;microsoft-store-seizure-warning</span><br><span class="line">  Store License Terms: https:&#x2F;&#x2F;aka.ms&#x2F;microsoft-store-license</span><br><span class="line"></span><br><span class="line">発行元は、お客様がインストール前に上記の情報を表示し、契約に同意することを必要としています。</span><br><span class="line">使用条件に同意しますか?</span><br><span class="line">[Y] はい  [N] いいえ: y</span><br><span class="line">Microsoft Store package download requires Microsoft Entra Id authentication. Authentication prompt may appear when necessary. Authenticated information will be shared with Microsoft services for access authorization. For Microsoft Store package licensing, the Microsoft Entra Id account needs to have administrator access to the Microsoft Entra Id tenant.</span><br><span class="line">Retrieving Microsoft Store package download information</span><br><span class="line">Downloading dependency packages from Microsoft Store...</span><br><span class="line">ダウンロード中 http:&#x2F;&#x2F;storeapps.f.tlu.dl.delivery.mp.microsoft.com&#x2F;filestreamingservice&#x2F;files&#x2F;de44abf4-d2ba-4197-a139-85c485d58e0b?P1&#x3D;1718594669&amp;P2&#x3D;404&amp;P3&#x3D;2&amp;P4&#x3D;dXBJYGdjm377zhgTpu3tXEhkHrLY7puRFS4gWMAkEzQqCdyjyPaLohrX43bb5t1vdGBw8wDvh6XFytWJYXV9rg%3d%3d</span><br><span class="line">  ██████████████████████████████  4.50 MB &#x2F; 4.50 MB</span><br><span class="line">Successfully verified Microsoft Store package hash</span><br><span class="line">Microsoft Store package downloaded: C:\Users\Administrator\Downloads\9MZ95KL8MR0L\Dependencies\Microsoft.UI.Xaml.2.7_7.2208.15002.0_x86__8wekyb3d8bbwe.appx</span><br><span class="line">ダウンロード中 http:&#x2F;&#x2F;storeapps.f.tlu.dl.delivery.mp.microsoft.com&#x2F;filestreamingservice&#x2F;files&#x2F;cadae296-3389-40c2-b927-605f7b399b78?P1&#x3D;1718594669&amp;P2&#x3D;404&amp;P3&#x3D;2&amp;P4&#x3D;dY0VBcqprKooKBDeXXX2kRveBZgE9WeEA9kEob4fyXoV7NKu%2bI7KAVBVB3X2EtM0jx6s%2bRtX3vBP%2bJNr%2fRjh4Q%3d%3d</span><br><span class="line">  ██████████████████████████████  4.83 MB &#x2F; 4.83 MB</span><br><span class="line">Successfully verified Microsoft Store package hash</span><br><span class="line">Microsoft Store package downloaded: C:\Users\Administrator\Downloads\9MZ95KL8MR0L\Dependencies\Microsoft.UI.Xaml.2.7_7.2208.15002.0_x64__8wekyb3d8bbwe.appx</span><br><span class="line">ダウンロード中 http:&#x2F;&#x2F;storeapps.f.tlu.dl.delivery.mp.microsoft.com&#x2F;filestreamingservice&#x2F;files&#x2F;dbbce45f-95dc-4af0-b99f-9a50bfd1a2d5?P1&#x3D;1718594669&amp;P2&#x3D;404&amp;P3&#x3D;2&amp;P4&#x3D;cs42hebU%2fbUbljZlor80yJxj4VVEBOR47TXLVJXIW2kPRF3s%2fd%2fyPUF1ZyPGM2FKOQyMrLcknO0cpBAAaL%2fFOQ%3d%3d</span><br><span class="line">…中略…</span><br><span class="line">ダウンロード中 http:&#x2F;&#x2F;storeapps.f.tlu.dl.delivery.mp.microsoft.com&#x2F;filestreamingservice&#x2F;files&#x2F;3cfbe560-b024-4a6b-8f67-2cdfdf1e4fe2?P1&#x3D;1718594668&amp;P2&#x3D;404&amp;P3&#x3D;2&amp;P4&#x3D;fV%2fc9KyIMURQHH3gtlZM5oGnAEWCvD%2fPYGTyMsrzNjeQZJl%2bGKBNwqZd5CEuEzVbw7UFzdKQ75ZbusIzFUsebQ%3d%3d</span><br><span class="line">  ██████████████████████████████  7.05 MB &#x2F; 7.05 MB</span><br><span class="line">Successfully verified Microsoft Store package hash</span><br><span class="line">Microsoft Store package downloaded: C:\Users\Administrator\Downloads\9MZ95KL8MR0L\Microsoft.ScreenSketch_2020.814.2355.0_neutral_~_8wekyb3d8bbwe.appxbundle</span><br><span class="line">Microsoft Store package download completed</span><br><span class="line">Retrieving Microsoft Store package license</span><br><span class="line">Microsoft Store package license saved: C:\Users\Administrator\Downloads\9MZ95KL8MR0L\9MZ95KL8MR0L_License.xml</span><br></pre></td></tr></table></figure>
+
+<p>手順通りに実施されました場合、Downloads フォルダー配下の &lt;PackageID&gt; 配下に、各種パッケージとライセンスファイルがダウンロードされますので、こちらのファイルをオフラインパッケージとしてお使いください。</p>
+<blockquote>
+<p><img src="./2.png" alt="ダウンロードされたパッケージファイル"></p>
+</blockquote>
+<h2 id="更新履歴"><a href="#更新履歴" class="headerlink" title="更新履歴"></a>更新履歴</h2><ul>
+<li>2024/06/10 : 本 Blog の公開</li>
+</ul>
+
+      
+      
+    </div>
+    <footer class="article-footer">
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/blog/2024/06/27/ActiveDirectory/Authentication/CGWininitID15/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">次の記事</strong>
+      <div class="article-nav-title">
+        
+          Credential Guard や VBS キーの分離が構成されていない状態で Wininit ID:15 が記録される問題について
+        
+      </div>
+    </a>
+  
+  
+    <a href="/blog/2024/05/29/UserInterfaceAndApps/Printing/defaultprinter/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">前の記事</strong>
+      <div class="article-nav-title">リモート デスクトップで通常使うプリンターが意図せず変わる事象について</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">カテゴリ</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/">Active Directory</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Authentication/">Authentication</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/DFSR/">DFSR</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/FunctionalLevel/">FunctionalLevel</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Group-Policy/">Group Policy</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Promotion-and-Demotion/">Promotion and Demotion</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/User-Profile/">User Profile</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Windows-Hello/">Windows Hello</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Windows-Time-Service/">Windows Time Service</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/AppLocker/">AppLocker</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/AppLocker/Active-Directory/">Active Directory</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/AppLocker/Microsoft-Intune/">Microsoft Intune</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Deployment/">Deployment</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Deployment/Feature-on-demand/">Feature on demand</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Deployment/Sysprep/">Sysprep</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Failover-Clustering/">Failover Clustering</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Failover-Clustering/Configuration-and-Management/">Configuration and Management</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/FileServices/">FileServices</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/FileServices/FTP/">FTP</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/FileServices/SMB/">SMB</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Hyper-V/">Hyper-V</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Hyper-V/Configuration-and-Management/">Configuration and Management</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/">Networking</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/BITS/">BITS</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/Bluetooth/">Bluetooth</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/DHCP/">DHCP</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/DNS/">DNS</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/Firewall/">Firewall</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/LBFO/">LBFO</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/NCSI/">NCSI</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/NetworkInterface/">NetworkInterface</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/TCPIP/">TCPIP</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/WinHTTP/">WinHTTP</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/OpenSSH/">OpenSSH</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/">Performance</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/Hang-up-BSoD/">Hang-up/BSoD</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/No-Boot/">No Boot</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/Slow-Response/">Slow Response</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/System-Resource/">System Resource</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/">Public Key Infrastructure</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Certificate-Management/">Certificate Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/SSL-TLS-Communication/">SSL TLS Communication</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/SSL-TLS-Connection/">SSL TLS Connection</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Smart-Card-Logon/">Smart Card Logon</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/">Remote Desktop</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/Azure-Virtual-Desktop-AVD/">Azure Virtual Desktop (AVD)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/Remote-Desktop-Service-RDS/">Remote Desktop Service (RDS)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/Windows-Virtual-Desktop-WVD/">Windows Virtual Desktop (WVD)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/RemoteAccess/">RemoteAccess</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/RemoteAccess/%E3%83%80%E3%82%A4%E3%83%A4%E3%83%AB%E3%82%A2%E3%83%83%E3%83%97%E6%8E%A5%E7%B6%9A/">ダイヤルアップ接続</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Setup/">Setup</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Setup/Feature-Update-FU/">Feature Update (FU)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/">Storage</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/Backup/">Backup</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/Management/">Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/StorageMigrationService/">StorageMigrationService</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/">User Interface and Apps</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Command-Prompt/">Command Prompt</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/EventLog/">EventLog</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Language-Support/">Language Support</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Microsoft-Store/">Microsoft Store</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/PowerShell/">PowerShell</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Printing-%E5%8D%B0%E5%88%B7/">Printing (印刷)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Server-Management/">Server Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Taskscheduler/">Taskscheduler</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Windows-Management-Instrumentation/">Windows Management Instrumentation</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Admin-Center/">Windows Admin Center</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Search/">Windows Search</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/">Windows Update</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Delivery-Optimization-DO/">Delivery Optimization (DO)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Feature-Update-FU/">Feature Update (FU)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Quality-Update-QU/">Quality Update (QU)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Windows-Update-Agent/">Windows Update Agent</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Windows-Update-Agent-WUA/">Windows Update Agent (WUA)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/">WirelessNetwork</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/NPS/">NPS</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/Wi-Fi/">Wi-Fi</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/%E3%83%A2%E3%83%90%E3%82%A4%E3%83%AB-%E3%83%96%E3%83%AD%E3%83%BC%E3%83%89%E3%83%90%E3%83%B3%E3%83%89%E6%8E%A5%E7%B6%9A-LTE/">モバイル ブロードバンド接続 (LTE)</a></li></ul></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最近の投稿</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/blog/2024/06/27/ActiveDirectory/Authentication/CGWininitID15/">Credential Guard や VBS キーの分離が構成されていない状態で Wininit ID:15 が記録される問題について</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2024/06/10/UserInterfaceAndApps/winget-store-download/">winget を用いた Microsoft Store アプリのオフラインダウンロードについて (Preview)</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2024/05/29/UserInterfaceAndApps/Printing/defaultprinter/">リモート デスクトップで通常使うプリンターが意図せず変わる事象について</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2024/05/01/RemoteDesktopService/RDS/HowToSetupRDS/">Windows Server での標準的なリモート デスクトップ サービス環境構築手順について</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2024/04/08/RemoteDesktopService/RDS/rdcbha-config/">RD 接続ブローカー高可用性環境の標準的な構築手順について</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">アーカイブ</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/06/">2024 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/05/">2024 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/04/">2024 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/03/">2024 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/02/">2024 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/01/">2024 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/12/">2023 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/11/">2023 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/10/">2023 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/09/">2023 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/08/">2023 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/07/">2023 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/06/">2023 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/05/">2023 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/04/">2023 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/03/">2023 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/02/">2023 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/01/">2023 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/12/">2022 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/11/">2022 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/10/">2022 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/09/">2022 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/08/">2022 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/07/">2022 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/06/">2022 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/05/">2022 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/04/">2022 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/03/">2022 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/02/">2022 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/01/">2022 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/12/">2021 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/11/">2021 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/10/">2021 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/09/">2021 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/08/">2021 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/07/">2021 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/06/">2021 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/05/">2021 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/04/">2021 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/03/">2021 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/02/">2021 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/01/">2021 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/12/">2020 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/11/">2020 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/10/">2020 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/03/">2020 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2019/03/">2019 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/08/">2018 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/07/">2018 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/02/">2018 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/09/">2017 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/05/">2017 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/03/">2017 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/02/">2017 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2016/08/">2016 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2014/03/">2014 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2012/02/">2012 / 02</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2024 Microsoft Japan Windows Technology Support Team<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/blog/" class="mobile-nav-link">Home</a>
+  
+    <a href="/blog/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+<script src="/blog/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>
