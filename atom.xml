@@ -1,0 +1,525 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>Microsoft Japan Windows Technology Support Blog</title>
+  
+  <subtitle>日本マイクロソフト Windows Support チームによる、サポート情報 Blog です。</subtitle>
+  <link href="https://jpwinsup.github.io/blog/atom.xml" rel="self"/>
+  
+  <link href="https://jpwinsup.github.io/blog/"/>
+  <updated>2025-04-04T13:31:30.861Z</updated>
+  <id>https://jpwinsup.github.io/blog/</id>
+  
+  <author>
+    <name>Microsoft Japan Windows Technology Support Team</name>
+    
+  </author>
+  
+  <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Windows Server 2019 に ARM64 向け V3 プリンター ドライバーがインストール出来ない</title>
+    <link href="https://jpwinsup.github.io/blog/2025/04/03/UserInterfaceAndApps/Printing/PrinterDriverARM64/"/>
+    <id>https://jpwinsup.github.io/blog/2025/04/03/UserInterfaceAndApps/Printing/PrinterDriverARM64/</id>
+    <published>2025-04-03T05:48:40.000Z</published>
+    <updated>2025-04-04T13:31:30.861Z</updated>
+    
+    <content type="html"><![CDATA[<p>本記事はマイクロソフト社員によって公開されております。</p><p>こんにちは、Windows サポート チームの神田です。<br>本ブログでは、ARM64 アーキテクチャ向けに開発された V3 プリンター ドライバーのインストールについて記述いたします。<br><a href="#english">English follows</a></p><h2 id="事象"><a href="#事象" class="headerlink" title="事象"></a>事象</h2><p>Windows Server 2022 (以降) のオペレーティング システムでは、ARM64 向け V3 プリンター ドライバーはインストールが可能ですが、Windows Server 2019 (以前) のオペレーティング システムではインストールができずエラーとなります。<br>これは、Windows Server 2019  開発時点では ARM64 アーキテクチャの端末が一般的に市場に出荷されていなかった事情から、その種のドライバーのインストールが想定されておらず、その結果以下のようなエラーとなりインストールができない状況となります。</p><img src="/blog/2025/04/03/UserInterfaceAndApps/Printing/PrinterDriverARM64/ARM64DriverErrorJapanese.jpg" class=""><p>このエラーの理由は、印刷コンポーネント ”プリント スプーラー” サービスが ARM64 アーキテクチャをリストしないためです。Windows Server 2022 では、ARM64 をリストし、インストールが正常に完了します。</p><p>Windows Server 2019 においては、ARM64 アーキテクチャ向けの V3 プリンター ドライバーがインストール出来ないのは、制限事項となります。また、製品自体が現在既に延長サポート ライフサイクル期間となっているため、動作の変更については計画がありません。<br>Windows Server に ARM64 V3 プリンター ドライバーをインストールしてプリンター サーバーとして動作させる場合には、バージョン 2022 以降のオペレーティング システムでの環境作成をご検討ください。</p><p> 参考情報 : Windows Server 2019 サポート ライフサイクル<br><a href="https://learn.microsoft.com/ja-jp/lifecycle/products/windows-server-2019">Windows Server 2019 - Microsoft Lifecycle | Microsoft Learn</a></p><hr><h2 id="Symptom"><a href="#Symptom" class="headerlink" title=" Symptom"></a><a name="english"></a> Symptom</h2><p>This blog is about the installation issue of the V3 printer driver developed for the ARM64 architecture.</p><p>On operating systems from Windows Server 2022 onwards, it is possible to install the V3 printer driver for ARM64. However, on operating systems prior to Windows Server 2019, the installation will result in an error. This is because, at the time of Windows Server 2019 development, ARM64 architecture devices were not generally available in the market, and the installation of such drivers was not anticipated, resulting in the following error and inability to install.</p><img src="/blog/2025/04/03/UserInterfaceAndApps/Printing/PrinterDriverARM64/ARM64DriverErrorEnglish.jpg" class=""><p>The reason for this error is that  “Print Spooler” service, a component necessary for printing,  does not list the ARM64 architecture. In Windows Server 2022, ARM64 is listed, and the installation completes successfully.</p><p>In Windows Server 2019, the inability to install the V3 printer driver for ARM64 architecture is a limitation. Additionally, as the product is already in the extended support lifecycle period, there are no plans to change this behavior. If you plan to install the ARM64 V3 printer driver on Windows Server and operate it as a print server, please consider creating an environment with an operating system version 2022 or later.</p><p>Information : Windows Server 2019 Support Lifecycle<br><a href="https://learn.microsoft.com/en-us/lifecycle/products/windows-server-2019">Windows Server 2019 - Microsoft Lifecycle | Microsoft Learn</a></p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;p&gt;本記事はマイクロソフト社員によって公開されております。&lt;/p&gt;
+&lt;p&gt;こんにちは、Windows サポート チームの神田です。&lt;br&gt;本ブログでは、ARM64 アーキテクチャ向けに開発された V3 プリンター ドライバーのインストールについて記述いたします。&lt;br&gt;&lt;a h</summary>
+      
+    
+    
+    
+    <category term="User Interface and Apps" scheme="https://jpwinsup.github.io/blog/categories/User-Interface-and-Apps/"/>
+    
+    <category term="Printing (印刷)" scheme="https://jpwinsup.github.io/blog/categories/User-Interface-and-Apps/Printing-%E5%8D%B0%E5%88%B7/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>Windows Server にてタスク マネージャーのディスクのパフォーマンス情報を有効にする方法</title>
+    <link href="https://jpwinsup.github.io/blog/2025/03/28/UserInterfaceAndApps/taskmgr-perfdisk/"/>
+    <id>https://jpwinsup.github.io/blog/2025/03/28/UserInterfaceAndApps/taskmgr-perfdisk/</id>
+    <published>2025-03-28T03:00:00.000Z</published>
+    <updated>2025-04-04T13:31:30.943Z</updated>
+    
+    <content type="html"><![CDATA[<p>※ 本記事はマイクロソフト社員によって公開されております。</p><p>こんにちは。Windows プラットフォーム サポート担当の丸山です。</p><p>今回は、Windows Server 製品でタスク マネージャーを開いたとき、[ディスク] に関する情報が表示されないという事象についてご紹介いたします。</p><h2 id="事象"><a href="#事象" class="headerlink" title="事象"></a>事象</h2><p>タスク マネージャーを開くと、各プロセスにおける CPU 使用率、メモリ使用量、ディスクの負荷状況などが表示されますが、Windows Server 製品では、ディスクに関するパフォーマンス情報が表示されません。</p><p><img src="ws2022.png" alt="Windows Server 2022 におけるタスクマネージャーの例"></p><p>なお、Windows Server 2025 以降では、既定の構成ではシステム ディスクの情報が既定で表示されておりますが、システム ディスク以外のディスクについてはパフォーマンス情報が表示されていません。※別のプログラムにてディスクのパフォーマンス カウンターの値が参照されている場合には、該当ディスクのパフォーマンス情報が表示されます。</p><h2 id="対象製品"><a href="#対象製品" class="headerlink" title="対象製品"></a>対象製品</h2><ul><li>Windows Server 2016</li><li>Windows Server 2019</li><li>Windows Server 2022</li><li>Windows Server 2025</li></ul><h2 id="対処策"><a href="#対処策" class="headerlink" title="対処策"></a>対処策</h2><p>[管理者として実行] されたコマンド プロンプトより、以下のコマンドを実行し、タスク マネージャーを再起動していただくことでディスクのパフォーマンス カウンターが表示されるようになります。</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">diskperf -Y</span><br></pre></td></tr></table></figure><p>上記情報が、お役立ちできますと幸いです。</p><h2 id="更新履歴"><a href="#更新履歴" class="headerlink" title="更新履歴"></a>更新履歴</h2><ul><li>2025/03/28: 本 Blog の公開</li></ul>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;p&gt;※ 本記事はマイクロソフト社員によって公開されております。&lt;/p&gt;
+&lt;p&gt;こんにちは。Windows プラットフォーム サポート担当の丸山です。&lt;/p&gt;
+&lt;p&gt;今回は、Windows Server 製品でタスク マネージャーを開いたとき、[ディスク] に関する情報が表示され</summary>
+      
+    
+    
+    
+    <category term="User Interface and Apps" scheme="https://jpwinsup.github.io/blog/categories/User-Interface-and-Apps/"/>
+    
+    <category term="Performance" scheme="https://jpwinsup.github.io/blog/categories/User-Interface-and-Apps/Performance/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>Windows Admin Center の一部の機能で日本語キーボードのレイアウトが英語になってしまう事象について</title>
+    <link href="https://jpwinsup.github.io/blog/2025/03/27/WindowsAdminCenter/WAC-RDP-Wrong-Keyboard/"/>
+    <id>https://jpwinsup.github.io/blog/2025/03/27/WindowsAdminCenter/WAC-RDP-Wrong-Keyboard/</id>
+    <published>2025-03-27T15:00:00.000Z</published>
+    <updated>2025-04-04T13:31:30.947Z</updated>
+    
+    <content type="html"><![CDATA[<blockquote><p>本記事は、マイクロソフト社員によって公開されております。  </p></blockquote><p>こんにちは、Windows サポート チームです。<br>今回は Windows Admin Center の一部の機能で日本語キーボードのレイアウトが英語になってしまう事象についてご案内いたします。</p><h2 id="事象"><a href="#事象" class="headerlink" title="事象"></a>事象</h2><hr>以下の機能を利用した場合、日本語キーボードのレイアウトが英語になってしまう事象が発生します。<h4 id="lt-リモートデスクトップ-gt"><a href="#lt-リモートデスクトップ-gt" class="headerlink" title="&lt;リモートデスクトップ&gt;"></a>&lt;リモートデスクトップ&gt;</h4><p><img src="1.jpg"></p><h4 id="lt-仮想マシンの接続-gt"><a href="#lt-仮想マシンの接続-gt" class="headerlink" title="&lt;仮想マシンの接続&gt;"></a>&lt;仮想マシンの接続&gt;</h4><p><img src="2.jpg"></p><h2 id="原因"><a href="#原因" class="headerlink" title="原因"></a>原因</h2><hr>上記の機能は Windows Admin Center の拡張機能が提供するリモートデスクトップ処理においてキーボードのレイアウト処理が正しく機能しないために発生します。現在、開発部門にて原因を調査中の状況です。<p>本記事を公開した時点 (2025/03/28) では修正の公開に向けて対応を進めておりますが、現時点においては修正の提供時期については未定になります。開発部門での進展があり次第、本記事をアップデートさせていただきます。</p><h2 id="回避策"><a href="#回避策" class="headerlink" title="回避策"></a>回避策</h2><hr>今回の事象は Windows Admin Center の拡張機能が提供するリモートデスクトップを使用すると発生するため、それぞれの機能については OS の標準機能を利用いただくことで回避が可能です。<h4 id="lt-リモートデスクトップ-gt-1"><a href="#lt-リモートデスクトップ-gt-1" class="headerlink" title="&lt;リモートデスクトップ&gt;"></a>&lt;リモートデスクトップ&gt;</h4><p>OS の標準機能でリモートデスクトップを行う場合には以下の手順を実施ください。</p><p>// 手順<br>1. [スタート] を右クリックし、[ファイル名を指定して実行] を選択します。<br>2. mstsc と入力し、[OK] をクリックします。<br>3. リモートデスクトップの接続画面が表示されますので、接続先のホスト名または IP アドレスを入力して、[接続] をクリックします。</p><h4 id="lt-仮想マシンの接続-gt-1"><a href="#lt-仮想マシンの接続-gt-1" class="headerlink" title="&lt;仮想マシンの接続&gt;"></a>&lt;仮想マシンの接続&gt;</h4><p>こちらについては仮想マシンに直接リモートデスクトップで接続する場合には、上記の手順と同様になります。また、その他に Hyper-V マネージャーを使用して Hyper-V ホストに接続し、Hyper-V のコンソールからアクセスすることも可能です。</p><p>Hyper-V マネージャーを利用する場合、接続元の端末に Hyper-V の管理ツールをインストールする必要がございます。インストールの方法をクライアント OS とサーバー OS に分けてご案内させていただきます。</p><p>// クライアント OS の場合<br>1. [スタート] を右クリックし、[ファイル名を指定して実行] を選択します。<br>2. optionalfeatures と入力し、[OK] をクリックします。<br>3. 以下にチェックを入れ、[OK] をクリックします。</p><p>[Hyper-V] - [Hyper-V 管理ツール] - [Hyper-V GUI 管理ツール]</p><p>4. 正常にインストールが完了することを確認します。</p><p>// サーバー OS の場合<br>1. サーバーマネージャーを開きます。<br>2. [管理] - [役割と機能の追加] を選択します。<br>3. [次へ] をクリックします。<br>4. [役割ベースまたは機能ベースのインストール] を選択し、[次へ] をクリックします。<br>5. インストール対象のサーバーをクリックし、[次へ] をクリックします。<br>6. [次へ] をクリックします。<br>7. 以下にチェックを入れ、[インストール] をクリックします。</p><p>[リモートサーバー管理ツール] - [役割管理ツール] - [Hyper-V 管理ツール] - [Hyper-V GUI 管理ツール]</p><p>8. 正常にインストールが完了することを確認します。</p><p>なお、Hyper-V マネージャーをインストールしている端末からリモートのHyper-V ホストを管理する場合には、リモート管理の設定が必要になります。詳細につきましては、こちらの公開情報を参照ください。</p><p>// 公開情報<br>Hyper-V マネージャーを使用した Hyper-V ホストのリモート管理<br><a href="https://learn.microsoft.com/ja-jp/windows-server/virtualization/hyper-v/manage/remotely-manage-hyper-v-hosts">https://learn.microsoft.com/ja-jp/windows-server/virtualization/hyper-v/manage/remotely-manage-hyper-v-hosts</a></p><h2 id="補足"><a href="#補足" class="headerlink" title="補足"></a>補足</h2><hr>Windows Admin Center はブラウザベースのアクセスが可能であるため、Windows Admin Center をインストールした端末とは別の端末からブラウザを利用してアクセスが可能です。構成としては以下の図のとおりです。<p><img src="3.jpg"></p><h4 id="lt-リモートデスクトップ-gt-2"><a href="#lt-リモートデスクトップ-gt-2" class="headerlink" title="&lt;リモートデスクトップ&gt;"></a>&lt;リモートデスクトップ&gt;</h4><p>リモート デスクトップ サービスの概要<br><a href="https://learn.microsoft.com/ja-jp/troubleshoot/windows-server/networking/service-overview-and-network-port-requirements#remote-desktop-services-rds">https://learn.microsoft.com/ja-jp/troubleshoot/windows-server/networking/service-overview-and-network-port-requirements#remote-desktop-services-rds</a></p><h4 id="lt-Hyper-V-マネージャー-gt"><a href="#lt-Hyper-V-マネージャー-gt" class="headerlink" title="&lt;Hyper-V マネージャー&gt;"></a>&lt;Hyper-V マネージャー&gt;</h4><p>Hyper-V マネージャーは WinRM 2.0 を利用するため、以下の公開情報の 5985 もしくは 5986 番ポートで通信が利用できるようにしていただければと存じます。</p><p>Windows リモート管理 (WinRM)<br><a href="https://learn.microsoft.com/ja-jp/troubleshoot/windows-server/networking/service-overview-and-network-port-requirements#windows-remote-management-winrm">https://learn.microsoft.com/ja-jp/troubleshoot/windows-server/networking/service-overview-and-network-port-requirements#windows-remote-management-winrm</a></p><p>また、仮想マシンのコンソールを開くために、上記と合わせて 2179 番ポートも利用できるようにお願いいたします。</p><p>いかがでしたでしょうか。本投稿が少しでも皆様のお役に立てば幸いです。 本情報の内容（添付文書、リンク先などを含む）は、作成日時でのものであり、予告なく変更される場合があります。</p><h2 id="変更履歴"><a href="#変更履歴" class="headerlink" title="変更履歴"></a>変更履歴</h2><ul><li>2025/03/28 : 本 Blog の公開</li></ul>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;blockquote&gt;
+&lt;p&gt;本記事は、マイクロソフト社員によって公開されております。  &lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;こんにちは、Windows サポート チームです。&lt;br&gt;今回は Windows Admin Center の一部の機能で日本語キーボードのレイ</summary>
+      
+    
+    
+    
+    <category term="Windows Admin Center" scheme="https://jpwinsup.github.io/blog/categories/Windows-Admin-Center/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>AlMs タグのページ プールの使用量が増加する動作について</title>
+    <link href="https://jpwinsup.github.io/blog/2025/03/24/Performance/SystemResource/AlpcMessageIssue/"/>
+    <id>https://jpwinsup.github.io/blog/2025/03/24/Performance/SystemResource/AlpcMessageIssue/</id>
+    <published>2025-03-24T10:00:00.000Z</published>
+    <updated>2025-04-04T13:31:30.518Z</updated>
+    
+    <content type="html"><![CDATA[<p>本記事はマイクロソフト社員によって公開されております。</p><p>こんにちは。日本マイクロソフトサポートです。<br>本公開情報では Windows Server 2025において、特定の操作が行われた際に、メモリ (ページ プール) の使用量が増加する動作について<br>お伝えさせていただきます。</p><h2 id="適用対象の-OS"><a href="#適用対象の-OS" class="headerlink" title="適用対象の OS"></a>適用対象の OS</h2><ul><li>Windows Server 2025</li></ul><h2 id="事象の概要"><a href="#事象の概要" class="headerlink" title="事象の概要"></a>事象の概要</h2><p>Windows Server 2025において、下記のような動作が行われる度にページ プールの使用量が増加します。</p><p>・ウィンドウの生成、破棄を行う<br>・タスクバーのアプリケーション アイコンの並びを変更する</p><p>1回当たりの使用量は数百 バイトですが、自動実行ツールで頻繁に上記の処理が繰り返し行われるような環境や長期に稼働している環境では、メモリ使用量が肥大する場合があります。</p><h2 id="現象"><a href="#現象" class="headerlink" title="現象"></a>現象</h2><p>OSのメモリ領域の内、AlMs タグのページ プールの使用量が増加します。</p><p>ページ プール メモリ全体の使用量は、タスクマネージャーからご確認いただけます。</p><p>タスク マネージャーの見方（Memory）<br><a href="https://jpwinsup.github.io/blog/2021/05/10/Performance/SystemResource/TaskManagerMemory/">https://jpwinsup.github.io/blog/2021/05/10/Performance/SystemResource/TaskManagerMemory/</a><br>“システム領域（ページ プールと非ページプール）” の項目をご確認ください。</p><p>また、PoolMon ツールを使用して、問題のAlMs タグのメモリ使用量を確認いただくことができます。<br>PoolMonは、Windows Driver Kit (WDK) に含まれています。<br>詳細については、下記のURLをご参照ください。</p><p>PoolMon<br><a href="https://learn.microsoft.com/ja-jp/windows-hardware/drivers/devtest/poolmon">https://learn.microsoft.com/ja-jp/windows-hardware/drivers/devtest/poolmon</a></p><h2 id="要因"><a href="#要因" class="headerlink" title="要因"></a>要因</h2><p>本動作は、Windows OSの仕様に起因して発生いたします。</p><p>Windows Server 2025 ではエクスプローラーの動作により、タスクバー上の表示内容に変更が発生しました場合などに、SearchHost.exeに対してALPC メッセージが送られる動作がございます。</p><p>上記の動作の際に、SearchHost.exeが中断状態となっておりますとメッセージが処理されず、キューに滞留しますため、メモリの使用量が増加します。</p><h2 id="対処策"><a href="#対処策" class="headerlink" title="対処策"></a>対処策</h2><p>SearchHostが実行状態となりますと、キューのメッセージが処理されるため、メモリの使用量が減少します。<br>以下の方法で対処が可能です。特に、長期運用される環境の場合では、定期的に対処策を実行ください。</p><p>対処方法<br>a) Windows ボタンを押下して、スタートメニューを実行します。<br>b) タスクバーの検索ボタンをクリックします。</p><p>本投稿が少しでも皆様のお役に立てば幸いです。<br>本情報の内容（添付文書、リンク先などを含む）は、作成日時でのものであり、予告なく変更される場合があります。</p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;p&gt;本記事はマイクロソフト社員によって公開されております。&lt;/p&gt;
+&lt;p&gt;こんにちは。日本マイクロソフトサポートです。&lt;br&gt;本公開情報では Windows Server 2025において、特定の操作が行われた際に、メモリ (ページ プール) の使用量が増加する動作について&lt;b</summary>
+      
+    
+    
+    
+    <category term="Performance" scheme="https://jpwinsup.github.io/blog/categories/Performance/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>UWP アプリのパッケージ名を確認する方法</title>
+    <link href="https://jpwinsup.github.io/blog/2025/03/23/UserInterfaceAndApps/FindAppxPackageName/"/>
+    <id>https://jpwinsup.github.io/blog/2025/03/23/UserInterfaceAndApps/FindAppxPackageName/</id>
+    <published>2025-03-23T07:00:00.000Z</published>
+    <updated>2025-04-04T13:31:30.848Z</updated>
+    
+    <content type="html"><![CDATA[<p>本記事はマイクロソフト社員によって公開されております。</p><p>こんにちは、Windows サポートチームの栗木です。<br>UWP（Universal Windows Platform）は、Windows で動作するアプリケーションの開発を容易にするために設計されたプラットフォームで、このプラットフォームで開発されたアプリを UWP アプリとよびます。UWP アプリは、Windows OS 上で多数動作しており、スタート メニューや設定アプリのようなシステムアプリ、Microsoft Store で配信されている電卓、Snipping Tool などが UWP アプリの例になります。また、3rd Party 製の UWP アプリもあります。</p><p>UWP アプリの管理において、パッケージ名の確認は重要です。パッケージ名は、アプリの一意の識別子として機能し、アプリのインストール、アンインストールなどの管理において重要な役割を果たします。特に、アプリのトラブルシューティングを行う際には、正確なパッケージ名を知っていることが不可欠になります。</p><p>本記事では、タスク マネージャーから UWP アプリのパッケージ名を確認する方法について説明します。</p><h2 id="適用対象の-OS"><a href="#適用対象の-OS" class="headerlink" title="適用対象の OS"></a>適用対象の OS</h2><ul><li>すべての Windows OS</li></ul><p>※ Windows 10 や Windows Server 2022 以前の OS を使用している環境では、タスク マネージャーの UI がスクリーン ショットと異なりますが、操作方法に違いはありません。</p><h2 id="確認手順"><a href="#確認手順" class="headerlink" title="確認手順"></a>確認手順</h2><h3 id="1-パッケージ名を確認したい-UWP-アプリを起動"><a href="#1-パッケージ名を確認したい-UWP-アプリを起動" class="headerlink" title="1. パッケージ名を確認したい UWP アプリを起動"></a>1. パッケージ名を確認したい UWP アプリを起動</h3><p>確認したいUWPアプリを通常通り起動します。今回は、例として、電卓と Snipping Tool のパッケージ名を確認していきます。</p><p><img src="UWP.png"></p><h3 id="2-タスク-マネージャーを起動"><a href="#2-タスク-マネージャーを起動" class="headerlink" title="2. タスク マネージャーを起動"></a>2. タスク マネージャーを起動</h3><p>タスク マネージャーを起動するには、キーボードの Ctrl + Shift + Esc キーを同時に押すか、タスク バーを右クリックして [<strong>タスク マネージャー</strong>] を選択します。</p><h3 id="3-詳細-画面に切り替え"><a href="#3-詳細-画面に切り替え" class="headerlink" title="3. [詳細] 画面に切り替え"></a>3. [詳細] 画面に切り替え</h3><p>タスク マネージャーが開いたら、サイド メニューから [<strong>詳細</strong>] 画面に切り替えます。この画面では、現在実行されているプロセスが表示されます。</p><h3 id="4-コマンド-ライン-カラムを追加"><a href="#4-コマンド-ライン-カラムを追加" class="headerlink" title="4. [コマンド ライン] カラムを追加"></a>4. [コマンド ライン] カラムを追加</h3><p>任意のカラムを右クリックして表示されたコンテキスト メニューより [<strong>列の選択</strong>] をクリックし、[<strong>コマンド ライン</strong>] にチェックを入れて [<strong>OK</strong>] をクリックします。これで、プロセスのコマンド ライン情報が表示されるようになります。</p><p><img src="SelectColumns.png"><br><img src="CommandLine.png"></p><h3 id="5-プロセス-画面に切り替え"><a href="#5-プロセス-画面に切り替え" class="headerlink" title="5. [プロセス] 画面に切り替え"></a>5. [プロセス] 画面に切り替え</h3><p>サイド メニューから [<strong>プロセス</strong>] 画面に切り替えます。</p><h3 id="6-UWP-アプリを右クリック"><a href="#6-UWP-アプリを右クリック" class="headerlink" title="6. UWP アプリを右クリック"></a>6. UWP アプリを右クリック</h3><p>起動した UWP アプリを探します。見つけたら、該当のアプリを右クリックします。</p><h3 id="7-コンテキスト-メニューから-詳細の表示-をクリック"><a href="#7-コンテキスト-メニューから-詳細の表示-をクリック" class="headerlink" title="7. コンテキスト メニューから [詳細の表示] をクリック"></a>7. コンテキスト メニューから [詳細の表示] をクリック</h3><p>右クリックすると表示されるコンテキストメニューから [<strong>詳細の表示</strong>] を選択します。これにより、自動的に [<strong>詳細</strong>] 画面に遷移し、実行プロセスがハイライトされます。Snipping Tool のようにアプリを右クリックすれば、[<strong>詳細の表示</strong>] がクリックできる場合や電卓のように [<strong>展開</strong>] が必要な場合があります。</p><p><strong>Snipping Tool</strong><br><img src="SnippingTool01.png"></p><p><strong>電卓</strong><br><img src="Calculator01.png"><br><img src="Calculator02.png"></p><h3 id="8-コマンド-ライン-カラムから実行ファイルのパスを確認"><a href="#8-コマンド-ライン-カラムから実行ファイルのパスを確認" class="headerlink" title="8. [コマンド ライン] カラムから実行ファイルのパスを確認"></a>8. [コマンド ライン] カラムから実行ファイルのパスを確認</h3><p>[<strong>コマンド ライン</strong>] カラムに表示されている実行ファイルのパスを確認します。このパスにはパッケージ名が含まれています。</p><p>バージョンを示す数字の前までが、パッケージ名になり、Snipping Tool は、<strong>Microsoft.ScreenSketch</strong>、電卓は、<strong>Microsoft.WindowsCalculator</strong> がパッケージ名になります。</p><p><strong>Snipping Tool: C:\Program Files\WindowsApps\Microsoft.ScreenSketch_11.2307.52.0_x64__8wekyb3d8bbwe\SnippingTool</strong><br><img src="SnippingTool02.png"></p><p><strong>電卓: C:\Program Files\WindowsApps\Microsoft.WindowsCalculator_11.2311.0.0_x64__8wekyb3d8bbwe</strong><br><img src="Calculator03.png"></p><h3 id="9-UWP-アプリの情報を-PowerShell-コマンドで確認"><a href="#9-UWP-アプリの情報を-PowerShell-コマンドで確認" class="headerlink" title="9. UWP アプリの情報を PowerShell コマンドで確認"></a>9. UWP アプリの情報を PowerShell コマンドで確認</h3><p>確認できたアプリのパッケージ名を使用すると、<a href="https://learn.microsoft.com/en-us/powershell/module/appx/get-appxpackage">Get-AppxPackage</a> より、UWP アプリの情報が確認できます。</p><figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">Get-AppxPackage</span> <span class="literal">-Name</span> <span class="string">&quot;アプリのパッケージ名&quot;</span></span><br></pre></td></tr></table></figure><p><strong>Snipping Tool: Get-AppxPackage -Name Microsoft.ScreenSketch</strong><br><img src="SnippingTool03.png"></p><p><strong>電卓: Get-AppxPackage -Name Microsoft.WindowsCalculator</strong><br><img src="Calculator04.png"></p><h2 id="変更履歴"><a href="#変更履歴" class="headerlink" title="変更履歴"></a>変更履歴</h2><ul><li>2025/03/23 : 本 Blog の公開</li></ul>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;p&gt;本記事はマイクロソフト社員によって公開されております。&lt;/p&gt;
+&lt;p&gt;こんにちは、Windows サポートチームの栗木です。&lt;br&gt;UWP（Universal Windows Platform）は、Windows で動作するアプリケーションの開発を容易にするために設計された</summary>
+      
+    
+    
+    
+    <category term="User Interface and Apps" scheme="https://jpwinsup.github.io/blog/categories/User-Interface-and-Apps/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>タスク マネージャーからエクスプローラーを再起動する方法</title>
+    <link href="https://jpwinsup.github.io/blog/2025/03/23/Shell/Explorer/RestartExplorer/"/>
+    <id>https://jpwinsup.github.io/blog/2025/03/23/Shell/Explorer/RestartExplorer/</id>
+    <published>2025-03-23T05:00:00.000Z</published>
+    <updated>2025-04-04T13:31:30.645Z</updated>
+    
+    <content type="html"><![CDATA[<p>本記事はマイクロソフト社員によって公開されております。</p><p>こんにちは、Windows サポート チームの栗木です。<br>エクスプローラーは、Windows のユーザー インターフェースを管理する重要なプロセスであり、デスクトップ、タスク バー、ファイル エクスプローラーなどを担当しています。Windows を使用していると、何らかの要因でエクスプローラーが突然応答しなくなったり、ファイルやフォルダが正しく表示されなくなることがあります。こうした問題が発生した場合、システム全体を再起動するのではなく、エクスプローラーだけを再起動することで問題を解決できることがあります。<br>本記事では、タスク マネージャーを使用してエクスプローラーを再起動する方法について説明します。</p><h2 id="適用対象の-OS"><a href="#適用対象の-OS" class="headerlink" title="適用対象の OS"></a>適用対象の OS</h2><ul><li>すべての Windows OS</li></ul><p>※ Windows 10 や Windows Server 2022 以前の OS を使用している環境では、タスク マネージャーの UI がスクリーン ショットと異なりますが、操作方法に違いはありません。</p><h2 id="再起動手順"><a href="#再起動手順" class="headerlink" title="再起動手順"></a>再起動手順</h2><h3 id="1-タスクマネージャーを起動"><a href="#1-タスクマネージャーを起動" class="headerlink" title="1. タスクマネージャーを起動"></a>1. タスクマネージャーを起動</h3><p>タスク マネージャーを起動するには、キーボードの Ctrl + Shift + Esc キーを同時に押すか、タスク バーを右クリックして [<strong>タスク マネージャー</strong>] を選択します。</p><h3 id="2-ユーザー-画面に切り替え"><a href="#2-ユーザー-画面に切り替え" class="headerlink" title="2. [ユーザー] 画面に切り替え"></a>2. [ユーザー] 画面に切り替え</h3><p>タスク マネージャーが開いたら、サイド メニューから [<strong>ユーザー</strong>] 画面に切り替えます。この画面では、現在ログインしているユーザーごとにプロセスが表示されます。Windows 10 や Windows Server 2022 以前の OS を使用している環境では、上部に配置されている [<strong>ユーザー</strong>] タブを選択してください。</p><p><img src="TaskMgrAdmin.png"></p><h3 id="3-エクスプローラー右クリック"><a href="#3-エクスプローラー右クリック" class="headerlink" title="3. エクスプローラー右クリック"></a>3. エクスプローラー右クリック</h3><p>再起動したいエクスプローラーを実行しているユーザー（例：user01）のプロセス一覧から [<strong>エクスプローラー</strong>] を探します。見つけたら、そのプロセスを右クリックします。</p><h3 id="4-コンテキストメニューから-再起動-をクリック"><a href="#4-コンテキストメニューから-再起動-をクリック" class="headerlink" title="4. コンテキストメニューから [再起動] をクリック"></a>4. コンテキストメニューから [再起動] をクリック</h3><p>右クリックすると表示されるコンテキストメニューから [<strong>再起動</strong>] を選択します。これにより、エクスプローラーが再起動され、デスクトップやタスク バーがリフレッシュされます。環境によっては、エクスプローラーが複数ありますが、その場合はそれぞれのエクスプローラーを再起動してください。</p><p><img src="TaskMgrRestart.png"></p><h2 id="補足情報"><a href="#補足情報" class="headerlink" title="補足情報"></a>補足情報</h2><p>再起動されたエクスプローラーを実行しているユーザーが、切断状態の場合には、エクスプローラーは終了した後にすぐに起動せず、ユーザーが接続状態になったときに起動します。</p><p>他のユーザーのエクスプローラーを再起動したい場合には、管理者権限を持つユーザーでタスク マネージャーを起動して作業する必要があります。管理者権限をもたないユーザー（例：user01）でログインし、タスク マネージャーを実行すると、以下のスクリーン ショットのように他のユーザーのプロセス一覧が表示できないようになっています。</p><p><img src="TaskMgrUser01.png"></p><h2 id="変更履歴"><a href="#変更履歴" class="headerlink" title="変更履歴"></a>変更履歴</h2><ul><li>2025/03/24 : 本 Blog の公開</li></ul>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;p&gt;本記事はマイクロソフト社員によって公開されております。&lt;/p&gt;
+&lt;p&gt;こんにちは、Windows サポート チームの栗木です。&lt;br&gt;エクスプローラーは、Windows のユーザー インターフェースを管理する重要なプロセスであり、デスクトップ、タスク バー、ファイル エクス</summary>
+      
+    
+    
+    
+    <category term="Shell" scheme="https://jpwinsup.github.io/blog/categories/Shell/"/>
+    
+    <category term="Explorer" scheme="https://jpwinsup.github.io/blog/categories/Shell/Explorer/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>Azure Local バージョン 22H2 OS サポート終了について</title>
+    <link href="https://jpwinsup.github.io/blog/2025/03/13/FailoverClustering/AzureLocal22H2-Reach-End-of-Support/"/>
+    <id>https://jpwinsup.github.io/blog/2025/03/13/FailoverClustering/AzureLocal22H2-Reach-End-of-Support/</id>
+    <published>2025-03-13T05:04:32.000Z</published>
+    <updated>2025-04-04T13:31:30.408Z</updated>
+    
+    <content type="html"><![CDATA[<p>本記事はマイクロソフト社員によって公開されております。</p><p>いつも弊社製品をご利用いただきまして誠にありがとうございます。日本マイクロソフトの Windows サポートチームです。</p><p>Azure Local バージョン 22H2 の OS は、<strong>2025 年 5 月 31 日</strong>にサポート終了を迎えます。それ以降、毎月のセキュリティおよび品質アップデートが提供されなくなります。サポートリクエスト (SR) は、オペレーティング システムのアップグレードを実施される場合にのみご利用いただけるようになります。<br><br></p><h2 id="推奨される対策"><a href="#推奨される対策" class="headerlink" title="[推奨される対策]"></a>[推奨される対策]</h2><hr>お使いのシステムが引き続きアップデートを受け取り、サポートを受けるためには、できるだけお早めに Azure Local バージョン 23H2 へのアップグレードをお勧めいたします。<p>Azure Local バージョン 22H2 から 23H2 へのアップグレード手順については以下の記事をご参照ください。<br><a href="https://learn.microsoft.com/ja-jp/azure/azure-local/upgrade/upgrade-22h2-to-23h2-powershell?view=azloc-24113">PowerShell を使用して Azure Stack HCI OS バージョン 22H2 をバージョン 23H2 にアップグレードする</a></p><p>また、アップグレード時のトラブルシューティングについては以下のトラブルシューティング ガイドをご参照いただければ幸いです。<br><a href="https://github.com/Azure/AzureLocal-Supportability/tree/main/TSG/Upgrade">AzureLocal-Supportability/TSG/Upgrade at main · Azure/AzureLocal-Supportability</a></p><p>本投稿が少しでも皆様のお役に立てば幸いです。</p><p>※ 本情報の内容 (添付文書、リンク先などを含む) は、作成日時点でのものであり、予告なく変更される場合があります。</p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;p&gt;本記事はマイクロソフト社員によって公開されております。&lt;/p&gt;
+&lt;p&gt;いつも弊社製品をご利用いただきまして誠にありがとうございます。日本マイクロソフトの Windows サポートチームです。&lt;/p&gt;
+&lt;p&gt;Azure Local バージョン 22H2 の OS は、&lt;str</summary>
+      
+    
+    
+    
+    <category term="Failover Clustering" scheme="https://jpwinsup.github.io/blog/categories/Failover-Clustering/"/>
+    
+    <category term="Configuration and Management" scheme="https://jpwinsup.github.io/blog/categories/Failover-Clustering/Configuration-and-Management/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>Windows 11 バージョン 24H2 で netsh.exe の出力を PowerShell の変数に代入すると、非 ASCII 文字が文字化けする事象について</title>
+    <link href="https://jpwinsup.github.io/blog/2025/03/11/Networking/TCPIP/NetshEncodingChange24h2/"/>
+    <id>https://jpwinsup.github.io/blog/2025/03/11/Networking/TCPIP/NetshEncodingChange24h2/</id>
+    <published>2025-03-11T02:46:29.000Z</published>
+    <updated>2025-04-04T13:31:30.500Z</updated>
+    
+    <content type="html"><![CDATA[<p>本記事はマイクロソフト社員によって公開されております。</p><p>いつも弊社製品をご利用いただきまして誠にありがとうございます。<br>日本マイクロソフト Windows サポートチームです。</p><p>このブログでは、Windows 11 バージョン 24H2 で PowerShell で netsh コマンド (netsh.exe) を実行し、その結果を変数に代入すると日本語の文字など非 ASCII 文字が文字化けする問題とその解決策について紹介します。</p><ul><li><a href="#%E4%BA%8B%E8%B1%A1">事象</a></li><li><a href="#%E5%8E%9F%E5%9B%A0">原因</a></li><li><a href="#%E5%9B%9E%E9%81%BF%E7%AD%96">回避策</a><ul><li><a href="#powershell-%E3%81%AE-outputencoding-%E3%82%92-utf-8-%E3%81%AB%E3%81%99%E3%82%8B">PowerShell の OutputEncoding を UTF-8 にする</a></li><li><a href="#%E3%83%97%E3%83%AD%E3%82%BB%E3%82%B9%E5%AE%9F%E8%A1%8C%E6%99%82%E3%81%AE%E3%83%91%E3%83%A9%E3%83%A1%E3%83%BC%E3%82%BF%E3%83%BC%E3%82%92%E8%A8%AD%E5%AE%9A%E3%81%99%E3%82%8B">プロセス実行時のパラメーターを設定する</a></li><li><a href="#%E5%B0%82%E7%94%A8%E3%81%AE-powershell-%E3%82%B3%E3%83%9E%E3%83%B3%E3%83%89%E3%83%AC%E3%83%83%E3%83%88-wmi-%E3%82%AA%E3%83%96%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88%E3%82%92%E5%8F%82%E7%85%A7%E3%81%99%E3%82%8B%E3%82%B3%E3%83%9E%E3%83%B3%E3%83%89%E3%83%AC%E3%83%83%E3%83%88-%E3%82%92%E4%BD%BF%E7%94%A8%E3%81%99%E3%82%8B">専用の PowerShell コマンドレット (WMI オブジェクトを参照するコマンドレット) を使用する</a></li></ul></li><li><a href="#%E6%9B%B4%E6%96%B0%E5%B1%A5%E6%AD%B4">更新履歴</a></li><li><a href="#%E7%89%B9%E8%A8%98%E4%BA%8B%E9%A0%85">特記事項</a></li></ul><h2 id="事象"><a href="#事象" class="headerlink" title="事象"></a>事象</h2><p>以下のように、PowerShell で netsh コマンド (netsh.exe) を実行し、その結果を変数に代入して使用するスクリプトを実装している場合に、Windows 11 バージョン 24H2 では期待される文字列を取得出来ない場合があります。</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">PS C:\&gt; $result &#x3D; netsh interface ipv4 show interface</span><br><span class="line">PS C:\&gt; $result</span><br><span class="line"></span><br><span class="line">Idx     Met         MTU          迥カ諷・                蜷榊燕</span><br><span class="line">---  ----------  ----------  ------------  ---------------------------</span><br><span class="line">  1          75  4294967295  connected     Loopback Pseudo-Interface 1</span><br><span class="line">  8          15        1500  connected     繧、繝シ繧オ繝阪ャ繝・</span><br></pre></td></tr></table></figure><p>また、パイプを使った処理でも同様に文字化けが発生し、期待した処理が出来ない可能性があります。</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">PS C:\&gt; netsh interface ipv4 show interface | Select-String connected</span><br><span class="line"></span><br><span class="line">  1          75  4294967295  connected     Loopback Pseudo-Interface 1</span><br><span class="line">  8          15        1500  connected     繧、繝シ繧オ繝阪ャ繝・</span><br></pre></td></tr></table></figure><h2 id="原因"><a href="#原因" class="headerlink" title="原因"></a>原因</h2><p>netsh.exe は Windows 11 バージョン 24H2 から、結果を UTF-8 で出力するようになりました。<br>これにより PowerShell の文字列の取り扱いとミスマッチが発生し、変数の参照時に文字化けが発生します。</p><h2 id="回避策"><a href="#回避策" class="headerlink" title="回避策"></a>回避策</h2><p>以下 3 点の、いずれかの方法を検討ください。</p><ul><li><a href="#PowerShell-%E3%81%AE-OutputEncoding-%E3%82%92-UTF-8-%E3%81%AB%E3%81%99%E3%82%8B">PowerShell の OutputEncoding を UTF-8 にする</a></li><li><a href="#%E3%83%97%E3%83%AD%E3%82%BB%E3%82%B9%E5%AE%9F%E8%A1%8C%E6%99%82%E3%81%AE%E3%83%91%E3%83%A9%E3%83%A1%E3%83%BC%E3%82%BF%E3%83%BC%E3%82%92%E8%A8%AD%E5%AE%9A%E3%81%99%E3%82%8B">プロセス実行時のパラメーターを設定する</a></li><li><a href="#%E5%B0%82%E7%94%A8%E3%81%AE-PowerShell-%E3%82%B3%E3%83%9E%E3%83%B3%E3%83%89%E3%83%AC%E3%83%83%E3%83%88-WMI-%E3%82%AA%E3%83%96%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88%E3%82%92%E5%8F%82%E7%85%A7%E3%81%99%E3%82%8B%E3%82%B3%E3%83%9E%E3%83%B3%E3%83%89%E3%83%AC%E3%83%83%E3%83%88-%E3%82%92%E4%BD%BF%E7%94%A8%E3%81%99%E3%82%8B">専用の PowerShell コマンドレット (WMI オブジェクトを参照するコマンドレット) を使用する</a></li></ul><h3 id="PowerShell-の-OutputEncoding-を-UTF-8-にする"><a href="#PowerShell-の-OutputEncoding-を-UTF-8-にする" class="headerlink" title="PowerShell の OutputEncoding を UTF-8 にする"></a>PowerShell の OutputEncoding を UTF-8 にする</h3><p>PowerShell の出力エンコーディングを UTF-8 に設定することで、文字化けの発生を防ぐことができます。<br>ただし、出力に含まれるテンプレート部分 (メッセージや出力のカラム見出し等) が英語になります。</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">PS C:\&gt; [System.Console]::OutputEncoding &#x3D; [System.Text.Encoding]::UTF8</span><br><span class="line">PS C:\&gt; $result &#x3D; netsh interface ipv4 show interface</span><br><span class="line">PS C:\&gt; $result</span><br><span class="line"></span><br><span class="line">Idx     Met         MTU          State                Name</span><br><span class="line">---  ----------  ----------  ------------  ---------------------------</span><br><span class="line">  1          75  4294967295  connected     Loopback Pseudo-Interface 1</span><br><span class="line">  8          15        1500  connected     イーサネット</span><br></pre></td></tr></table></figure><h3 id="プロセス実行時のパラメーターを設定する"><a href="#プロセス実行時のパラメーターを設定する" class="headerlink" title="プロセス実行時のパラメーターを設定する"></a>プロセス実行時のパラメーターを設定する</h3><p>netsh.exe を実行する際の各種パラメーターを調整し、文字化けを回避します。<br>以下のように関数化してご利用いただけます。</p><figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Get-NetshInterfaces</span></span> &#123;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="variable">$process</span> = <span class="built_in">New-Object</span> System.Diagnostics.Process</span><br><span class="line">        <span class="variable">$process</span>.StartInfo.FileName = <span class="string">&quot;C:\Windows\System32\netsh.exe&quot;</span></span><br><span class="line">        <span class="variable">$process</span>.StartInfo.Arguments = <span class="string">&quot;interface ipv4 show interface&quot;</span></span><br><span class="line">        <span class="variable">$process</span>.StartInfo.UseShellExecute = <span class="variable">$false</span></span><br><span class="line">        <span class="variable">$process</span>.StartInfo.RedirectStandardOutput = <span class="variable">$true</span></span><br><span class="line">        <span class="variable">$process</span>.StartInfo.StandardOutputEncoding = [<span class="type">System.Text.Encoding</span>]::UTF8</span><br><span class="line">        <span class="variable">$process</span>.Start() | <span class="built_in">Out-Null</span></span><br><span class="line">        <span class="keyword">return</span> <span class="variable">$process</span>.StandardOutput.ReadToEnd()</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">finally</span> &#123;</span><br><span class="line">        <span class="variable">$process</span>.Dispose()</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><p>上記例を実行すると、以下のように出力されます。</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">PS C:\&gt; function Get-NetshInterfaces &#123;</span><br><span class="line">&gt;&gt;     try &#123;</span><br><span class="line">&gt;&gt;         $process &#x3D; New-Object System.Diagnostics.Process</span><br><span class="line">&gt;&gt;         $process.StartInfo.FileName &#x3D; &quot;C:\Windows\System32\netsh.exe&quot;</span><br><span class="line">&gt;&gt;         $process.StartInfo.Arguments &#x3D; &quot;interface ipv4 show interface&quot;</span><br><span class="line">&gt;&gt;         $process.StartInfo.UseShellExecute &#x3D; $false</span><br><span class="line">&gt;&gt;         $process.StartInfo.RedirectStandardOutput &#x3D; $true</span><br><span class="line">&gt;&gt;         $process.StartInfo.StandardOutputEncoding &#x3D; [System.Text.Encoding]::UTF8</span><br><span class="line">&gt;&gt;         $process.Start() | Out-Null</span><br><span class="line">&gt;&gt;         return $process.StandardOutput.ReadToEnd()</span><br><span class="line">&gt;&gt;     &#125;</span><br><span class="line">&gt;&gt;     finally &#123;</span><br><span class="line">&gt;&gt;         $process.Dispose()</span><br><span class="line">&gt;&gt;     &#125;</span><br><span class="line">&gt;&gt; &#125;</span><br><span class="line">PS C:\&gt;</span><br><span class="line">PS C:\&gt; $result &#x3D; Get-NetshInterfaces</span><br><span class="line">PS C:\&gt; $result</span><br><span class="line"></span><br><span class="line">Idx     Met         MTU          State                Name</span><br><span class="line">---  ----------  ----------  ------------  ---------------------------</span><br><span class="line">  1          75  4294967295  connected     Loopback Pseudo-Interface 1</span><br><span class="line">  8          15        1500  connected     イーサネット</span><br></pre></td></tr></table></figure><h3 id="専用の-PowerShell-コマンドレット-WMI-オブジェクトを参照するコマンドレット-を使用する"><a href="#専用の-PowerShell-コマンドレット-WMI-オブジェクトを参照するコマンドレット-を使用する" class="headerlink" title="専用の PowerShell コマンドレット (WMI オブジェクトを参照するコマンドレット) を使用する"></a>専用の PowerShell コマンドレット (WMI オブジェクトを参照するコマンドレット) を使用する</h3><p>目的の設定項目等に WMI クラスが用意されている場合は「WMI オブジェクトを使用する」あるいは「WMI オブジェクトを取得する PowerShell コマンドレットを使用する」ことで、netsh.exe の出力文字列に依存せず処理を行うことが可能です。</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">PS C:\&gt; $result &#x3D; Get-NetIpInterface</span><br><span class="line">PS C:\&gt; $result</span><br><span class="line"></span><br><span class="line">ifIndex InterfaceAlias                  AddressFamily NlMtu(Bytes) InterfaceMetric Dhcp     ConnectionState PolicyStore</span><br><span class="line">------- --------------                  ------------- ------------ --------------- ----     --------------- -----------</span><br><span class="line">8       イーサネット                          IPv6                  1500              15 Enabled  Connected       ActiveStore</span><br><span class="line">1       Loopback Pseudo-Interface 1     IPv6            4294967295              75 Disabled Connected       ActiveStore</span><br><span class="line">8       イーサネット                          IPv4                  1500              15 Enabled  Connected       ActiveStore</span><br><span class="line">1       Loopback Pseudo-Interface 1     IPv4            4294967295              75 Disabled Connected       ActiveStore</span><br></pre></td></tr></table></figure><hr><h2 id="更新履歴"><a href="#更新履歴" class="headerlink" title="更新履歴"></a>更新履歴</h2><p>2025/03/11 : 本ブログ記事の公開</p><h2 id="特記事項"><a href="#特記事項" class="headerlink" title="特記事項"></a>特記事項</h2><p>本情報の内容（添付文書、リンク先などを含む）は作成日時点でのものであり、予告なく変更される場合があります。</p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;p&gt;本記事はマイクロソフト社員によって公開されております。&lt;/p&gt;
+&lt;p&gt;いつも弊社製品をご利用いただきまして誠にありがとうございます。&lt;br&gt;日本マイクロソフト Windows サポートチームです。&lt;/p&gt;
+&lt;p&gt;このブログでは、Windows 11 バージョン 24H2 で</summary>
+      
+    
+    
+    
+    <category term="Networking" scheme="https://jpwinsup.github.io/blog/categories/Networking/"/>
+    
+    <category term="TCPIP" scheme="https://jpwinsup.github.io/blog/categories/Networking/TCPIP/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>Windows Server 2022 の環境でデフラグ処理が連続して動き続ける事象について</title>
+    <link href="https://jpwinsup.github.io/blog/2025/03/05/Storage/Management/DefragProcessUncomplete/"/>
+    <id>https://jpwinsup.github.io/blog/2025/03/05/Storage/Management/DefragProcessUncomplete/</id>
+    <published>2025-03-05T15:00:00.000Z</published>
+    <updated>2025-04-04T13:31:30.698Z</updated>
+    
+    <content type="html"><![CDATA[<blockquote><p>本記事は、マイクロソフト社員によって公開されております。  </p></blockquote><p>こんにちは、Windows サポート チームです。<br>本日は Windows Server 2022 の環境でデフラグ処理が連続して動き続ける事象についてご案内いたします。</p><h2 id="事象"><a href="#事象" class="headerlink" title="事象"></a>事象</h2><hr>Windows Server 2022 の環境でデフラグ処理が正常に完了せず、数時間おきに処理が実行されてしまう。また、デフラグ処理中に svchost.exe (defragsvc) がサーバーの物理メモリを大量に確保してしまう。<h2 id="原因"><a href="#原因" class="headerlink" title="原因"></a>原因</h2><hr>現時点におきましては、原因の特定には至っておらず、調査中の状況になります。弊社過去事例から以下の環境で発生することを確認しております。<br><p>// 発生する可能性がある環境<br>・VMware vSAN を利用している環境。<br>・Windows Server 2022 が使用するディスクのスラブサイズが 4KB になっていること。<br>  (4K でなくともさらに小さい値の場合でも発生する可能性がございます。)</p><p>スラブのサイズは以下のコマンドにて確認が可能です。</p><p>// コマンド<br>fsutil volume tpinfo info &lt;ドライブ文字&gt;:</p><p>原因につきましては、調査に進展があり次第、アップデートさせていただきます。</p><h2 id="回避策"><a href="#回避策" class="headerlink" title="回避策"></a>回避策</h2><hr>現在判明している回避策はデフラグタスクを無効にしていただき、デフラグ処理が実行されないようにすることのみになります。デフラグタスクは以下の手順にて無効化することが可能です。<br><p>=========<br>ScheduledDefrag タスク の無効化手順<br>=========<br>1. 管理者権限で Powershell を起動します。</p><p>2. 以下のコマンドを実行して、ScheduledDefrag タスクが State が Disabled になっていないことを確認します。</p><p>Get-ScheduledTask -TaskName ScheduledDefrag</p><p>3. 以下のコマンドを実行して、ScheduledDefrag タスクが無効化します。</p><p>Get-ScheduledTask -TaskName ScheduledDefrag | Disable-ScheduledTask</p><p>4. 以下のコマンドを実行して、ScheduledDefrag タスクが State が Disabled になっていることを確認します。</p><p>Get-ScheduledTask -TaskName ScheduledDefrag<br><br>===</p><p>いかがでしたでしょうか。本投稿が少しでも皆様のお役に立てば幸いです。 本情報の内容（添付文書、リンク先などを含む）は、作成日時でのものであり、予告なく変更される場合があります。</p><h2 id="変更履歴"><a href="#変更履歴" class="headerlink" title="変更履歴"></a>変更履歴</h2><ul><li>2025/03/06 : 本 Blog の公開</li></ul>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;blockquote&gt;
+&lt;p&gt;本記事は、マイクロソフト社員によって公開されております。  &lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;こんにちは、Windows サポート チームです。&lt;br&gt;本日は Windows Server 2022 の環境でデフラグ処理が連続して動き続け</summary>
+      
+    
+    
+    
+    <category term="Storage" scheme="https://jpwinsup.github.io/blog/categories/Storage/"/>
+    
+    <category term="Management" scheme="https://jpwinsup.github.io/blog/categories/Storage/Management/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>USB 接続のプリンターで意図しない文字列が印刷される</title>
+    <link href="https://jpwinsup.github.io/blog/2025/03/02/UserInterfaceAndApps/Printing/PrintIssueconnectedUSB/"/>
+    <id>https://jpwinsup.github.io/blog/2025/03/02/UserInterfaceAndApps/Printing/PrintIssueconnectedUSB/</id>
+    <published>2025-03-02T03:24:13.000Z</published>
+    <updated>2025-04-04T13:31:30.861Z</updated>
+    
+    <content type="html"><![CDATA[<p>こんにちは、Windows サポート チームの神田です。<br>Windows の更新プログラムを適用すると、印刷処理に一部想定しない動作が発生する事が確認されており、こちらのブログにて確認している事象および対応策について、お知らせいたします。<br>※ 3/26 修正プログラムの提供開始について更新しました。</p><h4 id="事象"><a href="#事象" class="headerlink" title="事象"></a>事象</h4><p>USB で接続したプリンターで印刷を実行した際に、以下のような文字列が印刷されます。</p><img src="/blog/2025/03/02/UserInterfaceAndApps/Printing/PrintIssueconnectedUSB/20251dErrorSample.jpg" class=""><h4 id="要因"><a href="#要因" class="headerlink" title="要因"></a>要因</h4><p>Windows 10 および 11 において、2025 年 1 月第 4 週におよび 2 月第 2 週以降に提供された更新プログラムの一部に、印刷処理に想定しない動作を行うものが含まれており上記に記載した問題が発生します。</p><p>発生が確認されているバージョンは、以下の通りです。</p><p>Windows 10 22H2 にて以下およびこれより新しい更新プログラムをインストールしている環境</p><ul><li>KB5050081 (2025 年 1 月第 4 週)<br><a href="https://support.microsoft.com/ja-jp/topic/2025-%E5%B9%B4-1-%E6%9C%88-28-%E6%97%A5-kb5050081-os-%E3%83%93%E3%83%AB%E3%83%89-19045-5440-%E3%83%97%E3%83%AC%E3%83%93%E3%83%A5%E3%83%BC-a8c14cfd-0f24-43ad-aea2-641d86cb648f">2025 年 1 月 28 日 — KB5050081 (OS ビルド 19045.5440) プレビュー - Microsoft サポート</a></li><li>KB5051974 (2025 年 2 月第 2 週)<br><a href="https://support.microsoft.com/ja-jp/topic/2025-%E5%B9%B4-2-%E6%9C%88-11-%E6%97%A5-kb5051974-os-%E3%83%93%E3%83%AB%E3%83%89-19044-5487-%E3%81%8A%E3%82%88%E3%81%B3-19045-5487-687841b4-97c9-493a-8cb8-ba3b8c077c7e">2025 年 2 月 11 日 — KB5051974 (OS ビルド 19044.5487 および 19045.5487) - Microsoft サポート</a></li></ul><p>Windows 11 23H2 にて以下およびこれより新しい更新プログラムをインストールしている環境</p><ul><li>KB5050092 (2025 年 1 月第 4 週)<br><a href="https://support.microsoft.com/ja-jp/topic/2025-%E5%B9%B4-1-%E6%9C%88-29-%E6%97%A5-kb5050092-os-%E3%83%93%E3%83%AB%E3%83%89-22621-4830-%E3%81%8A%E3%82%88%E3%81%B3-22631-4830-%E3%83%97%E3%83%AC%E3%83%93%E3%83%A5%E3%83%BC-fc9d13d6-09c6-412e-aab5-939e2c13a768">2025 年 1 月 29 日 — KB5050092 (OS ビルド 22621.4830 および 22631.4830) プレビュー - Microsoft サポート</a></li><li>KB5051989  (2025 年 2 月第 2 週)<br><a href="https://support.microsoft.com/ja-jp/topic/2025-%E5%B9%B4-2-%E6%9C%88-11-%E6%97%A5-kb5051989-os-%E3%83%93%E3%83%AB%E3%83%89-22621-4890-%E3%81%8A%E3%82%88%E3%81%B3-22631-4890-b3062bbc-d32c-48cd-bc52-0c57bfd6a764">2025 年 2 月 11 日 — KB5051989 (OS ビルド 22621.4890 および 22631.4890) - Microsoft サポート</a></li></ul><p>また、本事象について、以下の「既知の問題と通知」 Web ページにも記載されています。</p><p><a href="https://learn.microsoft.com/ja-jp/windows/release-health/status-windows-10-22h2">Windows 10、バージョン 22H2 の既知の問題と通知 | Microsoft Learn</a><br><a href="https://learn.microsoft.com/en-us/windows/release-health/status-windows-10-22h2">Windows 10, version 22H2 known issues and notifications | Microsoft Learn (英語)</a><br><a href="https://learn.microsoft.com/ja-jp/windows/release-health/status-windows-11-22h2">Windows 11、バージョン 22H2 の既知の問題と通知 | Microsoft Learn</a><br><a href="https://learn.microsoft.com/en-us/windows/release-health/status-windows-11-22h2">Windows 11, version 22H2 known issues and notifications | Microsoft Learn (英語)</a><br><a href="https://learn.microsoft.com/en-us/windows/release-health/status-windows-11-23h2">Windows 11, version 23H2 known issues and notifications | Microsoft Learn (英語)</a></p><p>本事象については更新プログラムが提供されています。下記から更新プログラムをインストールして事象に改善が見られるか、ご確認いただきますようお願いいたします。</p><p>Windows 10 22H2 向け更新プログラム<br><a href="https://support.microsoft.com/en-us/topic/march-25-2025-kb5053643-os-build-19045-5679-preview-3fd3cc5d-2757-4092-ac0e-bb0e9c295861">March 25, 2025—KB5053643 (OS Build 19045.5679) Preview</a><br>Windows 11 22H2, 23H2 向け更新プログラム<br><a href="https://support.microsoft.com/en-us/topic/march-25-2025-kb5053657-os-builds-22621-5126-and-22631-5126-preview-87a95447-6e12-4cd6-a7cf-ef525b8a489f">March 25, 2025—KB5053657 (OS Builds 22621.5126 and 22631.5126) Preview</a></p><p>何からの事情で更新プログラムのインストールが行えない場合は、下記の回避策についてご検討ください。</p><h4 id="回避策-1"><a href="#回避策-1" class="headerlink" title="回避策 #1"></a>回避策 #1</h4><p>USB 接続でプリンターをご利用いただいている場合に発生する事象となります。<br>ネットワーク プリンターでは発生しないため、ネットワーク機能を有するプリンターをご利用の場合は、ネットワーク プリンターの設定を行っていただければ本事象は発生いたしません。</p><h4 id="回避策-2"><a href="#回避策-2" class="headerlink" title="回避策 #2"></a>回避策 #2</h4><p>KIR (Known Issue Rollback) という仕組みで問題のあるコードを無効にする設定を展開できます。<br>KIR のためのグループポリシーをインストールするモジュールは、前述の各 OS の「既知の問題と通知」のページの「グループ ポリシーをグループ ポリシー名でダウンロードします」の項目よりダウンロード可能です。</p><p>KIR の適用、展開方法の詳細については、下記の技術情報をご参照ください。<br><a href="https://learn.microsoft.com/ja-jp/troubleshoot/windows-client/group-policy/use-group-policy-to-deploy-known-issue-rollback">グループ ポリシーを使用して既知の問題のロールバックを展開する方法</a></p><p> ※ 補足<br>Windows 11 24H2 については、以下の更新プログラムにて修正していますが、一部回避できていない状況を確認しており調査中となります。<br><a href="https://support.microsoft.com/ja-jp/topic/2025-%E5%B9%B4-1-%E6%9C%88-28-%E6%97%A5-kb5050094-os-%E3%83%93%E3%83%AB%E3%83%89-26100-3037-%E3%83%97%E3%83%AC%E3%83%93%E3%83%A5%E3%83%BC-78fda0ea-79e9-468d-8a77-de7914ca1aef">2025 年 1 月 28 日 — KB5050094 (OS ビルド 26100.3037) プレビュー - Microsoft サポート</a><br><a href="https://support.microsoft.com/ja-jp/topic/2025-%E5%B9%B4-2-%E6%9C%88-11-%E6%97%A5-kb5051987-os-%E3%83%93%E3%83%AB%E3%83%89-26100-3194-63fb007d-3f52-4b47-85ea-28414a24be2d">2025 年 2 月 11 日 — KB5051987 (OS ビルド 26100.3194) - Microsoft サポート</a></p><p>弊社製品の想定しない動作により、ご迷惑をおかけしており誠に申し訳ございません。</p><p>よろしくお願いいたします。</p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;p&gt;こんにちは、Windows サポート チームの神田です。&lt;br&gt;Windows の更新プログラムを適用すると、印刷処理に一部想定しない動作が発生する事が確認されており、こちらのブログにて確認している事象および対応策について、お知らせいたします。&lt;br&gt;※ 3/26 修正プロ</summary>
+      
+    
+    
+    
+    <category term="User Interface and Apps" scheme="https://jpwinsup.github.io/blog/categories/User-Interface-and-Apps/"/>
+    
+    <category term="Printing (印刷)" scheme="https://jpwinsup.github.io/blog/categories/User-Interface-and-Apps/Printing-%E5%8D%B0%E5%88%B7/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>Processor Utility カウンターの値が周期的に空白になる</title>
+    <link href="https://jpwinsup.github.io/blog/2025/02/19/Performance/Tools/perfmon_procutil_drop/"/>
+    <id>https://jpwinsup.github.io/blog/2025/02/19/Performance/Tools/perfmon_procutil_drop/</id>
+    <published>2025-02-19T06:00:00.000Z</published>
+    <updated>2025-04-04T13:31:30.533Z</updated>
+    
+    <content type="html"><![CDATA[<p>本記事はマイクロソフト社員によって公開されております。  </p><p>いつも弊社製品をご利用いただきまして誠にありがとうございます。<br>日本マイクロソフト Windows サポートチームです。  </p><p>パフォーマンス モニターで取得できる CPU 関連カウンターのうち、Processor Information が提供する <code>% Processor Utility</code> と <code>% Privileged Utility</code> の値が定期的に抜け落ちる事象が確認されています。</p><h2 id="対象-OS"><a href="#対象-OS" class="headerlink" title="対象 OS"></a>対象 OS</h2><p>サポートされているすべての Windows および Windows Server (Windows Server 2025 含む)</p><h2 id="原因"><a href="#原因" class="headerlink" title="原因"></a>原因</h2><p>これらのカウンターの統計処理に使用する 32 bit 変数が時間の経過によりオーバーフローすることが原因です。<br>プロセッサの周波数やベース クロックによって実際の周期は前後しますが、弊社の検証環境では約 1 時間 55 分ごとに 1 回、空白が生じることを確認しています。</p><h2 id="影響のあるカウンター"><a href="#影響のあるカウンター" class="headerlink" title="影響のあるカウンター"></a>影響のあるカウンター</h2><ul><li><code>\Processor Information\ % Processor Utility</code></li><li><code>\Processor Information\ % Privileged Utility</code></li></ul><h2 id="影響・代替案"><a href="#影響・代替案" class="headerlink" title="影響・代替案"></a>影響・代替案</h2><p>本事象に伴うシステムへの影響はありません。また、この動作は次期 OS で修正が計画されています。<br>カウンターの空白化によって運用上の問題が生じる場合は、本事象が発生しない、以下のカウンターに代替することをご検討ください。</p><ul><li><code>\Processor Information\ % Processor Time</code></li><li><code>\Processor Information\ % Privileged Time</code></li></ul><p>CPU に関するパフォーマンス カウンターについては、<a href="https://jpwinsup.github.io/blog/2022/07/15/Performance/SystemResource/PerformanceCounterProcessor/">CPU 使用状況を確認する際に見るべきパフォーマンス カウンター</a> をご参照ください。</p><h2 id="変更履歴"><a href="#変更履歴" class="headerlink" title="変更履歴"></a>変更履歴</h2><p>2025/02/19 : 本記事の公開</p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;p&gt;本記事はマイクロソフト社員によって公開されております。  &lt;/p&gt;
+&lt;p&gt;いつも弊社製品をご利用いただきまして誠にありがとうございます。&lt;br&gt;日本マイクロソフト Windows サポートチームです。  &lt;/p&gt;
+&lt;p&gt;パフォーマンス モニターで取得できる CPU 関連カウ</summary>
+      
+    
+    
+    
+    <category term="Performance" scheme="https://jpwinsup.github.io/blog/categories/Performance/"/>
+    
+    <category term="Tools" scheme="https://jpwinsup.github.io/blog/categories/Performance/Tools/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>Windows Server 2025 日本語環境においてサーバーマネージャー上で &quot;リモート SSH アクセス&quot; の有効化に失敗する事象</title>
+    <link href="https://jpwinsup.github.io/blog/2025/02/17/OpenSSH/WindowsServer2025JPOpenSSHError/"/>
+    <id>https://jpwinsup.github.io/blog/2025/02/17/OpenSSH/WindowsServer2025JPOpenSSHError/</id>
+    <published>2025-02-17T08:20:00.000Z</published>
+    <updated>2025-04-04T13:31:30.505Z</updated>
+    
+    <content type="html"><![CDATA[<blockquote><p>本記事はマイクロソフト社員によって公開されております。</p></blockquote><hr><p>いつも弊社製品をご利用いただきまして誠にありがとうございます。<br>日本マイクロソフト Windows サポートチームです。</p><p>今回は、Windows Server 2025 日本語環境にてサーバーマネージャー上で “リモート SSH アクセス” の有効化に失敗する事象についてご案内いたします。<br>この記事では、本問題の概要と対処策について説明いたします。</p><h2 id="対象-OS"><a href="#対象-OS" class="headerlink" title="対象 OS"></a>対象 OS</h2><p>Windows Server 2025 日本語環境</p><h2 id="概要"><a href="#概要" class="headerlink" title="概要"></a>概要</h2><p>“サーバーマネージャー上で表示されている “リモートSSH接続：無効” における “無効” のリンクをクリックすることで、OpenSSH サービスを有効化するための PowerShell コマンドが実行されますが、日本語環境ではコマンドで指定している<br>オプションの文字列に一部問題があることにより、以下画面のようにエラーメッセージが表示されて本機能を有効化することが出来ない問題が発生いたします。</p><p>本事象に関しましては、現在弊社にて対応を検討中の状況でございますが、直接 PowerShell でコマンドを実行することで OpenSSH サービスの設定 (有効、無効) を切り替えることが可能でございますので、下記の対処策の実施をご検討いただけますと幸いです。</p><p><img src="1.png" alt="Windows Server 2025 日本語環境においてサーバーマネージャー上で &quot;リモート SSH アクセス&quot; を押下した際に表示されるエラーメッセージ"></p><h2 id="対処策"><a href="#対処策" class="headerlink" title="対処策"></a>対処策</h2><p>以下の PowerShell コマンドを管理者権限で実行することで  OpenSSH サービスの有効化が可能です。</p><p>OpenSSH サービスの有効化</p><blockquote><blockquote><blockquote></blockquote><p>Set-Service -Name sshd -StartupType Automatic -Status running</p><blockquote></blockquote><p>※一度実行することで、再起動後も有効となります。</p></blockquote></blockquote><p>以下の PowerShell コマンドを管理者権限で実行することで OpenSSH サービスの無効化が可能です。</p><p>OpenSSH サービスの無効化</p><blockquote><blockquote><blockquote></blockquote><p>Set-Service -Name sshd -StartupType Manual -Status Stopped</p><blockquote></blockquote></blockquote></blockquote><p>本投稿が少しでも皆様のお役に立ちましたら幸いです。<br>※ 本情報の内容 (添付文書、リンク先などを含む) は、作成日時点でのものであり、予告なく変更される場合があります。</p><h2 id="参考情報"><a href="#参考情報" class="headerlink" title="参考情報"></a>参考情報</h2><p><a href="https://learn.microsoft.com/ja-jp/powershell/module/microsoft.powershell.management/set-service?view=powershell-7.4">https://learn.microsoft.com/ja-jp/powershell/module/microsoft.powershell.management/set-service?view=powershell-7.4</a><br><a href="https://learn.microsoft.com/ja-jp/windows-server/administration/openssh/openssh_install_firstuse?tabs=gui&amp;pivots=windows-server-2025">https://learn.microsoft.com/ja-jp/windows-server/administration/openssh/openssh_install_firstuse?tabs=gui&amp;pivots=windows-server-2025</a></p><h2 id="変更履歴"><a href="#変更履歴" class="headerlink" title="変更履歴"></a>変更履歴</h2><p>2025/2/17 ：本記事の公開</p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;blockquote&gt;
+&lt;p&gt;本記事はマイクロソフト社員によって公開されております。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;hr&gt;
+&lt;p&gt;いつも弊社製品をご利用いただきまして誠にありがとうございます。&lt;br&gt;日本マイクロソフト Windows サポートチームです。&lt;/p&gt;
+&lt;p</summary>
+      
+    
+    
+    
+    <category term="OpenSSH" scheme="https://jpwinsup.github.io/blog/categories/OpenSSH/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>Windows 365 のお問い合わせのガイダンス</title>
+    <link href="https://jpwinsup.github.io/blog/2025/02/11/Windows365/W365Request/"/>
+    <id>https://jpwinsup.github.io/blog/2025/02/11/Windows365/W365Request/</id>
+    <published>2025-02-11T15:00:00.000Z</published>
+    <updated>2025-04-04T13:31:30.947Z</updated>
+    
+    <content type="html"><![CDATA[<p>※ 本記事はマイクロソフト社員によって公開されております。</p><p>こんにちは。 Windows プラットフォーム サポート担当のロベルトです。<br>本記事では、Windows 365 をご利用のお客様向けに、お問い合わせに関するガイダンスをご案内させていただきます。</p><p>Windows 365 はクラウド ベースのサービスであり、Cloud PC と呼ばれる、Windows の仮想マシンを提供するサービスでございます。</p><p>トラブルやお問い合わせが発生した場合には、Windows 365 製品や Windows OS、Azure 基盤など、どの観点での調査が必要かによって、お問い合わせ窓口が異なります。<br>本ガイダンスでは、お客様がお問い合わせ先に困ることのないよう、各技術エリアごとのサポート窓口について説明いたします。</p><p>なお、Windows 365 製品に関する公開情報は、<a href="https://learn.microsoft.com/ja-jp/windows-365/">こちらの URL</a> からご確認いただけますので、ご活用いただけますと幸いでございます。</p><h1 id="1-お問い合わせの窓口について"><a href="#1-お問い合わせの窓口について" class="headerlink" title="1. お問い合わせの窓口について"></a>1. お問い合わせの窓口について</h1><p>Windows 365 製品自体につきましては、Intune ポータルでの受付となりますが、Windows OS 観点や Windows OS 上の Office 製品、M365 に関するお問い合わせは窓口が異なってまいります。</p><p>大きく以下の 4 つに分かれておりますので、解決したい問題に合わせてお問い合わせください。</p><p>また、お問い合わせ方法は代表的なものとなりますので、貴社でご利用のお問い合わせ方法に応じて、お電話やメールなどにてお問い合わせ願います。</p><ul><li>Windows 365 および Intune 関連のお問い合わせ：<a href="https://endpoint.microsoft.com/">Intune ポータル</a></li><li>Azure 関連のお問い合わせ：<a href="https://portal.azure.com/">Azure 管理ポータル</a></li><li>M365 関連のお問い合わせ：<a href="https://admin.microsoft.com/AdminPortal/%E2%80%8B">Microsoft 365 管理センター</a></li><li>Windows OS に関するお問い合わせ : <a href="https://serviceshub.microsoft.com/databoard">Service Hub</a> (Unified/Premier ご契約者様向け)</li></ul><h2 id="Windows-365-に関するお問い合わせの対応領域について"><a href="#Windows-365-に関するお問い合わせの対応領域について" class="headerlink" title="Windows 365 に関するお問い合わせの対応領域について"></a>Windows 365 に関するお問い合わせの対応領域について</h2><p>前述の通り、Windows 365 に関連するお問い合わせにつきましては、<a href="https://endpoint.microsoft.com/">Intune ポータル</a> よりご起票いただく形となります。</p><p>上記の窓口にて対応しているお問い合わせの内容といたしましては、Cloud PC のデプロイやプロビジョニング、Cloud PC への接続障害、Business や Frontline など、エディションに関するご質問など、Windows 365 の機能自体に関する内容が対象となります。</p><p>一方で、ユーザーが Cloud PC にサインインした後の動作（例えば Windows OS のアプリや設定、または Office などの Microsoft 365 製品）や、Azure 基盤に関するご質問につきましては、Windows 365 の機能ではなく、それぞれ Windows OS や Microsoft 365、Azure 観点からの調査が必要となりますため、前述の通り該当する窓口からの起票が必要となります。</p><p>また、弊技術サポート部門よりライセンス購入方法や価格に関するご質問事項のご案内は出来かねますため、別途、貴社担当ライセンス営業へご確認をお願いいたします。</p><h2 id="有償となる調査について"><a href="#有償となる調査について" class="headerlink" title="有償となる調査について"></a>有償となる調査について</h2><p>Unified 契約以外の Premier もしくは Professional サポートのインシデントにてお問い合わせの場合、「Windows 365 に関するお問い合わせの対応領域について」にて言及されている内容の通り、Windows 365 範囲外のお問い合わせにつきましては、有償調査 （Labor もしくはインシデント消費）となる場合がございます。</p><p>Premier ご契約のお客様は、貴社担当の CSAM （Customer Success Account Manager） にご確認いただくか、直接エンジニアからのご説明をさせていただくことも可能でございますので、判断に迷う場合には Windows 365 や Azure インシデントもしくは M365 にてお問い合わせ願います。</p><p>(※) 2024 月 9 月 2 日以降に Advanced Support for Partner（ASfP）、Premier Support for Partner（PSfP）、SCS（Signature Cloud Support）にて新規ご契約されたお客様、またはご契約を更新されたお客様につきましては、Windows 365 を含む Azure テクニカル サポートの無償インシデント数が無制限でなくなります。詳細につきましては、CSAM までご相談ください。</p><h1 id="2-お問い合わせ例"><a href="#2-お問い合わせ例" class="headerlink" title="2. お問い合わせ例"></a>2. お問い合わせ例</h1><p>以下に、内容ごとのお問い合わせ先の例をご案内いたします。</p><p>ただし、あくまで例となりますため、内容によっては異なる場合や、複数のエリアにまたがった対応となる場合もございますので、判断に迷う場合には Windows 365 としてお問い合わせをお願いいたします。</p><h3 id="凡例"><a href="#凡例" class="headerlink" title="凡例"></a>凡例</h3><p>〇：多くはこちらがお問い合わせ先となります。</p><p>△：事象によっていずれかがお問い合わせ先となります。判断に迷う場合には Windows 365 にてお問い合わせください。</p><table><thead><tr><th></th><th>Windows 365 関連のお問い合わせ</th><th>Azure 関連のお問い合わせ</th><th>M365 (Office/Teams) のお問い合わせ</th><th>Windows OS に関するお問い合わせ（有償）</th></tr></thead><tbody><tr><td><strong>Windows 365 製品関連</strong></td><td></td><td></td><td></td><td></td></tr><tr><td>Windows 365 の仕様や動作について(構築、プロビジョニング、接続、設定手順、通信現境等)</td><td>〇</td><td></td><td></td><td></td></tr><tr><td>Windows 365 の Cloud PC への接続に使用するクライアント アプリ（Remote Desktop や Windows App など）について</td><td>〇</td><td></td><td></td><td></td></tr><tr><td>Windows 365 の Cloud PC の起動や、接続が失敗したり、遅延が発生する。</td><td>△</td><td></td><td></td><td>△</td></tr><tr><td>Azure 基盤の問題について</td><td></td><td>〇</td><td></td><td></td></tr><tr><td>Windows 365 を利用するためのライセンスについて</td><td>〇</td><td></td><td></td><td></td></tr><tr><td>Azure ユーザーのロールについて</td><td></td><td>〇</td><td></td><td></td></tr><tr><td>Azure Firewall について</td><td></td><td>〇</td><td></td><td></td></tr><tr><td>Windows 365 の Cloud PC へのサインイン履歴について</td><td>〇</td><td></td><td></td><td></td></tr><tr><td>サインイン時の Entra ID の認証に問題がある</td><td>△</td><td>△</td><td></td><td></td></tr><tr><td>多要素認証・条件付きアクセスについて</td><td></td><td>〇</td><td></td><td></td></tr><tr><td>Windows 365 の Cloud PC へ サインイン後の動作異常(操作遅延、 GUI 操作不具合など)</td><td></td><td></td><td></td><td>〇</td></tr><tr><td>Windows 365 の Cloud PC 内の  OS が BSOD で起動しない</td><td></td><td></td><td></td><td>〇</td></tr><tr><td>Windows 365 の Cloud PC で公開しているアプリケーションの問題</td><td></td><td></td><td></td><td>〇</td></tr><tr><td>Windows 365 接続時もしくは接続後のパフォーマンスについて</td><td></td><td></td><td></td><td>〇</td></tr><tr><td>Windows サービス、機能の問題 + 質問</td><td>△</td><td>△</td><td></td><td>△</td></tr><tr><td><strong>Office, M365 関連</strong></td><td></td><td></td><td></td><td></td></tr><tr><td>Office 製品のインスト ー ルについて</td><td></td><td></td><td>〇</td><td></td></tr><tr><td>Office 製品が起動しない</td><td></td><td></td><td>〇</td><td></td></tr><tr><td>Office 製品の動作に問題がある</td><td></td><td></td><td>〇</td><td></td></tr><tr><td>M365 の認証に問題がある</td><td></td><td></td><td>〇</td><td></td></tr><tr><td>M365 利用のためのライセンスについて</td><td></td><td></td><td>〇</td><td></td></tr><tr><td><strong>Teams 関連</strong></td><td></td><td></td><td></td><td></td></tr><tr><td>Teams のインストールに失敗する</td><td></td><td></td><td>〇</td><td></td></tr><tr><td>Teams 最適化設定の手順について</td><td>〇</td><td></td><td></td><td></td></tr><tr><td>Teams が最適化として動作しない</td><td>〇</td><td></td><td></td><td></td></tr><tr><td>Teams が最適化されているのに動作しない</td><td></td><td></td><td>〇</td><td></td></tr><tr><td>Teams 会議の音声や動画の品質が悪い</td><td></td><td></td><td>〇</td><td></td></tr><tr><td>Teams 会議の音声や動画が受信/送信できない</td><td>〇</td><td></td><td></td><td></td></tr><tr><td>Teams 画面共有ができない</td><td></td><td></td><td>〇</td><td></td></tr><tr><td>Teams 音声通話で問題が発生している</td><td></td><td></td><td>〇</td><td></td></tr><tr><td>パフォーマンスやリソース消費の問題</td><td></td><td></td><td>〇</td><td></td></tr><tr><td>OS 側のパフォーマンスの問題</td><td></td><td></td><td></td><td>〇</td></tr><tr><td><strong>In-Place Upgrade, Feature Update 関連</strong></td><td></td><td></td><td></td><td></td></tr><tr><td>FU 適用後、OS は起動したが、Windows 365  接続ができない</td><td>〇</td><td></td><td></td><td></td></tr><tr><td>FU 適用後、OS 起動に失敗した。Azure Backup は実施している。 Azure Backup からの復旧方法について</td><td></td><td>〇</td><td></td><td></td></tr><tr><td>FU 適用後、OS 起動に失敗した。Azure Backup は実施していない。既存の VM のイメージから何とか復旧したい。</td><td></td><td></td><td></td><td>〇</td></tr><tr><td>FU 適用後、OS 起動に失敗した。Backup から復旧したが、今後の他の仮想マシンでのアップデートを考えると原因を特定したい。</td><td></td><td></td><td></td><td>〇</td></tr><tr><td>FU したくないのに、WU で更新されてしまった。戻せないか、および自動更新されないようにしたい。</td><td></td><td></td><td></td><td>〇</td></tr></tbody></table><h1 id="3-更新履歴"><a href="#3-更新履歴" class="headerlink" title="3. 更新履歴"></a>3. 更新履歴</h1><ul><li>2025/02/12：本ブログの公開</li></ul>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;p&gt;※ 本記事はマイクロソフト社員によって公開されております。&lt;/p&gt;
+&lt;p&gt;こんにちは。 Windows プラットフォーム サポート担当のロベルトです。&lt;br&gt;本記事では、Windows 365 をご利用のお客様向けに、お問い合わせに関するガイダンスをご案内させていただきます</summary>
+      
+    
+    
+    
+    <category term="Windows 365" scheme="https://jpwinsup.github.io/blog/categories/Windows-365/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>WSL 2 が構成された環境において LBFO でチーミングの作成を試みると失敗する</title>
+    <link href="https://jpwinsup.github.io/blog/2025/02/04/Networking/LBFO/Creating-LBFOTeaming-fails-on-WSL2-enabled-machine/"/>
+    <id>https://jpwinsup.github.io/blog/2025/02/04/Networking/LBFO/Creating-LBFOTeaming-fails-on-WSL2-enabled-machine/</id>
+    <published>2025-02-04T00:00:00.000Z</published>
+    <updated>2025-04-04T13:31:30.469Z</updated>
+    
+    <content type="html"><![CDATA[<p>こんにちは、日本マイクロソフト Windows プラットフォーム サポートです。</p><p>本稿では、WSL 2 (Windows Subsystem for Linux 2) が構成された環境において、LBFO (Load Balancing and Failover) のチーミングの作成を試みると失敗する動作についてご説明します。</p><h2 id="事象"><a href="#事象" class="headerlink" title="事象"></a>事象</h2><p>WSL 2 が構成された環境において、NIC チーミングのコンソールから LBFO のチーミングの作成を試みると lbfoadmin.exe プロセスがクラッシュします。<br>その結果、[NIC チーミング] の構成画面が閉じられて、LBFO のチーミングの作成が失敗します。<br>事象が発生するとアプリケーション イベント ログに以下のイベントが記録されます。</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">ログの名前:         Application</span><br><span class="line">ソース:           Application Error</span><br><span class="line">イベント ID:       1000</span><br><span class="line">レベル:           エラー</span><br><span class="line">説明:</span><br><span class="line">障害が発生しているアプリケーション名: lbfoadmin.exe</span><br><span class="line">例外コード: 0xc0000005</span><br><span class="line">障害が発生しているアプリケーション パス: C:\Windows\system32\lbfoadmin.exe</span><br></pre></td></tr></table></figure><h2 id="原因"><a href="#原因" class="headerlink" title="原因"></a>原因</h2><p>本事象は WSL 2 と lbfoadmin.exe の互換性の問題で発生します。<br>(本事象は WSL 1 では発生しません)</p><h2 id="対象-OS"><a href="#対象-OS" class="headerlink" title="対象 OS"></a>対象 OS</h2><p>Windows Server 2022</p><h2 id="対応策"><a href="#対応策" class="headerlink" title="対応策"></a>対応策</h2><p>New-NetLbfoTeam の PowerShell コマンドレットを利用します。<br>なお、コマンドの利用方法についての詳細は公開情報を確認ください。</p><p>チーミング作成コマンドの例</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">New-NetLbfoTeam -Name &quot;Team1&quot; -TeamMembers &quot;NIC1&quot;,&quot;NIC2&quot;</span><br></pre></td></tr></table></figure><p><a href="https://learn.microsoft.com/en-us/powershell/module/netlbfo/new-netlbfoteam?view=windowsserver2025-ps">New-NetLbfoTeam (NetLbfo) | Microsoft Learn</a></p><p>確認コマンドの例</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Get-NetLbfoTeam</span><br><span class="line">Name                   : Team1</span><br></pre></td></tr></table></figure><p>※ Team1 という名前のチーミングが存在することを確認します。</p><p><a href="https://learn.microsoft.com/en-us/powershell/module/netlbfo/get-netlbfoteam?view=windowsserver2022-ps">Get-NetLbfoTeam (NetLbfo) | Microsoft Learn</a></p><hr><p>更新履歴<br>2025/02/04 : 本 Blog の公開</p><p>[特記事項]<br>本情報の内容（添付文書、リンク先などを含む）は作成日時点でのものであり、予告なく変更される場合があります。</p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;p&gt;こんにちは、日本マイクロソフト Windows プラットフォーム サポートです。&lt;/p&gt;
+&lt;p&gt;本稿では、WSL 2 (Windows Subsystem for Linux 2) が構成された環境において、LBFO (Load Balancing and Failover</summary>
+      
+    
+    
+    
+    <category term="Networking" scheme="https://jpwinsup.github.io/blog/categories/Networking/"/>
+    
+    <category term="LBFO" scheme="https://jpwinsup.github.io/blog/categories/Networking/LBFO/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>複数のマウントポイントがあるボリュームで仮想ハードディスクのチェーンが破損する</title>
+    <link href="https://jpwinsup.github.io/blog/2025/01/13/Hyper-V/Break-chain-on-multi-mount-points/"/>
+    <id>https://jpwinsup.github.io/blog/2025/01/13/Hyper-V/Break-chain-on-multi-mount-points/</id>
+    <published>2025-01-13T15:00:00.000Z</published>
+    <updated>2025-04-04T13:31:30.442Z</updated>
+    
+    <content type="html"><![CDATA[<p>本記事はマイクロソフト社員によって公開されております。  </p><p>こんにちは。Windows サポートチームです。<br>複数のマウントポイントがあるボリュームで仮想ハードディスクのチェーンが破損する事象についてお伝えさせていただきます。</p><h2 id="概要"><a href="#概要" class="headerlink" title="概要"></a>概要</h2><hr>仮想ハードディスクを保存するドライブのマウント ポイントが複数存在する状態でチェックポイントの作成、削除を行うと親ディスクと差分ディスクの親子関係が破損し、マージ処理が失敗する場合がございます。<p>Hyper-V サービスでは、仮想ディスクファイルが設定されているドライブに対して複数のマウントポイントが作成されることを想定しておりません。</p><p>そのため、仮想ハードディスクを保存するドライブのマウント ポイントは、複数作成しないようお願いいたします。</p><h2 id="事象"><a href="#事象" class="headerlink" title="事象"></a>事象</h2><hr>Hyper-V がディスクの親子関係を解決する際に、保存先のドライブに複数のマウント ポイントが存在すると同じフォルダー内にある親ディスクと子ディスクであっても、チェックポイント作成時、チェックポイントの削除時のマージ処理で、それぞれのファイルの完全パス名を取得する際に別々のマウントポイントのパス名を受け取ってしまう場合があります。<p>別々のパス名として扱われた結果、親子関係がないと判断されチェックポイントの削除時にマージ処理が失敗する状況が発生いたします。</p><p>複数のマウント ポイントが存在した場合の例について、以下のとおり説明します。</p><p>実体として、以下のように、C:\Hyper-V\VMs 配下に仮想ハードディスクの親仮想ディスク (.vhdx) と、子仮想ディスク (.avhdx) が存在し、C:\Hyper-V\VMs のマウント ポイントとして、D:\VMs が存在すると仮定します。</p><table><thead><tr><th>設定している仮想ディスクのパス：C:\Hyper-V\VMs\</th><th>追加したマウント ポイント：C:\Hyper-V\ -&gt; D:\</th></tr></thead><tbody><tr><td>C:\Hyper-V\VMs\ <br>+– VM.vhdx<br>+– VM_AAAA.avhdx<br>+– VM_BBBB.avhdx<br>+– VM_CCCC.avhdx</td><td>D:\VMs\ <br>+– VM.vhdx<br>+– VM_AAAA.avhdx<br>+– VM_BBBB.avhdx<br>+– VM_CCCC.avhdx</td></tr></tbody></table><p>上記のような状態で、親子関係を確認すると、以下のように、親子のパスが異なるドライブとして解決されます。</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">PS &gt; Get-VHD * | select path,parentpath</span><br><span class="line"></span><br><span class="line">Path                              ParentPath</span><br><span class="line">----                              ----------</span><br><span class="line">C:\Hyper-V\VMs\VM.vhdx</span><br><span class="line">C:\Hyper-V\VMs\VM_AAAA.avhdx      D:\VMs\VM.vhdx</span><br><span class="line">C:\Hyper-V\VMs\VM_BBBB.avhdx      D:\VMs\VM_AAAA.avhdx</span><br><span class="line">C:\Hyper-V\VMs\VM_CCCC.avhdx      D:\VMs\VM_BBBB.avhdx</span><br></pre></td></tr></table></figure><p>このような状況が発生すると、Hyper-V に正しく仮想ディスクの親子関係を解決できなくなりマージ処理が失敗いたします。</p><p>補足：<br><br>本事象が発生する事例を紹介します。<br>複数のマウント ポイントは、意図的に手動で作成することもできますが、Hyper-V クラスターの<br>環境では意図せず発生する事例が報告されています。</p><p>Hyper-V クラスターの環境では、共有ディスクとして、CSV (Cluster Shared Volume) を利用します。<br>この CSV は、以下のパス (以降、「CSV へのパス」と記載します。) として作成され、各ノードがアクセスする Hyper-V の構成情報や、仮想ディスクが格納されます。</p><p>C:\ClusterStorage\VolumeX<br>※ VolumeX の X は、インデックスになります。(例：C:\ClusterStorage\Volume1 など)</p><p>Hyper-V クラスターの環境で、リソースの所有者となったノードで CSV をオンラインにする際に「CSV へのパス」の初期化に失敗した場合、回復処置として初期化に失敗した CSV のパスを以下のようなパス名に変更し、新規に CSV のパスを作成するため「CSV へのパス」が複数存在する状態が発生いたします。</p><p>C:\ClusterStorage.000\VolumeX<br>※ ClusterStorage.001 や ClusterStorage.002 などが作成されている場合もございます。</p><p>セキュリティ対策ソフトや、フィルター ドライバーを利用するソリューションの影響により、「CSV へのパス」へアクセスできない状況が発生した場合に、このような状況が発生する (C:\ClusterStorage.000\VolumeX が作成される) 可能性がございます。</p><p>そのため、Hyper-V クラスターをご利用の環境では、以下の公開情報に掲載している除外設定をいただき、「CSV へのパス」を含めた、Hyper-V に影響するフォルダーや、ファイルへのアクセスに影響がない状況にて、運用いただくことをお勧めしております。</p><p>Hyper-V ホストに推奨されるウイルス対策の除外<br><a href="https://learn.microsoft.com/ja-jp/troubleshoot/windows-server/virtualization/antivirus-exclusions-for-hyper-v-hosts">https://learn.microsoft.com/ja-jp/troubleshoot/windows-server/virtualization/antivirus-exclusions-for-hyper-v-hosts</a></p><p>C:\ClusterStorage.000\VolumeX が作成された場合には、C:\ClusterStorage.000\VolumeX を削除して、重複したパスが存在しない状態にしてください。</p><p>なお、削除対象は、C:\ClusterStorage.000 フォルダーとなりますが、フォルダーを削除する際は、空の状態にする必要がありますので、まず、VolumeX などのマウントポイントの削除を実施してから<br>C:\ClusterStorage.000 フォルダーの削除を実施します。</p><p>※ 仮想マシンの削除による、差分ディスクのマージを実施される場合には、必ず、パスを統一 (ひとつのマウント ポイントのみが存在する状態に) してからご実施ください。パスが統一されていない状態で、仮想マシンを削除した場合、差分ディスクは正しくマージされないことが想定されます。</p><p>C:\ClusterStorage.000 フォルダーの VolumeX 配下の仮想マシンフォルダーや、ファイルを削除した場合、フォルダーや、ファイルの実体が削除されますため、ご注意ください。</p><p>なお、仮想ディスクの親子関係が破損してしまっている場合には、一旦、仮想マシンを削除してから同じ構成の仮想マシンを再作成いただくことをお勧めいたします。</p><p>仮想マシンの削除時に差分ディスクの AVHDX ファイルが存在する場合、すべてマージされ親ディスクの VHDX ファイルのみが残されます。仮想マシンを新規に作成いただく際は、マージされた仮想ディスクをご利用いただければと存じます。</p><p>いかがでしたでしょうか。本投稿が少しでも皆様のお役に立てば幸いです。<br>本情報の内容（添付文書、リンク先などを含む）は、作成日時でのものであり、予告なく変更される場合があります。</p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;p&gt;本記事はマイクロソフト社員によって公開されております。  &lt;/p&gt;
+&lt;p&gt;こんにちは。Windows サポートチームです。&lt;br&gt;複数のマウントポイントがあるボリュームで仮想ハードディスクのチェーンが破損する事象についてお伝えさせていただきます。&lt;/p&gt;
+&lt;h2 id=&quot;概</summary>
+      
+    
+    
+    
+    <category term="Hyper-V" scheme="https://jpwinsup.github.io/blog/categories/Hyper-V/"/>
+    
+    <category term="Configuration and Management" scheme="https://jpwinsup.github.io/blog/categories/Hyper-V/Configuration-and-Management/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>新しい [メモ帳] ご利用時に発生する事象について</title>
+    <link href="https://jpwinsup.github.io/blog/2025/01/08/Shell/Explorer/new-notepad-known-issues/"/>
+    <id>https://jpwinsup.github.io/blog/2025/01/08/Shell/Explorer/new-notepad-known-issues/</id>
+    <published>2025-01-08T00:00:00.000Z</published>
+    <updated>2025-04-04T13:31:30.646Z</updated>
+    
+    <content type="html"><![CDATA[<blockquote><p>本記事はマイクロソフト社員によって公開されております。</p></blockquote><hr><p>こんにちは、Windows サポートの丸山です。</p><p>本記事では、Windows 11 以降の環境で利用可能となる新しい [メモ帳] にて発生する事象について、ご紹介させていただきます。</p><h2 id="1-フォントに含まれている文字であるにもかかわらず、別のフォントが使用されてしまう事象について"><a href="#1-フォントに含まれている文字であるにもかかわらず、別のフォントが使用されてしまう事象について" class="headerlink" title="1. フォントに含まれている文字であるにもかかわらず、別のフォントが使用されてしまう事象について"></a>1. フォントに含まれている文字であるにもかかわらず、別のフォントが使用されてしまう事象について</h2><p>新しいメモ帳では、選択しているフォントに含まれていない文字が存在するテキスト ファイルを表示した場合において、フォントに含まれている文字であるにもかかわらず、別のフォントが使用されてしまう事象が報告されております。</p><p>以下は、Windows 標準搭載の “BIZ UD明朝” を用いて、U+2195 から U+223D までの文字のいくつかを含むテキスト ファイルを表示した例です。”BIZ UD 明朝” には、U+2195 の文字が含まれておりません。</p><p>Windows 10 のメモ帳では、フォントに含まれていない U+2195 の文字は別のフォントが使用されていますが、他の文字につきましては、正しく “BIZ UD 明朝” で表示されています。</p><p>Windows 11 のメモ帳では、フォントに含まれていない U+2195 の文字を含め、他の文字につきましても “BIZ UD 明朝” ではない別のフォントが使用されて表示されています。</p><p><img src="w10a.png" alt="Windows 10 における表示例 (グリフが正しい)"><br><img src="w11a.png" alt="Windows 11 における表示例 (グリフが正しくない)"></p><p>本事象につきましては、問題の改善に向け、調査中となります。</p><h2 id="2-フォントにリンクされた外字が表示されないことがある事象について"><a href="#2-フォントにリンクされた外字が表示されないことがある事象について" class="headerlink" title="2. フォントにリンクされた外字が表示されないことがある事象について"></a>2. フォントにリンクされた外字が表示されないことがある事象について</h2><p>新しいメモ帳では、フォントの表示名が複数の言語で定義されている場合に、フォントにリンクされた外字が正しく表示されないことがある事象が報告されております。</p><p>以下は、Windows 標準搭載の “ＭＳ 明朝” に外字をリンクして、U+E000 の文字を表示させた例です。”ＭＳ 明朝” のフォントには、”ＭＳ 明朝” と言う日本語の表示名と、”MS Mincho” と言う英語の表示名が定義されております。</p><p>Windows 10 のメモ帳ではリンクされた外字が表示されていることに対して、Windows 11 の新しいメモ帳では、リンクされた外字が表示されていません。</p><p><img src="w10b.png" alt="Windows 10 における表示例 (リンクされた外字が表示される)"><br><img src="w11b.png" alt="Windows 11 における表示例 (リンクされた外字が表示されていない)"></p><p>本事象につきましても、問題の改善に向け、調査中となります。</p><h2 id="以前のバージョンのメモ帳へのフォールバックについて"><a href="#以前のバージョンのメモ帳へのフォールバックについて" class="headerlink" title="以前のバージョンのメモ帳へのフォールバックについて"></a>以前のバージョンのメモ帳へのフォールバックについて</h2><p>Windows 11 環境の新しいメモ帳アプリにつきましては、[インストールされているアプリ] からアンインストールすることで、一時的に以前のバージョンのメモ帳にフォールバックすることが可能でございます。</p><p><img src="uninstall.png" alt="新しいメモ帳のアンインストール"></p><p>新しいメモ帳をご利用いただくにあたり、問題がございました場合には、新しいメモ帳をアンインストールして以前のバージョンのメモ帳にフォールバックすることについてご検討いただけますと幸いです。</p><p>※新しいメモ帳は、アンインストールしたあとも、Microsoft Store あるいは下記 URL から再インストールすることが可能です。</p><p><a href="https://apps.microsoft.com/detail/9MSMLRH6LZF3">https://apps.microsoft.com/detail/9MSMLRH6LZF3</a></p><hr><p>本情報の内容（添付文書、リンク先などを含む）は、作成日時点でのものであり、予告なく変更される場合があります。<br>新しい情報が得られましたら、本記事を更新していく予定です。</p><h2 id="変更履歴"><a href="#変更履歴" class="headerlink" title="変更履歴"></a>変更履歴</h2><ul><li>2025/01/08 : 本記事の公開</li><li>2025/01/22 : 以前のメモ帳へのフォールバックについて追記</li></ul>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;blockquote&gt;
+&lt;p&gt;本記事はマイクロソフト社員によって公開されております。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;hr&gt;
+&lt;p&gt;こんにちは、Windows サポートの丸山です。&lt;/p&gt;
+&lt;p&gt;本記事では、Windows 11 以降の環境で利用可能となる新しい [メモ帳</summary>
+      
+    
+    
+    
+    <category term="Shell" scheme="https://jpwinsup.github.io/blog/categories/Shell/"/>
+    
+    <category term="Explorer" scheme="https://jpwinsup.github.io/blog/categories/Shell/Explorer/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>複雑さの要件を満たす必要があるパスワードについて</title>
+    <link href="https://jpwinsup.github.io/blog/2024/12/27/ActiveDirectory/Authentication/passwordpolicy/"/>
+    <id>https://jpwinsup.github.io/blog/2024/12/27/ActiveDirectory/Authentication/passwordpolicy/</id>
+    <published>2024-12-27T03:00:00.000Z</published>
+    <updated>2025-04-04T13:31:30.396Z</updated>
+    
+    <content type="html"><![CDATA[<p>本記事はマイクロソフト社員によって公開されております。</p><p>こんにちは。Windows Commercial Support Directory Services チームです。</p><p>今回はパスワードの複雑さの要件における注意事項についてご紹介します。</p><p>[複雑さの要件を満たす必要があるパスワード] のポリシーを有効化した場合、パスワードの作成時や変更時に複雑さの要件を満たせなければ、パスワードを登録することができません。<br>既定の状態は以下のようになります。</p><p>/////////////////////////////////////<br><strong>ドメイン コントローラーの場合: 有効</strong><br><strong>スタンドアロン サーバーの場合: 無効</strong><br>/////////////////////////////////////<br>※ドメイン内のメンバー コンピューターは、既定で Default Domain Policy に複雑さの要件が有効化されております。</p><p>また、パスワードの複雑さの要件は、グループ ポリシーやローカル ポリシーで以下のパスを開いて設定することができます。</p><blockquote><p>[コンピューターの構成] - [ポリシー] - [Windows の設定] - [セキュリティの設定] - [アカウント ポリシー] - [パスワードのポリシー] - [複雑さの要件を満たす必要があるパスワード]</p></blockquote><p>そして、設定箇所内にあるヘルプの文章では以下のように記載されております。</p><blockquote><p>このポリシーが有効な場合、パスワードは次の最小要件を満たす必要があります。<br>・ユーザーのアカウント名またはフル ネームに含まれる 3 文字以上連続する文字列を使用しない。<br>・長さは 6 文字以上にする。<br>・次の 4 つのカテゴリのうち 3 つから文字を使う。<br>英大文字 (A ～ Z)<br>英小文字 (a ～ z)<br>10 進数の数字 (0 ～ 9)<br>アルファベット以外の文字 (!、$、#、% など)<br>複雑さの要件は、パスワードの変更時または作成時に強制的に適用されます。</p></blockquote><p>今回は上述のヘルプの文章について、一部補足させていただきます。<br>補足する文章は以下の 2 つで、文章ごとに分けて補足させていただきます。</p><p>補足 1: 長さは 6 文字以上にする<br>補足 2: ユーザーのアカウント名またはフル ネームに含まれる 3 文字以上連続する文字列を使用しない。</p><h2 id="補足-1-長さは-6-文字以上にする"><a href="#補足-1-長さは-6-文字以上にする" class="headerlink" title="補足 1: 長さは 6 文字以上にする"></a>補足 1: 長さは 6 文字以上にする</h2><p>こちらはポリシーの説明表記と動作に相違がございます。<br>パスワードの長さが 6 文字未満でも、以下の 4 つのカテゴリの内、3 つのカテゴリを使用してユーザー アカウントを設定できてしまうことです。</p><blockquote><p>・英大文字 (A ～ Z)<br>・英小文字 (a ～ z)<br>・10 進数の数字 (0 ～ 9)<br>・アルファベット以外の文字 (!、$、#、% など)</p></blockquote><p>そのため、パスワードの長さをポリシーの要件とする場合には、[複雑さの要件を満たす必要があるパスワード] ではなく [パスワードの長さ] を設定いただく必要がございます。</p><br><h2 id="補足-2-ユーザーのアカウント名またはフル-ネームに含まれる-3-文字以上連続する文字列を使用しない。"><a href="#補足-2-ユーザーのアカウント名またはフル-ネームに含まれる-3-文字以上連続する文字列を使用しない。" class="headerlink" title="補足 2: ユーザーのアカウント名またはフル ネームに含まれる 3 文字以上連続する文字列を使用しない。"></a>補足 2: ユーザーのアカウント名またはフル ネームに含まれる 3 文字以上連続する文字列を使用しない。</h2><p>こちらは、ドメインに参加していないローカル ユーザーの場合と、Active Directory に参加しているドメイン ユーザーの場合、共通している部分に分けてご案内差し上げます。</p><p>2-1. ローカル ユーザーの場合<br>2-2. ドメイン ユーザーの場合<br>2-3. 共通している部分<br><br></p><hr><h4 id="2-1-ローカル-ユーザーの場合"><a href="#2-1-ローカル-ユーザーの場合" class="headerlink" title="2-1. ローカル ユーザーの場合"></a>2-1. ローカル ユーザーの場合</h4><p>ローカル ユーザーの場合、下記のルールにてパスワードが複雑さの要件を満たしているかのチェックを行います。</p><h5 id="パスワードの複雑さのチェックのルール"><a href="#パスワードの複雑さのチェックのルール" class="headerlink" title="パスワードの複雑さのチェックのルール"></a>パスワードの複雑さのチェックのルール</h5><p><strong>&lt;ユーザー名&gt;</strong><br>・ユーザー名の長さが 3 文字未満の場合、ユーザー名に対してはチェックが行われません。<br>・ユーザー名がそのままパスワードに使われている場合は要件を満たさず、パスワードとして利用する事が出来ませんが、1 文字でも不足している文字列が含まれる場合はパスワードとして利用する事が可能です。</p><p><strong>&lt;フル ネーム&gt;</strong><br>・ユーザーの作成時にフル ネームに入力する値はチェックが行われません。<br>・フル ネームのパスワード変更時はそのままチェックが行われるわけではなく、スペース、タブ、改行などの空白、またはコンマ (,)、ピリオド (.)、ハイフン (-)、アンダースコア (_)、番号記号 (#) のいずれかの文字を区切りとして扱い「トークン」と呼ばれる単位に分割します。<br>・分割されたトークンの内、3 文字未満のトークンはチェックの対象から外れ、3 文字以上の長さを持つ各トークンに対してチェックが行われます。<br>・対象のトークンごとに文字列がパスワード内に存在するかのチェックが行われ、そのままパスワードに使われている場合は要件を満たしませんが、1 文字でも不足している場合はパスワードとして利用する事が可能です。</p><p>//パスワード チェックの例<br>ユーザー名、フル ネームの双方で要件を満たさなければ、そのパスワードは設定できません。</p><p><strong>&lt;ユーザー名の場合&gt;</strong><br>ユーザー名に対してチェックを実行するときは、区切り文字はないため、ユーザー名に設定された文字列が対象となります。</p><p><b style="border-bottom:solid 1px black;">例 1: ユーザー名の値が “TESTUSER_24” の場合</b><br>このユーザーは “TESTUSER_24” が含まれるパスワードを利用することができません。</p><p><strong>&lt;フル ネームの場合&gt;</strong><br>以下の例は、パスワード変更時の動作になります。</p><p><b style="border-bottom:solid 1px black;">例 2: フル ネームの値が “James_24” の場合</b></p><ol><li><p>“James”、”24” の 2 つのトークンに分割されます。</p></li><li><p>1 番目のトークンである “James” が含まれるパスワードを利用することができません。<br>※”Jame” や “ames” が含まれるパスワードは利用できます。</p></li><li><p>このユーザーは “24” は 3 文字未満のため、パスワードに含める事が可能です。</p></li></ol><p><b style="border-bottom:solid 1px black;">例 3: フル ネームの値が “Erin M. Hagens” の場合</b></p><ol><li><p>“ Erin”、”M”、”Hagens” の 3 つのトークンに分割されます。</p></li><li><p>2 番目のトークンである “M” は 3 文字未満のため、除外されます。</p></li><li><p>このユーザーは “Erin” “Hagens” が含まれるパスワードを利用することができません。</p></li></ol><p>よって、ローカル ポリシーを利用した場合の「複雑さの要件を満たす必要があるパスワード」は以下の説明として解釈いただき、パスワードを設定ください。</p><h5 id="lt-複雑さの要件を満たす必要があるパスワード-gt-ポリシーの説明"><a href="#lt-複雑さの要件を満たす必要があるパスワード-gt-ポリシーの説明" class="headerlink" title="&lt;複雑さの要件を満たす必要があるパスワード&gt; ポリシーの説明"></a>&lt;複雑さの要件を満たす必要があるパスワード&gt; ポリシーの説明</h5><blockquote><p>このポリシーが有効な場合、パスワードは次の最小要件を満たす必要があります。<br>・「ユーザー名」 を 3 文字以上に設定している場合、その文字列をそのままパスワードに使用しない。<br>・「フル ネーム」のトークンが 3 文字以上の場合、その文字列をそのままパスワードに使用しない。<br>・次の 4 つのカテゴリのうち 3 つから文字を使う。<br>英大文字 (A ～ Z)<br>英小文字 (a ～ z)<br>10 進数の数字 (0 ～ 9)<br>アルファベット以外の文字 (!、$、#、% など)<br>複雑さの要件は、パスワードの変更時または作成時に強制的に適用されます。<br><span style="color: red"><br>※「フル ネーム」のパスワード チェックは、パスワード変更時にのみ行われます。<br>※トークン: 「フル ネーム」内の区切り単位です。<br>※区切り単位: 「フル ネーム」の一部を 3 文字以上の英数字として定義し、スペース、タブ、改行などの空白、またはコンマ (,)、ピリオド (.)、ハイフン (-)、アンダースコア (_)、番号記号 (#) のいずれかの文字で前後両方を区切ります。<br></span></p></blockquote><p>続いて、ドメイン ユーザーの場合のパスワード チェックの動作についてご説明致します。</p><hr><h4 id="2-2-ドメイン-ユーザーの場合"><a href="#2-2-ドメイン-ユーザーの場合" class="headerlink" title="2-2. ドメイン ユーザーの場合"></a>2-2. ドメイン ユーザーの場合</h4><p>“ユーザーのアカウント名またはフル ネーム” を指す属性は以下のとおりです。</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ユーザーのアカウント名: sAMAccountName</span><br><span class="line">フル ネーム: DisplayName</span><br></pre></td></tr></table></figure><p>パスワードが複雑さの要件を満たしているかは、上記の sAMAccountName、DisplayName を使用してチェックが行われます。<br>※上記の属性値は、ADSI エディターを開いて各ユーザーのプロパティから確認することができます。</p><h5 id="パスワードの複雑さのチェックのルール-1"><a href="#パスワードの複雑さのチェックのルール-1" class="headerlink" title="パスワードの複雑さのチェックのルール"></a>パスワードの複雑さのチェックのルール</h5><p>属性によって複雑さをチェックするルールが異なりますので、それぞれ以下のようになります。</p><p><strong>&lt;sAMAccountName の場合&gt;</strong><br>・sAMAccountName の値の長さが 3 文字未満の場合、sAMAccountName に対してはチェックが行われません。</p><p>・sAMAccountName がそのまま使われている場合は要件を満たさず、パスワードとして利用する事も出来ませんが、  1 文字でも不足している文字列が含まれる場合はパスワードとして利用する事が可能です。</p><p><strong>&lt;DisplayName の場合&gt;</strong><br>・DisplayName はそのままチェックが行われるわけではなく、スペース、タブ、改行などの空白、またはコンマ (,)、ピリオド (.)、ハイフン (-)、アンダースコア (_)、番号記号 (#) のいずれかの文字を区切りとして扱い「トークン」と呼ばれる単位に分割します。</p><p>・分割されたトークンのうち、3文字未満のトークンはチェックの対象から外れ、3 文字以上の長さを持つ各トークンに関してチェックが行われます。</p><p>・対象のトークンごとにパスワード内に存在するかのチェックが行われ、そのままパスワードに使われている場合は要件を満たしませんが、1 文字でも不足している場合はパスワードとして利用する事が可能です。</p><p>※ユーザー アカウントを新規作成する際に、「フル ネーム」は、「姓」「名」「イニシャル」で入力した値をスペース区切り、最後にピリオド (.) が自動で入力されます。</p><p>//パスワード チェックの例<br>sAMAccountName DisplayName 双方で要件を満たさなければ、そのパスワードは設定できません。</p><p><strong>&lt;sAMAccountName の場合&gt;</strong><br>※sAMAccountName 属性に対してチェックを実行するときは、区切り文字はないため、 samAccountName に設定された文字列が対象となります。</p><p><b style="border-bottom:solid 1px black;">例 1: sAMAccountName の値が “James_24” の場合</b><br>このユーザーは “James_24” が含まれるパスワードを利用することができません。</p><p><strong>&lt;DisplayName の場合&gt;</strong><br><b style="border-bottom:solid 1px black;">例 1: DisplayName の値が “James_24” の場合</b></p><ol><li><p>“James”、”24” の 2 つのトークンに分割されます。</p></li><li><p>1 番目のトークンである “James” が含まれるパスワードを利用することができません。<br>※”Jame” や “mes” が含まれるパスワードは利用できます。</p></li><li><p>このユーザーは “24” は 3 文字未満のため、パスワード チェックの対象外となります。</p></li></ol><p><b style="border-bottom:solid 1px black;">例 2: DislayName の値が “Erin M. Hagens” の場合</b></p><ol><li><p>“ Erin”、”M”、”Hagens” の 3 つのトークンに分割されます。</p></li><li><p>2 番目のトークンである “M” は 3 文字未満のため、除外されます。</p></li><li><p>このユーザーは “Erin” “Hagens” が含まれるパスワードを利用することができません。</p></li></ol><p>よって、ドメイン ユーザーにおける「複雑さの要件を満たす必要があるパスワード」は、以下の説明として解釈いただきパスワードを設定くださいますようお願い申し上げます。</p><h5 id="lt-複雑さの要件を満たす必要があるパスワード-gt-ポリシーの説明-1"><a href="#lt-複雑さの要件を満たす必要があるパスワード-gt-ポリシーの説明-1" class="headerlink" title="&lt;複雑さの要件を満たす必要があるパスワード&gt; ポリシーの説明"></a>&lt;複雑さの要件を満たす必要があるパスワード&gt; ポリシーの説明</h5><blockquote><p>このポリシーが有効な場合、パスワードは次の最小要件を満たす必要があります。<br>・「ユーザー ログオン名 (Windows 2000 より前)」 を 3 文字以上に設定している場合、その文字列をそのままパスワードに使用しない。<br>・「フル ネーム」のトークンが 3 文字以上の場合、その文字列をそのままパスワードに使用しない。<br>・次の 4 つのカテゴリのうち 3 つから文字を使う。<br>英大文字 (A ～ Z)<br>英小文字 (a ～ z)<br>10 進数の数字 (0 ～ 9)<br>アルファベット以外の文字 (!、$、#、% など)<br>複雑さの要件は、パスワードの変更時または作成時に強制的に適用されます。<br><span style="color: red"><br>※トークン: 「フル ネーム」内の区切り単位です。<br>※ 区切り単位: 「フル ネーム」の一部を 3 文字以上の英数字として定義し、スペース、タブ、改行などの空白、またはコンマ (,)、ピリオド (.)、ハイフン (-)、アンダースコア (_)、番号記号 (#) のいずれかの文字で前後両方を区切ります。<br></span></p></blockquote><br><hr><h4 id="2-3-共通している部分"><a href="#2-3-共通している部分" class="headerlink" title="2-3. 共通している部分"></a>2-3. 共通している部分</h4><p>パスワードの複雑さのチェックのユーザー名の比較では、大文字 / 小文字の区別は行われません。</p><p>例えば、以下のような場合では「パスワードの複雑さの要件」を満たしていないため、パスワードを設定することができません。</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">アカウント名: TESTUSER001</span><br><span class="line">パスワード: TestUser001a!</span><br></pre></td></tr></table></figure><p>※大文字 / 小文字を区別しないため、アカウント名がそのままパスワードに組み込まれていることから、複雑さの要件を満たしていないと判断しパスワードが設定できません。</p><p>パスワードの複雑さの要件についての補足は以上となります。<br>また、以下の技術情報も併せてご確認いただき、パスワードを設定いただけますようお願い申し上げます。</p><p><a href="https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-server-2003/cc786468(v=ws.10)?redirectedfrom=MSDN">Passwords must meet complexity requirements</a></p><p>本投稿が少しでも皆様のお役に立てば幸いです。<br>※ 本情報の内容（リンク先などを含む）は、作成日時点でのものであり、予告なく変更される場合があります。<br><br></p><h2 id="更新履歴"><a href="#更新履歴" class="headerlink" title="更新履歴"></a>更新履歴</h2><hr><p>2024/12/27 : 本ブログの公開</p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;p&gt;本記事はマイクロソフト社員によって公開されております。&lt;/p&gt;
+&lt;p&gt;こんにちは。Windows Commercial Support Directory Services チームです。&lt;/p&gt;
+&lt;p&gt;今回はパスワードの複雑さの要件における注意事項についてご紹介します。&lt;/</summary>
+      
+    
+    
+    
+    <category term="Active Directory" scheme="https://jpwinsup.github.io/blog/categories/Active-Directory/"/>
+    
+    <category term="Authentication" scheme="https://jpwinsup.github.io/blog/categories/Active-Directory/Authentication/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>Windows の機能が利用するプロキシ設定とは？</title>
+    <link href="https://jpwinsup.github.io/blog/2024/12/04/Networking/Proxy/Proxy-settings-used-by-Windows-features/"/>
+    <id>https://jpwinsup.github.io/blog/2024/12/04/Networking/Proxy/Proxy-settings-used-by-Windows-features/</id>
+    <published>2024-12-04T03:50:00.000Z</published>
+    <updated>2025-04-04T13:31:30.483Z</updated>
+    
+    <content type="html"><![CDATA[<p>本稿では、Windows の機能や弊社製品が参照するプロキシ設定について解説します。</p><h1 id="Windows-の機能や弊社製品が利用するプロキシ設定とは"><a href="#Windows-の機能や弊社製品が利用するプロキシ設定とは" class="headerlink" title="Windows の機能や弊社製品が利用するプロキシ設定とは"></a>Windows の機能や弊社製品が利用するプロキシ設定とは</h1><p>Windows には、インターネットに接続する機能が多数あります。例えば、ウェブブラウザ (Edge)、Windows Update、ライセンス認証 などです。また、Office や Microsoft Defender for Endpoint (MDE) などの弊社製品もインターネットに接続します。</p><p>これらの機能・製品は、それぞれの独自の条件で参照するプロキシ設定を判定し、利用しています。参照するプロキシは、大別して以下の 4 種類になります。</p><ul><li>a) ログオン中のユーザーのユーザーごとのプロキシ設定 (インターネット オプションや [設定] のプロキシ設定)</li><li>b) 特定のユーザーのユーザーごとのプロキシ設定 (SYSTEM ユーザーなどのシステム アカウントのプロキシ設定)</li><li>c) システム全体のプロキシ設定 (WinHTTP プロキシ設定)</li><li>d) アプリ固有のプロキシ設定 (各アプリが個別に保持)</li></ul><h1 id="各機能・製品がどのプロキシ設定を参照するかについて"><a href="#各機能・製品がどのプロキシ設定を参照するかについて" class="headerlink" title="各機能・製品がどのプロキシ設定を参照するかについて"></a>各機能・製品がどのプロキシ設定を参照するかについて</h1><p>それぞれの機能がどのプロキシ設定を利用するかを一覧にすると、以下の表のようになります。</p><table><thead><tr><th>機能・製品名</th><th>a)</th><th>b)</th><th>c)</th><th>d)</th></tr></thead><tbody><tr><td>Microsoft Edge</td><td>〇</td><td></td><td></td><td>〇</td></tr><tr><td>Windows Update</td><td>〇</td><td>〇</td><td>〇</td><td></td></tr><tr><td>ライセンス認証</td><td>〇</td><td>〇</td><td>〇</td><td></td></tr><tr><td>証明書の失効確認</td><td>〇</td><td>〇</td><td>〇</td><td></td></tr><tr><td>WinRM (リモート管理)</td><td></td><td></td><td>〇</td><td></td></tr><tr><td>PowerShell</td><td>〇</td><td></td><td></td><td>〇</td></tr><tr><td>NCSI</td><td>〇</td><td></td><td>〇</td><td></td></tr><tr><td>Microsoft Defender for Endpoint</td><td>〇</td><td></td><td>〇</td><td>〇</td></tr><tr><td>Office</td><td>〇</td><td>〇</td><td>〇</td><td></td></tr></tbody></table><p>それぞれの動作の詳細は、以下の通りです。</p><h2 id="Microsoft-Edge"><a href="#Microsoft-Edge" class="headerlink" title="Microsoft Edge"></a>Microsoft Edge</h2><p>ProxySettings ポリシー等で Edge 独自のプロキシ設定がある場合はそちらを参照し、ない場合はログオン中のユーザーのユーザーごとのプロキシ設定を参照します。</p><p><a href="https://learn.microsoft.com/ja-jp/deployedge/edge-learnmore-cmdline-options-proxy-settings">Microsoft Edge コマンド ライン オプションを使用してプロキシ設定を構成する方法</a></p><h2 id="Windows-Update"><a href="#Windows-Update" class="headerlink" title="Windows Update"></a>Windows Update</h2><p>「自動更新での更新プログラムの検出」については、 WinHTTP プロキシ設定を参照しますが、そちらで接続できない場合はログオン中のユーザーのユーザーごとのプロキシ設定が参照されます。</p><p><a href="https://learn.microsoft.com/ja-jp/troubleshoot/windows-server/installing-updates-features-roles/windows-update-client-determines-proxy-server-connect">Windows Update クライアントが、Windows Update Web サイトへの接続に使用するプロキシ サーバーを決定する方法</a></p><p>「更新プログラムのダウンロード」については配信の最適化 (DO) もしくは BITS が利用されます。</p><p>DO では、ユーザーがログオン中の場合は、ログオン中のユーザーのユーザーごとのプロキシ設定が利用されますが、そうでない場合は WinHTTP プロキシが利用されます。<br>(例外として、ユーザーごとのプロキシ設定をシステム全体に適用する設定がある場合は、そちらが使われることがあります。)</p><p><a href="https://learn.microsoft.com/ja-jp/windows/deployment/do/delivery-optimization-proxy">配信の最適化でプロキシを使用する</a></p><p>BITS では、SYSTEM ユーザーのユーザーごとのプロキシ設定が参照されます。</p><p><a href="https://learn.microsoft.com/ja-jp/windows/win32/bits/best-practices-when-using-bits">BITS を使用する際のベスト プラクティス</a></p><h2 id="ライセンス認証"><a href="#ライセンス認証" class="headerlink" title="ライセンス認証"></a>ライセンス認証</h2><p>以下のプロキシ設定が使われる可能性があります。(ライセンス認証は秘匿性の高いコンポーネントのため、詳細情報は非公開となります。 )</p><ul><li>WinHTTP プロキシ設定</li><li>SYSTEM ユーザーのユーザーごとのプロキシ設定</li><li>ログオンユーザーのユーザーごとのプロキシ設定 (ユーザーがログオンしている場合)</li></ul><h2 id="証明書の失効確認"><a href="#証明書の失効確認" class="headerlink" title="証明書の失効確認"></a>証明書の失効確認</h2><p>動作条件により、以下のように動作します。</p><ul><li>ユーザーアカウント (SYSTEM / SERVICE 以外) で動作する場合：該当ユーザーのユーザーごとのプロキシ設定を参照</li><li>SYSTEM / SERVICE ユーザー アカウントで動作する場合：以下の優先順に参照<ul><li>WinHTTP</li><li>該当アカウントのユーザーごとのプロキシ設定</li></ul></li></ul><h2 id="WinRM-Windows-Remote-Management"><a href="#WinRM-Windows-Remote-Management" class="headerlink" title="WinRM (Windows Remote Management)"></a>WinRM (Windows Remote Management)</h2><p>Windows PowerShell から WinRM を使用したリモート処理を行った場合、WinHTTP のプロキシ設定を参照します。</p><h2 id="PowerShell-Invoke-WebRequest-や-Install-Module"><a href="#PowerShell-Invoke-WebRequest-や-Install-Module" class="headerlink" title="PowerShell (Invoke-WebRequest や Install-Module)"></a>PowerShell (Invoke-WebRequest や Install-Module)</h2><p>コマンド中で、-proxy パラメーターで明示的にプロキシ サーバーが指定されている場合はそちらを参照します。<br>特に指定がない場合は、ユーザーごとのプロキシ設定を参照します。</p><h2 id="NCSI-ネットワーク接続状態インジケーター"><a href="#NCSI-ネットワーク接続状態インジケーター" class="headerlink" title="NCSI (ネットワーク接続状態インジケーター)"></a>NCSI (ネットワーク接続状態インジケーター)</h2><p>弊社のインターネット接続性判定用の接続エンドポイントへの接続時に、以下の順で参照します。</p><ul><li>WinHTTP プロキシ設定</li><li>WPAD により自動構成されたプロキシ設定</li><li>ログオン中のユーザーごとのプロキシ設定の最後の変更状態のキャッシュ</li></ul><h2 id="Microsoft-Defender-for-Endpoint"><a href="#Microsoft-Defender-for-Endpoint" class="headerlink" title="Microsoft Defender for Endpoint"></a>Microsoft Defender for Endpoint</h2><p>WPAD により自動構成されたプロキシ設定、WinHTTP プロキシ設定またはアプリ独自のレジストリ設定を参照します。</p><h2 id="Office"><a href="#Office" class="headerlink" title="Office"></a>Office</h2><p>画像の挿入やテンプレートの取得などでは、ログオン中のユーザーのユーザーごとのプロキシ設定を参照しますが、Office 2019 以降や Microsoft 365 クライアントで存在する自動更新処理等の一部の機能については、処理内容によって、以下の順でそれぞれのプロキシ設定を参照する場合があります。</p><ul><li>WinHTTP プロキシ設定</li><li>SYSTEM ユーザーのユーザーごとのプロキシ設定</li><li>ログオンユーザーのユーザーごとのプロキシ設定 (ユーザーがログオンしている場合)</li></ul><p><a href="https://officesupportjp.github.io/blog/clr09r8tu00002wkjcubph9b8/">Office で利用するプロキシ設定について</a></p><h3 id="更新履歴"><a href="#更新履歴" class="headerlink" title="更新履歴"></a>更新履歴</h3><p>2024/12/04 : 本 Blog の公開</p><h3 id="特記事項"><a href="#特記事項" class="headerlink" title="[特記事項]"></a>[特記事項]</h3><p>本情報の内容（添付文書、リンク先などを含む）は作成日時点でのものであり、予告なく変更される場合があります。</p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;p&gt;本稿では、Windows の機能や弊社製品が参照するプロキシ設定について解説します。&lt;/p&gt;
+&lt;h1 id=&quot;Windows-の機能や弊社製品が利用するプロキシ設定とは&quot;&gt;&lt;a href=&quot;#Windows-の機能や弊社製品が利用するプロキシ設定とは&quot; class=&quot;hea</summary>
+      
+    
+    
+    
+    <category term="Networking" scheme="https://jpwinsup.github.io/blog/categories/Networking/"/>
+    
+    <category term="Proxy" scheme="https://jpwinsup.github.io/blog/categories/Networking/Proxy/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>ネットワークドライブ使用時に「セキュリティの警告」が表示される現象</title>
+    <link href="https://jpwinsup.github.io/blog/2024/11/26/Shell/Explorer/Security_Warning/"/>
+    <id>https://jpwinsup.github.io/blog/2024/11/26/Shell/Explorer/Security_Warning/</id>
+    <published>2024-11-26T00:00:00.000Z</published>
+    <updated>2025-04-04T13:31:30.646Z</updated>
+    
+    <content type="html"><![CDATA[<p>本記事はマイクロソフト社員によって公開されております。  </p><p>いつも弊社製品をご利用いただきまして誠にありがとうございます。<br>日本マイクロソフト Windows サポートチームです。</p><p>Windows サポートでは、2024 年 7 月以降の更新プログラムが適用された Windows にて、特定の運用状況下で 「セキュリティの警告」 が表示される現象を認識しております。 Windows の更新後、当警告が表示されるようになった場合は、この事象に該当しているかご確認ください。</p><h2 id="事象"><a href="#事象" class="headerlink" title="事象"></a>事象</h2><hr><p>2024 年 7 月以降の更新プログラムが適用された Windows において、次の 2 点を満たす運用を行っている場合に、ショートカットファイル実行時に 「セキュリティの警告」 が表示されることがあります。</p><h3 id="1-ネットワークドライブに接続していない状態でシステムが起動し、その後ネットワークドライブをマウントする運用をしている。"><a href="#1-ネットワークドライブに接続していない状態でシステムが起動し、その後ネットワークドライブをマウントする運用をしている。" class="headerlink" title="1. ネットワークドライブに接続していない状態でシステムが起動し、その後ネットワークドライブをマウントする運用をしている。"></a>1. ネットワークドライブに接続していない状態でシステムが起動し、その後ネットワークドライブをマウントする運用をしている。</h3><h3 id="2-ネットワーク共有上のアイコンファイルを参照するショートカットファイルがディレクトリ内に-1-つ以上存在する。"><a href="#2-ネットワーク共有上のアイコンファイルを参照するショートカットファイルがディレクトリ内に-1-つ以上存在する。" class="headerlink" title="2. ネットワーク共有上のアイコンファイルを参照するショートカットファイルがディレクトリ内に 1 つ以上存在する。"></a>2. ネットワーク共有上のアイコンファイルを参照するショートカットファイルがディレクトリ内に 1 つ以上存在する。</h3><blockquote><p>&emsp;&emsp; ショートカット ファイルの例)<br>&emsp;&emsp;&emsp;&emsp;- 参照先: Z:\share\work\task.bat<br>&emsp;&emsp;&emsp;&emsp;- ショートカットのアイコンの場所: Z:\share\admin\task.ico<br>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp; ※ Z: はネットワークドライブのレター<br>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp; </p><h6 id="※-このようなファイルがディレクトリ内に-1-つでも存在すると、同じディレクトリ内の、「ネットワーク共有上のアイコンファイルを参照しない」同様のショートカットを開いた場合にも警告が表示されます。"><a href="#※-このようなファイルがディレクトリ内に-1-つでも存在すると、同じディレクトリ内の、「ネットワーク共有上のアイコンファイルを参照しない」同様のショートカットを開いた場合にも警告が表示されます。" class="headerlink" title="※ このようなファイルがディレクトリ内に 1 つでも存在すると、同じディレクトリ内の、「ネットワーク共有上のアイコンファイルを参照しない」同様のショートカットを開いた場合にも警告が表示されます。"></a>※ このようなファイルがディレクトリ内に 1 つでも存在すると、同じディレクトリ内の、「ネットワーク共有上のアイコンファイルを参照しない」同様のショートカットを開いた場合にも警告が表示されます。</h6></blockquote><p>※以下は表示例。環境や使用状況により表示内容が異なる場合があります。</p><img src="/blog/2024/11/26/Shell/Explorer/Security_Warning/Security_Warning.png" class=""><h2 id="対象バージョン"><a href="#対象バージョン" class="headerlink" title="対象バージョン"></a>対象バージョン</h2><hr><p>Windows 10<br>Windows 11<br>Windows Server 2012 (ESU)<br>Windows Server 2012 R2 (ESU)<br>Windows Server 2016<br>Windows Server 2019<br>Windows Server 2022  </p><h2 id="対処方法"><a href="#対処方法" class="headerlink" title="対処方法"></a>対処方法</h2><hr><p>以下 1, 2 のいずれかの方法で、この現象を回避することができます。</p><h3 id="1-ネットワークドライブを永続的に割り当てる"><a href="#1-ネットワークドライブを永続的に割り当てる" class="headerlink" title="1. ネットワークドライブを永続的に割り当てる"></a>1. ネットワークドライブを永続的に割り当てる</h3><p>ネットワークドライブを「永続的に割り当てる」オプションでマウントすることで、システム起動時にドライブが常に接続されるようにします。<br>以下はコマンド や bat で当オプションを使用してマウントする例です。</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">net use z: \\Server\Share &#x2F;persistent:yes</span><br></pre></td></tr></table></figure><h3 id="2-ショートカットのアイコンファイル参照先をローカルに変更する"><a href="#2-ショートカットのアイコンファイル参照先をローカルに変更する" class="headerlink" title="2. ショートカットのアイコンファイル参照先をローカルに変更する"></a>2. ショートカットのアイコンファイル参照先をローカルに変更する</h3><p>ショートカットファイルのアイコンファイルの参照先を、ネットワークドライブではなく、ローカル上のファイルに変更します。</p><h2 id="補足情報"><a href="#補足情報" class="headerlink" title="補足情報"></a>補足情報</h2><hr><h4 id="警告が表示される大まかなメカニズムは以下の通りです"><a href="#警告が表示される大まかなメカニズムは以下の通りです" class="headerlink" title="警告が表示される大まかなメカニズムは以下の通りです"></a>警告が表示される大まかなメカニズムは以下の通りです</h4><blockquote><p>&emsp;&emsp; 1.&emsp; ネットワークドライブに未接続の状態でエクスプローラー (Explore.exe) を起動する。<br>&emsp;&emsp; 2.&emsp; 該当のショートカットファイルがあるディレクトリに移動する。<br>&emsp;&emsp; 3.&emsp; エクスプローラーがショートカットアイコンを取得するためにネットワーク共有にアクセスする。<br>&emsp;&emsp; &emsp;&emsp; (この時、エクスプローラーは該当のネットワーク共有を外部と判断します。OS の設定によってはアイコン取得も回避されるため、アイコンが表示されず白抜きになることがあります。)<br>&emsp;&emsp; 4.&emsp; ネットワークドライブをマウントする。<br>&emsp;&emsp; 5.&emsp; 該当のショートカットを開くと、「セキュリティの警告」 が表示される。</p><p>&emsp;&emsp; &emsp;&emsp;&emsp; ※ これは、エクスプローラーがネットワークドライブ先を外部とみなすために発生します。一度、手動で Explore.exe のプロセスを再起動すればネットワークドライブを割り当てている前提で認識するため一時的に警告が表示されなくなりますが、根本的な対処には上述の対応が必要です。</p></blockquote><p>&emsp;※ なお、エクスプローラーはデスクトップ画面も提供しています。そのため、ここに該当のショートカットを配置している場合は、ユーザー ログオン時に自動的に 1 ~ 3 が発生するため、本事象は主にデスクトップに該当のショートカットを配置しているシナリオで発生することが想定されます。  </p><h4 id="ショートカットのアイコンが白抜きになる事象"><a href="#ショートカットのアイコンが白抜きになる事象" class="headerlink" title="ショートカットのアイコンが白抜きになる事象"></a>ショートカットのアイコンが白抜きになる事象</h4><p>上記 3. の動作に関連して、ショートカットファイルのアイコンが白抜きになることがあります。<br>こちらの事象は別途対処が必要です。詳しくは <a href="https://jpwinsup.github.io/blog/2024/08/15/UserInterfaceAndApps/does-not-load-when-icon-is-on-a-network-shared-folder-lnk/">こちらの記事</a> で紹介しておりますので、ご確認ください。</p><hr><p>本情報の内容（添付文書、リンク先などを含む）は、作成日時点でのものであり、予告なく変更される場合があります。</p><h2 id="変更履歴"><a href="#変更履歴" class="headerlink" title="変更履歴"></a>変更履歴</h2><hr><p>2024/11/26 : 本記事の公開<br>2024/12/10 : 問題の再現条件に関して、加筆・修正 </p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;p&gt;本記事はマイクロソフト社員によって公開されております。  &lt;/p&gt;
+&lt;p&gt;いつも弊社製品をご利用いただきまして誠にありがとうございます。&lt;br&gt;日本マイクロソフト Windows サポートチームです。&lt;/p&gt;
+&lt;p&gt;Windows サポートでは、2024 年 7 月以降の更</summary>
+      
+    
+    
+    
+    <category term="Shell" scheme="https://jpwinsup.github.io/blog/categories/Shell/"/>
+    
+    <category term="Explorer" scheme="https://jpwinsup.github.io/blog/categories/Shell/Explorer/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>#4 Windows Commercial 紹介 Blog (メンバー インタビュー編)</title>
+    <link href="https://jpwinsup.github.io/blog/2024/11/20/%E7%B5%84%E7%B9%94%E7%B4%B9%E4%BB%8B%E3%83%96%E3%83%AD%E3%82%B0%EF%BC%88Windows%20Commercial%EF%BC%89/Wincomm-intro-4/"/>
+    <id>https://jpwinsup.github.io/blog/2024/11/20/%E7%B5%84%E7%B9%94%E7%B4%B9%E4%BB%8B%E3%83%96%E3%83%AD%E3%82%B0%EF%BC%88Windows%20Commercial%EF%BC%89/Wincomm-intro-4/</id>
+    <published>2024-11-20T17:43:42.000Z</published>
+    <updated>2025-04-04T13:31:30.994Z</updated>
+    
+    <content type="html"><![CDATA[<p>本記事はマイクロソフト社員によって公開されております。</p><p>私たちのチームでは、一緒にサポート エンジニア部門 (CSS: Customer Service &amp; Support) を盛り上げてくれるエンジニアの方を募集しております。本記事では、私たち Windows Commercial で活躍されている多様なメンバーにフォーカスして紹介します！ </p><p><strong>～異業種から技術サポート職への大きなチャレンジを果たし、入社後に 2 度の出産を経て活躍している女性エンジニアのご紹介です～</strong></p><p><img src="./wincomm_pic10.png"></p><h1 id="異業種からのチャレンジと-Microsoft-でのキャリア"><a href="#異業種からのチャレンジと-Microsoft-でのキャリア" class="headerlink" title="異業種からのチャレンジと Microsoft でのキャリア"></a>異業種からのチャレンジと Microsoft でのキャリア</h1><p>前職では営業職や旅館の女将として外国人観光客をおもてなしするサービス業を経験した後、IT 業界に足を踏み入れ System Engineer Service (SES) 企業で働き、その後 Microsoft に入社しました。私は、営業職やサービス業出身のため技術が強みでなかったという事、また入社が 2020 年 5 月 コロナ禍となりフルリモートのワークスタイルで勤務を開始した為、当時 Microsoft で活躍できるのか正直不安な部分もあったことも覚えています。</p><p>しかしながら、技術の経験が浅い中でも、素晴らしいメンターや周りのチーム メンバーのサポート、また体系化されたトレーニングを受けながら、フルリモート環境の中でも安心してオンボーディングが進み、サポート業務に従事する事ができています。 </p><p>入社してからは Windows Commercial の Device and Deployment チームに配属され、OS のライセンス認証や 展開 (デプロイメント) に関する機能を主に担当していますが、現在では、Directory Services チームへのインターンも行っており、今後更なる製品知識の幅を広げていきたいと思っています。 </p><h1 id="Work-Life-Balance-について"><a href="#Work-Life-Balance-について" class="headerlink" title="Work Life Balance について"></a>Work Life Balance について</h1><p>プライベートでは 2022 年と 2023 年に出産し、産休と育休を取得した経験があります。当時は休むことによるキャリアの停滞や、復帰後に今までと同じように働き続けることができるか不安な部分もありましたが、メンバーにもフォローしていただきながら、またリモートワークやフレックス制度を活用しながらフルタイムで働いています。</p><p>現在は、業後は定時で仕事を切り上げ、子ども達との時間を大切にしています。その分、朝方に趣味や仕事の時間を作っており、育児とプライベート、キャリアのバランスをうまく取れるように工夫しています。2 児の母として、育児をしながらの仕事は大変な面もありますが、柔軟な職場環境を活用しながら Windows Commercial 内のインターンも含め対応できる技術エリアを広げ、今後もどんどん新しいことに挑戦していきたいと考えています。</p><h1 id="Windows-Commercial-の魅力"><a href="#Windows-Commercial-の魅力" class="headerlink" title="Windows Commercial の魅力"></a>Windows Commercial の魅力</h1><p>Windows Commercial には素晴らしいメンバーが多く在籍しており、高い技術力はもちろんのこと、人間的にも尊敬できる人が多く、多方面で良い刺激を受けることができ、自身の成長につながっていると感じています。また技術関連のトレーニングが多数そろっており、製品知識のキャッチアップもできますし、手に職をつけたい方にもお勧めなので、少しでも興味がある方は是非チャレンジしてみてください！ </p><p><img src="./wincomm_pic11.png"></p><p><img src=""></p><p><strong>～Critical Response Team で日々お客様の緊急案件の課題解決に尽力するお父さんエンジニアのご紹介です～</strong></p><p><img src="./wincomm_pic12.png"></p><h1 id="マイクロソフトのサポートを目指したきっかけと今後のキャリアプラン"><a href="#マイクロソフトのサポートを目指したきっかけと今後のキャリアプラン" class="headerlink" title="マイクロソフトのサポートを目指したきっかけと今後のキャリアプラン"></a>マイクロソフトのサポートを目指したきっかけと今後のキャリアプラン</h1><p>新卒でメーカー系の SIer に就職し、大手銀行向けのシステム構築に携わっていました。とあるプロジェクトでマイクロソフトのエンジニアと協業する機会があり、理論整然と顧客からの質問に回答し、また適切に議論をリードする姿に憧れ、自身もこんなエンジニアになりたいとの思いから、マイクロソフトのサポートエンジニアに応募し、2019 年に入社しました。</p><p>入社後は User Experience (UEX), Performance チームで Windows OS の UI 周りやシステムのパフォーマンスに関するサポートを行い、現在は兼ねてから希望していた Critical Response Team (CRT) と呼ばれる緊急案件を対応するチームに所属し、お客様のご運用環境で発生した緊急性の高い事案の対応に日々奮闘しています。</p><p>今後のキャリアプランとしては、引き続き現在のチームで Windows OS の知識や問題解決力を磨きつつ、将来的には技術コンサルタントなど、Windows Commercial のサポートで培った技術をもとに、お客様の製品導入の支援にも携わってみたいと考えています。</p><h1 id="育休取得の経験とサポーティブな文化"><a href="#育休取得の経験とサポーティブな文化" class="headerlink" title="育休取得の経験とサポーティブな文化"></a>育休取得の経験とサポーティブな文化</h1><p>マイクロソフトに入社してから 1 年も経たないうちに育休を取得しましたが、正直当時は不安がありました。オンボーディングが完了し、まさにこれからチームに貢献できるという状況で、長期の休暇を取ることに対する葛藤が非常に大きかったです。</p><p>しかしながら、育休を取る際にチームメンバーの方が非常に協力的で、引き継ぎや現在対応中の案件の調整について親身に相談に乗ってくれました。「マイクロソフト」「外資系」というと個人プレーの印象も強いかと思いますが、この職場にはサポーティブな文化があり、チーメンバーのフォローのお陰で、安心して育休を取得することができました。特にメンターや当時のマネージャーの方々が全面的にサポートしてくれたことに感謝しています。</p><p><img src="./wincomm_pic13.png"></p><h1 id="Windows-Commercial-の魅力-1"><a href="#Windows-Commercial-の魅力-1" class="headerlink" title="Windows Commercial の魅力"></a>Windows Commercial の魅力</h1><p>Windows サポートの最大の魅力は Windows OS を通じて、コンピューターサイエンスを深く理解できることだと、私は感じています。Windows OS の仕組みを知っていくと、例えばネットワークの分野では RFC (Request For Comments) などの標準化を踏まえて設計していることなど、コンピューターサイエンスについて深く理解することができます。</p><p>このような知識をもとに Azure などのクラウド製品サポートなど、エンジニアとしてどのような環境にいっても対応できる、という実感がでてきますので、手に職をつけたい方にとってもお勧めですので、少しでも興味が有る方は是非チャレンジしてみていただきたいです。</p><p>&lt;関連ブログ&gt;</p><ul><li><a href="/blog/2024/11/06/%E7%B5%84%E7%B9%94%E7%B4%B9%E4%BB%8B%E3%83%96%E3%83%AD%E3%82%B0%EF%BC%88Windows%20Commercial%EF%BC%89/Wincomm-intro-1">#1 Windows Commercial 紹介 Blog (組織概要&amp;サポートの仕事編)</a></li><li><a href="/blog/2024/11/06/%E7%B5%84%E7%B9%94%E7%B4%B9%E4%BB%8B%E3%83%96%E3%83%AD%E3%82%B0%EF%BC%88Windows%20Commercial%EF%BC%89/Wincomm-intro-2">#2 Windows Commercial 紹介 Blog (チーム紹介 Part 1)</a></li><li><a href="/blog/2024/11/06/%E7%B5%84%E7%B9%94%E7%B4%B9%E4%BB%8B%E3%83%96%E3%83%AD%E3%82%B0%EF%BC%88Windows%20Commercial%EF%BC%89/Wincomm-intro-3">#3 Windows Commercial 紹介 Blog (チーム紹介 Part 2)</a></li></ul>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;p&gt;本記事はマイクロソフト社員によって公開されております。&lt;/p&gt;
+&lt;p&gt;私たちのチームでは、一緒にサポート エンジニア部門 (CSS: Customer Service &amp;amp; Support) を盛り上げてくれるエンジニアの方を募集しております。本記事では、私たち Wi</summary>
+      
+    
+    
+    
+    <category term="組織紹介ブログ（Windows Commercial）" scheme="https://jpwinsup.github.io/blog/categories/%E7%B5%84%E7%B9%94%E7%B4%B9%E4%BB%8B%E3%83%96%E3%83%AD%E3%82%B0%EF%BC%88Windows-Commercial%EF%BC%89/"/>
+    
+    
+  </entry>
+  
+</feed>
