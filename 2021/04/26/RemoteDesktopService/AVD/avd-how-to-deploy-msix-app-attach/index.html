@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-180187723-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-180187723-1');
+</script>
+<!-- End Google Analytics -->
+
+  
+  <title>MSIX app attach の構築手順について | Microsoft Japan Windows Technology Support Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="本記事はマイクロソフト社員によって公開されております。 こんにちは。Windows プラットフォーム サポートの玉井です。今回は、2021 年 4 月 13 日 に GA された、MSIX app attach と、その構築手順について、ご案内いたします。 MSIX app attach GA の 発表記事 :  MSIX app attach is now generally available">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MSIX app attach の構築手順について">
+<meta property="og:url" content="https://jpwinsup.github.io/blog/2021/04/26/RemoteDesktopService/AVD/avd-how-to-deploy-msix-app-attach/index.html">
+<meta property="og:site_name" content="Microsoft Japan Windows Technology Support Blog">
+<meta property="og:description" content="本記事はマイクロソフト社員によって公開されております。 こんにちは。Windows プラットフォーム サポートの玉井です。今回は、2021 年 4 月 13 日 に GA された、MSIX app attach と、その構築手順について、ご案内いたします。 MSIX app attach GA の 発表記事 :  MSIX app attach is now generally available">
+<meta property="og:locale" content="ja_JP">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2021/04/26/RemoteDesktopService/AVD/avd-how-to-deploy-msix-app-attach/msix-app-attach-process.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2021/04/26/RemoteDesktopService/AVD/avd-how-to-deploy-msix-app-attach/msix-app-attach-process-detail.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2021/04/26/RemoteDesktopService/AVD/avd-how-to-deploy-msix-app-attach/custom-image.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2021/04/26/RemoteDesktopService/AVD/avd-how-to-deploy-msix-app-attach/store-msix-packaging-tool.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2021/04/26/RemoteDesktopService/AVD/avd-how-to-deploy-msix-app-attach/search-msix-packaging-tool.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2021/04/26/RemoteDesktopService/AVD/avd-how-to-deploy-msix-app-attach/select-application-package.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2021/04/26/RemoteDesktopService/AVD/avd-how-to-deploy-msix-app-attach/msix-package-on-this-computer.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2021/04/26/RemoteDesktopService/AVD/avd-how-to-deploy-msix-app-attach/msix-package-prepare-computer.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2021/04/26/RemoteDesktopService/AVD/avd-how-to-deploy-msix-app-attach/msix-package-select-installer.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2021/04/26/RemoteDesktopService/AVD/avd-how-to-deploy-msix-app-attach/msix-package-information.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2021/04/26/RemoteDesktopService/AVD/avd-how-to-deploy-msix-app-attach/msix-package-installation1.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2021/04/26/RemoteDesktopService/AVD/avd-how-to-deploy-msix-app-attach/msix-package-installation2.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2021/04/26/RemoteDesktopService/AVD/avd-how-to-deploy-msix-app-attach/msix-package-installation3.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2021/04/26/RemoteDesktopService/AVD/avd-how-to-deploy-msix-app-attach/msix-package-installation4.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2021/04/26/RemoteDesktopService/AVD/avd-how-to-deploy-msix-app-attach/msix-package-installation5.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2021/04/26/RemoteDesktopService/AVD/avd-how-to-deploy-msix-app-attach/msix-package-installation-completed.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2021/04/26/RemoteDesktopService/AVD/avd-how-to-deploy-msix-app-attach/msix-package-task-management.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2021/04/26/RemoteDesktopService/AVD/avd-how-to-deploy-msix-app-attach/msix-package-complete.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2021/04/26/RemoteDesktopService/AVD/avd-how-to-deploy-msix-app-attach/msix-package-new-package.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2021/04/26/RemoteDesktopService/AVD/avd-how-to-deploy-msix-app-attach/msix-package-create-package.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2021/04/26/RemoteDesktopService/AVD/avd-how-to-deploy-msix-app-attach/msix-package-created.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2021/04/26/RemoteDesktopService/AVD/avd-how-to-deploy-msix-app-attach/msixmgr-unzip.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2021/04/26/RemoteDesktopService/AVD/avd-how-to-deploy-msix-app-attach/msixmgr-move-msixfile.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2021/04/26/RemoteDesktopService/AVD/avd-how-to-deploy-msix-app-attach/ask-for-formatting.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2021/04/26/RemoteDesktopService/AVD/avd-how-to-deploy-msix-app-attach/create-parent-folder.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2021/04/26/RemoteDesktopService/AVD/avd-how-to-deploy-msix-app-attach/upload-msix-app-attach-package-to-azure-files.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2021/04/26/RemoteDesktopService/AVD/avd-how-to-deploy-msix-app-attach/azure-portal-msix-package.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2021/04/26/RemoteDesktopService/AVD/avd-how-to-deploy-msix-app-attach/get-azure-files-path.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2021/04/26/RemoteDesktopService/AVD/avd-how-to-deploy-msix-app-attach/add-msix-package-failed.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2021/04/26/RemoteDesktopService/AVD/avd-how-to-deploy-msix-app-attach/add-msix-package-succeeded.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2021/04/26/RemoteDesktopService/AVD/avd-how-to-deploy-msix-app-attach/msix-package-added.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2021/04/26/RemoteDesktopService/AVD/avd-how-to-deploy-msix-app-attach/create-app-group.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2021/04/26/RemoteDesktopService/AVD/avd-how-to-deploy-msix-app-attach/create-remoteapp-appgroup.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2021/04/26/RemoteDesktopService/AVD/avd-how-to-deploy-msix-app-attach/add-msix-application-to-appgroup.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2021/04/26/RemoteDesktopService/AVD/avd-how-to-deploy-msix-app-attach/assign-user.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2021/04/26/RemoteDesktopService/AVD/avd-how-to-deploy-msix-app-attach/select-workspace.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2021/04/26/RemoteDesktopService/AVD/avd-how-to-deploy-msix-app-attach/remote-appgroup-created.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2021/04/26/RemoteDesktopService/AVD/avd-how-to-deploy-msix-app-attach/avdclient-remoteapp.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2021/04/26/RemoteDesktopService/AVD/avd-how-to-deploy-msix-app-attach/get-computer-name-using-powershell.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2021/04/26/RemoteDesktopService/AVD/avd-how-to-deploy-msix-app-attach/msix-how-it-looks-like-on-sessionhost.png">
+<meta property="article:published_time" content="2021-04-26T00:00:00.000Z">
+<meta property="article:modified_time" content="2026-02-19T02:53:58.545Z">
+<meta property="article:author" content="Microsoft Japan Windows Technology Support Team">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://jpwinsup.github.io/blog/2021/04/26/RemoteDesktopService/AVD/avd-how-to-deploy-msix-app-attach/msix-app-attach-process.png">
+  
+    <link rel="alternate" href="/blog/atom.xml" title="Microsoft Japan Windows Technology Support Blog" type="application/atom+xml">
+  
+
+  <link rel="icon" href="/blog/favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="/blog/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/blog/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/blog/favicon-16x16.png">
+  <link rel="manifest" href="/blog/site.webmanifest">
+  <link rel="mask-icon" href="/blog/safari-pinned-tab.svg" color="#5bbad5">
+  <meta name="msapplication-TileColor" content="#ffffff">
+  <meta name="theme-color" content="#ffffff">
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/blog/css/style.css">
+
+<meta name="generator" content="Hexo 5.2.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="site-header-logo"></div>
+  <div id="site-header-blog-wrapper"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        <div id="ms-logo"></div>
+        
+          <a class="main-nav-link" href="/blog/">Home</a>
+        
+          <a class="main-nav-link" href="/blog/archives">Archives</a>
+        
+        <a class="main-nav-link" target="_blank" rel="noopener" href="https://cssjpn.github.io/">サポート情報</a>
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/blog/atom.xml" title="RSSフィード"></a>
+        
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//www.bing.com/search" method="get" accept-charset="UTF-8" name="bing-search" onsubmit="var f=this;if(f['q'].value){var searchUrl =  'https://www.bing.com/search?q=' +  encodeURIComponent(f['q'].value + ' site:' + f['sitesearch'].value) ;window.open(searchUrl, 'blank') };return false;" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="検索"><button type="submit" id="nav-search-btn" class="search-form-submit"></button><input type="hidden" name="sitesearch" value="https://jpwinsup.github.io/blog"></form>
+      </div>
+    </div>
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/blog/" id="logo">Microsoft Japan Windows Technology Support Blog</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/blog/" id="subtitle">日本マイクロソフト Windows Support チームによる、サポート情報 Blog です。</a>
+        </h2>
+      
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-RemoteDesktopService/AVD/avd-how-to-deploy-msix-app-attach" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    
+    
+      <header class="article-header-single">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      MSIX app attach の構築手順について
+    </h1>
+  
+
+      </header>
+      <div class="article-share">
+        Last Update: 
+        <a href="/blog/2021/04/26/RemoteDesktopService/AVD/avd-how-to-deploy-msix-app-attach/" class="article-date-single">
+  <time datetime="2021-04-26T00:00:00.000Z" itemprop="datePublished">2021-04-26</time>
+</a>
+        
+  <div class="article-category">
+    <a class="article-category-link" href="/blog/categories/Remote-Desktop/">Remote Desktop</a>►<a class="article-category-link" href="/blog/categories/Remote-Desktop/Azure-Virtual-Desktop-AVD/">Azure Virtual Desktop (AVD)</a>
+  </div>
+
+        
+        <a href="https://github.com/jpwinsup/blog/issues/new?title=&body=%EF%BB%BF%0A%0A---%0A%0A%23%23%23%23+Document+Details%0A%0A*+Article+ID%3A+45557531-6724-59e7-9add-5007734ce328%0A*+TITLE%3A+MSIX+app+attach+%E3%81%AE%E6%A7%8B%E7%AF%89%E6%89%8B%E9%A0%86%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6%0A*+URL+https%3A%2F%2Fjpwinsup.github.io%2Fblog%2F2021%2F04%2F26%2FRemoteDesktopService%2FAVD%2Favd-how-to-deploy-msix-app-attach%2F%0A*+SourceFileName%3A+source%2F_posts%2FRemoteDesktopService%2FAVD%2Favd-how-to-deploy-msix-app-attach.md%0A" class="article-github-issue-link" target="_blank" rel="noopener noreferrer">feedback</a>
+        
+        <a data-url="https://jpwinsup.github.io/blog/2021/04/26/RemoteDesktopService/AVD/avd-how-to-deploy-msix-app-attach/" data-id="cmlsvjdox01jkru3ye573bxri" class="article-share-link">共有</a>
+      </div>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>本記事はマイクロソフト社員によって公開されております。</p>
+<p>こんにちは。Windows プラットフォーム サポートの玉井です。<br>今回は、2021 年 4 月 13 日 に GA された、MSIX app attach と、その構築手順について、ご案内いたします。</p>
+<p>MSIX app attach GA の 発表記事 : <a href="https://techcommunity.microsoft.com/t5/windows-virtual-desktop/msix-app-attach-is-now-generally-available/m-p/2270468#M6864​" target="_blank"> MSIX app attach is now generally available </a></p>
+<p><a id="index"></a></p>
+<h2 id="目次"><a href="#目次" class="headerlink" title="目次"></a><a href="#index">目次</a></h2><ul>
+<li><a href="#about-msix-app-attach">MSIX app attach の概要について</a></li>
+<li><a href="#about-image-management">イメージ管理について</a></li>
+<li><a href="#msix-process">MSIX app attach の動作プロセスについて</a></li>
+<li><a href="#requirement">必要要件</a></li>
+<li><a href="#prepare-msix-packaging-environment">MSIX パッケージ作成用の環境作成</a></li>
+<li><a href="#package-msix-application">MSIX アプリケーションのパッケージ化 （例: PowerShell 7）</a></li>
+<li><a href="#expand-msix-package">MSIX パッケージ を MSIX app attach パッケージ（MSIX イメージ）に拡張する</a></li>
+<li><a href="#upload-vhdx-to-file-share">ファイル共有に MSIX イメージ の VHDX ファイルをアップロードする</a></li>
+<li><a href="#configure-msix-app-attach">Azure portal で MSIX app attach を設定する</a></li>
+<li><a href="#summary">まとめ</a></li>
+<li><a href="#related-article">関連情報</a></li>
+<li><a href="#updatehistory">更新履歴</a></li>
+</ul>
+<p><a id="about-msix-app-attach"></a></p>
+<h2 id="MSIX-app-attach-の概要について"><a href="#MSIX-app-attach-の概要について" class="headerlink" title="MSIX app attach の概要について"></a><a href="#about-msix-app-attach">MSIX app attach の概要について</a></h2><p>MSIX app attach の概要を説明する前に、MSIX についてまずは説明します。</p>
+<p>MSIX は、新しい Windows アプリ パッケージ形式です。<br>MSIX パッケージ形式では、Win32、WPF、Windows フォームのアプリに対して新たな、最新のパッケージ化および展開機能が有効になるだけでなく、既存のアプリ パッケージやインストール ファイルの機能が維持されます。</p>
+<p>MSIX パッケージ自体の詳細な情報につきましては、以下の公開情報をご参照ください。<br><a href="https://docs.microsoft.com/ja-jp/windows/msix/" target="_blank"> MSIX ドキュメント </a></p>
+<p>MSIX app attach は、この MSIX パッケージを、ユーザーログオン時にアプリケーションとして OS に アタッチする（取り付ける）ことで、AVD 環境で OS と アプリケーションを分離するために利用できる機能となっています。</p>
+<p>一般的に AVD などの、DaaS/VDI のソリューションでは、イメージ管理に工数がかかるという課題があります。<br>マスターイメージにアプリケーションをインストールし、アップデートごとにマスターイメージを変更し、バージョン管理をされる管理者の方が多いのではないでしょうか。<br>MSIX app attach を利用することで、アプリケーションの管理を、イメージ管理から分離し、マスターイメージの変更作業にかかる工数を減らすことができます。</p>
+<p>以下が、MSIX app attach の主な利点となります。</p>
+<ul>
+<li>MSIX コンテナーを使用して、ユーザー データ、OS、アプリを分離する。</li>
+<li>アプリケーションを動的に配信するときに再パッケージ化する必要がなくなる。</li>
+<li>ユーザーがサインインするまでにかかる時間を短縮する。</li>
+<li>インフラストラクチャの要件とコストを削減する。</li>
+</ul>
+<p>その他詳細につきましては、以下の MSIX app attach の公開情報をご確認ください。<br><a href="https://docs.microsoft.com/ja-jp/azure/virtual-desktop/what-is-app-attach#what-does-msix-app-attach-do" target="_blank"> MSIX アプリのアタッチとは </a></p>
+<p><a href="https://docs.microsoft.com/ja-jp/azure/virtual-desktop/app-attach-glossary" target="_blank"> MSIX アプリのアタッチの用語集 </a></p>
+<p><a href="https://docs.microsoft.com/ja-jp/azure/virtual-desktop/app-attach-faq" target="_blank"> MSIX アプリ アタッチに関するごよくある質問 </a></p>
+<p><a id="about-image-management"></a></p>
+<h2 id="イメージ管理について"><a href="#イメージ管理について" class="headerlink" title="イメージ管理について"></a><a href="#about-image-management">イメージ管理について</a></h2><p>上記で、MSIX app attach を利用することで、イメージ管理のコストを下げることができる旨を記載いたしましたが、日本語環境や、お客様の要件に併せたカスタムイメージを作成される際に、イメージ作成がなくなるわけではないことは予めご留意ください。</p>
+<p>MSIX app attach を利用することで、アプリケーションとイメージ管理を分離することはできますが、それ以外のローカライゼーション（日本語化）や、sysprep 前にマスターイメージに設定されたい内容につきましては、これまでと同様カスタムイメージ作成時にご実施いただく必要がございます。</p>
+<p>日本語化イメージ作成手順につきましては、以下の弊社サポートブログをご参考ください。</p>
+<p><a href="https://jpwinsup.github.io/blog/2021/01/20/RemoteDesktopService/AVD/AVD-ARM-Japanese-image/" target="_blank"> AVD ARM 日本語化イメージ作成手順について </a></p>
+<p>また、AVD での カスタムイメージ作成時の手順や、設定項目につきましては、以下の公開情報をご参照ください。</p>
+<p><a href="https://docs.microsoft.com/ja-jp/azure/virtual-desktop/set-up-customize-master-image" target="_blank"> マスター VHD イメージを準備してカスタマイズする </a></p>
+<p><a id="msix-process"></a></p>
+<h2 id="MSIX-app-attach-の動作プロセスについて"><a href="#MSIX-app-attach-の動作プロセスについて" class="headerlink" title="MSIX app attach の動作プロセスについて"></a><a href="#msix-process">MSIX app attach の動作プロセスについて</a></h2><p>MSIX app attach は、下図の 1 から 6 の順番に動作します。</p>
+<ol>
+<li>AVD 管理者が、Azure Portal から MSIX パッケージを設定し、割り当てを行います。</li>
+<li>まず、ユーザーが AVD クライアントで認証を行い、AVD フィードを取得します。</li>
+<li>AVD の サービス として、AVD コントロールプレーン 内の ブローカー が、ユーザー の セッション を ホストプール内のセッションホストに割り当てます。</li>
+<li>FSLogix で、ユーザープロファイル の コンテナ を セッションホスト の マシン に ロード(マウント）します。</li>
+<li>ユーザーに割り振られたアプリケーションを読み込みます。</li>
+<li>割り振られた アプリケーション を、セッションホストに登録します。</li>
+</ol>
+<img src="/blog/2021/04/26/RemoteDesktopService/AVD/avd-how-to-deploy-msix-app-attach/msix-app-attach-process.png" class="">
+
+<p>また、MSIX app attach だけに着目すると、以下のようなプロセスがあります。</p>
+<ol>
+<li>MSIX パッケージ を MSIX app attach のパッケージに拡張します。</li>
+<li>VM 上で、MSIX app attach のパッケージを利用できるようにします。（ステージング）</li>
+<li>ステージングされたアプリケーションを、ユーザーに利用できるようにします。（登録）</li>
+<li>ユーザーセッションが確立されるまで、アプリケーションのロードを遅延させます。（遅延登録）</li>
+<li>ユーザーが必要となったときに、アプリケーションがロードされるようにできます。（オンデマンド）</li>
+</ol>
+<img src="/blog/2021/04/26/RemoteDesktopService/AVD/avd-how-to-deploy-msix-app-attach/msix-app-attach-process-detail.png" class="">
+
+<p><a id="requirement"></a></p>
+<h2 id="必要要件"><a href="#必要要件" class="headerlink" title=" 必要要件 "></a><a href="#requirement"> 必要要件 </a></h2><p>MSIX app attach 利用時に必要な要件は以下となります。</p>
+<ul>
+<li>AVD 環境</li>
+<li>Windows 10 single or multi-session かつ、build 2004 以降のバージョン</li>
+<li>ネットワーク共有（例: Azure Files もしくは Azure NetApp Files)</li>
+<li>AVD ホストプール内の セッションホストから、上記 ネットワーク共有への NTFS の 読み取り権限。</li>
+<li><a href="https://docs.microsoft.com/en-us/windows/msix/packaging-tool/tool-overview" target="_blank">MSIX Packaging tool</a></li>
+<li><a href="https://aka.ms/msixmgr" target="_blank">MSIX Mgr tool</a></li>
+<li>MSIX パッケージ用の内部用もしくは外部用の証明書（自己証明書含む）</li>
+</ul>
+<p>また、MSIX パッケージ作成用の環境を用意します。<br>これは、既存のインストーラーを MSIX Packaging tool を用いて変換する際に利用します。</p>
+<p>この環境は、MSIX app attach でアタッチされようとしているアプリケーションを展開する環境と同様の構成を取ることを推奨しております。<br>例) Windows 10 multi-session で 2004 の AVD 環境に展開されようとしている場合は、同じ OS バージョンを利用します。</p>
+<p>また、MSIX Packaging tool で、既存のインストーラーを展開される際は、他のアプリケーションや、既定以外のサービスを立ち上げていない状態で実行されることを推奨いたします。</p>
+<p>MSIX パッケージ を作成する環境を構成する際の推奨事項の詳細については、以下の公開情報をご参照ください。</p>
+<p><a href="https://docs.microsoft.com/ja-jp/windows/msix/packaging-tool/prepare-your-environment" target="_blank"> 変換のために環境を準備する </a></p>
+<p><a id="prepare-msix-packaging-environment"></a></p>
+<h2 id="MSIX-パッケージ作成用の環境作成"><a href="#MSIX-パッケージ作成用の環境作成" class="headerlink" title=" MSIX パッケージ作成用の環境作成 "></a><a href="#prepare-msix-packaging-environment"> MSIX パッケージ作成用の環境作成 </a></h2><p>MSIX パッケージを作成するための環境を Azure VM で用意します。<br>今回は、Windows 10 Enterprise multi-session, Version 20H2 + Microsoft365 Apps - Gen1 のイメージを基に展開した Azure VM を構築し、この VM 上で MSIX パッケージを作成します。</p>
+<img src="/blog/2021/04/26/RemoteDesktopService/AVD/avd-how-to-deploy-msix-app-attach/custom-image.png" class="">
+
+<p>VM 作成後、以下の公開情報に記載されているように MSIX アプリ アタッチ アプリケーションの自動更新をオフにします。</p>
+<p><a href="https://docs.microsoft.com/ja-jp/azure/virtual-desktop/app-attach-azure-portal#turn-off-automatic-updates-for-msix-app-attach-applications" target="_blank"> MSIX アプリ アタッチ アプリケーションの自動更新をオフにする </a></p>
+<p>この VM を日本語化される際は、以下のブログをご参照ください。</p>
+<p><a href="https://jpwinsup.github.io/blog/2021/01/20/RemoteDesktopService/AVD/AVD-ARM-Japanese-image/" target="_blank"> AVD ARM 日本語化イメージ作成手順について </a></p>
+<p><a id="package-msix-application"></a></p>
+<h2 id="MSIX-アプリケーションのパッケージ化-（例-PowerShell-7）"><a href="#MSIX-アプリケーションのパッケージ化-（例-PowerShell-7）" class="headerlink" title=" MSIX アプリケーションのパッケージ化 （例: PowerShell 7） "></a><a href="#package-msix-application"> MSIX アプリケーションのパッケージ化 （例: PowerShell 7） </a></h2><p>MSIX アプリケーションのパッケージ化について説明します。上記で作成した MSIX パッケージ作成用の環境に RDP 接続を行って実施します。<br>また、MSIX アプリケーションにしようとしているアプリケーションは、まだ MSIX パッケージ作成用の環境にインストールされていない状態で MSIX アプリケーションのパッケージ化を行ってください。<br>※既にインストールされているアプリケーションで実施すると、MSIX パッケージ作成の途中のエントリーポイントの指定の際に、適切なエントリーポイントが読み込まれないことがございます。</p>
+<p>また、以下に記載する手順の詳細な情報につきましては、以下の公開情報をご参照ください。<br><a href="https://docs.microsoft.com/ja-jp/windows/msix/packaging-tool/create-app-package" target="_blank"> 任意のデスクトップインストーラー (MSI、EXE、ClickOnce、または App-v) からの MSIX パッケージの作成 </a></p>
+<p>Microsoft Store アプリを開き、MSIX Packaging Tool を検索してインストールします。</p>
+<img src="/blog/2021/04/26/RemoteDesktopService/AVD/avd-how-to-deploy-msix-app-attach/store-msix-packaging-tool.png" class="">
+
+<p>MSIX Packaging Tool を検索して、開きます。</p>
+<img src="/blog/2021/04/26/RemoteDesktopService/AVD/avd-how-to-deploy-msix-app-attach/search-msix-packaging-tool.png" class="">
+
+<p>「アプリケーション パッケージを作成します」を選択します。</p>
+<img src="/blog/2021/04/26/RemoteDesktopService/AVD/avd-how-to-deploy-msix-app-attach/select-application-package.png" class="">
+
+<p>「このコンピューターにパッケージを作成する」を選択して、「次へ」をクリックします。</p>
+<img src="/blog/2021/04/26/RemoteDesktopService/AVD/avd-how-to-deploy-msix-app-attach/msix-package-on-this-computer.png" class="">
+
+<p>コンピューターの準備では、推奨される実施項目内にチェックをつけ、「次へ」をクリックします。</p>
+<img src="/blog/2021/04/26/RemoteDesktopService/AVD/avd-how-to-deploy-msix-app-attach/msix-package-prepare-computer.png" class="">
+
+<p>インストーラーの選択では、インストーラーを選択しますが、その際にセッションホスト側で利用するパッケージ署名用証明書を作成する必要があります。</p>
+<p>詳細につきましては、以下の公開情報をご確認ください。<br><a href="https://docs.microsoft.com/ja-jp/windows/msix/package/create-certificate-package-signing" target="_blank"> パッケージ署名用証明書を作成する </a></p>
+<p>今回は、検証のため、以下のようなコマンドで、自己証明書を作成します。<br>自己証明書は、あくまで検証用であるため、本番環境では、信頼された証明機関から発行された証明書をご利用ください。<br>管理者権限の PowerShell プロンプトを開き、以下のコマンドを実行します。<br>※ 以下の PowerShell 内のパラメータはお客様の環境に併せて適宜変更してください。</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">New-SelfSignedCertificate</span> <span class="literal">-Type</span> Custom <span class="literal">-Subject</span> <span class="string">&quot;CN=Contoso Software, O=Contoso Corporation, C=US&quot;</span> <span class="literal">-KeyUsage</span> DigitalSignature <span class="literal">-FriendlyName</span> <span class="string">&quot;Your friendly name goes here&quot;</span> <span class="literal">-CertStoreLocation</span> <span class="string">&quot;Cert:\CurrentUser\My&quot;</span> <span class="literal">-TextExtension</span> <span class="selector-tag">@</span>(<span class="string">&quot;2.5.29.37=&#123;text&#125;1.3.6.1.5.5.7.3.3&quot;</span>, <span class="string">&quot;2.5.29.19=&#123;text&#125;&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<p>作成した証明書は、以下のコマンドで確認できます。</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">Set-Location</span> Cert:\CurrentUser\My</span><br><span class="line"><span class="built_in">Get-ChildItem</span> | <span class="built_in">Format-Table</span> Subject, FriendlyName, Thumbprint</span><br></pre></td></tr></table></figure>
+
+<p>作成した証明書をパスワード付きでエクスポートします。<br>パスワードおよびファイルパスは適宜変更してください。</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$password</span> = <span class="built_in">ConvertTo-SecureString</span> <span class="literal">-String</span> &lt;Your Password&gt; <span class="literal">-Force</span> <span class="literal">-AsPlainText</span> </span><br><span class="line"><span class="built_in">Export-PfxCertificate</span> <span class="literal">-cert</span> <span class="string">&quot;Cert:\CurrentUser\My\&lt;Certificate Thumbprint&gt;&quot;</span> <span class="literal">-FilePath</span> &lt;FilePath&gt;.pfx <span class="literal">-Password</span> <span class="variable">$password</span></span><br></pre></td></tr></table></figure>
+
+<p>今回は上記で作成した pfx ファイルをパッケージ署名用の証明書として利用します。</p>
+<p>また、今回は PowerShell 7 をインストールするため、以下の PowerShell 7 の 公開情報にある、「MSI パッケージのインストール」からインストーラーをダウンロードします。<br><a href="https://docs.microsoft.com/ja-jp/powershell/scripting/install/installing-powershell-core-on-windows?view=powershell-7.1#installing-the-msi-package" target="_blank"> Windows への PowerShell のインストール - MSI パッケージのインストール </a></p>
+<p>インストーラーと、上記で作成した証明書をそれぞれ MSIX packaging tool で選択します。</p>
+<img src="/blog/2021/04/26/RemoteDesktopService/AVD/avd-how-to-deploy-msix-app-attach/msix-package-select-installer.png" class="">
+
+<p>パッケージ名、パッケージの表示名、発行元の表示名、バージョンなど、必要な情報を入力し、「次へ」をクリックします。</p>
+<img src="/blog/2021/04/26/RemoteDesktopService/AVD/avd-how-to-deploy-msix-app-attach/msix-package-information.png" class="">
+
+<p>アプリケーションのインストールが始まります。<br>通常のインストールと同様に、インストールウィザードに沿ってインストールを進めてください。</p>
+<img src="/blog/2021/04/26/RemoteDesktopService/AVD/avd-how-to-deploy-msix-app-attach/msix-package-installation1.png" class="">
+
+<img src="/blog/2021/04/26/RemoteDesktopService/AVD/avd-how-to-deploy-msix-app-attach/msix-package-installation2.png" class="">
+
+<img src="/blog/2021/04/26/RemoteDesktopService/AVD/avd-how-to-deploy-msix-app-attach/msix-package-installation3.png" class="">
+<img src="/blog/2021/04/26/RemoteDesktopService/AVD/avd-how-to-deploy-msix-app-attach/msix-package-installation4.png" class="">
+<img src="/blog/2021/04/26/RemoteDesktopService/AVD/avd-how-to-deploy-msix-app-attach/msix-package-installation5.png" class="">
+
+<p>インストール終了後、「次へ」をクリックします。<br>この際に、再起動が必要となるインストーラーの場合は、ここで再起動を選択します。今回は、再起動が必要ないため、「次へ」を選択します。</p>
+<img src="/blog/2021/04/26/RemoteDesktopService/AVD/avd-how-to-deploy-msix-app-attach/msix-package-installation-completed.png" class="">
+
+<p>初回起動時のタスクの管理では、アプリケーションのエントリ ポイントを選択できます。<br>今回の場合はすでに、pwsh.exe が指定されているため、そのまま、「次へ」を選択します。</p>
+<img src="/blog/2021/04/26/RemoteDesktopService/AVD/avd-how-to-deploy-msix-app-attach/msix-package-task-management.png" class="">
+
+<p>「終了しますか」の確認画面で、「はい、次へ進みます」を選択します。</p>
+<img src="/blog/2021/04/26/RemoteDesktopService/AVD/avd-how-to-deploy-msix-app-attach/msix-package-complete.png" class="">
+
+<p>「新しいパッケージの作成」の画面で、いくつかの除外するサービスが自動的に選択されます。<br>自動アップデートをするサービスがある場合に除外するように設定できます。<br>MSIX app attach では、MSIX アプリケーションの自動更新はサポートされていないため、もしこの画面で自動アップデートをするようなサービスがあったら、除外する必要があります。<br>今回は、サービスが検出されなかったため、そのまま「次へ」をクリックします。</p>
+<img src="/blog/2021/04/26/RemoteDesktopService/AVD/avd-how-to-deploy-msix-app-attach/msix-package-new-package.png" class="">
+
+<p>「パッケージの作成」の画面では、特に既定の値から変更せず、「作成」をクリックします。</p>
+<img src="/blog/2021/04/26/RemoteDesktopService/AVD/avd-how-to-deploy-msix-app-attach/msix-package-create-package.png" class="">
+
+<p>下図のように、作成が完了し、保存場所に .msix 拡張子を持つ、MSIX パッケージ が作成されます。<br>次に、この MSIX パッケージ を、MSIX app attach パッケージ に拡張する作業を行います。</p>
+<img src="/blog/2021/04/26/RemoteDesktopService/AVD/avd-how-to-deploy-msix-app-attach/msix-package-created.png" class="">
+
+<p><a id="expand-msix-package"></a></p>
+<h2 id="MSIX-パッケージ-を-MSIX-app-attach-パッケージに拡張する"><a href="#MSIX-パッケージ-を-MSIX-app-attach-パッケージに拡張する" class="headerlink" title=" MSIX パッケージ を MSIX app attach パッケージに拡張する "></a><a href="#expand-msix-package"> MSIX パッケージ を MSIX app attach パッケージに拡張する </a></h2><p><a href="https://aka.ms/msixmgr" target="_blank">MSIX mgr tool </a> をダウンロードしてください。<br>このツールをインストールすることで、今後の作業に必要な MSIX コマンドを実行することができ、MSIX パッケージを VHD(X)形式に変換できます。</p>
+<p>本ツールの詳細につきましては、以下の公開情報をご確認ください。<br><a href="https://docs.microsoft.com/ja-jp/azure/virtual-desktop/app-attach-msixmgr" target="_blank"> MSIXMGR ツールの使用 </a></p>
+<p>MSIXMGR ツールは、msixmgr.zip としてダウンロードされます。解凍すると、x64 フォルダと、x86 フォルダがありますが、今回は 64 bit 環境を想定し、x64 フォルダの中身を利用します。<br>C ドライブ配下に MSIXappattach という名前の作業フォルダを作成し、x64 フォルダの中身を移動します。</p>
+<img src="/blog/2021/04/26/RemoteDesktopService/AVD/avd-how-to-deploy-msix-app-attach/msixmgr-unzip.png" class="">
+
+<p>先ほど作成した msix ファイルを MSIXappattach フォルダ配下に移動します。</p>
+<img src="/blog/2021/04/26/RemoteDesktopService/AVD/avd-how-to-deploy-msix-app-attach/msixmgr-move-msixfile.png" class="">
+
+<p>MSIX イメージを格納するための VHDX を作成します。<br>この作業の詳細につきましては、以下の公開情報をご確認ください。<br><a href="https://docs.microsoft.com/ja-jp/azure/virtual-desktop/app-attach-image-prep" target="_blank"> Azure Virtual Desktop 用の MSIX イメージを準備する </a></p>
+<p>以降の PowerShell はすべて管理者権限の PowerShell プロンプトで実行してください。<br>まず、VHD(X)を作成するために、Hyper-V を有効にします。※VM の再起動が発生します。</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">Enable-WindowsOptionalFeature</span> <span class="literal">-Online</span> <span class="literal">-FeatureName</span> Microsoft<span class="literal">-Hyper</span><span class="literal">-V</span> <span class="literal">-All</span></span><br></pre></td></tr></table></figure>
+
+<p>以下のコマンドを実行して、VHDX ファイルを作成します。<br>この際、以下の例では、1024 MB で作成していますが、VHDX が展開された MSIX パッケージよりも十分に大きいことを確認してください。</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">New-VHD</span> <span class="literal">-SizeBytes</span> <span class="number">1024</span>MB <span class="literal">-Path</span> c:\MSIXappattach\powershell7.vhdx <span class="literal">-Dynamic</span> <span class="literal">-Confirm</span>:<span class="variable">$false</span></span><br></pre></td></tr></table></figure>
+
+<p>以下のコマンドを実行して、作成したばかりの VHDX をマウントします。</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$vhdObject</span> = <span class="built_in">Mount</span><span class="literal">-VHD</span> c:\MSIXappattach\powershell7.vhdx <span class="literal">-Passthru</span></span><br></pre></td></tr></table></figure>
+<p>以下のコマンドを実行して、マウントした VHDX を初期化します。</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$disk</span> = <span class="built_in">Initialize-Disk</span> <span class="literal">-Passthru</span> <span class="literal">-Number</span> <span class="variable">$vhdObject</span>.Number</span><br></pre></td></tr></table></figure>
+<p>以下のコマンドを実行して、初期化された VHD 用の新しいパーティションを作成します。</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$partition</span> = <span class="built_in">New-Partition</span> <span class="literal">-AssignDriveLetter</span> <span class="literal">-UseMaximumSize</span> <span class="literal">-DiskNumber</span> <span class="variable">$disk</span>.Number</span><br></pre></td></tr></table></figure>
+
+<p>その際に、以下のようなポップアップが表示されますが、後述の PowerShell コマンドレットでフォーマットをするため、キャンセルをクリックしてください。</p>
+<img src="/blog/2021/04/26/RemoteDesktopService/AVD/avd-how-to-deploy-msix-app-attach/ask-for-formatting.png" class="">
+
+<p>以下のコマンドを実行して、パーティションをフォーマットします。この際の出力結果の一番左の列の DriveLetter から、どのドライブにこの VHDX ファイルがマウントされているのか確認できます。</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">Format-Volume</span> <span class="literal">-FileSystem</span> NTFS <span class="literal">-Confirm</span>:<span class="variable">$false</span> <span class="literal">-DriveLetter</span> <span class="variable">$partition</span>.DriveLetter <span class="literal">-Force</span></span><br></pre></td></tr></table></figure>
+<p>マウントされたディスク上に、親フォルダを作成します。<br>この作業が必要なのは、MSIX パッケージが正常に機能するために親フォルダが必要であるためです。<br>親フォルダが存在する限り、親フォルダにどのような名前を付けてもかまいません。<br>今回は、powershell7 という親フォルダを作成します。</p>
+<img src="/blog/2021/04/26/RemoteDesktopService/AVD/avd-how-to-deploy-msix-app-attach/create-parent-folder.png" class="">
+
+<p>管理者権限のコマンドプロンプトを開き、以下のコマンドを実行します。<br>これは、.msix の拡張子を持つ、MSIX パッケージを、MSIX app attach パッケージ（VHDX）に変換するコマンドです。<br>-packagePath では、C:\MSIXappattach フォルダ配下の MSIX パッケージを指定しています。<br>-destination では、現在マウントされているパスで上記に作成した親フォルダを指定しています。<br>-packagePath, -destination で指定するパラメータは適宜変更してください。<br>-applyacls は、必要なアクセス権限（ACL）を割り振っています。</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> C:\MSIXappattach</span><br><span class="line">msixmgr.exe <span class="literal">-Unpack</span> <span class="literal">-packagePath</span> PowerShell7<span class="literal">-x64_7</span>.<span class="number">1.3</span>.<span class="number">0</span>_x64__ad8pwfkyh69vj.msix <span class="literal">-destination</span> <span class="string">&quot;f:\powershell7&quot;</span> <span class="literal">-applyacls</span></span><br></pre></td></tr></table></figure>
+<p>実行結果は以下のようになります。</p>
+
+
+<p>マウントされた VHDX にアクセスし、作成した親アプリ フォルダ を開いて、パッケージの内容があることを確認します。</p>
+
+
+<p>確認後、マウントされた VHDX を以下のコマンドで アンマウント(dismount) します。</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$vhdObject</span> = <span class="built_in">Dismount-VHD</span> c:\MSIXappattach\powershell7.vhdx <span class="literal">-Passthru</span></span><br></pre></td></tr></table></figure>
+
+<p><a id="upload-vhdx-to-file-share"></a></p>
+<h2 id="ファイル共有に-MSIX-イメージ-の-VHDX-ファイルをアップロードする"><a href="#ファイル共有に-MSIX-イメージ-の-VHDX-ファイルをアップロードする" class="headerlink" title=" ファイル共有に MSIX イメージ の VHDX ファイルをアップロードする "></a><a href="#upload-vhdx-to-file-share"> ファイル共有に MSIX イメージ の VHDX ファイルをアップロードする </a></h2><p>AVD セッションホストからアクセスできるファイル共有の作成の仕方につきましては、以下の公開情報をご参考ください。<br>後述の Azure portal で MSIX app attach を設定する を実施する前に、Azure Files にファイル共有を作成しておき、以下の公開情報の通りに、MSIX app attach を設定しておきたいセッションホストに対して NTFS の読み取り権限を付与する作業を行います。</p>
+<p><a href="https://docs.microsoft.com/ja-jp/azure/virtual-desktop/app-attach-file-share" target="_blank"> MSIX アプリのアタッチ用にファイル共有を設定する </a></p>
+<p>次に、MSIX イメージの VHDX ファイルを、AVD セッションホストからアクセスできるファイル共有（例: Azure Files）にアップロードします。<br>アップロードする際は、MSIX パッケージ作成用環境の VM に、Azure Files をマウントする方法で、VHDX を直接 Azure Files にアップロードが可能となります。<br><a href="https://docs.microsoft.com/ja-jp/azure/storage/files/storage-how-to-use-files-windows#mount-the-azure-file-share" target="_blank"> Windows で Azure ファイル共有を使用する - Azure ファイル共有をマウントする </a><br>下図は、MSIX パッケージ作成用環境の Z ドライブに Azure Files をマウントし、powershell7.vhdx をアップロードした図となります。</p>
+<img src="/blog/2021/04/26/RemoteDesktopService/AVD/avd-how-to-deploy-msix-app-attach/upload-msix-app-attach-package-to-azure-files.png" class="">
+
+<p><a id="configure-msix-app-attach"></a></p>
+<h2 id="Azure-portal-で-MSIX-app-attach-を設定する"><a href="#Azure-portal-で-MSIX-app-attach-を設定する" class="headerlink" title=" Azure portal で MSIX app attach を設定する "></a><a href="#configure-msix-app-attach"> Azure portal で MSIX app attach を設定する </a></h2><p>本手順につきましては、以下の公開情報に詳細がございますため、ご参照ください。<br>日本語版のドキュメントの反映が遅れており、フォームに関して、入力が必要である旨の記載がございますが、MSIX app attach はすでに GA されておりますため、こちらは必要ございません。<br><a href="https://docs.microsoft.com/ja-jp/azure/virtual-desktop/app-attach-azure-portal" target="_blank"> Azure portal で MSIX アプリのアタッチを設定する </a></p>
+<p>事前準備として、上記で作成した MSIX のアプリケーション が公的に信頼されていない証明書、または自己署名された証明書を使用している場合、以下の手順を実行する前に、MSIX アプリケーションを展開しようとしている AVD ホストプール内の AVD セッションホストで、証明書をインストールしておく必要があります。<br>以下の公開情報を基に、AVD セッションホスト側で証明書をインストールしてください。<br><a href="https://docs.microsoft.com/ja-jp/azure/virtual-desktop/app-attach#install-certificates" target="_blank"> 証明書をインストールする </a></p>
+<p>まず、<a href="https://portal.azure.com/" target="_blank">Azure Portal </a> を開き、Azure Virtual Desktop へ移動します。<br>次に、MSIX アプリケーションを配置したいホストプールを選択します。<br>左側の管理ペインから、MSIX パッケージを選択し、追加をクリックします。</p>
+<img src="/blog/2021/04/26/RemoteDesktopService/AVD/avd-how-to-deploy-msix-app-attach/azure-portal-msix-package.png" class="">
+
+<p>次に、Azure Files から、アップロードした VHDX ファイルのパスを取得します。<br>下図のように URL を取得し、<a target="_blank" rel="noopener" href="https://xxxx/">https://xxxx/</a> の https: を削除し、スラッシュ（/）をバックスラッシュ（\）へと置換して、共有パスを用意します。<br>例: \XXXX.file.core.windows.net\msixappattachdemo\msixappattach\powershell7.vhdx</p>
+<img src="/blog/2021/04/26/RemoteDesktopService/AVD/avd-how-to-deploy-msix-app-attach/get-azure-files-path.png" class="">
+
+<p>上記の方法で用意したパスを、MSIX パッケージの追加の画面で入力します。<br>この入力の際に、MSIX パッケージのアクセス権限のチェックや、証明書のチェックの処理が実行されます。<br>例えば、セッションホストに、事前に MSIX パッケージを作成した際の証明書がインストールされていない場合、以下のようにエラーが発生します。</p>
+<img src="/blog/2021/04/26/RemoteDesktopService/AVD/avd-how-to-deploy-msix-app-attach/add-msix-package-failed.png" class="">
+
+<p>チェック処理が成功した場合、下図のように、表示名や、登録の種類、状態を設定できます。<br>オンデマンド登録は高速ユーザー ログオン用に最適化されているのに対し、通常の登録はアプリケーションのスタートアップ用に最適化されています。<br>また、MSIX パッケージには 2 つの状態があります。<br>アクティブなパッケージはユーザーに配信されます。<br>非アクティブなパッケージにはアクセスできません。<br>設定後、追加をクリックします。</p>
+<img src="/blog/2021/04/26/RemoteDesktopService/AVD/avd-how-to-deploy-msix-app-attach/add-msix-package-succeeded.png" class="">
+
+<p>PowerShell 7 の MSIX パッケージが正常に ホストプール に追加されました。</p>
+<img src="/blog/2021/04/26/RemoteDesktopService/AVD/avd-how-to-deploy-msix-app-attach/msix-package-added.png" class="">
+
+<p>次に、MSIX アプリを、アプリケーション グループに追加します。<br>今回は、msixtest01 というホストプールに、デスクトップのアプリケーション グループである msixtest01-DAG がありますが、Remote App 用のアプリケーション グループがまだないため、MSIX アプリを公開するために、まずはアプリケーション グループから作成します。<br>下図のように、「追加」をクリックします。</p>
+<img src="/blog/2021/04/26/RemoteDesktopService/AVD/avd-how-to-deploy-msix-app-attach/create-app-group.png" class="">
+
+<p>Remote App 用の アプリケーション グループ msix-remoteapp を作成します。<br>※ この際に、アプリケーション グループ の種類で、デスクトップが選択できないのは、1つのホストプールごとに存在できる デスクトップ アプリ グループ は一つのみであるためです。</p>
+<img src="/blog/2021/04/26/RemoteDesktopService/AVD/avd-how-to-deploy-msix-app-attach/create-remoteapp-appgroup.png" class="">
+
+<p>次に、アプリケーションの追加をクリックし、アプリケーション ソース から 「MSIX パッケージ」を選択し、先ほど追加した MSIX パッケージである PowerShell 7 と、各種情報を入力し、保存します。</p>
+<img src="/blog/2021/04/26/RemoteDesktopService/AVD/avd-how-to-deploy-msix-app-attach/add-msix-application-to-appgroup.png" class="">
+
+<p>「割り当て」では、このアプリケーションを利用できるようにしたいユーザーを割り当てます。</p>
+<img src="/blog/2021/04/26/RemoteDesktopService/AVD/avd-how-to-deploy-msix-app-attach/assign-user.png" class="">
+
+<p>「ワークスペース」では、既存のワークスペースに登録します。今回はすでにあるデスクトップ アプリケーショングループ が登録されている ワークスペースを選択します。</p>
+<img src="/blog/2021/04/26/RemoteDesktopService/AVD/avd-how-to-deploy-msix-app-attach/select-workspace.png" class="">
+
+<p>これで、アプリケーショングループの作成を行います。<br>作成完了後、下図のように、アプリケーションの種類が MSIX のアプリケーションが、RemoteApp のアプリケーショングループに追加されていることが確認できます。</p>
+<img src="/blog/2021/04/26/RemoteDesktopService/AVD/avd-how-to-deploy-msix-app-attach/remote-appgroup-created.png" class="">
+
+<p>MSIX アプリケーションの RemoteApp のアプリケーショングループを割り当てたユーザーでAVD デスクトップクライアントからログオンして、「最新の情報に更新」をクリックします。<br>該当のホストプールに、PowerShell 7 (x64) のアプリケーションが公開されていることが確認できます。</p>
+<p>この MSIX アプリケーション は、オンデマンド登録されているため、このユーザーが、この Remote App のアプリケーショングループを選択して、ログオンを試みた際に、割り振られたセッションホストに対して、AVD コントロールプレーンから、MSIX アプリケーションがマウントされる動作となります。</p>
+<img src="/blog/2021/04/26/RemoteDesktopService/AVD/avd-how-to-deploy-msix-app-attach/avdclient-remoteapp.png" class="">
+
+<p>早速、PowerShell 7 (x64) のアプリケーショングループを選択し、認証後、PowerShell が立ち上がるため、PowerShell で コンピューター名を取得します。</p>
+<img src="/blog/2021/04/26/RemoteDesktopService/AVD/avd-how-to-deploy-msix-app-attach/get-computer-name-using-powershell.png" class="">
+
+<p>実際に上記PowerShellで確認したセッションホストのマシンに別のユーザーで RDP 接続して、セッションホスト上では、どのように MSIX アプリケーションが見えているのか確認してみます。<br>以下の図では、msix-test01-0 という名前のマシン上で、別のユーザーから PowerShell を開いている図となります。<br>PowerShell というキーワードでアプリケーションを検索しても、このユーザーには、PowerShell 7 が表示されていません。<br>これは、この別のユーザーには、PowerShell 7 が割り振られていないためです。<br>また、タスクマネージャーを見ると、今回 MSIX アプリを公開したユーザー wvduser01 では、pwsh.exe が起動していることがわかります。<br>この pwsh.exe には、別のユーザーからアクセスができないように制御されています。</p>
+<img src="/blog/2021/04/26/RemoteDesktopService/AVD/avd-how-to-deploy-msix-app-attach/msix-how-it-looks-like-on-sessionhost.png" class="">
+
+<p>今回の例では、RemoteApp アプリケーショングループとして、MSIX アプリケーションの公開を行いましたが、デスクトップ アプリケーショングループとしても同様に公開をすることが可能となります。<br>その場合は、既存のデスクトップ アプリケーショングループにアプリケーション ソースが「MSIX パッケージ」のアプリケーションを追加いただくことで、実現が可能となります。</p>
+<p><a id="summary"></a></p>
+<h2 id="まとめ"><a href="#まとめ" class="headerlink" title="まとめ"></a><a href="#summary">まとめ</a></h2><p>本記事では、MSIX app attach を利用することで、マスターイメージと、アプリケーションを分離することができるというコンセプトの部分を説明させていただきました。<br>また、実際にMSIX パッケージを作成する環境を構築し、MSIX パッケージを作成するところから、AVD で MSIX app attach を設定するところまでの一連の流れをご紹介いたしました。</p>
+<p>本ブログ記事が、お客様の MSIX app attach 導入の一助になれましたら、幸いでございます。</p>
+<p><a id="related-article"></a></p>
+<h2 id="関連情報"><a href="#関連情報" class="headerlink" title="関連情報"></a><a href="#related-article">関連情報</a></h2><p><a href="https://docs.microsoft.com/ja-jp/learn/modules/m365-wvd-application-management/" target="_blank"> Microsoft Learn - Azure Virtual Desktop 用の MSIX アプリ アタッチを使用してアプリケーションを展開する </a></p>
+<p><a href="https://techcommunity.microsoft.com/t5/windows-virtual-desktop/msix-app-attach-is-now-generally-available/m-p/2270468#M6864" target="_blank"> MSIX app attach is now generally available (from Tech Community) </a></p>
+<p><a href="https://christiaanbrinkhoff.com/2020/12/02/the-future-of-application-virtualization-learn-here-how-to-create-and-configure-msix-app-attach-packages-containers-on-windows-10-enterprise-multi-and-single-session-build-2004-and-higher-for-win/#WhatisMSIXappattach" target="_blank"> Learn how to configure MSIX app attach (via the Azure Portal) packages containers on Windows 10 Enterprise multi and single-session for Azure Virtual Desktop (from Christiaan Brinkhoff blog post) </a></p>
+<p><a href="https://youtu.be/m0ifZg2WF5Q" target="_blank"> MSIX AppAttach Portal | Azure Virtual Desktop - from Azure Academy youtube video </a></p>
+<p><a href="https://xenithit.blogspot.com/2020/11/msix-app-attach-future-of-application.html" target="_blank"> MSIX App Attach - the future of application delivery, a sneak peek of the upcoming Azure portal integration (from Tom Hickling blog post) </a></p>
+<p><a id="updatehistory"></a></p>
+<h2 id="更新履歴-Update-History"><a href="#更新履歴-Update-History" class="headerlink" title="更新履歴 - Update History"></a><a href="#updatehistory">更新履歴 - Update History</a></h2><ul>
+<li>2021/04/26 : 本 Blog の公開</li>
+<li>2021/06/17 : WVD の名称が AVD に変更</li>
+</ul>
+
+      
+      
+    </div>
+    <footer class="article-footer">
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/blog/2021/04/26/RemoteDesktopService/WVD/wvd-how-to-deploy-msix-app-attach/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">次の記事</strong>
+      <div class="article-nav-title">
+        
+          MSIX app attach の構築手順について
+        
+      </div>
+    </a>
+  
+  
+    <a href="/blog/2021/04/22/UserInterfaceAndApps/ResetFileAssociationsSubject/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">前の記事</strong>
+      <div class="article-nav-title">既定のアプリのリセットについて</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">カテゴリ</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Activation/">Activation</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Activation/ESU/">ESU</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Activation/security-SPP/">security-SPP</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/">Active Directory</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Authentication/">Authentication</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/DFSR/">DFSR</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/FunctionalLevel/">FunctionalLevel</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Group-Policy/">Group Policy</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Promotion-and-Demotion/">Promotion and Demotion</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/User-Profile/">User Profile</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Windows-Hello/">Windows Hello</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Windows-Time-Service/">Windows Time Service</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/AppLocker/">AppLocker</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/AppLocker/Active-Directory/">Active Directory</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/AppLocker/Microsoft-Intune/">Microsoft Intune</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Deployment/">Deployment</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Deployment/Feature-on-demand/">Feature on demand</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Deployment/Sysprep/">Sysprep</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Failover-Clustering/">Failover Clustering</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Failover-Clustering/Configuration-and-Management/">Configuration and Management</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/FileServices/">FileServices</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/FileServices/FTP/">FTP</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/FileServices/SMB/">SMB</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Hyper-V/">Hyper-V</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Hyper-V/Configuration-and-Management/">Configuration and Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Hyper-V/Migration/">Migration</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Microsoft-Connected-Cache/">Microsoft Connected Cache</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/">Networking</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/BITS/">BITS</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/Bluetooth/">Bluetooth</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/DHCP/">DHCP</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/DNS/">DNS</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/Firewall/">Firewall</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/LBFO/">LBFO</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/NCSI/">NCSI</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/NetworkInterface/">NetworkInterface</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/Proxy/">Proxy</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/TCPIP/">TCPIP</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/OpenSSH/">OpenSSH</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/">Performance</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/Hang-up-BSoD/">Hang-up/BSoD</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/No-Boot/">No Boot</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/Slow-Response/">Slow Response</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/System-Resource/">System Resource</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/Tools/">Tools</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/">Public Key Infrastructure</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Certificate-Authority/">Certificate Authority</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Certificate-Management/">Certificate Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Code-Signing/">Code Signing</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/SSL-TLS-Communication/">SSL TLS Communication</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/SSL-TLS-Connection/">SSL TLS Connection</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Smart-Card-Logon/">Smart Card Logon</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/">Remote Desktop</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/Azure-Virtual-Desktop-AVD/">Azure Virtual Desktop (AVD)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/Remote-Desktop-Service-RDS/">Remote Desktop Service (RDS)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/Windows-Virtual-Desktop-WVD/">Windows Virtual Desktop (WVD)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/RemoteAccess/">RemoteAccess</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/RemoteAccess/%E3%83%80%E3%82%A4%E3%83%A4%E3%83%AB%E3%82%A2%E3%83%83%E3%83%97%E6%8E%A5%E7%B6%9A/">ダイヤルアップ接続</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Setup/">Setup</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Setup/Feature-Update-FU/">Feature Update (FU)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Shell/">Shell</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Shell/Explorer/">Explorer</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/">Storage</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/Backup/">Backup</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/FSRM/">FSRM</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/Management/">Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/StorageMigrationService/">StorageMigrationService</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/UEFI/">UEFI</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/UEFI/Secure-Boot/">Secure Boot</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/">User Interface and Apps</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Command-Prompt/">Command Prompt</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/EventLog/">EventLog</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Language-Support/">Language Support</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Microsoft-Store/">Microsoft Store</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Performance/">Performance</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/PowerShell/">PowerShell</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Printing-%E5%8D%B0%E5%88%B7/">Printing (印刷)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Server-Management/">Server Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Taskscheduler/">Taskscheduler</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Windows-Management-Instrumentation/">Windows Management Instrumentation</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps-Language-support/">User Interface and Apps - Language support</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-365/">Windows 365</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Admin-Center/">Windows Admin Center</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Search/">Windows Search</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/">Windows Update</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Delivery-Optimization-DO/">Delivery Optimization (DO)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Feature-Update-FU/">Feature Update (FU)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Quality-Update-QU/">Quality Update (QU)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Windows-Update-Agent/">Windows Update Agent</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Windows-Update-Agent-WUA/">Windows Update Agent (WUA)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/">WirelessNetwork</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/NPS/">NPS</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/Wi-Fi/">Wi-Fi</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/%E3%83%A2%E3%83%90%E3%82%A4%E3%83%AB-%E3%83%96%E3%83%AD%E3%83%BC%E3%83%89%E3%83%90%E3%83%B3%E3%83%89%E6%8E%A5%E7%B6%9A-LTE/">モバイル ブロードバンド接続 (LTE)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/%E7%B5%84%E7%B9%94%E7%B4%B9%E4%BB%8B%E3%83%96%E3%83%AD%E3%82%B0%EF%BC%88Windows-Commercial%EF%BC%89/">組織紹介ブログ（Windows Commercial）</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最近の投稿</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/blog/2026/02/16/ActiveDirectory/GroupPolicy/UacPolicyIsEnabled/">「ユーザー アカウント制御：ビルトイン Administrator アカウントのための管理者承認モード」ポリシーが有効になる動作ついて</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/02/15/UserInterfaceAndApps/Printing/printer-queue-app-preview/">印刷キューアプリのプレビュー機能について</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/02/02/ActiveDirectory/Authentication/kerberos-rc4-for-service-account-ticket-issuance-changes-related-to-cve-2026-20833/">CVE‑2026‑20833 への対応とその影響について [KB5073381]</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/01/12/Hyper-V/vmwp-does-not-save-the-RTC-value-of-a-virtual-machine-when-performing-Live-Migration/">ライブ マイグレーション後の再起動でゲスト OS の時刻がずれる場合がある</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/01/07/WindowsUpdate/FU/fublog-txt/">ISO メディア経由かつ動的更新無効な状態で Windows 11 バージョン 24H2 または 25H2 へのアップグレードが失敗 (0x8007042B 0x2000D) する事象と対策について</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">アーカイブ</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2026/02/">2026 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2026/01/">2026 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/12/">2025 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/11/">2025 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/10/">2025 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/09/">2025 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/08/">2025 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/07/">2025 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/06/">2025 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/05/">2025 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/04/">2025 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/03/">2025 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/02/">2025 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/01/">2025 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/12/">2024 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/11/">2024 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/10/">2024 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/09/">2024 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/08/">2024 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/07/">2024 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/06/">2024 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/05/">2024 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/04/">2024 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/03/">2024 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/02/">2024 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/01/">2024 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/12/">2023 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/11/">2023 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/10/">2023 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/09/">2023 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/08/">2023 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/07/">2023 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/06/">2023 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/05/">2023 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/04/">2023 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/03/">2023 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/02/">2023 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/01/">2023 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/12/">2022 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/11/">2022 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/10/">2022 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/09/">2022 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/08/">2022 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/07/">2022 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/06/">2022 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/05/">2022 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/04/">2022 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/03/">2022 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/02/">2022 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/01/">2022 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/12/">2021 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/11/">2021 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/10/">2021 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/09/">2021 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/08/">2021 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/07/">2021 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/06/">2021 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/05/">2021 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/04/">2021 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/03/">2021 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/02/">2021 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/01/">2021 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/12/">2020 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/11/">2020 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/10/">2020 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/07/">2020 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/03/">2020 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2019/03/">2019 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/11/">2018 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/10/">2018 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/09/">2018 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/08/">2018 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/07/">2018 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/06/">2018 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/04/">2018 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/02/">2018 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/12/">2017 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/11/">2017 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/09/">2017 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/05/">2017 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/03/">2017 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/02/">2017 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2016/08/">2016 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2016/05/">2016 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2014/03/">2014 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2012/02/">2012 / 02</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2026 Microsoft Japan Windows Technology Support Team<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/blog/" class="mobile-nav-link">Home</a>
+  
+    <a href="/blog/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+<script src="/blog/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

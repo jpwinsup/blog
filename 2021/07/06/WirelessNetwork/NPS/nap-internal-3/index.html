@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-180187723-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-180187723-1');
+</script>
+<!-- End Google Analytics -->
+
+  
+  <title>NAP internal-3 新しいセキュリティ更新プログラムが検出されているのに、ポリシー非準拠と判定されない？ | Microsoft Japan Windows Technology Support Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="こんにちは。Windows プラットフォーム サポート担当です。 前回までの記事で、Windows 標準の NAP 機能でどのようなセキュリティの正常性のチェックを行うことができるかを説明しました。その中でも、NAP を導入する多くのお客様が 「ちゃんとセキュリティ更新プログラムを適用していないコンピューターには、社内のネットワークには接続させたくない」と、セキュリティ更新プログラムの適用のチェッ">
+<meta property="og:type" content="article">
+<meta property="og:title" content="NAP internal-3 新しいセキュリティ更新プログラムが検出されているのに、ポリシー非準拠と判定されない？">
+<meta property="og:url" content="https://jpwinsup.github.io/blog/2021/07/06/WirelessNetwork/NPS/nap-internal-3/index.html">
+<meta property="og:site_name" content="Microsoft Japan Windows Technology Support Blog">
+<meta property="og:description" content="こんにちは。Windows プラットフォーム サポート担当です。 前回までの記事で、Windows 標準の NAP 機能でどのようなセキュリティの正常性のチェックを行うことができるかを説明しました。その中でも、NAP を導入する多くのお客様が 「ちゃんとセキュリティ更新プログラムを適用していないコンピューターには、社内のネットワークには接続させたくない」と、セキュリティ更新プログラムの適用のチェッ">
+<meta property="og:locale" content="ja_JP">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2021/07/06/WirelessNetwork/NPS/nap-internal-3/1.jpg">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2021/07/06/WirelessNetwork/NPS/nap-internal-3/2.jpg">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2021/07/06/WirelessNetwork/NPS/nap-internal-3/3.jpg">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2021/07/06/WirelessNetwork/NPS/nap-internal-3/4.jpg">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2021/07/06/WirelessNetwork/NPS/nap-internal-3/5.jpg">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2021/07/06/WirelessNetwork/NPS/nap-internal-3/6.jpg">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2021/07/06/WirelessNetwork/NPS/nap-internal-3/7.jpg">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2021/07/06/WirelessNetwork/NPS/nap-internal-3/8.jpg">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2021/07/06/WirelessNetwork/NPS/nap-internal-3/9.jpg">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2021/07/06/WirelessNetwork/NPS/nap-internal-3/10.jpg">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2021/07/06/WirelessNetwork/NPS/nap-internal-3/11.jpg">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2021/07/06/WirelessNetwork/NPS/nap-internal-3/12.jpg">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2021/07/06/WirelessNetwork/NPS/nap-internal-3/13.jpg">
+<meta property="article:published_time" content="2021-07-06T09:52:44.000Z">
+<meta property="article:modified_time" content="2026-02-19T02:53:59.004Z">
+<meta property="article:author" content="Microsoft Japan Windows Technology Support Team">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://jpwinsup.github.io/blog/2021/07/06/WirelessNetwork/NPS/nap-internal-3/1.jpg">
+  
+    <link rel="alternate" href="/blog/atom.xml" title="Microsoft Japan Windows Technology Support Blog" type="application/atom+xml">
+  
+
+  <link rel="icon" href="/blog/favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="/blog/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/blog/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/blog/favicon-16x16.png">
+  <link rel="manifest" href="/blog/site.webmanifest">
+  <link rel="mask-icon" href="/blog/safari-pinned-tab.svg" color="#5bbad5">
+  <meta name="msapplication-TileColor" content="#ffffff">
+  <meta name="theme-color" content="#ffffff">
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/blog/css/style.css">
+
+<meta name="generator" content="Hexo 5.2.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="site-header-logo"></div>
+  <div id="site-header-blog-wrapper"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        <div id="ms-logo"></div>
+        
+          <a class="main-nav-link" href="/blog/">Home</a>
+        
+          <a class="main-nav-link" href="/blog/archives">Archives</a>
+        
+        <a class="main-nav-link" target="_blank" rel="noopener" href="https://cssjpn.github.io/">サポート情報</a>
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/blog/atom.xml" title="RSSフィード"></a>
+        
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//www.bing.com/search" method="get" accept-charset="UTF-8" name="bing-search" onsubmit="var f=this;if(f['q'].value){var searchUrl =  'https://www.bing.com/search?q=' +  encodeURIComponent(f['q'].value + ' site:' + f['sitesearch'].value) ;window.open(searchUrl, 'blank') };return false;" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="検索"><button type="submit" id="nav-search-btn" class="search-form-submit"></button><input type="hidden" name="sitesearch" value="https://jpwinsup.github.io/blog"></form>
+      </div>
+    </div>
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/blog/" id="logo">Microsoft Japan Windows Technology Support Blog</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/blog/" id="subtitle">日本マイクロソフト Windows Support チームによる、サポート情報 Blog です。</a>
+        </h2>
+      
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-WirelessNetwork/NPS/nap-internal-3" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    
+    
+      <header class="article-header-single">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      NAP internal-3 新しいセキュリティ更新プログラムが検出されているのに、ポリシー非準拠と判定されない？
+    </h1>
+  
+
+      </header>
+      <div class="article-share">
+        Last Update: 
+        <a href="/blog/2021/07/06/WirelessNetwork/NPS/nap-internal-3/" class="article-date-single">
+  <time datetime="2021-07-06T09:52:44.000Z" itemprop="datePublished">2021-07-06</time>
+</a>
+        
+  <div class="article-category">
+    <a class="article-category-link" href="/blog/categories/WirelessNetwork/">WirelessNetwork</a>►<a class="article-category-link" href="/blog/categories/WirelessNetwork/NPS/">NPS</a>
+  </div>
+
+        
+        <a href="https://github.com/jpwinsup/blog/issues/new?title=&body=%EF%BB%BF%0A%0A---%0A%0A%23%23%23%23+Document+Details%0A%0A*+Article+ID%3A+2e95f79c-9aa3-56cd-a28b-0b9665e221e6%0A*+TITLE%3A+NAP+internal-3+%E6%96%B0%E3%81%97%E3%81%84%E3%82%BB%E3%82%AD%E3%83%A5%E3%83%AA%E3%83%86%E3%82%A3%E6%9B%B4%E6%96%B0%E3%83%97%E3%83%AD%E3%82%B0%E3%83%A9%E3%83%A0%E3%81%8C%E6%A4%9C%E5%87%BA%E3%81%95%E3%82%8C%E3%81%A6%E3%81%84%E3%82%8B%E3%81%AE%E3%81%AB%E3%80%81%E3%83%9D%E3%83%AA%E3%82%B7%E3%83%BC%E9%9D%9E%E6%BA%96%E6%8B%A0%E3%81%A8%E5%88%A4%E5%AE%9A%E3%81%95%E3%82%8C%E3%81%AA%E3%81%84%EF%BC%9F%0A*+URL+https%3A%2F%2Fjpwinsup.github.io%2Fblog%2F2021%2F07%2F06%2FWirelessNetwork%2FNPS%2Fnap-internal-3%2F%0A*+SourceFileName%3A+source%2F_posts%2FWirelessNetwork%2FNPS%2Fnap-internal-3.md%0A" class="article-github-issue-link" target="_blank" rel="noopener noreferrer">feedback</a>
+        
+        <a data-url="https://jpwinsup.github.io/blog/2021/07/06/WirelessNetwork/NPS/nap-internal-3/" data-id="cmlsvjdhp00nvru3yarisepzx" class="article-share-link">共有</a>
+      </div>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>こんにちは。Windows プラットフォーム サポート担当です。</p>
+<p>前回までの記事で、Windows 標準の NAP 機能でどのようなセキュリティの正常性のチェックを行うことができるかを説明しました。<br>その中でも、NAP を導入する多くのお客様が 「ちゃんとセキュリティ更新プログラムを適用していないコンピューターには、社内のネットワークには接続させたくない」と、セキュリティ更新プログラムの適用のチェックを有効にしておられると思います。</p>
+<p>しかしながら、NAP におけるセキュリティ更新プログラムの適用状態のチェックは、必ずしもリアルタイムにおこなわれるものではありません。このため、Windows Update の画面の表示では確かに適用すべき新しいセキュリティ更新プログラムが検出されているにもかかわらず、クライアントがポリシー準拠の状態のままになってしまうタイミングが存在します。</p>
+<p>本稿では、Windows 標準の NAP 機能において、クライアントがどのようにインストールされているセキュリティ更新プログラムの状態を取得するか、また、それがどのように結果に反映されるかの仕組みについて説明いたします。</p>
+<h2 id="1-具体的に、どのような現象が発生するか？"><a href="#1-具体的に、どのような現象が発生するか？" class="headerlink" title="1. 具体的に、どのような現象が発生するか？"></a>1. 具体的に、どのような現象が発生するか？</h2><p>仕組みの解説を始める前に、まずは具体的にどのような現象が発生しうるかについて説明いたします。</p>
+<h3 id="1-NPS-における-Windows-セキュリティ正常性検証ツールの設定"><a href="#1-NPS-における-Windows-セキュリティ正常性検証ツールの設定" class="headerlink" title="(1) NPS における Windows セキュリティ正常性検証ツールの設定"></a>(1) NPS における Windows セキュリティ正常性検証ツールの設定</h3><p>NPS では、下図のようにすべてのセキュリティ更新プログラムの適用を強制する設定になっているものとします。</p>
+<p><img src="1.jpg"></p>
+<h3 id="2-クライアントではすべてのセキュリティ更新プログラムが適用されている状態"><a href="#2-クライアントではすべてのセキュリティ更新プログラムが適用されている状態" class="headerlink" title="(2) クライアントではすべてのセキュリティ更新プログラムが適用されている状態"></a>(2) クライアントではすべてのセキュリティ更新プログラムが適用されている状態</h3><p>クライアントでは、下図のようにすべてのセキュリティ更新プログラムが適用されている状態です。</p>
+<p><img src="2.jpg"></p>
+<p>もちろん、NAP のポリシーにも準拠しているものと判定されています。</p>
+<p><img src="3.jpg"></p>
+<p><img src="4.jpg"></p>
+<h3 id="3-Windows-Update-により、新しいセキュリティ更新プログラムが検出される"><a href="#3-Windows-Update-により、新しいセキュリティ更新プログラムが検出される" class="headerlink" title="(3) Windows Update により、新しいセキュリティ更新プログラムが検出される"></a>(3) Windows Update により、新しいセキュリティ更新プログラムが検出される</h3><p>Windows Update が行われ、新しいセキュリティ更新プログラムが適用されます。</p>
+<p><img src="5.jpg"></p>
+<p>NPS の設定では、(1) の通りすべてのセキュリティ更新プログラムの適用が要求されているので、この時点でクライアントはポリシー非準拠の状態となるはずです。</p>
+<h3 id="4-ポリシー非準拠に・・・ならない！"><a href="#4-ポリシー非準拠に・・・ならない！" class="headerlink" title="(4) ポリシー非準拠に・・・ならない！"></a>(4) ポリシー非準拠に・・・ならない！</h3><p>しかし、NAP のステータスを確認することができる napstat コマンドでも、一向にクライアントの状態が変更された様子が確認できず、ポリシー非準拠の状態に推移しません。</p>
+<p><img src="6.jpg"></p>
+<p>この結果から、「もしかすると自動的に検疫の再チェックが走っていないのでは？」と思われる方もいらっしゃるかもしれません。<br>しかし、手動で検疫のチェックを再度行ってみても・・・(この環境では DHCP 検疫を用いているので、<code>ipconfig /renew</code> を実施)</p>
+<p><img src="7.jpg"></p>
+<p>やはり、ポリシーに準拠した状態のままであると判定されてしまいます。</p>
+<p><img src="8.jpg"></p>
+<h3 id="5-時間経過や、OS-の再起動によりポリシー非準拠の状態に推移"><a href="#5-時間経過や、OS-の再起動によりポリシー非準拠の状態に推移" class="headerlink" title="(5) 時間経過や、OS の再起動によりポリシー非準拠の状態に推移"></a>(5) 時間経過や、OS の再起動によりポリシー非準拠の状態に推移</h3><p>なぜポリシー非準拠になってくれないのだろう・・・と途方に暮れていると、しばらくの時間の経過後に自動的にポリシー非準拠の状態に推移します。また、(4) の状態で OS の再起動を行った場合も、ポリシー非準拠の状態に推移します。</p>
+<p><img src="9.jpg"></p>
+<p><img src="10.jpg"></p>
+<p>それではなぜ、リアルタイムにセキュリティ更新プログラムの適用の状態が結果に反映されないのでしょうか。これは、先日の記事でもご紹介した、クライアントのセキュリティ状態を収集する WSHA と呼ばれるモジュールが、どのようにしてクライアントに適用されているセキュリティ更新プログラムの状態を取得しているかの仕組みに起因しています。</p>
+<h2 id="2-WSHA-によるオフライン-スキャン-オフライン-スキャンとは"><a href="#2-WSHA-によるオフライン-スキャン-オフライン-スキャンとは" class="headerlink" title="2. WSHA によるオフライン スキャン - オフライン スキャンとは"></a>2. WSHA によるオフライン スキャン - オフライン スキャンとは</h2><p>セキュリティ更新プログラムの状態は、Windows Update Agent が管理しています。</p>
+<p>WSHA は検疫のチェックに使用する SoH を構成するために Windows Update Agent から未適用のセキュリティ更新プログラムの有無を取得する必要がありますが、新しいセキュリティ更新プログラムが検出されたことを Windows Update Agent が能動的に WSHA に対して通知するわけではなく、常に WSHA 側から Windows Update Agent に問い合わせて状態を取得します。</p>
+<p><img src="11.jpg"></p>
+<p>この問い合わせの処理をオフラインスキャンと言います。オフライン スキャンが WSHA から要求されると、Windows Update Agent は自身が持つデータベースから、セキュリティ更新プログラムの適用状態を WSHA に対して報告します。<br>(この処理はあくまでもオフラインで行われるので、オフラインスキャンのタイミングで再度 Windows Update が行われるわけではありません。)</p>
+<p>オフラインスキャンが実施されると、Network Access Protection Agent に関するイベント ログに、下図のようなイベントが出力されます。</p>
+<p><img src="12.jpg"></p>
+<h3 id="オフライン-スキャンの間隔"><a href="#オフライン-スキャンの間隔" class="headerlink" title="オフライン スキャンの間隔"></a>オフライン スキャンの間隔</h3><p>また、オフラインスキャンは定期的に行われ、その間隔は OS のバージョンによって下記のように異なります。</p>
+<p>(Windows XP SP3 / Windows Vista)<br>既定値 : 60 (分)<br>最小値 : 3 (分)<br>最大値 : 300 (分)</p>
+<p>(Windows 7)<br>既定値 : 1320 (分)<br>最小値 : 30 (分)<br>最大値 : 4320 (分)</p>
+<p>現在設定されているオフラインスキャンの間隔は、Network Access Protection Agent の起動時に出力される下図のイベントで確認できます。</p>
+<p><img src="13.jpg"></p>
+<p>また、オフラインスキャンの間隔は下記のレジストリによって変更することもできます。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">レジストリ キー:</span><br><span class="line">HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\MSSHA</span><br><span class="line"></span><br><span class="line">値:</span><br><span class="line">ScanInterval (REG_DWORD)</span><br></pre></td></tr></table></figure>
+
+<p>このように、オフラインスキャンが行われて初めて WSHA が未適用のセキュリティ更新プログラムの存在に気づくことができます。Windows Update の画面で新しいセキュリティ更新プログラムが検出されているにもかかわらずポリシー非準拠と判定されない場合は、まだオフラインスキャンが実施されていないことが原因として考えられます。</p>
+<p><strong>※ オフライン スキャンは NAP Agent サービスの起動時に必ず行われます。OS や NAP Agent サービスの再起動によって適切にポリシー非準拠の状態に推移するのはこのためです。</strong></p>
+<h2 id="3-ポリシー非準拠と判定された場合の動作"><a href="#3-ポリシー非準拠と判定された場合の動作" class="headerlink" title="3. ポリシー非準拠と判定された場合の動作"></a>3. ポリシー非準拠と判定された場合の動作</h2><p>セキュリティ更新プログラムの未適用によってポリシー非準拠と判定された場合、ユーザーは直ちに新しいセキュリティ更新プログラムを適用して、ポリシー準拠の状態に戻そうとすることが予想されます。</p>
+<p>一般的に、ポリシー準拠の状態からポリシー非準拠の状態に推移するのに若干のタイムラグが存在することはそれほど大きな問題にはならないかもしれません。しかし、ポリシー非準拠の状態からポリシー準拠の状態に戻るのに時間がかかってしまうと、ユーザーからは新しいセキュリティ更新プログラムを適用したにもかかわらずに正常なネットワークに接続できないように見えてしまうので、大きな問題となりうるでしょう。</p>
+<p>このため、ポリシー非準拠の状態に推移した場合、前述のオフラインスキャンは実施されなくなり、代わりに 15 秒に 1 度の間隔でセキュリティ更新プログラムのインストール数のみのチェックが行われるようになります。(このチェックも、WSHA から Windows Update Agent に対して行われます。)<br>そして、インストールされているセキュリティ更新プログラムの数に変化があった場合、再度オフラインスキャンを行い、ポリシーの準拠 / 非準拠の判定が行われます。</p>
+<h3 id="特記事項"><a href="#特記事項" class="headerlink" title="特記事項"></a>特記事項</h3><p>本記事は 2010 年 1 月 20 日に公開された記事を本ブログに移行した記事になります。<br>また本情報の内容 (添付文書、リンク先などを含む) は、作成日時点でのものであり、予告なく変更される場合があります。</p>
+
+      
+      
+    </div>
+    <footer class="article-footer">
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/blog/2021/07/19/Performance/SystemResource/PerformanceCounterAlert/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">次の記事</strong>
+      <div class="article-nav-title">
+        
+          パフォーマンス カウンターの警告
+        
+      </div>
+    </a>
+  
+  
+    <a href="/blog/2021/07/06/WirelessNetwork/NPS/nap-internal-2/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">前の記事</strong>
+      <div class="article-nav-title">NAP internal-2 WSHA がチェックできる項目 (セキュリティ更新プログラムに関する状態)</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">カテゴリ</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Activation/">Activation</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Activation/ESU/">ESU</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Activation/security-SPP/">security-SPP</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/">Active Directory</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Authentication/">Authentication</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/DFSR/">DFSR</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/FunctionalLevel/">FunctionalLevel</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Group-Policy/">Group Policy</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Promotion-and-Demotion/">Promotion and Demotion</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/User-Profile/">User Profile</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Windows-Hello/">Windows Hello</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Windows-Time-Service/">Windows Time Service</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/AppLocker/">AppLocker</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/AppLocker/Active-Directory/">Active Directory</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/AppLocker/Microsoft-Intune/">Microsoft Intune</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Deployment/">Deployment</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Deployment/Feature-on-demand/">Feature on demand</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Deployment/Sysprep/">Sysprep</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Failover-Clustering/">Failover Clustering</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Failover-Clustering/Configuration-and-Management/">Configuration and Management</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/FileServices/">FileServices</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/FileServices/FTP/">FTP</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/FileServices/SMB/">SMB</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Hyper-V/">Hyper-V</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Hyper-V/Configuration-and-Management/">Configuration and Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Hyper-V/Migration/">Migration</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Microsoft-Connected-Cache/">Microsoft Connected Cache</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/">Networking</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/BITS/">BITS</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/Bluetooth/">Bluetooth</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/DHCP/">DHCP</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/DNS/">DNS</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/Firewall/">Firewall</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/LBFO/">LBFO</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/NCSI/">NCSI</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/NetworkInterface/">NetworkInterface</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/Proxy/">Proxy</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/TCPIP/">TCPIP</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/OpenSSH/">OpenSSH</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/">Performance</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/Hang-up-BSoD/">Hang-up/BSoD</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/No-Boot/">No Boot</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/Slow-Response/">Slow Response</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/System-Resource/">System Resource</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/Tools/">Tools</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/">Public Key Infrastructure</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Certificate-Authority/">Certificate Authority</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Certificate-Management/">Certificate Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Code-Signing/">Code Signing</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/SSL-TLS-Communication/">SSL TLS Communication</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/SSL-TLS-Connection/">SSL TLS Connection</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Smart-Card-Logon/">Smart Card Logon</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/">Remote Desktop</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/Azure-Virtual-Desktop-AVD/">Azure Virtual Desktop (AVD)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/Remote-Desktop-Service-RDS/">Remote Desktop Service (RDS)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/Windows-Virtual-Desktop-WVD/">Windows Virtual Desktop (WVD)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/RemoteAccess/">RemoteAccess</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/RemoteAccess/%E3%83%80%E3%82%A4%E3%83%A4%E3%83%AB%E3%82%A2%E3%83%83%E3%83%97%E6%8E%A5%E7%B6%9A/">ダイヤルアップ接続</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Setup/">Setup</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Setup/Feature-Update-FU/">Feature Update (FU)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Shell/">Shell</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Shell/Explorer/">Explorer</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/">Storage</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/Backup/">Backup</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/FSRM/">FSRM</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/Management/">Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/StorageMigrationService/">StorageMigrationService</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/UEFI/">UEFI</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/UEFI/Secure-Boot/">Secure Boot</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/">User Interface and Apps</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Command-Prompt/">Command Prompt</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/EventLog/">EventLog</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Language-Support/">Language Support</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Microsoft-Store/">Microsoft Store</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Performance/">Performance</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/PowerShell/">PowerShell</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Printing-%E5%8D%B0%E5%88%B7/">Printing (印刷)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Server-Management/">Server Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Taskscheduler/">Taskscheduler</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Windows-Management-Instrumentation/">Windows Management Instrumentation</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps-Language-support/">User Interface and Apps - Language support</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-365/">Windows 365</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Admin-Center/">Windows Admin Center</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Search/">Windows Search</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/">Windows Update</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Delivery-Optimization-DO/">Delivery Optimization (DO)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Feature-Update-FU/">Feature Update (FU)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Quality-Update-QU/">Quality Update (QU)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Windows-Update-Agent/">Windows Update Agent</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Windows-Update-Agent-WUA/">Windows Update Agent (WUA)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/">WirelessNetwork</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/NPS/">NPS</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/Wi-Fi/">Wi-Fi</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/%E3%83%A2%E3%83%90%E3%82%A4%E3%83%AB-%E3%83%96%E3%83%AD%E3%83%BC%E3%83%89%E3%83%90%E3%83%B3%E3%83%89%E6%8E%A5%E7%B6%9A-LTE/">モバイル ブロードバンド接続 (LTE)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/%E7%B5%84%E7%B9%94%E7%B4%B9%E4%BB%8B%E3%83%96%E3%83%AD%E3%82%B0%EF%BC%88Windows-Commercial%EF%BC%89/">組織紹介ブログ（Windows Commercial）</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最近の投稿</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/blog/2026/02/16/ActiveDirectory/GroupPolicy/UacPolicyIsEnabled/">「ユーザー アカウント制御：ビルトイン Administrator アカウントのための管理者承認モード」ポリシーが有効になる動作ついて</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/02/15/UserInterfaceAndApps/Printing/printer-queue-app-preview/">印刷キューアプリのプレビュー機能について</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/02/02/ActiveDirectory/Authentication/kerberos-rc4-for-service-account-ticket-issuance-changes-related-to-cve-2026-20833/">CVE‑2026‑20833 への対応とその影響について [KB5073381]</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/01/12/Hyper-V/vmwp-does-not-save-the-RTC-value-of-a-virtual-machine-when-performing-Live-Migration/">ライブ マイグレーション後の再起動でゲスト OS の時刻がずれる場合がある</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/01/07/WindowsUpdate/FU/fublog-txt/">ISO メディア経由かつ動的更新無効な状態で Windows 11 バージョン 24H2 または 25H2 へのアップグレードが失敗 (0x8007042B 0x2000D) する事象と対策について</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">アーカイブ</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2026/02/">2026 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2026/01/">2026 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/12/">2025 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/11/">2025 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/10/">2025 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/09/">2025 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/08/">2025 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/07/">2025 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/06/">2025 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/05/">2025 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/04/">2025 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/03/">2025 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/02/">2025 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/01/">2025 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/12/">2024 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/11/">2024 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/10/">2024 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/09/">2024 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/08/">2024 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/07/">2024 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/06/">2024 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/05/">2024 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/04/">2024 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/03/">2024 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/02/">2024 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/01/">2024 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/12/">2023 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/11/">2023 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/10/">2023 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/09/">2023 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/08/">2023 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/07/">2023 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/06/">2023 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/05/">2023 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/04/">2023 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/03/">2023 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/02/">2023 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/01/">2023 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/12/">2022 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/11/">2022 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/10/">2022 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/09/">2022 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/08/">2022 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/07/">2022 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/06/">2022 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/05/">2022 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/04/">2022 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/03/">2022 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/02/">2022 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/01/">2022 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/12/">2021 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/11/">2021 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/10/">2021 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/09/">2021 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/08/">2021 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/07/">2021 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/06/">2021 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/05/">2021 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/04/">2021 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/03/">2021 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/02/">2021 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/01/">2021 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/12/">2020 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/11/">2020 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/10/">2020 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/07/">2020 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/03/">2020 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2019/03/">2019 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/11/">2018 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/10/">2018 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/09/">2018 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/08/">2018 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/07/">2018 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/06/">2018 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/04/">2018 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/02/">2018 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/12/">2017 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/11/">2017 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/09/">2017 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/05/">2017 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/03/">2017 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/02/">2017 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2016/08/">2016 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2016/05/">2016 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2014/03/">2014 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2012/02/">2012 / 02</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2026 Microsoft Japan Windows Technology Support Team<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/blog/" class="mobile-nav-link">Home</a>
+  
+    <a href="/blog/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+<script src="/blog/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

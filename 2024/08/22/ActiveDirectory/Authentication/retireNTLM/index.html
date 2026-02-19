@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-180187723-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-180187723-1');
+</script>
+<!-- End Google Analytics -->
+
+  
+  <title>NTLM の廃止に向けた対応について | Microsoft Japan Windows Technology Support Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="2025&#x2F;10&#x2F;10 更新以下の機能追加等に伴い本記事の内容を更新しました。・NTLM監査イベントの追加・特定の状況における段階的な NTLMv1 無効化  本記事はマイクロソフト社員によって公開されております。 こんにちは。Windows Commercial Support Directory Services チームです。 今回は、先般非推奨となった NTLM の廃止に向けた対応につい">
+<meta property="og:type" content="article">
+<meta property="og:title" content="NTLM の廃止に向けた対応について">
+<meta property="og:url" content="https://jpwinsup.github.io/blog/2024/08/22/ActiveDirectory/Authentication/retireNTLM/index.html">
+<meta property="og:site_name" content="Microsoft Japan Windows Technology Support Blog">
+<meta property="og:description" content="2025&#x2F;10&#x2F;10 更新以下の機能追加等に伴い本記事の内容を更新しました。・NTLM監査イベントの追加・特定の状況における段階的な NTLMv1 無効化  本記事はマイクロソフト社員によって公開されております。 こんにちは。Windows Commercial Support Directory Services チームです。 今回は、先般非推奨となった NTLM の廃止に向けた対応につい">
+<meta property="og:locale" content="ja_JP">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2024/08/22/ActiveDirectory/Authentication/retireNTLM/02.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2024/08/22/ActiveDirectory/Authentication/retireNTLM/03.png">
+<meta property="article:published_time" content="2024-08-22T03:00:00.000Z">
+<meta property="article:modified_time" content="2026-02-19T02:53:58.326Z">
+<meta property="article:author" content="Microsoft Japan Windows Technology Support Team">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://jpwinsup.github.io/blog/2024/08/22/ActiveDirectory/Authentication/retireNTLM/02.png">
+  
+    <link rel="alternate" href="/blog/atom.xml" title="Microsoft Japan Windows Technology Support Blog" type="application/atom+xml">
+  
+
+  <link rel="icon" href="/blog/favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="/blog/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/blog/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/blog/favicon-16x16.png">
+  <link rel="manifest" href="/blog/site.webmanifest">
+  <link rel="mask-icon" href="/blog/safari-pinned-tab.svg" color="#5bbad5">
+  <meta name="msapplication-TileColor" content="#ffffff">
+  <meta name="theme-color" content="#ffffff">
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/blog/css/style.css">
+
+<meta name="generator" content="Hexo 5.2.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="site-header-logo"></div>
+  <div id="site-header-blog-wrapper"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        <div id="ms-logo"></div>
+        
+          <a class="main-nav-link" href="/blog/">Home</a>
+        
+          <a class="main-nav-link" href="/blog/archives">Archives</a>
+        
+        <a class="main-nav-link" target="_blank" rel="noopener" href="https://cssjpn.github.io/">サポート情報</a>
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/blog/atom.xml" title="RSSフィード"></a>
+        
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//www.bing.com/search" method="get" accept-charset="UTF-8" name="bing-search" onsubmit="var f=this;if(f['q'].value){var searchUrl =  'https://www.bing.com/search?q=' +  encodeURIComponent(f['q'].value + ' site:' + f['sitesearch'].value) ;window.open(searchUrl, 'blank') };return false;" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="検索"><button type="submit" id="nav-search-btn" class="search-form-submit"></button><input type="hidden" name="sitesearch" value="https://jpwinsup.github.io/blog"></form>
+      </div>
+    </div>
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/blog/" id="logo">Microsoft Japan Windows Technology Support Blog</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/blog/" id="subtitle">日本マイクロソフト Windows Support チームによる、サポート情報 Blog です。</a>
+        </h2>
+      
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-ActiveDirectory/Authentication/retireNTLM" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    
+    
+      <header class="article-header-single">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      NTLM の廃止に向けた対応について
+    </h1>
+  
+
+      </header>
+      <div class="article-share">
+        Last Update: 
+        <a href="/blog/2024/08/22/ActiveDirectory/Authentication/retireNTLM/" class="article-date-single">
+  <time datetime="2024-08-22T03:00:00.000Z" itemprop="datePublished">2024-08-22</time>
+</a>
+        
+  <div class="article-category">
+    <a class="article-category-link" href="/blog/categories/Active-Directory/">Active Directory</a>►<a class="article-category-link" href="/blog/categories/Active-Directory/Authentication/">Authentication</a>
+  </div>
+
+        
+        <a href="https://github.com/jpwinsup/blog/issues/new?title=&body=%EF%BB%BF%0A%0A---%0A%0A%23%23%23%23+Document+Details%0A%0A*+Article+ID%3A+39b70561-cecb-5857-b3ca-d1ca2ea2811e%0A*+TITLE%3A+NTLM+%E3%81%AE%E5%BB%83%E6%AD%A2%E3%81%AB%E5%90%91%E3%81%91%E3%81%9F%E5%AF%BE%E5%BF%9C%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6%0A*+URL+https%3A%2F%2Fjpwinsup.github.io%2Fblog%2F2024%2F08%2F22%2FActiveDirectory%2FAuthentication%2FretireNTLM%2F%0A*+SourceFileName%3A+source%2F_posts%2FActiveDirectory%2FAuthentication%2FretireNTLM.md%0A" class="article-github-issue-link" target="_blank" rel="noopener noreferrer">feedback</a>
+        
+        <a data-url="https://jpwinsup.github.io/blog/2024/08/22/ActiveDirectory/Authentication/retireNTLM/" data-id="cmlsvjdo601huru3y88a79igu" class="article-share-link">共有</a>
+      </div>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <br>
+
+<blockquote>
+<p>2025/10/10 更新<br>以下の機能追加等に伴い本記事の内容を更新しました。<br>・NTLM監査イベントの追加<br>・特定の状況における段階的な NTLMv1 無効化</p>
+</blockquote>
+<p>本記事はマイクロソフト社員によって公開されております。</p>
+<p>こんにちは。Windows Commercial Support Directory Services チームです。</p>
+<p>今回は、先般非推奨となった NTLM の廃止に向けた対応について、ご参考としていただける情報についてご案内いたします。<br>今後の対応について、現時点で詳細が未確定な部分もございますので、必要に応じてブログの内容はアップデートする予定です。</p>
+<h2 id="1-NTLM-廃止の背景"><a href="#1-NTLM-廃止の背景" class="headerlink" title="1. NTLM 廃止の背景"></a>1. NTLM 廃止の背景</h2><hr>
+<p>Windows 認証のセキュリティを向上させるため、弊社は NTLM 認証を使う必要があるシナリオに対処して、最終的に NTLM を無効化し、すべての認証をよりセキュアな Kerberos で行えるようにする目標がございます。</p>
+<p>NTLM はチャレンジ/レスポンス方式を採用した認証プロトコルとなりますが、古くから利用されている背景もあり、<br>近年では多くの脆弱性や問題が確認され、また、相互認証のようなセキュリティ的に強度の高い実装はされておらず最新の暗号アルゴリズムにも対応しておりません。</p>
+<p>このように、NTLM では最新のセキュリティ要件に対応することができなくなってしまっていることから、<br>生体認証やパスワード レスといったセキュリティ強度の高い認証方式を採用でき、より拡張性がある Kerberos の利用を標準化させることで、全ての Windows ユーザーの認証におけるセキュリティ レベルを向上させたいという背景がございます。</p>
+<p>現在、弊社では Kerberos を使用できないシナリオや、NTLM にフォール バックするシナリオに対処するため、<br>Kerberos を使用した初期認証とパススルー認証 (IAKERB) および Kerberos 用のローカル鍵配布センター (Local KDC) といった新機能の導入も計画しております。</p>
+<p>最終的な目標は、NTLM を使用するシナリオを全て排除することとなりますが、後述の NTLM 廃止に向けた対応についてご確認いただき、お客様環境においても移行の準備をご検討いただけますと幸いです。</p>
+<br>
+
+<h2 id="2-NTLM-廃止までのスケジュール"><a href="#2-NTLM-廃止までのスケジュール" class="headerlink" title="2. NTLM 廃止までのスケジュール"></a>2. NTLM 廃止までのスケジュール</h2><hr>
+<p>弊社は NTLM が機能開発の対象ではなくなり、非推奨の機能であることを 2024 年 6 月に公開情報に明記しました。<br>詳細につきましては、以下の公開情報をご参照ください。</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://learn.microsoft.com/ja-jp/windows/whats-new/deprecated-features#deprecated-features">Windows クライアントの非推奨の機能</a></li>
+</ul>
+<p>また、Windows 11 24H2 / Windows Server 2025 から NTLMv1 が削除されたことを 2024 年 12 月に公開情報に明記いたしました。<br>この変更により、Windows 11 24H2 / Windows Server 2025 からは NTLMv1 による認証要求が行われなくなりました。<br>なお、グループ ポリシー “ネットワーク セキュリティ: LAN Manager 認証レベル”・ レジストリ “LmCompatibilityLevel” の設定値に関わらず、上記の動作が適用されます。</p>
+<ul>
+<li><p><a target="_blank" rel="noopener" href="https://learn.microsoft.com/en-us/windows-server/get-started/removed-deprecated-features-windows-server-2025">Features removed or no longer developed starting with Windows Server 2025</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://learn.microsoft.com/en-us/windows/whats-new/removed-features">Features and functionality removed in Windows client</a></p>
+</li>
+</ul>
+<p>今後も段階的な NTLM の廃止が計画されておりますが、2024 年 12 月時点では以降の詳細なロードマップは公開されておりません。<br>今後公開される情報が更新されましたら、本ブログにおいてもご案内させていただきます。</p>
+<br>
+
+<h2 id="3-NTLM-廃止後の代替機能"><a href="#3-NTLM-廃止後の代替機能" class="headerlink" title="3. NTLM 廃止後の代替機能"></a>3. NTLM 廃止後の代替機能</h2><hr>
+<p>NTLM の廃止に伴い、より安全で信頼性の高い認証プロトコルである Kerberos への完全移行が求められます。<br>弊社では、この移行をスムーズに進めるために、IAKERB および Local KDC を活用した対応策を導入予定です。<br>機能を利用するための要件や設定方法については現時点で公開されておりませんが、各機能の概要について以下にご案内いたします。<br>また、IP アドレスを指定した接続において Kerberos を利用する方法が既に用意されておりますので、本機能についても後述いたします。</p>
+<h3 id="IAKERB"><a href="#IAKERB" class="headerlink" title="IAKERB"></a>IAKERB</h3><hr>
+<p>アプリケーション サーバーへのアクセスに Kerberos が用いられる場合、クライアントは事前に KDC へ接続してチケットを入手する必要があります。<br>複雑なネットワーク構成の環境においては、このクライアントと KDC 間のネットワーク接続が課題となる場合があり、NTLM を利用せざるを得ない要因ともなっています。<br>IAKERB は Kerberos の拡張プロトコルであり、Kerberos チケットの取得において事前に KDC へ接続しなければならない状況に対応するもので、多様なネットワーク トポロジにおける Kerberos の利用をサポートします。<br>IAKERB では、クライアントが KDC にアクセスできない場合、アプリケーション サーバーがプロキシとして機能し、KDC と通信を行います。具体的には、クライアントがアプリケーション サーバーに Kerberos 認証要求を送信し、アプリケーション サーバーがその要求を KDC に転送します。<br>KDC は応答をアプリケーション サーバーに返し、それがクライアントに伝えられます。</p>
+<p><img src="02.png"></p>
+<h3 id="Local-KDC"><a href="#Local-KDC" class="headerlink" title="Local KDC"></a>Local KDC</h3><hr>
+<p>ローカル アカウントやオフラインのコンピューターにおける認証においては、現状は NTLM を利用せざるを得ないシナリオが存在します。Local KDC は、このようなローカル アカウントやオフライン コンピューターの Kerberos 認証をサポートするための機能です。<br>各 Windows コンピューターに KDC の機能を持たせることで、ローカル ユーザー アカウントに対する Kerberos 認証を実現します。<br>これにより、ドメインに参加していないコンピューターや、オフラインのコンピューターに対して Kerberos 認証を利用させることが可能となります。</p>
+<h3 id="IP-アドレス指定の接続で-Kerberos-を利用させる"><a href="#IP-アドレス指定の接続で-Kerberos-を利用させる" class="headerlink" title="IP アドレス指定の接続で Kerberos を利用させる"></a>IP アドレス指定の接続で Kerberos を利用させる</h3><hr>
+<p>クライアントがリソースにアクセスする際、ホスト名ではなく IP アドレスを指定した場合、Kerberos は用いられずに NTLM で認証される動作となります。<br>ユーザーによる操作であればホスト名を指定する運用に変えることもできますが、アプリケーションでハードコードされている状態であれば、NTLM が利用できなくなることで影響が及ぶことが考えられます。<br>このような状況に対応するために、IP アドレスが指定された場合も Kerberos を用いるように変更できる機能が用意されておりますので、本機能を利用するための設定方法を以下にご案内いたします。<br>なお、本機能を利用できる OS バージョンは Windows 10 バージョン 1507、Windows Server 2016 以降となります。</p>
+<h4 id="1-クライアント側でのレジストリ設定"><a href="#1-クライアント側でのレジストリ設定" class="headerlink" title="[1] クライアント側でのレジストリ設定"></a>[1] クライアント側でのレジストリ設定</h4><p>リソースへのアクセス元となるクライアント側で、以下のレジストリを設定します。</p>
+<pre><code>キー：HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System\Kerberos\Parameters
+名前：TryIPSPN 
+種類：REG_DWORD
+値：1</code></pre>
+<p>上記レジストリは、以下のコマンドで設定が可能です。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">reg add &quot;HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System\Kerberos\Parameters&quot; &#x2F;v TryIPSPN &#x2F;t REG_DWORD &#x2F;d 1 &#x2F;f</span><br></pre></td></tr></table></figure>
+
+<br>
+
+<h4 id="2-SPN-の登録"><a href="#2-SPN-の登録" class="headerlink" title="[2] SPN の登録"></a>[2] SPN の登録</h4><p>SPN (Service Principal Name) は、Kerberos 認証においてサービスを識別するために利用される識別子です。<br>ドメインのアカウントの属性値として、この SPN を登録する必要があります。<br>以下のコマンドで設定が可能です。&lt;サービス&gt; の箇所には対象のコンピューターでホストするサービスに対応する値を指定する必要があります。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Setspn -s &lt;サービス&gt;&#x2F;&lt;IP アドレス&gt; &lt;ドメイン アカウント&gt;</span><br><span class="line"></span><br><span class="line">例：リソース サーバー server01 に IP アドレス 192.168.1.1 の SPN を設定する場合</span><br><span class="line">Setspn -s host&#x2F;192.168.1.1 server01</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><a target="_blank" rel="noopener" href="https://learn.microsoft.com/ja-jp/windows-server/security/kerberos/configuring-kerberos-over-ip">IP アドレス用 Kerberos の構成</a></li>
+</ul>
+<h3 id="Negotiate-SSP"><a href="#Negotiate-SSP" class="headerlink" title="Negotiate SSP"></a>Negotiate SSP</h3><hr>
+<p>アプリケーションの実装において NTLM が利用されている場合、Kerberos が利用されるように変更を行う必要があります。<br>AcquireCredentialsHandle 関数を呼び出す際に NTLM の利用がハードコーディングされている場合、これを Negotiate に置換いただくことで対応が可能です。<br>Negotiate の利用により、Kerberos が利用可能な場合には自動的に使用し、そうでない場合には NTLM にフォールバックするため、<br>移行の過渡期においてもセキュリティと互換性の両方を確保できます。</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://learn.microsoft.com/ja-jp/windows-server/security/windows-authentication/security-support-provider-interface-architecture#BKMK_NegoSSP">セキュリティ サポート プロバイダー インターフェイスのアーキテクチャ</a></li>
+</ul>
+<br>
+
+<h2 id="4-NTLM-廃止に向けた対応について"><a href="#4-NTLM-廃止に向けた対応について" class="headerlink" title="4. NTLM 廃止に向けた対応について"></a>4. NTLM 廃止に向けた対応について</h2><hr>
+<h3 id="A-NTLM-利用の監査について"><a href="#A-NTLM-利用の監査について" class="headerlink" title="[A] NTLM 利用の監査について"></a>[A] NTLM 利用の監査について</h3><hr>
+<p>NTLM 廃止に向けて、認証に NTLM が利用されているかどうかを判断する場合、以下のような NTLM の監査に関するグループ ポリシーを利用することが有効となります。</p>
+<p>対象のグループ ポリシーのパス<br>[コンピューターの構成] - [ポリシー] - [Windows の設定] - [セキュリティの設定] - [ローカル ポリシー] </p>
+<p>グループ ポリシー名 および 設定<br>(1) [ネットワーク セキュリティ: NTLM を制限する: このドメイン内の NTLM 認証を監査する] の値を「すべて有効にする」<br>(2) [ネットワーク セキュリティ: NTLM を制限する: 着信 NTLM トラフィックを監査する] の値を「すべてのアカウントに対して監査を有効にする」<br>(3) [ネットワーク セキュリティ: NTLM を制限する: リモート サーバーに対する送信 NTLM トラフィック] の値を「すべて監査する」</p>
+<p>上記グループ ポリシーを設定した状態で NTLM 認証が行われると、ポリシーに従い、イベント ログに後述する監査イベントが記録されます。<br>この監査イベントを確認することで、NTLM 認証を行っている状況を判断していただくことが可能です。</p>
+<p>対象のイベントはイベント ビューアーの以下イベント ログから確認が可能です。<br>[Applications and Services Log] - [Microsoft] - [Windows] - [NTLM] - [Operational]</p>
+<h3 id="1-ネットワーク-セキュリティ-NTLM-を制限する-このドメイン内の-NTLM-認証を監査する-の値を「すべて有効にする」"><a href="#1-ネットワーク-セキュリティ-NTLM-を制限する-このドメイン内の-NTLM-認証を監査する-の値を「すべて有効にする」" class="headerlink" title="(1) [ネットワーク セキュリティ: NTLM を制限する: このドメイン内の NTLM 認証を監査する] の値を「すべて有効にする」"></a>(1) [ネットワーク セキュリティ: NTLM を制限する: このドメイン内の NTLM 認証を監査する] の値を「すべて有効にする」</h3><p>こちらのポリシーをドメイン コントローラーに設定すると、ドメイン内のメンバー コンピューターからの NTLM 認証要求について以下の監査イベントを出力します。<br>通常、アクセス元、アクセス先コンピューター名と、認証に利用されたユーザー名が記録されます。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">ログの名前: Microsoft-Windows-NTLM&#x2F;Operational</span><br><span class="line">ソース: Microsoft-Windows-NTLM</span><br><span class="line">イベント ID: 8004</span><br><span class="line">レベル: 情報</span><br><span class="line">説明:</span><br><span class="line">ブロックされているドメイン コントローラーの監査: このドメイン コントローラーへの NTLM 認証を監査します。</span><br><span class="line">セキュリティで保護されたチャネル名: &lt;アクセス先コンピューター名&gt;</span><br><span class="line">ユーザー名: &lt;NTLM 認証を行ったユーザー名&gt;</span><br><span class="line">ドメイン名: &lt;Domain Name&gt;</span><br><span class="line">ワークステーション名: &lt;アクセス元コンピューター名&gt;</span><br><span class="line">セキュリティで保護されたチャネルの種類: 2</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-ネットワーク-セキュリティ-NTLM-を制限する-着信-NTLM-トラフィックを監査する-の値を「すべてのアカウントに対して監査を有効にする」"><a href="#2-ネットワーク-セキュリティ-NTLM-を制限する-着信-NTLM-トラフィックを監査する-の値を「すべてのアカウントに対して監査を有効にする」" class="headerlink" title="(2) [ネットワーク セキュリティ: NTLM を制限する: 着信 NTLM トラフィックを監査する] の値を「すべてのアカウントに対して監査を有効にする」"></a>(2) [ネットワーク セキュリティ: NTLM を制限する: 着信 NTLM トラフィックを監査する] の値を「すべてのアカウントに対して監査を有効にする」</h3><p>こちらの設定を行うと、設定が適用されたコンピューターに対して NTLM 認証を試行した場合に以下の監査イベントを出力します。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">ログの名前: Microsoft-Windows-NTLM&#x2F;Operational</span><br><span class="line">ソース: Microsoft-Windows-NTLM</span><br><span class="line">イベント ID: 8002</span><br><span class="line">レベル: 情報</span><br><span class="line">説明:</span><br><span class="line">NTLM server blocked audit: Audit Incoming NTLM Traffic that would be blocked </span><br><span class="line">Calling process PID: </span><br><span class="line">Calling process LUID:</span><br><span class="line">Calling process user identity: </span><br><span class="line">Calling process domain identity:</span><br><span class="line">Mechanism OID: </span><br></pre></td></tr></table></figure>
+
+<p>以下の ID 8003 のイベントでは、Workstation の値から、NTLM 認証要求元のコンピューター名を確認することが可能です。 </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">ログの名前: Microsoft-Windows-NTLM&#x2F;Operational</span><br><span class="line">ソース: Microsoft-Windows-NTLM</span><br><span class="line">イベント ID: 8003</span><br><span class="line">レベル: 情報</span><br><span class="line">説明:</span><br><span class="line">NTLM server blocked in the domain audit: Audit NTLM authentication in this domain</span><br><span class="line">User: </span><br><span class="line">Domain: </span><br><span class="line">Workstation: </span><br><span class="line">PID:</span><br><span class="line">Process: </span><br><span class="line">Logon type:</span><br><span class="line">InProc: </span><br><span class="line">Mechanism: </span><br></pre></td></tr></table></figure>
+
+<h3 id="3-ネットワーク-セキュリティ-NTLM-を制限する-リモート-サーバーに対する送信-NTLM-トラフィック-の値を「すべて監査する」"><a href="#3-ネットワーク-セキュリティ-NTLM-を制限する-リモート-サーバーに対する送信-NTLM-トラフィック-の値を「すべて監査する」" class="headerlink" title="(3) [ネットワーク セキュリティ: NTLM を制限する: リモート サーバーに対する送信 NTLM トラフィック] の値を「すべて監査する」"></a>(3) [ネットワーク セキュリティ: NTLM を制限する: リモート サーバーに対する送信 NTLM トラフィック] の値を「すべて監査する」</h3><p>こちらの設定は、設定が適用されたコンピューターから、任意のコンピューターに対して NTLM 認証を試行した場合に以下の監査イベントを出力します。<br>このイベントには、通常、NTLM 認証を試みたユーザー名やアクセス先が出力されます。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">ログの名前: Microsoft-Windows-NTLM&#x2F;Operational</span><br><span class="line">ソース: Microsoft-Windows-NTLM</span><br><span class="line">イベント ID: 8001</span><br><span class="line">レベル: 情報</span><br><span class="line">説明:</span><br><span class="line">NTLM client blocked audit: Audit outgoing NTLM authentication traffic that would be blocked.</span><br><span class="line">Target server: </span><br><span class="line">Supplied user: </span><br><span class="line">Supplied domain: </span><br><span class="line">PID of client process: </span><br><span class="line">Name of client process:</span><br><span class="line">LUID of client process: </span><br><span class="line">User identity of client process:</span><br><span class="line">Domain name of user identity of client process: </span><br><span class="line">Mechanism OID: </span><br></pre></td></tr></table></figure>
+
+<br>
+
+<h3 id="2025年9月-追加される-NTLM-監査イベントについて"><a href="#2025年9月-追加される-NTLM-監査イベントについて" class="headerlink" title="(2025年9月~) 追加される NTLM 監査イベントについて"></a>(2025年9月~) 追加される NTLM 監査イベントについて</h3><p>以下の公開情報でご案内しているとおり、NTLM の利用状況を監査するイベントが追加されます。</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://support.microsoft.com/ja-jp/topic/windows-11-%E3%83%90%E3%83%BC%E3%82%B8%E3%83%A7%E3%83%B3-24h2-%E3%81%8A%E3%82%88%E3%81%B3-windows-server-2025-%E3%81%A7%E3%81%AE-ntlm-%E7%9B%A3%E6%9F%BB%E3%81%AE%E6%A9%9F%E8%83%BD%E5%BC%B7%E5%8C%96%E3%81%AE%E6%A6%82%E8%A6%81-b7ead732-6fc5-46a3-a943-27a4571d9e7b">Windows 11 バージョン 24H2 および Windows Server 2025 での NTLM 監査の機能強化の概要</a></li>
+</ul>
+<p>NTLM 認証に関わる以下の観点のログが追加されますが、2025年10月時点では Windows 11 24H2 以降にのみ追加されており、Windows Server 2025 には追加されておりません。<br>このため、ドメイン コントローラーに関するログは現時点では確認することができません。</p>
+<p>・クライアント (NTLM 認証の要求元)<br>・サーバー (NTLM 認証の要求先)<br>・ドメイン コントローラー</p>
+<p>追加されるイベント ログは既定で有効となりますが、それぞれ以下のグループ ポリシーで有効・無効を制御可能です。</p>
+<p>// クライアント・サーバー<br>[コンピューターの構成] - [ポリシー] - [管理用テンプレート] - [システム] - [NTLM]<br>-&gt; NTLM 拡張ログ</p>
+<p>// ドメイン コントローラー<br>[コンピューターの構成] - [ポリシー] - [管理用テンプレート] - [システム] - [Net Logon]<br>-&gt; 拡張されたドメイン全体の NTLM ログを記録する</p>
+<p>記録されるイベントの ID は以下のとおりです。</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>情報</th>
+<th>警告</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>クライアント</td>
+<td>4020</td>
+<td>4021</td>
+</tr>
+<tr>
+<td>サーバー</td>
+<td>4022</td>
+<td>4023</td>
+</tr>
+<tr>
+<td>ドメイン コントローラー<br>(クロスドメインでの NTLM 認証)</td>
+<td>4030</td>
+<td>4031</td>
+</tr>
+<tr>
+<td>ドメイン コントローラー<br>(自ドメイン内での NTLM 認証)</td>
+<td>4032</td>
+<td>4033</td>
+</tr>
+</tbody></table>
+<p>追加されるイベントは既存のイベントと同様に以下イベント ログから確認が可能です。<br>[Applications and Services Log] - [Microsoft] - [Windows] - [NTLM] - [Operational]</p>
+<p><strong>クライアント</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line">ログの名前: Microsoft-Windows-NTLM&#x2F;Operational</span><br><span class="line">ソース: Microsoft-Windows-NTLM</span><br><span class="line">イベント ID: 4020 &#x2F; 4021</span><br><span class="line">レベル: 情報 &#x2F; 警告</span><br><span class="line">説明:</span><br><span class="line">This machine attempted to authenticate to a remote resource via NTLM.</span><br><span class="line"></span><br><span class="line">Process Information:</span><br><span class="line">     Process Name: &lt;Name&gt;</span><br><span class="line">     Process PID: &lt;PID&gt;</span><br><span class="line"></span><br><span class="line">Client Information:</span><br><span class="line">     Username: &lt;Username&gt;</span><br><span class="line">     Domain: &lt;Domain Name&gt;</span><br><span class="line">     Hostname: &lt;Host Name&gt;</span><br><span class="line">     Sign-On Type: &lt;Single Sign-On &#x2F; Supplied Creds&gt;</span><br><span class="line"></span><br><span class="line">Target Information:</span><br><span class="line">     Target Machine: &lt;Machine Name&gt;</span><br><span class="line">     Target Domain: &lt;Machine Domain&gt;</span><br><span class="line">     Target Resource: &lt;Service Principal Name (SPN)&gt;</span><br><span class="line">     Target IP: &lt;IP Address&gt;</span><br><span class="line">     Target Network Name: &lt;Network Name&gt;</span><br><span class="line"></span><br><span class="line">NTLM Usage:</span><br><span class="line">     Reason ID: &lt;Usage ID&gt;</span><br><span class="line">     Reason: &lt;Usage Reason&gt;</span><br><span class="line"></span><br><span class="line">NTLM Security:</span><br><span class="line">     Negotiated Flags: &lt;Flags&gt;</span><br><span class="line">     NTLM Version: &lt;NTLMv2 &#x2F; NTLMv1&gt;</span><br><span class="line">     Session Key Status: &lt; Present &#x2F; Missing&gt;</span><br><span class="line">     Channel Binding: &lt; Supported &#x2F; Not Supported&gt;</span><br><span class="line">     Service Binding: &lt;Service Principal Name (SPN)&gt;</span><br><span class="line">     MIC Status: &lt; Protected &#x2F; Unprotected&gt;</span><br><span class="line">     AvFlags: &lt;NTLM Flags&gt;</span><br><span class="line">     AvFlags String: &lt;NTLM Flag String&gt;</span><br><span class="line"></span><br><span class="line">For more information, see aka.ms&#x2F;ntlmlogandblock.</span><br></pre></td></tr></table></figure>
+<p><strong>サーバー</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">ログの名前: Microsoft-Windows-NTLM&#x2F;Operational</span><br><span class="line">ソース: Microsoft-Windows-NTLM</span><br><span class="line">イベント ID: 4022 &#x2F; 4023</span><br><span class="line">レベル: 情報 &#x2F; 警告</span><br><span class="line">説明:</span><br><span class="line">A remote client is using NTLM to authenticate to this workstation.</span><br><span class="line"></span><br><span class="line">Process Information:</span><br><span class="line">     Process Name: &lt;Name&gt;</span><br><span class="line">     Process PID: &lt;PID&gt;</span><br><span class="line"></span><br><span class="line">Remote Client Information:</span><br><span class="line">     Username: &lt;Client Username&gt;</span><br><span class="line">     Domain: &lt;Client Domain&gt;</span><br><span class="line">     Client Machine: &lt;Client Machine Name&gt;</span><br><span class="line">     Client IP: &lt;Client IP&gt;</span><br><span class="line">     Client Network Name: &lt;Client Network Name&gt;</span><br><span class="line"></span><br><span class="line">NTLM Security:</span><br><span class="line"></span><br><span class="line">     Negotiated Flags: &lt;Flags&gt;</span><br><span class="line">     NTLM Version: &lt;NTLMv2 &#x2F; NTLMv1&gt;</span><br><span class="line">     Session Key Status: &lt; Present &#x2F; Missing&gt;</span><br><span class="line">     Channel Binding: &lt; Supported &#x2F; Not Supported&gt;</span><br><span class="line">     Service Binding: &lt;Service Principal Name (SPN)&gt;</span><br><span class="line">     MIC Status: &lt; Protected &#x2F; Unprotected&gt;</span><br><span class="line">     AvFlags: &lt;NTLM Flags&gt;</span><br><span class="line">     AvFlags String: &lt;NTLM Flag String&gt;</span><br><span class="line"></span><br><span class="line">Status: &lt;Status Code&gt;</span><br><span class="line">Status Message: &lt;Status String&gt;</span><br><span class="line"></span><br><span class="line">For more information, see aka.ms&#x2F;ntlmlogandblock</span><br></pre></td></tr></table></figure>
+<p><strong>ドメイン コントローラー (クロスドメインでの NTLM 認証)</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">ログの名前: Microsoft-Windows-NTLM&#x2F;Operational</span><br><span class="line">ソース: Microsoft-Windows-NTLM</span><br><span class="line">イベント ID: 4030 &#x2F; 4031</span><br><span class="line">レベル: 情報 &#x2F; 警告</span><br><span class="line">説明:</span><br><span class="line">The DC &lt;DC Name&gt; processed a network NTLM authentication involving an account from this domain.</span><br><span class="line"></span><br><span class="line">Client Information:</span><br><span class="line">     Client Name: &lt;Username&gt;</span><br><span class="line">     Client Domain: &lt;Domain&gt;</span><br><span class="line">     Client Machine: &lt;Client workstation&gt;</span><br><span class="line"></span><br><span class="line">Server Information:</span><br><span class="line">     Server Name: &lt;Server Machine Name&gt;</span><br><span class="line">     Server Domain: &lt;Server Domain&gt;</span><br><span class="line"></span><br><span class="line">Forwarded From:</span><br><span class="line">     Secure Channel Type: &lt;Netlogon Secure Channel Info&gt;</span><br><span class="line">     Farside Name: &lt;Cross-Domain DC Machine Name &gt;</span><br><span class="line">     Farside Domain: &lt;Cross-Domain Domain Name&gt;</span><br><span class="line">     Farside IP: &lt;Cross-Domain DC IP&gt;</span><br><span class="line"></span><br><span class="line">NTLM Security:</span><br><span class="line">     Negotiated Flags: &lt;Flags&gt;</span><br><span class="line">     NTLM Version: &lt;NTLMv2 &#x2F; NTLMv1&gt;</span><br><span class="line">     Session Key Status: &lt; Present &#x2F; Missing&gt;</span><br><span class="line">     Channel Binding: &lt; Supported &#x2F; Not Supported&gt;</span><br><span class="line">     Service Binding: &lt;Service Principal Name (SPN)&gt;</span><br><span class="line">     MIC Status: &lt; Protected &#x2F; Unprotected&gt;</span><br><span class="line">     AvFlags: &lt;NTLM Flags&gt;</span><br><span class="line">     AvFlags String: &lt;NTLM Flag String&gt;</span><br><span class="line"></span><br><span class="line">Status: &lt;Status Code&gt;</span><br><span class="line"></span><br><span class="line">For more information, see aka.ms&#x2F;ntlmlogandblock</span><br></pre></td></tr></table></figure>
+<p><strong>ドメイン コントローラー (自ドメイン内での NTLM 認証)</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">ログの名前: Microsoft-Windows-NTLM&#x2F;Operational</span><br><span class="line">ソース: Microsoft-Windows-NTLM</span><br><span class="line">イベント ID: 4032 &#x2F; 4033</span><br><span class="line">レベル: 情報 &#x2F; 警告</span><br><span class="line">説明:</span><br><span class="line">The DC &lt;DC Name&gt; processed a forwarded NTLM authentication request originating from this domain.</span><br><span class="line"></span><br><span class="line">Client Information:</span><br><span class="line">     Client Name: &lt;Username&gt;</span><br><span class="line">     Client Domain: &lt;Domain&gt;</span><br><span class="line">     Client Machine: &lt;Client workstation&gt;</span><br><span class="line"></span><br><span class="line">Server Information:</span><br><span class="line">     Server Name: &lt;Server Machine Name&gt;</span><br><span class="line">     Server Domain: &lt;Server Domain&gt;</span><br><span class="line">     Server IP: &lt;Server IP&gt;</span><br><span class="line">     Server OS: &lt;Server Operating System&gt;</span><br><span class="line"></span><br><span class="line">NTLM Security:</span><br><span class="line">     Negotiated Flags: &lt;Flags&gt;</span><br><span class="line">     NTLM Version: &lt;NTLMv2 &#x2F; NTLMv1&gt;</span><br><span class="line">     Session Key Status: &lt; Present &#x2F; Missing&gt;</span><br><span class="line">     Channel Binding: &lt; Supported &#x2F; Not Supported&gt;</span><br><span class="line">     Service Binding: &lt;Service Principal Name (SPN)&gt;</span><br><span class="line">     MIC Status: &lt; Protected &#x2F; Unprotected&gt;</span><br><span class="line">     AvFlags: &lt;NTLM Flags&gt;</span><br><span class="line">     AvFlags String: &lt;NTLM Flag String&gt;</span><br><span class="line"></span><br><span class="line">Status: &lt;Status Code&gt;</span><br><span class="line">Status Message: &lt;Status String&gt;</span><br><span class="line"></span><br><span class="line">For more information, see aka.ms&#x2F;ntlmlogandblock</span><br></pre></td></tr></table></figure>
+<br>
+
+<h3 id="B-NTLM-の段階的な無効化について"><a href="#B-NTLM-の段階的な無効化について" class="headerlink" title="[B] NTLM の段階的な無効化について"></a>[B] NTLM の段階的な無効化について</h3><hr>
+<p>Windows 11 24H2 / Windows Server 2025 の新機能として、SMB クライアントにおいて NTLM の利用をブロックする機能が実装されています。<br>この機能により、まずは SMB 通信に限定して NTLM を無効化することが可能となり、環境内の NTLM 廃止に向けた段階的な対応を進めることができます。<br>また、この設定を利用することで、ブルートフォースやパス・ザ・ハッシュといった攻撃に対する予防効果も期待できます。</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://techcommunity.microsoft.com/blog/filecab/smb-ntlm-blocking-now-supported-in-windows-insider/3916206">SMB NTLM blocking now supported in Windows Insider</a><blockquote>
+<p>An attacker who tricks a user or application into sending NTLM challenge responses to a malicious server will no longer receive any NTLM data and cannot brute force, crack, or pass hashes.</p>
+</blockquote>
+</li>
+</ul>
+<p>なお、特定のサーバーのみ NTLM を可能とするといった例外も設定することが可能です。<br>設定方法につきましては、以下公開情報をご確認いただけますようお願いいたします。</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://learn.microsoft.com/ja-jp/windows-server/storage/file-server/smb-ntlm-blocking?tabs=group-policy">SMB で NTLM 接続をブロックする</a></li>
+</ul>
+<p>本設定により NTLM の利用がブロックされた場合、以下のようなエラー メッセージが表示されます。</p>
+<p><img src="03.png"></p>
+<p>また、以下イベント ログに ID 4015 の警告イベントが記録されます。<br>[Applications and Services Log] - [Microsoft] - [Windows] - [NTLM] - [Operational]</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">ログの名前:         Microsoft-Windows-NTLM&#x2F;Operational</span><br><span class="line">ソース:           Microsoft-Windows-NTLM</span><br><span class="line">イベント ID:       4015</span><br><span class="line">レベル:           警告</span><br><span class="line">説明:</span><br><span class="line">NTLM client blocked: Outgoing NTLM authentication traffic to remote servers that is blocked.</span><br><span class="line">Target server: &lt;アクセス先コンピューター&gt;</span><br><span class="line">Supplied user: (NULL)</span><br><span class="line">Supplied domain: (NULL)</span><br><span class="line">PID of client process: 4</span><br><span class="line">Name of client process:</span><br><span class="line">LUID of client process: 0x4860A</span><br><span class="line">User identity of client process: &lt;NTLM 認証を試みたユーザー名&gt;</span><br><span class="line">Domain name of user identity of client process: &lt;Domain Name&gt;</span><br><span class="line">Mechanism OID: 1.3.6.1.4.1.311.2.2.10</span><br><span class="line"></span><br><span class="line">An application on this computer attempted NTLM for authentication</span><br><span class="line">but the application explicitly blocks NTLM usage.</span><br><span class="line">Using an IP address or local user credentials from a remote computer</span><br><span class="line">may lead to an NTLM authentication attempt.</span><br><span class="line">This event does not mean that NTLM is blocked for all authentication attempts from</span><br><span class="line">this computer.</span><br></pre></td></tr></table></figure>
+
+<br>
+
+<h3 id="C-特定の状況における-NTLMv1-利用の段階的な無効化について"><a href="#C-特定の状況における-NTLMv1-利用の段階的な無効化について" class="headerlink" title="[C] 特定の状況における NTLMv1 利用の段階的な無効化について"></a>[C] 特定の状況における NTLMv1 利用の段階的な無効化について</h3><hr>
+<p>Windows 11 24H2 および Windows Server 2025 では NTLMv1 が削除されましたが、MS-CHAPv2 が利用されるケースなど限られた状況では引き続き NTLMv1 由来の資格情報が機能する場合があります。<br>弊社では、今後このような NTLMv1 由来の資格情報についても段階的に無効化し、完全な NTLM の無効化に向けて対応を進めます。<br>なお、Credential Guard が有効な環境においては、このような NTLMv1 由来の資格情報は既に利用できないため、以下にご案内する情報は Credential Guard が無効の環境に対してのみ適用されるものです。<br>Credential Guard の要件が満たされている場合は、その展開と有効化を強く推奨いたします。</p>
+<h4 id="セキュリティ強化による変更点"><a href="#セキュリティ強化による変更点" class="headerlink" title="セキュリティ強化による変更点"></a>セキュリティ強化による変更点</h4><p><strong>レジストリの追加</strong><br>以下のレジストリが追加されます。<br>このレジストリにより、本セキュリティ強化の動作モード(監査/強制)を制御することが可能です。</p>
+<pre><code>レジストリ キー：HKEY_LOCAL_MACHINE\SYSTEM\currentcontrolset\control\lsa\msv1_0
+種類：REG_DWORD
+名前：BlockNtlmv1SSO
+値：
+0 (監査モード) (既定値)：ログオン ユーザーによる NTLMv1 資格情報の生成が監査されますが、利用は許可されます。監査された場合、警告イベント(ID 4024)が生成されます。
+1 (強制モード)：ログオン ユーザーによる NTLMv1 資格情報の生成が監査され、利用が禁止されます。監査された場合、エラー イベント(ID 4025)が生成されます。</code></pre>
+<p><strong>イベントの追加</strong><br>以下のイベントが追加されます。<br>NTLMv1 由来の資格情報が生成された場合、監査モードでは ID 4024 が記録されますが、その利用は許可されます。<br>強制モードでは ID 4025 が記録され、その利用は禁止されるため、対象の資格情報を利用する機能を利用することはできません。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">ログの名前: Microsoft-Windows-NTLM&#x2F;Operational</span><br><span class="line">ソース: Microsoft-Windows-NTLM</span><br><span class="line">イベント ID: 4024</span><br><span class="line">レベル: 警告</span><br><span class="line">説明: </span><br><span class="line">Auditing an attempt to use NTLMv1-derived credentials for Single Sign-On</span><br><span class="line">Target server: &lt;domain_name&gt;</span><br><span class="line">Supplied user: &lt;user_name&gt;</span><br><span class="line">Supplied domain: &lt;domain_name&gt;</span><br><span class="line">PID of client process: &lt;process_identifier&gt;</span><br><span class="line">Name of client process: &lt;process_name&gt;</span><br><span class="line">LUID of client process: &lt;locally_unique_identifier&gt;</span><br><span class="line">User identity of client process: &lt;user_name&gt;</span><br><span class="line">Domain name of user identity of client process: &lt;domain_name&gt;</span><br><span class="line">​​​​​​​Mechanism OID: &lt;object_identifier&gt;</span><br><span class="line">For more information, see https:&#x2F;&#x2F;go.microsoft.com&#x2F;fwlink&#x2F;?linkid&#x3D;2321802.</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">ログの名前: Microsoft-Windows-NTLM&#x2F;Operational</span><br><span class="line">ソース: Microsoft-Windows-NTLM</span><br><span class="line">イベント ID: 4025</span><br><span class="line">レベル: エラー</span><br><span class="line">説明: </span><br><span class="line">An attempt to use NTLMv1-derived credentials for Single Sign-On was blocked due to policy.</span><br><span class="line">Target server: &lt;domain_name&gt;</span><br><span class="line">Supplied user: &lt;user_name&gt;</span><br><span class="line">Supplied domain: &lt;domain_name&gt;</span><br><span class="line">PID of client process: &lt;process_identifier&gt;</span><br><span class="line">Name of client process: &lt;process_name&gt;</span><br><span class="line">LUID of client process: &lt;locally_unique_identifier&gt;</span><br><span class="line">User identity of client process: &lt;user_name&gt;</span><br><span class="line">Domain name of user identity of client process: &lt;domain_name&gt;</span><br><span class="line">​​​​​​​Mechanism OID: &lt;object_identifier&gt;</span><br><span class="line">For more information, see https:&#x2F;&#x2F;go.microsoft.com&#x2F;fwlink&#x2F;?linkid&#x3D;2321802.</span><br></pre></td></tr></table></figure>
+
+<h4 id="スケジュールについて"><a href="#スケジュールについて" class="headerlink" title="スケジュールについて"></a>スケジュールについて</h4><p>このセキュリティ強化は以下のスケジュールでの展開を予定しています。<br>なお、これらは暫定的なものであり、今後変更される可能性があります。</p>
+<p><strong>1. 2025 年 9 月：Windows 11 24H2 監査モード</strong><br>このフェーズでは、Windows 11 24H2 が監査モードで動作します。<br>BlockNtlmv1SSO を 1 とすることで強制モードへ移行することが可能です。</p>
+<p><strong>2. 2025 年 11 月：Windows Server 2025 監査モード</strong><br>このフェーズでは、Windows Server 2025 が監査モードで動作するようになります。<br>BlockNtlmv1SSO を 1 とすることで強制モードへ移行することが可能です。</p>
+<p><strong>3. 2026 年 10 月：既定強制モード</strong><br>このフェーズでは、BlockNtlmv1SSO が明示的に設定されていない限り、既定で強制モードとして動作します。<br>BlockNtlmv1SSO  を 0 とすることで監査モードで動作させることが可能です。</p>
+<p>以下の公開情報も併せてご確認ください。</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://support.microsoft.com/ja-jp/topic/windows-11-%E3%83%90%E3%83%BC%E3%82%B8%E3%83%A7%E3%83%B3-24h2-%E3%81%8A%E3%82%88%E3%81%B3-windows-server-2025-%E3%81%AE-ntlmv1-%E3%81%AB%E5%AF%BE%E3%81%99%E3%82%8B%E4%BB%8A%E5%BE%8C%E3%81%AE%E5%A4%89%E6%9B%B4-c0554217-cdbc-420f-b47c-e02b2db49b2e">Windows 11 バージョン 24H2 および Windows Server 2025 の NTLMv1 に対する今後の変更</a></li>
+</ul>
+<h4 id="求められる対応について"><a href="#求められる対応について" class="headerlink" title="求められる対応について"></a>求められる対応について</h4><p>イベントが記録された環境では、VPN や無線 LAN へ接続する際の認証方式に MSCHAPv2 を利用されるなど、NTLMv1 由来の資格情報が利用されています。<br>イベント中に記録されるプロセスよりどのような機能で利用されているかを特定し、MSCHAPv2 が利用されている場合は EAP-TLS といった証明書ベースの認証方式に移行いただくことをご検討いただけますようお願いいたします。</p>
+<br>
+
+<h2 id="5-NTLM-が利用されるシナリオ例"><a href="#5-NTLM-が利用されるシナリオ例" class="headerlink" title="5. NTLM が利用されるシナリオ例"></a>5. NTLM が利用されるシナリオ例</h2><hr>
+<p>NTLM は主に次のようなシナリオで使用されます。</p>
+<p>(1) ホスト名では無く、IP アドレスを利用してサーバーへアクセスして認証を行っている<br>(2) ファイアウォールが Kerberos に必要なポートを制限している場合<br>(3) アクセス先の SPN がドメインコントローラーへ登録されていない<br>(4) 信頼関係 (外部信頼) 先に関する認証<br>(5) オンプレミス ドメインに所属していないワークグループ環境内での認証</p>
+<p>具体的には、ファイル サーバーへアクセスする際や、リモート デスクトップで他のコンピューターへアクセスする際に、アクセス先を IP アドレスで入力している場合は NTLM での認証となります。<br>またそれぞれ Kerberos が利用できない場合などは、NTLM にフォールバックされます。<br>その他、OS 関連では以下に機能毎の認証に関する公開情報がございますため、必要に応じてご参照いただけますと幸いでございます。</p>
+<p><strong>SMB</strong></p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://techcommunity.microsoft.com/t5/storage-at-microsoft/smb-ntlm-blocking-now-supported-in-windows-insider/ba-p/3916206">SMB NTLM blocking now supported in Windows Insider</a></li>
+</ul>
+<p><strong>WinHTTP</strong></p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://learn.microsoft.com/ja-jp/windows/win32/winhttp/authentication-in-winhttp">WinHTTP での認証</a></li>
+</ul>
+<p><strong>Failover Clustering</strong></p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://learn.microsoft.com/en-us/windows-server/get-started/whats-new-in-windows-server-2019#failover-clustering">What’s new in Windows Server 2019</a></li>
+</ul>
+<p><strong>WinRM</strong></p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://learn.microsoft.com/ja-jp/windows/win32/winrm/authentication-for-remote-connections">リモート接続の認証</a></li>
+<li><a target="_blank" rel="noopener" href="https://learn.microsoft.com/ja-jp/powershell/scripting/security/remoting/winrm-security?view=powershell-7.4">WinRM を使用した PowerShell リモート処理のセキュリティに関する考慮事項</a></li>
+</ul>
+<p><strong>印刷</strong></p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://learn.microsoft.com/ja-jp/troubleshoot/windows-client/printing/windows-11-rpc-connection-updates-for-print">印刷用の RPC 接続更新プログラムをWindows 11する</a></li>
+</ul>
+<br>
+
+<h2 id="6-参考リンク"><a href="#6-参考リンク" class="headerlink" title="6. 参考リンク"></a>6. 参考リンク</h2><hr>
+<p>本対応に関して Global のエンジニアからも情報が公開されておりますので、ご参考としていただけますと幸いでございます。</p>
+<ul>
+<li><p><a target="_blank" rel="noopener" href="https://techcommunity.microsoft.com/t5/windows-it-pro-blog/the-evolution-of-windows-authentication/ba-p/3926848">The evolution of Windows authentication</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=SEtARCtGP0Y&t=213s">The Evolution of Windows Authentication (Webinar)</a></p>
+</li>
+</ul>
+<br>
+
+<h2 id="更新履歴"><a href="#更新履歴" class="headerlink" title="更新履歴"></a>更新履歴</h2><p>2024/08/22 : 本ブログの公開<br>2024/12/20 : NTLMv1 削除に関する情報公開に伴う更新 / SMB における NTLM 無効化方法について更新<br>2025/10/10 : NTLM 監査イベントの追加 / 特定の状況における段階的な NTLMv1 無効化について更新</p>
+
+      
+      
+    </div>
+    <footer class="article-footer">
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/blog/2024/08/30/RemoteDesktopService/AVD/AVD-ARM-Japanese-image-windows11/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">次の記事</strong>
+      <div class="article-nav-title">
+        
+          AVD ARM 日本語化イメージ作成手順について - Windows 11
+        
+      </div>
+    </a>
+  
+  
+    <a href="/blog/2024/08/15/UserInterfaceAndApps/does-not-load-when-icon-is-on-a-network-shared-folder-lnk/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">前の記事</strong>
+      <div class="article-nav-title">ショートカット ファイルのアイコンが白抜きになる事象について</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">カテゴリ</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Activation/">Activation</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Activation/ESU/">ESU</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Activation/security-SPP/">security-SPP</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/">Active Directory</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Authentication/">Authentication</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/DFSR/">DFSR</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/FunctionalLevel/">FunctionalLevel</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Group-Policy/">Group Policy</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Promotion-and-Demotion/">Promotion and Demotion</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/User-Profile/">User Profile</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Windows-Hello/">Windows Hello</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Windows-Time-Service/">Windows Time Service</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/AppLocker/">AppLocker</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/AppLocker/Active-Directory/">Active Directory</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/AppLocker/Microsoft-Intune/">Microsoft Intune</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Deployment/">Deployment</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Deployment/Feature-on-demand/">Feature on demand</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Deployment/Sysprep/">Sysprep</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Failover-Clustering/">Failover Clustering</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Failover-Clustering/Configuration-and-Management/">Configuration and Management</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/FileServices/">FileServices</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/FileServices/FTP/">FTP</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/FileServices/SMB/">SMB</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Hyper-V/">Hyper-V</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Hyper-V/Configuration-and-Management/">Configuration and Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Hyper-V/Migration/">Migration</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Microsoft-Connected-Cache/">Microsoft Connected Cache</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/">Networking</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/BITS/">BITS</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/Bluetooth/">Bluetooth</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/DHCP/">DHCP</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/DNS/">DNS</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/Firewall/">Firewall</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/LBFO/">LBFO</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/NCSI/">NCSI</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/NetworkInterface/">NetworkInterface</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/Proxy/">Proxy</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/TCPIP/">TCPIP</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/OpenSSH/">OpenSSH</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/">Performance</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/Hang-up-BSoD/">Hang-up/BSoD</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/No-Boot/">No Boot</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/Slow-Response/">Slow Response</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/System-Resource/">System Resource</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/Tools/">Tools</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/">Public Key Infrastructure</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Certificate-Authority/">Certificate Authority</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Certificate-Management/">Certificate Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Code-Signing/">Code Signing</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/SSL-TLS-Communication/">SSL TLS Communication</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/SSL-TLS-Connection/">SSL TLS Connection</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Smart-Card-Logon/">Smart Card Logon</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/">Remote Desktop</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/Azure-Virtual-Desktop-AVD/">Azure Virtual Desktop (AVD)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/Remote-Desktop-Service-RDS/">Remote Desktop Service (RDS)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/Windows-Virtual-Desktop-WVD/">Windows Virtual Desktop (WVD)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/RemoteAccess/">RemoteAccess</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/RemoteAccess/%E3%83%80%E3%82%A4%E3%83%A4%E3%83%AB%E3%82%A2%E3%83%83%E3%83%97%E6%8E%A5%E7%B6%9A/">ダイヤルアップ接続</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Setup/">Setup</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Setup/Feature-Update-FU/">Feature Update (FU)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Shell/">Shell</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Shell/Explorer/">Explorer</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/">Storage</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/Backup/">Backup</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/FSRM/">FSRM</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/Management/">Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/StorageMigrationService/">StorageMigrationService</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/UEFI/">UEFI</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/UEFI/Secure-Boot/">Secure Boot</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/">User Interface and Apps</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Command-Prompt/">Command Prompt</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/EventLog/">EventLog</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Language-Support/">Language Support</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Microsoft-Store/">Microsoft Store</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Performance/">Performance</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/PowerShell/">PowerShell</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Printing-%E5%8D%B0%E5%88%B7/">Printing (印刷)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Server-Management/">Server Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Taskscheduler/">Taskscheduler</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Windows-Management-Instrumentation/">Windows Management Instrumentation</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps-Language-support/">User Interface and Apps - Language support</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-365/">Windows 365</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Admin-Center/">Windows Admin Center</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Search/">Windows Search</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/">Windows Update</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Delivery-Optimization-DO/">Delivery Optimization (DO)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Feature-Update-FU/">Feature Update (FU)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Quality-Update-QU/">Quality Update (QU)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Windows-Update-Agent/">Windows Update Agent</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Windows-Update-Agent-WUA/">Windows Update Agent (WUA)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/">WirelessNetwork</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/NPS/">NPS</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/Wi-Fi/">Wi-Fi</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/%E3%83%A2%E3%83%90%E3%82%A4%E3%83%AB-%E3%83%96%E3%83%AD%E3%83%BC%E3%83%89%E3%83%90%E3%83%B3%E3%83%89%E6%8E%A5%E7%B6%9A-LTE/">モバイル ブロードバンド接続 (LTE)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/%E7%B5%84%E7%B9%94%E7%B4%B9%E4%BB%8B%E3%83%96%E3%83%AD%E3%82%B0%EF%BC%88Windows-Commercial%EF%BC%89/">組織紹介ブログ（Windows Commercial）</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最近の投稿</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/blog/2026/02/16/ActiveDirectory/GroupPolicy/UacPolicyIsEnabled/">「ユーザー アカウント制御：ビルトイン Administrator アカウントのための管理者承認モード」ポリシーが有効になる動作ついて</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/02/15/UserInterfaceAndApps/Printing/printer-queue-app-preview/">印刷キューアプリのプレビュー機能について</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/02/02/ActiveDirectory/Authentication/kerberos-rc4-for-service-account-ticket-issuance-changes-related-to-cve-2026-20833/">CVE‑2026‑20833 への対応とその影響について [KB5073381]</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/01/12/Hyper-V/vmwp-does-not-save-the-RTC-value-of-a-virtual-machine-when-performing-Live-Migration/">ライブ マイグレーション後の再起動でゲスト OS の時刻がずれる場合がある</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/01/07/WindowsUpdate/FU/fublog-txt/">ISO メディア経由かつ動的更新無効な状態で Windows 11 バージョン 24H2 または 25H2 へのアップグレードが失敗 (0x8007042B 0x2000D) する事象と対策について</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">アーカイブ</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2026/02/">2026 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2026/01/">2026 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/12/">2025 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/11/">2025 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/10/">2025 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/09/">2025 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/08/">2025 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/07/">2025 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/06/">2025 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/05/">2025 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/04/">2025 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/03/">2025 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/02/">2025 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/01/">2025 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/12/">2024 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/11/">2024 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/10/">2024 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/09/">2024 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/08/">2024 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/07/">2024 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/06/">2024 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/05/">2024 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/04/">2024 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/03/">2024 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/02/">2024 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/01/">2024 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/12/">2023 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/11/">2023 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/10/">2023 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/09/">2023 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/08/">2023 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/07/">2023 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/06/">2023 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/05/">2023 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/04/">2023 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/03/">2023 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/02/">2023 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/01/">2023 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/12/">2022 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/11/">2022 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/10/">2022 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/09/">2022 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/08/">2022 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/07/">2022 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/06/">2022 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/05/">2022 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/04/">2022 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/03/">2022 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/02/">2022 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/01/">2022 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/12/">2021 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/11/">2021 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/10/">2021 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/09/">2021 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/08/">2021 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/07/">2021 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/06/">2021 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/05/">2021 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/04/">2021 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/03/">2021 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/02/">2021 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/01/">2021 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/12/">2020 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/11/">2020 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/10/">2020 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/07/">2020 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/03/">2020 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2019/03/">2019 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/11/">2018 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/10/">2018 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/09/">2018 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/08/">2018 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/07/">2018 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/06/">2018 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/04/">2018 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/02/">2018 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/12/">2017 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/11/">2017 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/09/">2017 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/05/">2017 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/03/">2017 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/02/">2017 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2016/08/">2016 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2016/05/">2016 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2014/03/">2014 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2012/02/">2012 / 02</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2026 Microsoft Japan Windows Technology Support Team<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/blog/" class="mobile-nav-link">Home</a>
+  
+    <a href="/blog/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+<script src="/blog/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

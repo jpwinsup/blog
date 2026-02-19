@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-180187723-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-180187723-1');
+</script>
+<!-- End Google Analytics -->
+
+  
+  <title>Windows Server バックアップによるバックアップ手順 | Microsoft Japan Windows Technology Support Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="本記事は、マイクロソフト社員によって公開されております。    こんにちは、Windows サポートチームの三浦です。本日は Windows Server バックアップの概要やバックアップ手順などを紹介させていただきます。リストア手順については、こちら の記事をご参照ください。 機能概要Windows Server バックアップは Windows Server OS に標準搭載されているバックア">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Windows Server バックアップによるバックアップ手順">
+<meta property="og:url" content="https://jpwinsup.github.io/blog/2022/03/22/Storage/Backup/Windows-Server-Backup-Overview/index.html">
+<meta property="og:site_name" content="Microsoft Japan Windows Technology Support Blog">
+<meta property="og:description" content="本記事は、マイクロソフト社員によって公開されております。    こんにちは、Windows サポートチームの三浦です。本日は Windows Server バックアップの概要やバックアップ手順などを紹介させていただきます。リストア手順については、こちら の記事をご参照ください。 機能概要Windows Server バックアップは Windows Server OS に標準搭載されているバックア">
+<meta property="og:locale" content="ja_JP">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2022/03/22/Storage/Backup/Windows-Server-Backup-Overview/install-1.jpg">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2022/03/22/Storage/Backup/Windows-Server-Backup-Overview/install-2.jpg">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2022/03/22/Storage/Backup/Windows-Server-Backup-Overview/install-3.jpg">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2022/03/22/Storage/Backup/Windows-Server-Backup-Overview/install-4.jpg">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2022/03/22/Storage/Backup/Windows-Server-Backup-Overview/install-5.jpg">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2022/03/22/Storage/Backup/Windows-Server-Backup-Overview/install-6.jpg">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2022/03/22/Storage/Backup/Windows-Server-Backup-Overview/install-7.jpg">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2022/03/22/Storage/Backup/Windows-Server-Backup-Overview/install-8.jpg">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2022/03/22/Storage/Backup/Windows-Server-Backup-Overview/backup-1.jpg">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2022/03/22/Storage/Backup/Windows-Server-Backup-Overview/backup-2.jpg">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2022/03/22/Storage/Backup/Windows-Server-Backup-Overview/backup-3.jpg">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2022/03/22/Storage/Backup/Windows-Server-Backup-Overview/backup-4.jpg">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2022/03/22/Storage/Backup/Windows-Server-Backup-Overview/backup-5.jpg">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2022/03/22/Storage/Backup/Windows-Server-Backup-Overview/backup-6.jpg">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2022/03/22/Storage/Backup/Windows-Server-Backup-Overview/backup-7.jpg">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2022/03/22/Storage/Backup/Windows-Server-Backup-Overview/backup-8.jpg">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2022/03/22/Storage/Backup/Windows-Server-Backup-Overview/backup-9.jpg">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2022/03/22/Storage/Backup/Windows-Server-Backup-Overview/backup-10.jpg">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2022/03/22/Storage/Backup/Windows-Server-Backup-Overview/backup-11.jpg">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2022/03/22/Storage/Backup/Windows-Server-Backup-Overview/backup-12.jpg">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2022/03/22/Storage/Backup/Windows-Server-Backup-Overview/schedule-1.jpg">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2022/03/22/Storage/Backup/Windows-Server-Backup-Overview/schedule-2.jpg">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2022/03/22/Storage/Backup/Windows-Server-Backup-Overview/schedule-3.jpg">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2022/03/22/Storage/Backup/Windows-Server-Backup-Overview/schedule-4.jpg">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2022/03/22/Storage/Backup/Windows-Server-Backup-Overview/schedule-5.jpg">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2022/03/22/Storage/Backup/Windows-Server-Backup-Overview/schedule-6.jpg">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2022/03/22/Storage/Backup/Windows-Server-Backup-Overview/schedule-7.jpg">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2022/03/22/Storage/Backup/Windows-Server-Backup-Overview/schedule-8.jpg">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2022/03/22/Storage/Backup/Windows-Server-Backup-Overview/schedule-9.jpg">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2022/03/22/Storage/Backup/Windows-Server-Backup-Overview/schedule-10.jpg">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2022/03/22/Storage/Backup/Windows-Server-Backup-Overview/schedule-11.jpg">
+<meta property="article:published_time" content="2022-03-22T03:00:00.000Z">
+<meta property="article:modified_time" content="2026-02-19T02:53:58.618Z">
+<meta property="article:author" content="Microsoft Japan Windows Technology Support Team">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://jpwinsup.github.io/blog/2022/03/22/Storage/Backup/Windows-Server-Backup-Overview/install-1.jpg">
+  
+    <link rel="alternate" href="/blog/atom.xml" title="Microsoft Japan Windows Technology Support Blog" type="application/atom+xml">
+  
+
+  <link rel="icon" href="/blog/favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="/blog/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/blog/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/blog/favicon-16x16.png">
+  <link rel="manifest" href="/blog/site.webmanifest">
+  <link rel="mask-icon" href="/blog/safari-pinned-tab.svg" color="#5bbad5">
+  <meta name="msapplication-TileColor" content="#ffffff">
+  <meta name="theme-color" content="#ffffff">
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/blog/css/style.css">
+
+<meta name="generator" content="Hexo 5.2.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="site-header-logo"></div>
+  <div id="site-header-blog-wrapper"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        <div id="ms-logo"></div>
+        
+          <a class="main-nav-link" href="/blog/">Home</a>
+        
+          <a class="main-nav-link" href="/blog/archives">Archives</a>
+        
+        <a class="main-nav-link" target="_blank" rel="noopener" href="https://cssjpn.github.io/">サポート情報</a>
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/blog/atom.xml" title="RSSフィード"></a>
+        
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//www.bing.com/search" method="get" accept-charset="UTF-8" name="bing-search" onsubmit="var f=this;if(f['q'].value){var searchUrl =  'https://www.bing.com/search?q=' +  encodeURIComponent(f['q'].value + ' site:' + f['sitesearch'].value) ;window.open(searchUrl, 'blank') };return false;" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="検索"><button type="submit" id="nav-search-btn" class="search-form-submit"></button><input type="hidden" name="sitesearch" value="https://jpwinsup.github.io/blog"></form>
+      </div>
+    </div>
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/blog/" id="logo">Microsoft Japan Windows Technology Support Blog</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/blog/" id="subtitle">日本マイクロソフト Windows Support チームによる、サポート情報 Blog です。</a>
+        </h2>
+      
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-Storage/Backup/Windows-Server-Backup-Overview" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    
+    
+      <header class="article-header-single">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Windows Server バックアップによるバックアップ手順
+    </h1>
+  
+
+      </header>
+      <div class="article-share">
+        Last Update: 
+        <a href="/blog/2022/03/22/Storage/Backup/Windows-Server-Backup-Overview/" class="article-date-single">
+  <time datetime="2022-03-22T03:00:00.000Z" itemprop="datePublished">2022-03-22</time>
+</a>
+        
+  <div class="article-category">
+    <a class="article-category-link" href="/blog/categories/Storage/">Storage</a>►<a class="article-category-link" href="/blog/categories/Storage/Backup/">Backup</a>
+  </div>
+
+        
+        <a href="https://github.com/jpwinsup/blog/issues/new?title=&body=%EF%BB%BF%0A%0A---%0A%0A%23%23%23%23+Document+Details%0A%0A*+Article+ID%3A+0afa15c1-bb58-5e75-8c6e-ba0e68b8a7d8%0A*+TITLE%3A+Windows+Server+%E3%83%90%E3%83%83%E3%82%AF%E3%82%A2%E3%83%83%E3%83%97%E3%81%AB%E3%82%88%E3%82%8B%E3%83%90%E3%83%83%E3%82%AF%E3%82%A2%E3%83%83%E3%83%97%E6%89%8B%E9%A0%86%0A*+URL+https%3A%2F%2Fjpwinsup.github.io%2Fblog%2F2022%2F03%2F22%2FStorage%2FBackup%2FWindows-Server-Backup-Overview%2F%0A*+SourceFileName%3A+source%2F_posts%2FStorage%2FBackup%2FWindows-Server-Backup-Overview.md%0A" class="article-github-issue-link" target="_blank" rel="noopener noreferrer">feedback</a>
+        
+        <a data-url="https://jpwinsup.github.io/blog/2022/03/22/Storage/Backup/Windows-Server-Backup-Overview/" data-id="cmlsvjdfe00izru3y3a67arzw" class="article-share-link">共有</a>
+      </div>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<p>本記事は、マイクロソフト社員によって公開されております。  </p>
+</blockquote>
+<p>こんにちは、Windows サポートチームの三浦です。<br>本日は Windows Server バックアップの概要やバックアップ手順などを紹介させていただきます。<br>リストア手順については、<a href="https://jpwinsup.github.io/blog/2022/05/09/Storage/Backup/Restore/">こちら</a> の記事をご参照ください。<br><br></p>
+<h1 id="機能概要"><a href="#機能概要" class="headerlink" title="機能概要"></a>機能概要</h1><p>Windows Server バックアップは Windows Server OS に標準搭載されているバックアップ機能であり、以下のバックアップが実行可能です。</p>
+<p>・ベアメタル バックアップ<br>・システム状態のバックアップ<br>・ボリューム単位でのバックアップ<br>・ファイル単位でのバックアップ<br>・仮想マシンのバックアップ (Hyper-V ホストの場合)</p>
+<p>また、バックアップ先としてはローカル ドライブ、もしくは、SMB 上のファイル共有が選択でき、バックアップ先をローカル ドライブに指定した場合は、最大、512 世代のバックアップが取得可能です。<br>※ バックアップ先を SMB 上のファイル共有に指定した場合は、最新の 1 世代のみがバックアップされ、バックアップの世代管理は行われません。<br><br></p>
+<h1 id="制限事項"><a href="#制限事項" class="headerlink" title="制限事項"></a>制限事項</h1><p>・同構成への端末へリストアを行うことを前提に設計されているため、ハードウェア構成が大きく異なるサーバーへのリストアを行った場合、リストアが正しく完了しない場合がございます。(異なるサーバー上へのデータ移行を目的とした利用もサポートされておりません。)<br>・バックアップ先は、NTFS もしくは ReFS でフォーマットされたボリュームである必要がございます。<br>・バックアップ保存先を自ホスト上のファイル共有に指定することは非サポートとなります。<br><br></p>
+<h1 id="インストール手順"><a href="#インストール手順" class="headerlink" title="インストール手順"></a>インストール手順</h1><p>Windows Server バックアップは既定でインストールされていないため、バックアップ機能を利用するには、機能のインストールが必要です。<br>機能のインストールが行われていない環境では、下記の手順を参考に、機能のインストールを実行ください。</p>
+<ol>
+<li>管理者権限を持つユーザーでログオンします。</li>
+<li>[サーバー マネージャー] を開き、[管理] - [役割と機能の追加] の順に選択します。</li>
+</ol>
+<p><img src="./install-1.jpg"></p>
+<ol start="3">
+<li>[役割と機能の追加ウィザード] が起動しましたら、[開始する前に] で [次へ] を選択します。</li>
+</ol>
+<p><img src="./install-2.jpg"></p>
+<ol start="4">
+<li>[インストールの種類の選択] で [役割ベースまたは機能ベースのインストール] がチェックされた状態で [次へ] を選択します。</li>
+</ol>
+<p><img src="./install-3.jpg"></p>
+<ol start="5">
+<li>[対象サーバーの選択] で [サーバー プールからサーバーを選択] をチェックし、[サーバー プール] から対象のサーバーを選択して [次へ] を選択します。</li>
+</ol>
+<p><img src="./install-4.jpg"></p>
+<ol start="6">
+<li>[サーバーの役割の選択] は既定の状態で [次へ] を選択します。</li>
+</ol>
+<p><img src="./install-5.jpg"></p>
+<ol start="7">
+<li>機能の選択] で [Windows Server バックアップ] をチェックし、 [次へ] を選択します。</li>
+</ol>
+<p><img src="./install-6.jpg"></p>
+<ol start="8">
+<li>[インストール オプションの確認] で [インストール] を選択します。</li>
+</ol>
+<p><img src="./install-7.jpg"></p>
+<ol start="9">
+<li>[インストールの進行状況] で [インストールが正常に完了しました。] と表示されましたらインストールは完了となります。[閉じる] を選択してウィザードを終了します。</li>
+</ol>
+<p><img src="./install-8.jpg"></p>
+<br>
+
+<h1 id="バックアップ手順"><a href="#バックアップ手順" class="headerlink" title="バックアップ手順"></a>バックアップ手順</h1><p>以下にバックアップの取得例を記載しますので、バックアップ実行時の参考情報としてご活用ください。<br><br></p>
+<ol>
+<li>管理者権限を持つユーザーでログオンします。</li>
+<li>[サーバー マネージャー] を開き、[ツール] - [Windows Server バックアップ] の順に選択します。</li>
+</ol>
+<p><img src="./backup-1.jpg"></p>
+<ol start="3">
+<li>[Windows Server バックアップ] が起動しましたら、左ペインの [ローカル バックアップ] を選択します。</li>
+</ol>
+<p><img src="./backup-2.jpg"></p>
+<ol start="4">
+<li>右側の [操作] ペインで [単発バックアップ] を選択します。</li>
+</ol>
+<p><img src="./backup-3.jpg"></p>
+<ol start="5">
+<li>[単発バックアップ ウィザード] が起動しましたら、[バックアップ オプション] で [別のオプション] をチェックして [次へ] を選択します。</li>
+</ol>
+<p><img src="./backup-4.jpg"></p>
+<ol start="6">
+<li>[バックアップの構成の選択] で [サーバー全体] もしくは [カスタム] のいずれかをチェックして [次へ] を選択します。今回の例では [カスタム] を選択します。</li>
+</ol>
+<p><img src="./backup-5.jpg"></p>
+<ol start="7">
+<li>[バックアップする項目を選択] で [項目の追加] を選択します。</li>
+</ol>
+<p><img src="./backup-6.jpg"></p>
+<ol start="8">
+<li>[項目の選択] でバックアップに含めたい項目にチェックを入れて [OK] を選択します。今回の例では、[ベア メタル回復] にチェックを入れます。(ベアメタル回復にチェックを入れると、ベアメタル バックアップに必要な項目にも自動的にチェックが入ります。)</li>
+</ol>
+<p><img src="./backup-7.jpg"></p>
+<ol start="9">
+<li>[バックアップする項目を選択] で指定したバックアップ項目が含まれていることを確認し、[次へ] を選択します。</li>
+</ol>
+<p><img src="./backup-8.jpg"></p>
+<ol start="10">
+<li>[作成先の種類の指定] でバックアップ先を指定し、[次へ] を選択します。今回の例では [ローカル ドライブ] にチェックを入れます。</li>
+</ol>
+<p><img src="./backup-9.jpg"></p>
+<ol start="11">
+<li>[バックアップ先の選択] でバックアップ先ボリュームを指定して [次へ] を選択します。<br>※ バックアップ先を [リモート共有フォルダー] に指定した場合は、SMB 上のファイル共有を UNC パスでご指定ください。</li>
+</ol>
+<p><img src="./backup-10.jpg"></p>
+<ol start="12">
+<li>[確認] で [バックアップ] を選択してバックアップを開始します。</li>
+</ol>
+<p><img src="./backup-11.jpg"></p>
+<ol start="13">
+<li>[バックアップの進行状況] で [状態] が [完了しました] に変わりましたら、バックアップは完了となります。[閉じる] を選択してウィザードを終了します。</li>
+</ol>
+<p><img src="./backup-12.jpg"><br><br></p>
+<h1 id="バックアップ-スケジュールの構成手順"><a href="#バックアップ-スケジュールの構成手順" class="headerlink" title="バックアップ スケジュールの構成手順"></a>バックアップ スケジュールの構成手順</h1><p>バックアップを定期実行するためのスケジュールを構成することも可能です。<br><br></p>
+<ol>
+<li>管理者権限を持つユーザーでログオンします。</li>
+<li>[Windows Server バックアップ] を起動し、右側の [操作] ペインで [バックアップ スケジュール] を選択します。</li>
+</ol>
+<p><img src="./schedule-1.jpg"></p>
+<ol start="3">
+<li>[バックアップ スケジュール ウィザード] が起動しましたら、[はじめに] で [次へ] を選択します。</li>
+</ol>
+<p><img src="./schedule-2.jpg"></p>
+<ol start="4">
+<li>[バックアップ構成の選択] で [サーバー全体] もしくは [カスタム] のいずれかをチェックして [次へ] を選択します。今回の例では [サーバー全体] を選択します。</li>
+</ol>
+<p><img src="./schedule-3.jpg"></p>
+<ol start="5">
+<li>[バックアップ時間の指定] でバックアップの実行スケジュールを指定して [次へ] を選択します。今回の例では、1 日 1 回、21:00 にバックアップが開始されるようスケジュールを指定します。</li>
+</ol>
+<p><img src="./schedule-4.jpg"></p>
+<ol start="6">
+<li>[作成先の種類の指定] でバックアップ先を指定し、[次へ] を選択します。今回の例では [ボリュームにバックアップする] を選択します。</li>
+</ol>
+<p><img src="./schedule-5.jpg"></p>
+<ol start="7">
+<li>[ボリュームの選択] で [追加] を選択します。</li>
+</ol>
+<p><img src="./schedule-6.jpg"></p>
+<ol start="8">
+<li>[ボリュームの追加] でバックアップ先に指定するボリュームを選択し [OK] を押下します。</li>
+</ol>
+<p><img src="./schedule-7.jpg"></p>
+<ol start="9">
+<li>バックアップ先に指定したボリュームが正しく追加されていることを確認し [次へ] を選択します。</li>
+</ol>
+<p><img src="./schedule-8.jpg"></p>
+<ol start="10">
+<li>[確認] で構成内容に問題が無いことを確認し [完了] を選択します。</li>
+</ol>
+<p><img src="./schedule-9.jpg"></p>
+<ol start="11">
+<li>[要約] 画面に変わりましたら、スケジュールの構成は完了となり、指定したスケジュールに沿ってバックアップが自動実行されます。[閉じる] を選択してウィザードを終了します。</li>
+</ol>
+<p><img src="./schedule-10.jpg"></p>
+<p>なお、スケジュールの構成後は、[単発バックアップ] から [スケジュールされたバックアップのオプション] を選択することで、本ウィザードで指定したバックアップ構成で、単発バックアップを実行することも可能です。</p>
+<p><img src="./schedule-11.jpg"><br><br><br>いかがでしたでしょうか。本投稿が少しでも皆様のお役に立てば幸いです。<br>本情報の内容（添付文書、リンク先などを含む）は、作成日時でのものであり、予告なく変更される場合があります。</p>
+
+      
+      
+    </div>
+    <footer class="article-footer">
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/blog/2022/03/24/RemoteDesktopService/RDS/ports-used-in-remote-desktop-service-environment/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">次の記事</strong>
+      <div class="article-nav-title">
+        
+          リモート デスクトップ サービス環境で使用するポートについて
+        
+      </div>
+    </a>
+  
+  
+    <a href="/blog/2022/03/22/WindowsUpdate/WUA/WindowsUpdateMayFailWith0x80246013/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">前の記事</strong>
+      <div class="article-nav-title">Windows Update を実施すると 0x80246013 エラーで失敗する事象について</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">カテゴリ</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Activation/">Activation</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Activation/ESU/">ESU</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Activation/security-SPP/">security-SPP</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/">Active Directory</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Authentication/">Authentication</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/DFSR/">DFSR</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/FunctionalLevel/">FunctionalLevel</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Group-Policy/">Group Policy</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Promotion-and-Demotion/">Promotion and Demotion</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/User-Profile/">User Profile</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Windows-Hello/">Windows Hello</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Windows-Time-Service/">Windows Time Service</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/AppLocker/">AppLocker</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/AppLocker/Active-Directory/">Active Directory</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/AppLocker/Microsoft-Intune/">Microsoft Intune</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Deployment/">Deployment</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Deployment/Feature-on-demand/">Feature on demand</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Deployment/Sysprep/">Sysprep</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Failover-Clustering/">Failover Clustering</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Failover-Clustering/Configuration-and-Management/">Configuration and Management</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/FileServices/">FileServices</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/FileServices/FTP/">FTP</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/FileServices/SMB/">SMB</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Hyper-V/">Hyper-V</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Hyper-V/Configuration-and-Management/">Configuration and Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Hyper-V/Migration/">Migration</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Microsoft-Connected-Cache/">Microsoft Connected Cache</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/">Networking</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/BITS/">BITS</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/Bluetooth/">Bluetooth</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/DHCP/">DHCP</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/DNS/">DNS</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/Firewall/">Firewall</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/LBFO/">LBFO</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/NCSI/">NCSI</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/NetworkInterface/">NetworkInterface</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/Proxy/">Proxy</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/TCPIP/">TCPIP</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/OpenSSH/">OpenSSH</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/">Performance</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/Hang-up-BSoD/">Hang-up/BSoD</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/No-Boot/">No Boot</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/Slow-Response/">Slow Response</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/System-Resource/">System Resource</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/Tools/">Tools</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/">Public Key Infrastructure</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Certificate-Authority/">Certificate Authority</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Certificate-Management/">Certificate Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Code-Signing/">Code Signing</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/SSL-TLS-Communication/">SSL TLS Communication</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/SSL-TLS-Connection/">SSL TLS Connection</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Smart-Card-Logon/">Smart Card Logon</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/">Remote Desktop</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/Azure-Virtual-Desktop-AVD/">Azure Virtual Desktop (AVD)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/Remote-Desktop-Service-RDS/">Remote Desktop Service (RDS)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/Windows-Virtual-Desktop-WVD/">Windows Virtual Desktop (WVD)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/RemoteAccess/">RemoteAccess</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/RemoteAccess/%E3%83%80%E3%82%A4%E3%83%A4%E3%83%AB%E3%82%A2%E3%83%83%E3%83%97%E6%8E%A5%E7%B6%9A/">ダイヤルアップ接続</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Setup/">Setup</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Setup/Feature-Update-FU/">Feature Update (FU)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Shell/">Shell</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Shell/Explorer/">Explorer</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/">Storage</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/Backup/">Backup</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/FSRM/">FSRM</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/Management/">Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/StorageMigrationService/">StorageMigrationService</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/UEFI/">UEFI</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/UEFI/Secure-Boot/">Secure Boot</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/">User Interface and Apps</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Command-Prompt/">Command Prompt</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/EventLog/">EventLog</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Language-Support/">Language Support</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Microsoft-Store/">Microsoft Store</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Performance/">Performance</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/PowerShell/">PowerShell</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Printing-%E5%8D%B0%E5%88%B7/">Printing (印刷)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Server-Management/">Server Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Taskscheduler/">Taskscheduler</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Windows-Management-Instrumentation/">Windows Management Instrumentation</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps-Language-support/">User Interface and Apps - Language support</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-365/">Windows 365</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Admin-Center/">Windows Admin Center</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Search/">Windows Search</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/">Windows Update</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Delivery-Optimization-DO/">Delivery Optimization (DO)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Feature-Update-FU/">Feature Update (FU)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Quality-Update-QU/">Quality Update (QU)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Windows-Update-Agent/">Windows Update Agent</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Windows-Update-Agent-WUA/">Windows Update Agent (WUA)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/">WirelessNetwork</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/NPS/">NPS</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/Wi-Fi/">Wi-Fi</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/%E3%83%A2%E3%83%90%E3%82%A4%E3%83%AB-%E3%83%96%E3%83%AD%E3%83%BC%E3%83%89%E3%83%90%E3%83%B3%E3%83%89%E6%8E%A5%E7%B6%9A-LTE/">モバイル ブロードバンド接続 (LTE)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/%E7%B5%84%E7%B9%94%E7%B4%B9%E4%BB%8B%E3%83%96%E3%83%AD%E3%82%B0%EF%BC%88Windows-Commercial%EF%BC%89/">組織紹介ブログ（Windows Commercial）</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最近の投稿</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/blog/2026/02/16/ActiveDirectory/GroupPolicy/UacPolicyIsEnabled/">「ユーザー アカウント制御：ビルトイン Administrator アカウントのための管理者承認モード」ポリシーが有効になる動作ついて</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/02/15/UserInterfaceAndApps/Printing/printer-queue-app-preview/">印刷キューアプリのプレビュー機能について</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/02/02/ActiveDirectory/Authentication/kerberos-rc4-for-service-account-ticket-issuance-changes-related-to-cve-2026-20833/">CVE‑2026‑20833 への対応とその影響について [KB5073381]</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/01/12/Hyper-V/vmwp-does-not-save-the-RTC-value-of-a-virtual-machine-when-performing-Live-Migration/">ライブ マイグレーション後の再起動でゲスト OS の時刻がずれる場合がある</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/01/07/WindowsUpdate/FU/fublog-txt/">ISO メディア経由かつ動的更新無効な状態で Windows 11 バージョン 24H2 または 25H2 へのアップグレードが失敗 (0x8007042B 0x2000D) する事象と対策について</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">アーカイブ</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2026/02/">2026 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2026/01/">2026 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/12/">2025 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/11/">2025 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/10/">2025 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/09/">2025 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/08/">2025 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/07/">2025 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/06/">2025 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/05/">2025 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/04/">2025 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/03/">2025 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/02/">2025 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/01/">2025 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/12/">2024 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/11/">2024 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/10/">2024 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/09/">2024 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/08/">2024 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/07/">2024 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/06/">2024 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/05/">2024 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/04/">2024 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/03/">2024 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/02/">2024 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/01/">2024 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/12/">2023 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/11/">2023 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/10/">2023 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/09/">2023 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/08/">2023 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/07/">2023 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/06/">2023 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/05/">2023 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/04/">2023 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/03/">2023 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/02/">2023 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/01/">2023 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/12/">2022 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/11/">2022 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/10/">2022 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/09/">2022 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/08/">2022 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/07/">2022 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/06/">2022 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/05/">2022 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/04/">2022 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/03/">2022 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/02/">2022 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/01/">2022 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/12/">2021 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/11/">2021 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/10/">2021 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/09/">2021 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/08/">2021 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/07/">2021 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/06/">2021 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/05/">2021 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/04/">2021 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/03/">2021 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/02/">2021 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/01/">2021 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/12/">2020 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/11/">2020 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/10/">2020 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/07/">2020 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/03/">2020 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2019/03/">2019 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/11/">2018 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/10/">2018 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/09/">2018 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/08/">2018 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/07/">2018 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/06/">2018 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/04/">2018 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/02/">2018 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/12/">2017 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/11/">2017 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/09/">2017 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/05/">2017 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/03/">2017 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/02/">2017 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2016/08/">2016 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2016/05/">2016 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2014/03/">2014 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2012/02/">2012 / 02</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2026 Microsoft Japan Windows Technology Support Team<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/blog/" class="mobile-nav-link">Home</a>
+  
+    <a href="/blog/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+<script src="/blog/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

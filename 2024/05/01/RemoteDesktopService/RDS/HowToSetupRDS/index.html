@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-180187723-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-180187723-1');
+</script>
+<!-- End Google Analytics -->
+
+  
+  <title>Windows Server での標準的なリモート デスクトップ サービス環境構築手順について | Microsoft Japan Windows Technology Support Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="本記事はマイクロソフト社員によって公開されております。   こんにちは。Windows プラットフォーム サポートの吉田です。今回は、Windows Server における、標準的なリモート デスクトップ サービス環境の構築手順をご案内いたします。なお、構築の前提条件といたしまして、対象サーバーが Active Directory に参加している環境としています。ワークグループ環境での構築につきま">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Windows Server での標準的なリモート デスクトップ サービス環境構築手順について">
+<meta property="og:url" content="https://jpwinsup.github.io/blog/2024/05/01/RemoteDesktopService/RDS/HowToSetupRDS/index.html">
+<meta property="og:site_name" content="Microsoft Japan Windows Technology Support Blog">
+<meta property="og:description" content="本記事はマイクロソフト社員によって公開されております。   こんにちは。Windows プラットフォーム サポートの吉田です。今回は、Windows Server における、標準的なリモート デスクトップ サービス環境の構築手順をご案内いたします。なお、構築の前提条件といたしまして、対象サーバーが Active Directory に参加している環境としています。ワークグループ環境での構築につきま">
+<meta property="og:locale" content="ja_JP">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2024/05/01/RemoteDesktopService/RDS/HowToSetupRDS/ws2022RDS_setup_01.PNG">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2024/05/01/RemoteDesktopService/RDS/HowToSetupRDS/ws2022RDS_setup_02.PNG">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2024/05/01/RemoteDesktopService/RDS/HowToSetupRDS/ws2022RDS_setup_03.PNG">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2024/05/01/RemoteDesktopService/RDS/HowToSetupRDS/ws2022RDS_setup_04.PNG">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2024/05/01/RemoteDesktopService/RDS/HowToSetupRDS/ws2022RDS_setup_05.PNG">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2024/05/01/RemoteDesktopService/RDS/HowToSetupRDS/ws2022RDS_setup_06.PNG">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2024/05/01/RemoteDesktopService/RDS/HowToSetupRDS/ws2022RDS_setup_07.PNG">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2024/05/01/RemoteDesktopService/RDS/HowToSetupRDS/ws2022RDS_setup_08.PNG">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2024/05/01/RemoteDesktopService/RDS/HowToSetupRDS/ws2022RDS_setup_09.PNG">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2024/05/01/RemoteDesktopService/RDS/HowToSetupRDS/ws2022RDS_setup_10.PNG">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2024/05/01/RemoteDesktopService/RDS/HowToSetupRDS/ws2022RDS_setup_11.PNG">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2024/05/01/RemoteDesktopService/RDS/HowToSetupRDS/ws2022RDS_setup_12.PNG">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2024/05/01/RemoteDesktopService/RDS/HowToSetupRDS/ws2022RDS_setup_13.PNG">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2024/05/01/RemoteDesktopService/RDS/HowToSetupRDS/ws2022RDS_setup_14.PNG">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2024/05/01/RemoteDesktopService/RDS/HowToSetupRDS/ws2022RDS_setup_15.PNG">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2024/05/01/RemoteDesktopService/RDS/HowToSetupRDS/ws2022RDS_setup_16.PNG">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2024/05/01/RemoteDesktopService/RDS/HowToSetupRDS/ws2022RDS_setup_17.PNG">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2024/05/01/RemoteDesktopService/RDS/HowToSetupRDS/ws2022RDS_setup_18.PNG">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2024/05/01/RemoteDesktopService/RDS/HowToSetupRDS/ws2022RDS_setup_19.PNG">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2024/05/01/RemoteDesktopService/RDS/HowToSetupRDS/ws2022RDS_setup_20.PNG">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2024/05/01/RemoteDesktopService/RDS/HowToSetupRDS/ws2022RDS_setup_21.PNG">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2024/05/01/RemoteDesktopService/RDS/HowToSetupRDS/ws2022RDS_setup_22.PNG">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2024/05/01/RemoteDesktopService/RDS/HowToSetupRDS/ws2022RDS_setup_23.PNG">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2024/05/01/RemoteDesktopService/RDS/HowToSetupRDS/ws2022RDS_setup_24.PNG">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2024/05/01/RemoteDesktopService/RDS/HowToSetupRDS/ws2022RDS_setup_25.PNG">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2024/05/01/RemoteDesktopService/RDS/HowToSetupRDS/ws2022RDS_setup_26.PNG">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2024/05/01/RemoteDesktopService/RDS/HowToSetupRDS/ws2022RDS_setup_27.PNG">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2024/05/01/RemoteDesktopService/RDS/HowToSetupRDS/ws2022RDS_setup_28.PNG">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2024/05/01/RemoteDesktopService/RDS/HowToSetupRDS/ws2022RDS_setup_29.PNG">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2024/05/01/RemoteDesktopService/RDS/HowToSetupRDS/ws2022RDS_setup_30.PNG">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2024/05/01/RemoteDesktopService/RDS/HowToSetupRDS/ws2022RDS_setup_31.PNG">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2024/05/01/RemoteDesktopService/RDS/HowToSetupRDS/ws2022RDS_setup_32.PNG">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2024/05/01/RemoteDesktopService/RDS/HowToSetupRDS/ws2022RDS_setup_33.PNG">
+<meta property="article:published_time" content="2024-05-01T08:00:00.000Z">
+<meta property="article:modified_time" content="2026-02-19T02:53:58.569Z">
+<meta property="article:author" content="Microsoft Japan Windows Technology Support Team">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://jpwinsup.github.io/blog/2024/05/01/RemoteDesktopService/RDS/HowToSetupRDS/ws2022RDS_setup_01.PNG">
+  
+    <link rel="alternate" href="/blog/atom.xml" title="Microsoft Japan Windows Technology Support Blog" type="application/atom+xml">
+  
+
+  <link rel="icon" href="/blog/favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="/blog/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/blog/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/blog/favicon-16x16.png">
+  <link rel="manifest" href="/blog/site.webmanifest">
+  <link rel="mask-icon" href="/blog/safari-pinned-tab.svg" color="#5bbad5">
+  <meta name="msapplication-TileColor" content="#ffffff">
+  <meta name="theme-color" content="#ffffff">
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/blog/css/style.css">
+
+<meta name="generator" content="Hexo 5.2.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="site-header-logo"></div>
+  <div id="site-header-blog-wrapper"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        <div id="ms-logo"></div>
+        
+          <a class="main-nav-link" href="/blog/">Home</a>
+        
+          <a class="main-nav-link" href="/blog/archives">Archives</a>
+        
+        <a class="main-nav-link" target="_blank" rel="noopener" href="https://cssjpn.github.io/">サポート情報</a>
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/blog/atom.xml" title="RSSフィード"></a>
+        
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//www.bing.com/search" method="get" accept-charset="UTF-8" name="bing-search" onsubmit="var f=this;if(f['q'].value){var searchUrl =  'https://www.bing.com/search?q=' +  encodeURIComponent(f['q'].value + ' site:' + f['sitesearch'].value) ;window.open(searchUrl, 'blank') };return false;" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="検索"><button type="submit" id="nav-search-btn" class="search-form-submit"></button><input type="hidden" name="sitesearch" value="https://jpwinsup.github.io/blog"></form>
+      </div>
+    </div>
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/blog/" id="logo">Microsoft Japan Windows Technology Support Blog</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/blog/" id="subtitle">日本マイクロソフト Windows Support チームによる、サポート情報 Blog です。</a>
+        </h2>
+      
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-RemoteDesktopService/RDS/HowToSetupRDS" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    
+    
+      <header class="article-header-single">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Windows Server での標準的なリモート デスクトップ サービス環境構築手順について
+    </h1>
+  
+
+      </header>
+      <div class="article-share">
+        Last Update: 
+        <a href="/blog/2024/05/01/RemoteDesktopService/RDS/HowToSetupRDS/" class="article-date-single">
+  <time datetime="2024-05-01T08:00:00.000Z" itemprop="datePublished">2024-05-01</time>
+</a>
+        
+  <div class="article-category">
+    <a class="article-category-link" href="/blog/categories/Remote-Desktop/">Remote Desktop</a>►<a class="article-category-link" href="/blog/categories/Remote-Desktop/Remote-Desktop-Service-RDS/">Remote Desktop Service (RDS)</a>
+  </div>
+
+        
+        <a href="https://github.com/jpwinsup/blog/issues/new?title=&body=%EF%BB%BF%0A%0A---%0A%0A%23%23%23%23+Document+Details%0A%0A*+Article+ID%3A+80557435-123b-58b2-83f1-0502760002f2%0A*+TITLE%3A+Windows+Server+%E3%81%A7%E3%81%AE%E6%A8%99%E6%BA%96%E7%9A%84%E3%81%AA%E3%83%AA%E3%83%A2%E3%83%BC%E3%83%88+%E3%83%87%E3%82%B9%E3%82%AF%E3%83%88%E3%83%83%E3%83%97+%E3%82%B5%E3%83%BC%E3%83%93%E3%82%B9%E7%92%B0%E5%A2%83%E6%A7%8B%E7%AF%89%E6%89%8B%E9%A0%86%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6%0A*+URL+https%3A%2F%2Fjpwinsup.github.io%2Fblog%2F2024%2F05%2F01%2FRemoteDesktopService%2FRDS%2FHowToSetupRDS%2F%0A*+SourceFileName%3A+source%2F_posts%2FRemoteDesktopService%2FRDS%2FHowToSetupRDS.md%0A" class="article-github-issue-link" target="_blank" rel="noopener noreferrer">feedback</a>
+        
+        <a data-url="https://jpwinsup.github.io/blog/2024/05/01/RemoteDesktopService/RDS/HowToSetupRDS/" data-id="cmlsvjden00grru3y3x244vd5" class="article-share-link">共有</a>
+      </div>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>本記事はマイクロソフト社員によって公開されております。  </p>
+<p>こんにちは。Windows プラットフォーム サポートの吉田です。<br>今回は、Windows Server における、標準的なリモート デスクトップ サービス環境の構築手順をご案内いたします。<br>なお、構築の前提条件といたしまして、対象サーバーが Active Directory に参加している環境としています。<br>ワークグループ環境での構築につきましては、以下を参照ください。</p>
+<ul>
+<li>Windows Server 2012 リモート デスクトップ環境の構成について<br><a target="_blank" rel="noopener" href="https://blogs.technet.microsoft.com/askcorejp/2012/12/27/windows-server-2012/">https://blogs.technet.microsoft.com/askcorejp/2012/12/27/windows-server-2012/</a></li>
+</ul>
+<hr>
+<p>Windows Server においては、リモート デスクトップ サービスおよび RemoteApp アプリケーションを公開する場合、<br>一般的な方法として、同一ドメイン内に下記の役割を持つサーバーを配置いたします。<br>なお、下記の役割は全て一台のサーバーに集約する事が可能です。</p>
+<ul>
+<li>リモート デスクトップ  (RD) セッション ホスト<br>デスクトップ セッション、RemoteApp プログラムを提供します。</li>
+<li>リモート デスクトップ (RD) 接続ブローカー<br>ユーザーからの接続要求および再接続時の割り当てを管理します。</li>
+<li>リモート デスクトップ (RD) Web アクセス<br>RD セッション ホスト、RemoteApp プログラムへの接続ポイントを提供する Web ポータルとなります。</li>
+<li>リモート デスクトップ (RD) ライセンス<br>RD セッション ホスト、RemoteApp プログラムを使用する際に、ユーザーが接続するのに必要なライセンス (RDS CAL) を管理します。</li>
+</ul>
+<p>また、Windows Server においては、リモート デスクトップ サービスおよび RemoteApp を [セッション コレクション] という概念で、管理・公開いたします。</p>
+<p>[セッション コレクション] の単位にて、複数台のセッション ホスト サーバーを管理する事が可能となっており、[サーバー マネージャー] 上に展開される [リモート デスクトップ 管理サービス (RDMS)] にて一元管理、設定が可能です。</p>
+<p>[セッション ベースのデスクトップ展開] におきましては、以下 2 種類の展開方法があります。</p>
+<ul>
+<li>標準の展開<br>各役割を、複数、または一台のサーバーに展開する場合に使用します。</li>
+<li>クイック スタート<br>各役割を、一台のサーバーに集約する場合に使用します。</li>
+</ul>
+<p>一台のサーバーに展開する場合、[クイック スタート] での展開が簡易ですが、評価環境での構築を意図しているため、一台のサーバーに展開いただく場合においても、[標準の展開] を選択いただく事を推奨いたします。</p>
+<p>以下の手順におきましては、[標準の展開] での構成方法をご案内いたします。</p>
+<p>※ 補足<br>本手順では、 標準的な RDS 環境の構築方法として、RD セッション ホスト、RD 接続ブローカー、RDWeb アクセスを<br>インストールして構築する方法をご案内しておりますが、RD 接続ブローカーをインストールせず RDS 環境を構築する事も可能です。<br>その場合、本ブログの冒頭の “Windows Server 2012 リモートデスクトップ環境の構成について” のリンク先の手順にて構築をご実施ください。<br>( RD 接続ブローカーを構築しない場合、サーバー マネージャーを利用した GUI での RDS 環境の構築/管理や、セッション コレクションを使用した分散処理が利用できない等の制限がございます。 )</p>
+<h3 id="サーバーの追加"><a href="#サーバーの追加" class="headerlink" title="サーバーの追加"></a>サーバーの追加</h3><p>複数台のサーバーに各役割をインストールいただく場合には、接続ブローカーの役割をインストールいただくサーバーにおいて、各サーバーを管理対象としていただく必要があります。<br>一台のサーバーに全ての役割をインストールする場合には、この手順は必要ありません。</p>
+<ol>
+<li>左ペイン の [全てのサーバー] 右クリック、[サーバーの追加] 選択します。</li>
+<li>検索ボタンで、ドメイン内のサーバーを検出し、各役割をインストールするサーバーを選択します。</li>
+<li>[OK] ボタンで完了です。</li>
+</ol>
+<h3 id="役割のインストール"><a href="#役割のインストール" class="headerlink" title="役割のインストール"></a>役割のインストール</h3><ol>
+<li><p>接続ブローカーの役割をインストールいただくサーバーにて、ドメインの administrator でログインし、[サーバー マネージャー] を開き、[管理] - [役割と機能の追加] を選択します。</p>
+<img src="/blog/2024/05/01/RemoteDesktopService/RDS/HowToSetupRDS/ws2022RDS_setup_01.PNG" class="">
+</li>
+<li><p>[インストールの種類] にて [リモート デスクトップ サービスのインストール] を選択します。</p>
+<img src="/blog/2024/05/01/RemoteDesktopService/RDS/HowToSetupRDS/ws2022RDS_setup_02.PNG" class="">
+</li>
+<li><p>[展開の種類の選択] にて [標準の展開] を選択します。</p>
+<img src="/blog/2024/05/01/RemoteDesktopService/RDS/HowToSetupRDS/ws2022RDS_setup_03.PNG" class="">
+</li>
+<li><p>[展開シナリオの選択] にて [セッション ベースのデスクトップ展開] を選択します。</p>
+<img src="/blog/2024/05/01/RemoteDesktopService/RDS/HowToSetupRDS/ws2022RDS_setup_04.PNG" class="">
+</li>
+<li><p>[役割サービスの確認] 画面が表示されますので、[次へ] を押下します。</p>
+<img src="/blog/2024/05/01/RemoteDesktopService/RDS/HowToSetupRDS/ws2022RDS_setup_05.PNG" class="">
+</li>
+<li><p>[RD ブローカー サーバーの指定]、[RD Web アクセス サーバーの指定]、[RD セッション ホスト サーバーの指定] のそれぞれにて、インストールいただくサーバーを選択します</p>
+<img src="/blog/2024/05/01/RemoteDesktopService/RDS/HowToSetupRDS/ws2022RDS_setup_06.PNG" class="">
+<img src="/blog/2024/05/01/RemoteDesktopService/RDS/HowToSetupRDS/ws2022RDS_setup_07.PNG" class="">
+<img src="/blog/2024/05/01/RemoteDesktopService/RDS/HowToSetupRDS/ws2022RDS_setup_08.PNG" class="">
+</li>
+<li><p>[選択内容の確認] にて、各役割の選択サーバーに間違いがない事を確認し、[必要に応じてターゲット サーバーを自動的に再起動する] にチェックをいれ [展開] を押下します。</p>
+<img src="/blog/2024/05/01/RemoteDesktopService/RDS/HowToSetupRDS/ws2022RDS_setup_09.PNG" class="">
+</li>
+<li><p>各役割のインストールが実行され、RD セッション ホストの役割がインストールされるサーバーにつきましては、再起動が実施されます。</p>
+<img src="/blog/2024/05/01/RemoteDesktopService/RDS/HowToSetupRDS/ws2022RDS_setup_10.PNG" class="">
+</li>
+<li><p>再起動完了後、インストールを実施したサーバーの [進行状況の表示] において、すべての役割で [成功] となっていたら、インストール完了です。</p>
+<img src="/blog/2024/05/01/RemoteDesktopService/RDS/HowToSetupRDS/ws2022RDS_setup_11.PNG" class="">
+<p>また、RD セッション ホスト の役割をインストールされていないサーバーと、インストールされているサーバーとでは、ログオン画面の動きが変わります。<br>ログオン画面の動きが変わる詳細につきましては、以下を参照願います。<br>&lt; RD セッション ホスト サーバーのログオン画面で最後にログオンしたユーザー名が表示されない動作について &gt;<br><a target="_blank" rel="noopener" href="https://blogs.technet.microsoft.com/askcorejp/2017/02/21/rdsh-logonscreen/">https://blogs.technet.microsoft.com/askcorejp/2017/02/21/rdsh-logonscreen/</a></p>
+</li>
+</ol>
+<h3 id="セッション-コレクションの作成"><a href="#セッション-コレクションの作成" class="headerlink" title="セッション コレクションの作成"></a>セッション コレクションの作成</h3><ol>
+<li><p>サーバー マネージャーにて、左ペインより、[リモートデスクトップ サービス] - [概要] を選択します。</p>
+<img src="/blog/2024/05/01/RemoteDesktopService/RDS/HowToSetupRDS/ws2022RDS_setup_12.PNG" class="">
+</li>
+<li><p>右ペインの [展開の概要] にて、RD セッションホスト を右クリックし、[セッション コレクションの作成] を選択します。</p>
+<img src="/blog/2024/05/01/RemoteDesktopService/RDS/HowToSetupRDS/ws2022RDS_setup_13.PNG" class="">
+</li>
+<li><p>[コレクション名の指定] にて任意のセッション コレクション名を指定します。</p>
+<img src="/blog/2024/05/01/RemoteDesktopService/RDS/HowToSetupRDS/ws2022RDS_setup_14.PNG" class="">
+</li>
+<li><p>[RD セッション ホスト サーバーの指定] にてサーバー プールから、 セッション コレクションを作成する RD セッション ホスト サーバーを追加します。</p>
+<img src="/blog/2024/05/01/RemoteDesktopService/RDS/HowToSetupRDS/ws2022RDS_setup_15.PNG" class="">
+</li>
+<li><p>[ユーザー グループの指定] にて利用を許可するユーザーまたはグループを指定します。</p>
+<img src="/blog/2024/05/01/RemoteDesktopService/RDS/HowToSetupRDS/ws2022RDS_setup_16.PNG" class="">
+</li>
+<li><p>[ユーザー プロファイル ディスクの指定] にてユーザー プロファイルの保存先を指定します。ユーザー プロファイル ディスクを有効にしない設定でも問題ありません。</p>
+<img src="/blog/2024/05/01/RemoteDesktopService/RDS/HowToSetupRDS/ws2022RDS_setup_17.PNG" class="">
+</li>
+<li><p>[作成] をクリックし、[進行状況の表示] にて全て [成功] となっていたら、セッション コレクション作成完了です。</p>
+<img src="/blog/2024/05/01/RemoteDesktopService/RDS/HowToSetupRDS/ws2022RDS_setup_18.PNG" class="">
+<img src="/blog/2024/05/01/RemoteDesktopService/RDS/HowToSetupRDS/ws2022RDS_setup_19.PNG" class="">
+
+</li>
+</ol>
+<h3 id="セッション-コレクションのプロパティ"><a href="#セッション-コレクションのプロパティ" class="headerlink" title="セッション コレクションのプロパティ"></a>セッション コレクションのプロパティ</h3><ol>
+<li><p>サーバー マネージャーにて、左ペインより、[リモートデスクトップ サービス] - [(コレクション名)] を選択します。</p>
+<img src="/blog/2024/05/01/RemoteDesktopService/RDS/HowToSetupRDS/ws2022RDS_setup_20.PNG" class="">
+</li>
+<li><p>右ペインの [プロパティ] の [タスク] - [プロパティの編集] を選択する事で、セッション コレクションの各設定をカスタマイズする事ができます。</p>
+<ul>
+<li>全般</li>
+<li>ユーザー グループの指定</li>
+<li>セッションの設定の構成</li>
+<li>セキュリティ設定の構成</li>
+<li>負荷分散の設定の構成</li>
+<li>ユーザー プロファイル ディスクの構成<img src="/blog/2024/05/01/RemoteDesktopService/RDS/HowToSetupRDS/ws2022RDS_setup_21.PNG" class="">
+
+</li>
+</ul>
+</li>
+</ol>
+<h3 id="RemoteApp-アプリケーションの公開"><a href="#RemoteApp-アプリケーションの公開" class="headerlink" title="RemoteApp アプリケーションの公開"></a>RemoteApp アプリケーションの公開</h3><ol>
+<li><p>サーバー マネージャーにて、左ペインより、[リモートデスクトップ サービス] - [(コレクション名)] を選択します。</p>
+<img src="/blog/2024/05/01/RemoteDesktopService/RDS/HowToSetupRDS/ws2022RDS_setup_22.PNG" class="">
+</li>
+<li><p>右ペインの [RemoteApp プログラム] の [タスク] - [RemoteApp プログラムの公開] を選択します。</p>
+<img src="/blog/2024/05/01/RemoteDesktopService/RDS/HowToSetupRDS/ws2022RDS_setup_23.PNG" class="">
+</li>
+<li><p>RemoteApp プログラムの選択] にて公開したいアプリケーションを選択します。<br>公開するアプリケーションは、RD セッション ホスト サーバーにインストールされている必要があります。</p>
+<img src="/blog/2024/05/01/RemoteDesktopService/RDS/HowToSetupRDS/ws2022RDS_setup_24.PNG" class="">
+</li>
+<li><p>[確認] 画面にて公開するアプリケーションを確認し、[公開] をクリックします。</p>
+<img src="/blog/2024/05/01/RemoteDesktopService/RDS/HowToSetupRDS/ws2022RDS_setup_25.PNG" class="">
+</li>
+<li><p>[完了] 画面にてエラーがない事を確認し、[閉じる] をクリックします。<br>以上にて、RemoteApp アプリケーションの公開が完了です。</p>
+<img src="/blog/2024/05/01/RemoteDesktopService/RDS/HowToSetupRDS/ws2022RDS_setup_26.PNG" class="">
+
+</li>
+</ol>
+<h3 id="ライセンス-サーバーのインストール"><a href="#ライセンス-サーバーのインストール" class="headerlink" title="ライセンス サーバーのインストール"></a>ライセンス サーバーのインストール</h3><ol>
+<li><p>サーバー マネージャーにて、左ペインより、[リモートデスクトップ サービス] - [概要] を選択します。</p>
+<img src="/blog/2024/05/01/RemoteDesktopService/RDS/HowToSetupRDS/ws2022RDS_setup_27.PNG" class="">
+</li>
+<li><p>右ペインの [展開の概要] にて、[RD ライセンス] の (+) マークをクリックします。</p>
+<img src="/blog/2024/05/01/RemoteDesktopService/RDS/HowToSetupRDS/ws2022RDS_setup_28.PNG" class="">
+</li>
+<li><p>[サーバーの選択] にて、RD ライセンス の役割をインストールするサーバーを選択します。</p>
+<img src="/blog/2024/05/01/RemoteDesktopService/RDS/HowToSetupRDS/ws2022RDS_setup_29.PNG" class="">
+</li>
+<li><p>[選択内容の確認] でインストールするサーバーに間違いがない事を確認し、[追加] をクリックします。</p>
+<img src="/blog/2024/05/01/RemoteDesktopService/RDS/HowToSetupRDS/ws2022RDS_setup_30.PNG" class="">
+</li>
+<li><p>[進行状況の表示] にて [成功] となっていたら、ライセンス サーバーのインストール完了です。</p>
+<img src="/blog/2024/05/01/RemoteDesktopService/RDS/HowToSetupRDS/ws2022RDS_setup_31.PNG" class="">
+
+</li>
+</ol>
+<h3 id="ライセンス-モードの設定"><a href="#ライセンス-モードの設定" class="headerlink" title="ライセンス モードの設定"></a>ライセンス モードの設定</h3><ol>
+<li><p>サーバー マネージャーにて、左ペインより、[リモートデスクトップ サービス] - [概要] を選択します。</p>
+</li>
+<li><p>[展開の概要] から [タスク] - [展開プロパティの編集] を選択します。</p>
+<img src="/blog/2024/05/01/RemoteDesktopService/RDS/HowToSetupRDS/ws2022RDS_setup_32.PNG" class="">
+</li>
+<li><p>左ペインより [RD ライセンス] を選択します。</p>
+</li>
+<li><p>[接続デバイス数] または [接続ユーザー数] を指定します。</p>
+<img src="/blog/2024/05/01/RemoteDesktopService/RDS/HowToSetupRDS/ws2022RDS_setup_33.PNG" class="">
+
+</li>
+</ol>
+<p>ライセンス サーバーのアクティブ化およびライセンスのインストールにつきましては、下記を参照願います。</p>
+<ul>
+<li><p>リモート デスクトップ ライセンス サーバーをアクティブ化する<br><a target="_blank" rel="noopener" href="https://technet.microsoft.com/ja-jp/library/cc771547.aspx">https://technet.microsoft.com/ja-jp/library/cc771547.aspx</a></p>
+</li>
+<li><p>リモート デスクトップ サービス クライアント アクセス ライセンスをインストールする<br><a target="_blank" rel="noopener" href="https://technet.microsoft.com/ja-jp/library/cc725890.aspx">https://technet.microsoft.com/ja-jp/library/cc725890.aspx</a></p>
+</li>
+</ul>
+<p>上記までを実施いただくことで、標準的なリモート デスクトップ サービス環境が構成されます。<br>なお、Windows Server においては、RemoteApp アプリケーションは RD Web アクセスのポータル サイトからのご利用が標準となっています。<br>クライアントから、以下の URL にアクセスいただいてご利用ください。</p>
+<p>https://(Web アクセス サーバー FQDN 名)/rdweb<br>例 :  <a target="_blank" rel="noopener" href="https://webaccess.contoso.com/rdweb">https://WebAccess.contoso.com/rdweb</a></p>
+
+      
+      
+    </div>
+    <footer class="article-footer">
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/blog/2024/05/29/UserInterfaceAndApps/Printing/defaultprinter/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">次の記事</strong>
+      <div class="article-nav-title">
+        
+          リモート デスクトップで通常使うプリンターが意図せず変わる事象について
+        
+      </div>
+    </a>
+  
+  
+    <a href="/blog/2024/04/08/RemoteDesktopService/RDS/rdcbha-config/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">前の記事</strong>
+      <div class="article-nav-title">RD 接続ブローカー高可用性環境の標準的な構築手順について</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">カテゴリ</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Activation/">Activation</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Activation/ESU/">ESU</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Activation/security-SPP/">security-SPP</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/">Active Directory</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Authentication/">Authentication</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/DFSR/">DFSR</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/FunctionalLevel/">FunctionalLevel</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Group-Policy/">Group Policy</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Promotion-and-Demotion/">Promotion and Demotion</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/User-Profile/">User Profile</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Windows-Hello/">Windows Hello</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Windows-Time-Service/">Windows Time Service</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/AppLocker/">AppLocker</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/AppLocker/Active-Directory/">Active Directory</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/AppLocker/Microsoft-Intune/">Microsoft Intune</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Deployment/">Deployment</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Deployment/Feature-on-demand/">Feature on demand</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Deployment/Sysprep/">Sysprep</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Failover-Clustering/">Failover Clustering</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Failover-Clustering/Configuration-and-Management/">Configuration and Management</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/FileServices/">FileServices</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/FileServices/FTP/">FTP</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/FileServices/SMB/">SMB</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Hyper-V/">Hyper-V</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Hyper-V/Configuration-and-Management/">Configuration and Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Hyper-V/Migration/">Migration</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Microsoft-Connected-Cache/">Microsoft Connected Cache</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/">Networking</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/BITS/">BITS</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/Bluetooth/">Bluetooth</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/DHCP/">DHCP</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/DNS/">DNS</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/Firewall/">Firewall</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/LBFO/">LBFO</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/NCSI/">NCSI</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/NetworkInterface/">NetworkInterface</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/Proxy/">Proxy</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/TCPIP/">TCPIP</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/OpenSSH/">OpenSSH</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/">Performance</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/Hang-up-BSoD/">Hang-up/BSoD</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/No-Boot/">No Boot</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/Slow-Response/">Slow Response</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/System-Resource/">System Resource</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/Tools/">Tools</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/">Public Key Infrastructure</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Certificate-Authority/">Certificate Authority</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Certificate-Management/">Certificate Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Code-Signing/">Code Signing</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/SSL-TLS-Communication/">SSL TLS Communication</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/SSL-TLS-Connection/">SSL TLS Connection</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Smart-Card-Logon/">Smart Card Logon</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/">Remote Desktop</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/Azure-Virtual-Desktop-AVD/">Azure Virtual Desktop (AVD)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/Remote-Desktop-Service-RDS/">Remote Desktop Service (RDS)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/Windows-Virtual-Desktop-WVD/">Windows Virtual Desktop (WVD)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/RemoteAccess/">RemoteAccess</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/RemoteAccess/%E3%83%80%E3%82%A4%E3%83%A4%E3%83%AB%E3%82%A2%E3%83%83%E3%83%97%E6%8E%A5%E7%B6%9A/">ダイヤルアップ接続</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Setup/">Setup</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Setup/Feature-Update-FU/">Feature Update (FU)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Shell/">Shell</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Shell/Explorer/">Explorer</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/">Storage</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/Backup/">Backup</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/FSRM/">FSRM</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/Management/">Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/StorageMigrationService/">StorageMigrationService</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/UEFI/">UEFI</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/UEFI/Secure-Boot/">Secure Boot</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/">User Interface and Apps</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Command-Prompt/">Command Prompt</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/EventLog/">EventLog</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Language-Support/">Language Support</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Microsoft-Store/">Microsoft Store</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Performance/">Performance</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/PowerShell/">PowerShell</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Printing-%E5%8D%B0%E5%88%B7/">Printing (印刷)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Server-Management/">Server Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Taskscheduler/">Taskscheduler</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Windows-Management-Instrumentation/">Windows Management Instrumentation</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps-Language-support/">User Interface and Apps - Language support</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-365/">Windows 365</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Admin-Center/">Windows Admin Center</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Search/">Windows Search</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/">Windows Update</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Delivery-Optimization-DO/">Delivery Optimization (DO)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Feature-Update-FU/">Feature Update (FU)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Quality-Update-QU/">Quality Update (QU)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Windows-Update-Agent/">Windows Update Agent</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Windows-Update-Agent-WUA/">Windows Update Agent (WUA)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/">WirelessNetwork</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/NPS/">NPS</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/Wi-Fi/">Wi-Fi</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/%E3%83%A2%E3%83%90%E3%82%A4%E3%83%AB-%E3%83%96%E3%83%AD%E3%83%BC%E3%83%89%E3%83%90%E3%83%B3%E3%83%89%E6%8E%A5%E7%B6%9A-LTE/">モバイル ブロードバンド接続 (LTE)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/%E7%B5%84%E7%B9%94%E7%B4%B9%E4%BB%8B%E3%83%96%E3%83%AD%E3%82%B0%EF%BC%88Windows-Commercial%EF%BC%89/">組織紹介ブログ（Windows Commercial）</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最近の投稿</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/blog/2026/02/16/ActiveDirectory/GroupPolicy/UacPolicyIsEnabled/">「ユーザー アカウント制御：ビルトイン Administrator アカウントのための管理者承認モード」ポリシーが有効になる動作ついて</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/02/15/UserInterfaceAndApps/Printing/printer-queue-app-preview/">印刷キューアプリのプレビュー機能について</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/02/02/ActiveDirectory/Authentication/kerberos-rc4-for-service-account-ticket-issuance-changes-related-to-cve-2026-20833/">CVE‑2026‑20833 への対応とその影響について [KB5073381]</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/01/12/Hyper-V/vmwp-does-not-save-the-RTC-value-of-a-virtual-machine-when-performing-Live-Migration/">ライブ マイグレーション後の再起動でゲスト OS の時刻がずれる場合がある</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/01/07/WindowsUpdate/FU/fublog-txt/">ISO メディア経由かつ動的更新無効な状態で Windows 11 バージョン 24H2 または 25H2 へのアップグレードが失敗 (0x8007042B 0x2000D) する事象と対策について</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">アーカイブ</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2026/02/">2026 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2026/01/">2026 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/12/">2025 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/11/">2025 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/10/">2025 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/09/">2025 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/08/">2025 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/07/">2025 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/06/">2025 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/05/">2025 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/04/">2025 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/03/">2025 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/02/">2025 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/01/">2025 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/12/">2024 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/11/">2024 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/10/">2024 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/09/">2024 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/08/">2024 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/07/">2024 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/06/">2024 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/05/">2024 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/04/">2024 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/03/">2024 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/02/">2024 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/01/">2024 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/12/">2023 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/11/">2023 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/10/">2023 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/09/">2023 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/08/">2023 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/07/">2023 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/06/">2023 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/05/">2023 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/04/">2023 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/03/">2023 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/02/">2023 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/01/">2023 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/12/">2022 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/11/">2022 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/10/">2022 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/09/">2022 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/08/">2022 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/07/">2022 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/06/">2022 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/05/">2022 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/04/">2022 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/03/">2022 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/02/">2022 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/01/">2022 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/12/">2021 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/11/">2021 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/10/">2021 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/09/">2021 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/08/">2021 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/07/">2021 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/06/">2021 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/05/">2021 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/04/">2021 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/03/">2021 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/02/">2021 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/01/">2021 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/12/">2020 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/11/">2020 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/10/">2020 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/07/">2020 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/03/">2020 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2019/03/">2019 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/11/">2018 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/10/">2018 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/09/">2018 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/08/">2018 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/07/">2018 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/06/">2018 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/04/">2018 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/02/">2018 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/12/">2017 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/11/">2017 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/09/">2017 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/05/">2017 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/03/">2017 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/02/">2017 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2016/08/">2016 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2016/05/">2016 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2014/03/">2014 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2012/02/">2012 / 02</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2026 Microsoft Japan Windows Technology Support Team<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/blog/" class="mobile-nav-link">Home</a>
+  
+    <a href="/blog/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+<script src="/blog/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

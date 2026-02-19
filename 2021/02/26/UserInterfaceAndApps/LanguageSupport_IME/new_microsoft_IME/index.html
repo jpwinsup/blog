@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-180187723-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-180187723-1');
+</script>
+<!-- End Google Analytics -->
+
+  
+  <title>Windows 10 version 2004 からの新しい Microsoft IME (Input Method Editor) について | Microsoft Japan Windows Technology Support Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="本記事はマイクロソフト社員によって公開されております。こんにちは、マイクロソフト Windows サポートの 神田 です。 Windows 10 version 2004 からの新しい Microsoft IME (Input Method Editor) について、設定画面が変更された点、および以前の Microsoft IMEから省略された機能について紹介します。 ■   新しい Micros">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Windows 10 version 2004 からの新しい Microsoft IME (Input Method Editor) について">
+<meta property="og:url" content="https://jpwinsup.github.io/blog/2021/02/26/UserInterfaceAndApps/LanguageSupport_IME/new_microsoft_IME/index.html">
+<meta property="og:site_name" content="Microsoft Japan Windows Technology Support Blog">
+<meta property="og:description" content="本記事はマイクロソフト社員によって公開されております。こんにちは、マイクロソフト Windows サポートの 神田 です。 Windows 10 version 2004 からの新しい Microsoft IME (Input Method Editor) について、設定画面が変更された点、および以前の Microsoft IMEから省略された機能について紹介します。 ■   新しい Micros">
+<meta property="og:locale" content="ja_JP">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2021/02/26/UserInterfaceAndApps/LanguageSupport_IME/new_microsoft_IME/img1.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2021/02/26/UserInterfaceAndApps/LanguageSupport_IME/new_microsoft_IME/img2.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2021/02/26/UserInterfaceAndApps/LanguageSupport_IME/new_microsoft_IME/img3.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2021/02/26/UserInterfaceAndApps/LanguageSupport_IME/new_microsoft_IME/img4.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2021/02/26/UserInterfaceAndApps/LanguageSupport_IME/new_microsoft_IME/img5.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2021/02/26/UserInterfaceAndApps/LanguageSupport_IME/new_microsoft_IME/img6.png">
+<meta property="article:published_time" content="2021-02-26T09:00:00.000Z">
+<meta property="article:modified_time" content="2026-02-19T02:53:58.839Z">
+<meta property="article:author" content="Microsoft Japan Windows Technology Support Team">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://jpwinsup.github.io/blog/2021/02/26/UserInterfaceAndApps/LanguageSupport_IME/new_microsoft_IME/img1.png">
+  
+    <link rel="alternate" href="/blog/atom.xml" title="Microsoft Japan Windows Technology Support Blog" type="application/atom+xml">
+  
+
+  <link rel="icon" href="/blog/favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="/blog/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/blog/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/blog/favicon-16x16.png">
+  <link rel="manifest" href="/blog/site.webmanifest">
+  <link rel="mask-icon" href="/blog/safari-pinned-tab.svg" color="#5bbad5">
+  <meta name="msapplication-TileColor" content="#ffffff">
+  <meta name="theme-color" content="#ffffff">
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/blog/css/style.css">
+
+<meta name="generator" content="Hexo 5.2.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="site-header-logo"></div>
+  <div id="site-header-blog-wrapper"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        <div id="ms-logo"></div>
+        
+          <a class="main-nav-link" href="/blog/">Home</a>
+        
+          <a class="main-nav-link" href="/blog/archives">Archives</a>
+        
+        <a class="main-nav-link" target="_blank" rel="noopener" href="https://cssjpn.github.io/">サポート情報</a>
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/blog/atom.xml" title="RSSフィード"></a>
+        
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//www.bing.com/search" method="get" accept-charset="UTF-8" name="bing-search" onsubmit="var f=this;if(f['q'].value){var searchUrl =  'https://www.bing.com/search?q=' +  encodeURIComponent(f['q'].value + ' site:' + f['sitesearch'].value) ;window.open(searchUrl, 'blank') };return false;" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="検索"><button type="submit" id="nav-search-btn" class="search-form-submit"></button><input type="hidden" name="sitesearch" value="https://jpwinsup.github.io/blog"></form>
+      </div>
+    </div>
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/blog/" id="logo">Microsoft Japan Windows Technology Support Blog</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/blog/" id="subtitle">日本マイクロソフト Windows Support チームによる、サポート情報 Blog です。</a>
+        </h2>
+      
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-UserInterfaceAndApps/LanguageSupport_IME/new_microsoft_IME" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    
+    
+      <header class="article-header-single">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Windows 10 version 2004 からの新しい Microsoft IME (Input Method Editor) について
+    </h1>
+  
+
+      </header>
+      <div class="article-share">
+        Last Update: 
+        <a href="/blog/2021/02/26/UserInterfaceAndApps/LanguageSupport_IME/new_microsoft_IME/" class="article-date-single">
+  <time datetime="2021-02-26T09:00:00.000Z" itemprop="datePublished">2021-02-26</time>
+</a>
+        
+  <div class="article-category">
+    <a class="article-category-link" href="/blog/categories/User-Interface-and-Apps/">User Interface and Apps</a>►<a class="article-category-link" href="/blog/categories/User-Interface-and-Apps/Language-Support/">Language Support</a>
+  </div>
+
+        
+        <a href="https://github.com/jpwinsup/blog/issues/new?title=&body=%EF%BB%BF%0A%0A---%0A%0A%23%23%23%23+Document+Details%0A%0A*+Article+ID%3A+dc90f52e-face-5a70-ab26-caf6530894a4%0A*+TITLE%3A+Windows+10+version+2004+%E3%81%8B%E3%82%89%E3%81%AE%E6%96%B0%E3%81%97%E3%81%84+Microsoft+IME+%28Input+Method+Editor%29+%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6%0A*+URL+https%3A%2F%2Fjpwinsup.github.io%2Fblog%2F2021%2F02%2F26%2FUserInterfaceAndApps%2FLanguageSupport_IME%2Fnew_microsoft_IME%2F%0A*+SourceFileName%3A+source%2F_posts%2FUserInterfaceAndApps%2FLanguageSupport_IME%2Fnew_microsoft_IME.md%0A" class="article-github-issue-link" target="_blank" rel="noopener noreferrer">feedback</a>
+        
+        <a data-url="https://jpwinsup.github.io/blog/2021/02/26/UserInterfaceAndApps/LanguageSupport_IME/new_microsoft_IME/" data-id="cmlsvjdgt00lhru3yc7i08p6s" class="article-share-link">共有</a>
+      </div>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>本記事はマイクロソフト社員によって公開されております。<br>こんにちは、マイクロソフト Windows サポートの 神田 です。</p>
+<p>Windows 10 version 2004 からの新しい Microsoft IME (Input Method Editor) について、設定画面が変更された点、および以前の Microsoft IMEから省略された機能について紹介します。</p>
+<h2 id="■-新しい-Microsoft-IME-の設定画面について"><a href="#■-新しい-Microsoft-IME-の設定画面について" class="headerlink" title="■   新しい Microsoft IME の設定画面について"></a>■   新しい Microsoft IME の設定画面について</h2><p>Windows 10 は、初期バージョン (バージョン 1507、Threshold 1、などとも呼ばれます) から、デスクトップ用、ラップトップ用のコンピューター向けインターフェースと、タブレット、スマートフォン向けのインターフェースとの共存を試みています。<br>Windows 10 version 2004 においては Microsoft IME の機能も大きく更新し、スマートフォンやスマートフォンからもアクセスがしやすいよう [設定] アプリと呼ばれるユニバーサルな設定画面から設定変更、カスタマイズを行えるようになっています。<br>また、以前は複数個所に存在した同じ設定を、すべて [設定] アプリ内に集約させることで、設定の煩雑さを解消しています。</p>
+<p>[設定] アプリは、スタートメニューからも、Microsoft IME の “A” または “あ” などを右クリックすることでも起動可能です。<br>[設定] アプリからの設定変更、カスタマイズが可能になったことにより、それらの変更操作を行うまでのステップが少なくなりました。また [設定] はアプリなので、ブラウザのように [←] (戻る) ボタンでひとつ前の設定画面に戻すことも可能ですし、[検索] ボックスで参照したい設定画面をキーワードで検索して表示させることも容易です。</p>
+<img src="/blog/2021/02/26/UserInterfaceAndApps/LanguageSupport_IME/new_microsoft_IME/img1.png" class="">
+
+<h2 id="■-Microsoft-IME-ツールバーの表示-非表示"><a href="#■-Microsoft-IME-ツールバーの表示-非表示" class="headerlink" title="■   Microsoft IME ツールバーの表示/非表示"></a>■   Microsoft IME ツールバーの表示/非表示</h2><p>操作のステップが簡単になった例として IME ツールバーの表示、非表示の変更方法についてご案内いたします。<br>Microsoft IME のツールバーをタスクバーからフローティングさせて使う方法がありますが、利用状況により画面領域の確保のためタスクバーにしまったり再度表示させたり、という場合に新しい Microsoft IME だと、以下の 2 クリック (右クリック 1、左クリック 1) で切り替えが可能です。</p>
+<p>  ＞ タスク バーの “A” または “あ” を右クリック - [IME ツールバーの表示/非表示] をクリック</p>
+<p>また [設定] アプリ内の、Microsoft IME ツールバーの表示/非表示の設定画面へも以下のステップで到達します。</p>
+<p>  ＞ タスク バーの “A” または “あ” を右クリック - [設定] ボタンをクリック  - [Microsoft IME] の [デザイン] をクリック<br>      “IME ツールバーを使用する”</p>
+<p>(タスク バーの “A” を右クリック - [設定] ボタンを表示)</p>
+<img src="/blog/2021/02/26/UserInterfaceAndApps/LanguageSupport_IME/new_microsoft_IME/img2.png" class="">
+<p>([設定] アプリの [Microsoft IME] の [デザイン] 内 “IME ツールバーを使用する” )</p>
+<img src="/blog/2021/02/26/UserInterfaceAndApps/LanguageSupport_IME/new_microsoft_IME/img3.png" class="">
+<p>以前の Microsoft IMEでは、IME ツールバーの表示/非表示の設定は、以下 4 回のクリック操作が必要となります。</p>
+<p> ＞ [設定] アプリを (スタートメニューなどから) 起動 - [時刻と言語] - [キーボード] から<br>     “使用可能な場合にデスクトップ言語バーを使用する”<br>     “言語バーのオプション” </p>
+<p>([設定] アプリの IME ツールバーの設定)</p>
+<img src="/blog/2021/02/26/UserInterfaceAndApps/LanguageSupport_IME/new_microsoft_IME/img4.png" class="">
+
+<p>また、ツールバーをデスクトップにフロート表示させている場合、最小化を行うにはツールバーを直接操作する必要があり、誤って起動中のデスクトップ アプリの画面をアクティブにしてしまう可能性がありますが、新しい Microsoft IME では表示/非表示をタスクバー内の操作で完結できるので、アプリケーションの誤操作を防ぐ効果もございます。</p>
+<h2 id="■-キーのカスタマイズについて"><a href="#■-キーのカスタマイズについて" class="headerlink" title="■   キーのカスタマイズについて"></a>■   キーのカスタマイズについて</h2><p>あたらしい Microsoft IME では、キーボードのカスタマイズについても、以下の少ないステップで変更画面に達します。また、設定できる項目が以前より少なくなっています。</p>
+<p>＞ タスク バーの “A” または “あ” を右クリック - [設定] ボタンをクリック - [キーとタッチのカスタマイズ] をクリック<br>    ”キーの割り当て”<br>    “各キーに好みの機能を割り当てる”</p>
+<p>([設定] アプリの [キーとタッチのカスタマイズ])</p>
+<img src="/blog/2021/02/26/UserInterfaceAndApps/LanguageSupport_IME/new_microsoft_IME/img5.png" class="">
+<p>上記の画面について、以前の Microsoft IME では、以下のステップが必要です。なお、この場合は以前の Microsoft IME の設定ダイアログが開き、上記より細かい設定が可能な以前のオプションが利用可能です。</p>
+<p> ＞ タスク バーの “A” または “あ” を右クリック - [Microsoft IME の設定] の [詳細設定] ボタン<br>      - [編集操作] の [キー設定] - [ユーザー定義] -[変更] ボタンをクリック</p>
+<p>([Microsoft IME の設定] の [詳細設定] - [編集操作] - [キー設定])</p>
+<img src="/blog/2021/02/26/UserInterfaceAndApps/LanguageSupport_IME/new_microsoft_IME/img6.png" class="">
+
+<h2 id="■-新しい-Microsoft-IME-と以前の-Microsoft-IME-の利用について"><a href="#■-新しい-Microsoft-IME-と以前の-Microsoft-IME-の利用について" class="headerlink" title="■   新しい Microsoft IME と以前の Microsoft IME の利用について"></a>■   新しい Microsoft IME と以前の Microsoft IME の利用について</h2><p>上記の例に挙げさせていただきました通り、新しい Microsoft IME と以前の Microsoft IME では、設定画面も設定できる項目も異なる場合があります。弊社としては今後のコンピューターの利用のために最適化した新しい Microsoft IME の利用をしていただきたい意向がございます。</p>
+<p>しかしながら、例に挙げた IME ツールバーの表示/非表示の切り替え設定や、キーのカスタマイズ設定については、操作と設定を簡素化させた影響で、簡略化または省略した機能もございます。新しい Microsoft IME の設定や機能が運用に合わない、新しい IME では機能が足りない、といった方のために以下の方法で以前の Microsoft IME との切り替えが可能となっております。</p>
+<p> ＞ タスク バーの “A” または “あ” を右クリック - [Microsoft IME] - [全般] - [互換性]<br>     “以前のバージョンの Microsoft IME を使う”</p>
+<p>以前の Microsoft IME を使う方が業務の効率が良い、以前の Microsoft IME の方が使いやすい、といった場合には、一時的な対応として、以前のバージョンとの互換性で残している Microsoft IME を、上記の設定にて変更してご利用いただければと思います。またその際には、新しい Microsoft IME をより使いやすくするため、後述しておりますフィードバック Hub にてご意見やご要望を弊社までいただけますと幸いです。</p>
+<p>新しい Microsoft IME の機能の最適化については、 Windows 10 をご利用いただいているユーザー様からのフィードバックや利用統計情報など様々な情報を基に、弊社の開発にて十分に精査したうえで行っております。</p>
+<p> Windows 10 とプライバシー コンプライアンス  IT とコンプライアンスの担当者向けガイド<br><a target="_blank" rel="noopener" href="https://docs.microsoft.com/ja-jp/windows/privacy/windows-10-and-privacy-compliance">https://docs.microsoft.com/ja-jp/windows/privacy/windows-10-and-privacy-compliance</a><br>(該当部分抜粋) 手描き入力とタイプ入力の診断 Windows で実行するアプリやサービスの言語認識と提案機能の品質向上のために、オプションの手書き入力とタイプ入力の診断データが Microsoft によって収集されます。</p>
+<p>Windows 10 の利用統計情報、診断データについては、ユーザー様からの協力が必要です。詳細については下記ブログにてご案内しております。</p>
+<p>Windows 診断データについて<br><a target="_blank" rel="noopener" href="https://blogs.windows.com/japan/2019/12/05/about-windows-diagnostic-data/">https://blogs.windows.com/japan/2019/12/05/about-windows-diagnostic-data/</a></p>
+<p>また、新しい Microsoft IME については、導入して間もない新機能であり予期しない動作があります。オペレーティングシステムの月例の更新にて逐次修正を行っておりますが、既知の障害に該当しない問題に遭遇した場合は、Windows 10 の標準で実装されております “フィードバック Hub” アプリにて事象と再現手順、画面ショットなどの情報提供をいただけますと、問題の特定、修正に非常に有効な情報となりますので、こちらもご協力いただけると幸いです。<br>以前の Microsoft IME にあって、新しい Microsoft IME では省略されてしまった機能について、復活または別の機能での代替などを希望される場合も、同じく “フィードバック Hub” アプリにてご要望として挙げていただければ、弊社の Microsoft IME の開発チームにて検討材料とさせていただきますので、こちらも合わせてご意見をいただければと思います。</p>
+<p><a target="_blank" rel="noopener" href="https://support.microsoft.com/ja-jp/topic/microsoft-ime-%E3%82%92%E4%BD%BF%E7%94%A8%E3%81%97%E3%81%A6%E3%81%84%E3%82%8B%E5%A0%B4%E5%90%88-windows-10-%E3%83%90%E3%83%BC%E3%82%B8%E3%83%A7%E3%83%B3-20h2-%E3%81%8A%E3%82%88%E3%81%B3-windows-10-%E3%83%90%E3%83%BC%E3%82%B8%E3%83%A7%E3%83%B3-2004-%E3%81%A7%E5%95%8F%E9%A1%8C%E3%81%8C%E7%99%BA%E7%94%9F%E3%81%99%E3%82%8B%E5%8F%AF%E8%83%BD%E6%80%A7%E3%81%8C%E3%81%82%E3%82%8A%E3%81%BE%E3%81%99-63696506-47d2-9997-0b72-41a68e328692">Microsoft IME を使用している場合、Windows 10 バージョン 20H2 および Windows 10 バージョン 2004 で問題が発生する可能性があります。</a></p>
+<p><a target="_blank" rel="noopener" href="https://blogs.windows.com/japan/2016/09/08/windows-10-and-feedback-1/">Windows 10 とフィードバック (1) : Windows 10 は日本の皆さまからのフィードバックを必要としています！ - Windows Blog for Japan</a></p>
+<h2 id="■-更新履歴-Update-History"><a href="#■-更新履歴-Update-History" class="headerlink" title="■ 更新履歴 - Update History"></a>■ 更新履歴 - Update History</h2><ul>
+<li>2021/02/26 : 本 Blog の公開</li>
+<li>2023/06/05 : カテゴリの変更</li>
+</ul>
+
+      
+      
+    </div>
+    <footer class="article-footer">
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/blog/2021/02/28/FailoverClustering/ConfigurationAndManagement/S2D-SwitchlessNetwork/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">次の記事</strong>
+      <div class="article-nav-title">
+        
+          S2D の Switchless ネットワークを利用する際の考慮事項について
+        
+      </div>
+    </a>
+  
+  
+    <a href="/blog/2021/02/25/FailoverClustering/ConfigurationAndManagement/maintenance-operation-hyper-v-cluster-2019/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">前の記事</strong>
+      <div class="article-nav-title">Windows Server 2019 の Hyper-V クラスター環境のメンテナンス操作時の注意事項</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">カテゴリ</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Activation/">Activation</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Activation/ESU/">ESU</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Activation/security-SPP/">security-SPP</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/">Active Directory</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Authentication/">Authentication</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/DFSR/">DFSR</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/FunctionalLevel/">FunctionalLevel</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Group-Policy/">Group Policy</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Promotion-and-Demotion/">Promotion and Demotion</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/User-Profile/">User Profile</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Windows-Hello/">Windows Hello</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Windows-Time-Service/">Windows Time Service</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/AppLocker/">AppLocker</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/AppLocker/Active-Directory/">Active Directory</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/AppLocker/Microsoft-Intune/">Microsoft Intune</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Deployment/">Deployment</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Deployment/Feature-on-demand/">Feature on demand</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Deployment/Sysprep/">Sysprep</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Failover-Clustering/">Failover Clustering</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Failover-Clustering/Configuration-and-Management/">Configuration and Management</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/FileServices/">FileServices</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/FileServices/FTP/">FTP</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/FileServices/SMB/">SMB</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Hyper-V/">Hyper-V</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Hyper-V/Configuration-and-Management/">Configuration and Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Hyper-V/Migration/">Migration</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Microsoft-Connected-Cache/">Microsoft Connected Cache</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/">Networking</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/BITS/">BITS</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/Bluetooth/">Bluetooth</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/DHCP/">DHCP</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/DNS/">DNS</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/Firewall/">Firewall</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/LBFO/">LBFO</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/NCSI/">NCSI</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/NetworkInterface/">NetworkInterface</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/Proxy/">Proxy</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/TCPIP/">TCPIP</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/OpenSSH/">OpenSSH</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/">Performance</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/Hang-up-BSoD/">Hang-up/BSoD</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/No-Boot/">No Boot</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/Slow-Response/">Slow Response</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/System-Resource/">System Resource</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/Tools/">Tools</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/">Public Key Infrastructure</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Certificate-Authority/">Certificate Authority</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Certificate-Management/">Certificate Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Code-Signing/">Code Signing</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/SSL-TLS-Communication/">SSL TLS Communication</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/SSL-TLS-Connection/">SSL TLS Connection</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Smart-Card-Logon/">Smart Card Logon</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/">Remote Desktop</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/Azure-Virtual-Desktop-AVD/">Azure Virtual Desktop (AVD)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/Remote-Desktop-Service-RDS/">Remote Desktop Service (RDS)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/Windows-Virtual-Desktop-WVD/">Windows Virtual Desktop (WVD)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/RemoteAccess/">RemoteAccess</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/RemoteAccess/%E3%83%80%E3%82%A4%E3%83%A4%E3%83%AB%E3%82%A2%E3%83%83%E3%83%97%E6%8E%A5%E7%B6%9A/">ダイヤルアップ接続</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Setup/">Setup</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Setup/Feature-Update-FU/">Feature Update (FU)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Shell/">Shell</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Shell/Explorer/">Explorer</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/">Storage</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/Backup/">Backup</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/FSRM/">FSRM</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/Management/">Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/StorageMigrationService/">StorageMigrationService</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/UEFI/">UEFI</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/UEFI/Secure-Boot/">Secure Boot</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/">User Interface and Apps</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Command-Prompt/">Command Prompt</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/EventLog/">EventLog</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Language-Support/">Language Support</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Microsoft-Store/">Microsoft Store</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Performance/">Performance</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/PowerShell/">PowerShell</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Printing-%E5%8D%B0%E5%88%B7/">Printing (印刷)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Server-Management/">Server Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Taskscheduler/">Taskscheduler</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Windows-Management-Instrumentation/">Windows Management Instrumentation</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps-Language-support/">User Interface and Apps - Language support</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-365/">Windows 365</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Admin-Center/">Windows Admin Center</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Search/">Windows Search</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/">Windows Update</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Delivery-Optimization-DO/">Delivery Optimization (DO)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Feature-Update-FU/">Feature Update (FU)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Quality-Update-QU/">Quality Update (QU)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Windows-Update-Agent/">Windows Update Agent</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Windows-Update-Agent-WUA/">Windows Update Agent (WUA)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/">WirelessNetwork</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/NPS/">NPS</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/Wi-Fi/">Wi-Fi</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/%E3%83%A2%E3%83%90%E3%82%A4%E3%83%AB-%E3%83%96%E3%83%AD%E3%83%BC%E3%83%89%E3%83%90%E3%83%B3%E3%83%89%E6%8E%A5%E7%B6%9A-LTE/">モバイル ブロードバンド接続 (LTE)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/%E7%B5%84%E7%B9%94%E7%B4%B9%E4%BB%8B%E3%83%96%E3%83%AD%E3%82%B0%EF%BC%88Windows-Commercial%EF%BC%89/">組織紹介ブログ（Windows Commercial）</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最近の投稿</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/blog/2026/02/16/ActiveDirectory/GroupPolicy/UacPolicyIsEnabled/">「ユーザー アカウント制御：ビルトイン Administrator アカウントのための管理者承認モード」ポリシーが有効になる動作ついて</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/02/15/UserInterfaceAndApps/Printing/printer-queue-app-preview/">印刷キューアプリのプレビュー機能について</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/02/02/ActiveDirectory/Authentication/kerberos-rc4-for-service-account-ticket-issuance-changes-related-to-cve-2026-20833/">CVE‑2026‑20833 への対応とその影響について [KB5073381]</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/01/12/Hyper-V/vmwp-does-not-save-the-RTC-value-of-a-virtual-machine-when-performing-Live-Migration/">ライブ マイグレーション後の再起動でゲスト OS の時刻がずれる場合がある</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/01/07/WindowsUpdate/FU/fublog-txt/">ISO メディア経由かつ動的更新無効な状態で Windows 11 バージョン 24H2 または 25H2 へのアップグレードが失敗 (0x8007042B 0x2000D) する事象と対策について</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">アーカイブ</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2026/02/">2026 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2026/01/">2026 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/12/">2025 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/11/">2025 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/10/">2025 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/09/">2025 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/08/">2025 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/07/">2025 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/06/">2025 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/05/">2025 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/04/">2025 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/03/">2025 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/02/">2025 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/01/">2025 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/12/">2024 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/11/">2024 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/10/">2024 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/09/">2024 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/08/">2024 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/07/">2024 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/06/">2024 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/05/">2024 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/04/">2024 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/03/">2024 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/02/">2024 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/01/">2024 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/12/">2023 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/11/">2023 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/10/">2023 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/09/">2023 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/08/">2023 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/07/">2023 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/06/">2023 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/05/">2023 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/04/">2023 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/03/">2023 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/02/">2023 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/01/">2023 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/12/">2022 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/11/">2022 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/10/">2022 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/09/">2022 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/08/">2022 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/07/">2022 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/06/">2022 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/05/">2022 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/04/">2022 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/03/">2022 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/02/">2022 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/01/">2022 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/12/">2021 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/11/">2021 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/10/">2021 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/09/">2021 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/08/">2021 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/07/">2021 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/06/">2021 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/05/">2021 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/04/">2021 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/03/">2021 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/02/">2021 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/01/">2021 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/12/">2020 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/11/">2020 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/10/">2020 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/07/">2020 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/03/">2020 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2019/03/">2019 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/11/">2018 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/10/">2018 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/09/">2018 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/08/">2018 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/07/">2018 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/06/">2018 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/04/">2018 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/02/">2018 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/12/">2017 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/11/">2017 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/09/">2017 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/05/">2017 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/03/">2017 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/02/">2017 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2016/08/">2016 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2016/05/">2016 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2014/03/">2014 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2012/02/">2012 / 02</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2026 Microsoft Japan Windows Technology Support Team<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/blog/" class="mobile-nav-link">Home</a>
+  
+    <a href="/blog/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+<script src="/blog/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

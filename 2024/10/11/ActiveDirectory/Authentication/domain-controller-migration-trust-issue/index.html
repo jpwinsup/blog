@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-180187723-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-180187723-1');
+</script>
+<!-- End Google Analytics -->
+
+  
+  <title>ドメイン コントローラー移行後に信頼関係が正常に動作しなくなる事象について | Microsoft Japan Windows Technology Support Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="こんにちは。Windows Commercial Support Directory Services チームです。ドメイン コントローラーを移行した後にドメイン間の認証 (信頼関係) が正常に動作しなくなった場合、その要因は DNS に起因しているケースが多くあります。様々なシナリオがありますが、その中の 1 つのシナリオを紹介します。 本稿では、下記の条件で発生するシナリオを紹介します。  c">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ドメイン コントローラー移行後に信頼関係が正常に動作しなくなる事象について">
+<meta property="og:url" content="https://jpwinsup.github.io/blog/2024/10/11/ActiveDirectory/Authentication/domain-controller-migration-trust-issue/index.html">
+<meta property="og:site_name" content="Microsoft Japan Windows Technology Support Blog">
+<meta property="og:description" content="こんにちは。Windows Commercial Support Directory Services チームです。ドメイン コントローラーを移行した後にドメイン間の認証 (信頼関係) が正常に動作しなくなった場合、その要因は DNS に起因しているケースが多くあります。様々なシナリオがありますが、その中の 1 つのシナリオを紹介します。 本稿では、下記の条件で発生するシナリオを紹介します。  c">
+<meta property="og:locale" content="ja_JP">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2024/10/11/ActiveDirectory/Authentication/domain-controller-migration-trust-issue/before.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2024/10/11/ActiveDirectory/Authentication/domain-controller-migration-trust-issue/after.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2024/10/11/ActiveDirectory/Authentication/domain-controller-migration-trust-issue/ERROR_NO_LOGON_SERVER.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2024/10/11/ActiveDirectory/Authentication/domain-controller-migration-trust-issue/DNS_MANAGER.png">
+<meta property="article:published_time" content="2024-10-11T02:24:58.000Z">
+<meta property="article:modified_time" content="2026-02-19T02:53:58.322Z">
+<meta property="article:author" content="Microsoft Japan Windows Technology Support Team">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://jpwinsup.github.io/blog/2024/10/11/ActiveDirectory/Authentication/domain-controller-migration-trust-issue/before.png">
+  
+    <link rel="alternate" href="/blog/atom.xml" title="Microsoft Japan Windows Technology Support Blog" type="application/atom+xml">
+  
+
+  <link rel="icon" href="/blog/favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="/blog/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/blog/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/blog/favicon-16x16.png">
+  <link rel="manifest" href="/blog/site.webmanifest">
+  <link rel="mask-icon" href="/blog/safari-pinned-tab.svg" color="#5bbad5">
+  <meta name="msapplication-TileColor" content="#ffffff">
+  <meta name="theme-color" content="#ffffff">
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/blog/css/style.css">
+
+<meta name="generator" content="Hexo 5.2.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="site-header-logo"></div>
+  <div id="site-header-blog-wrapper"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        <div id="ms-logo"></div>
+        
+          <a class="main-nav-link" href="/blog/">Home</a>
+        
+          <a class="main-nav-link" href="/blog/archives">Archives</a>
+        
+        <a class="main-nav-link" target="_blank" rel="noopener" href="https://cssjpn.github.io/">サポート情報</a>
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/blog/atom.xml" title="RSSフィード"></a>
+        
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//www.bing.com/search" method="get" accept-charset="UTF-8" name="bing-search" onsubmit="var f=this;if(f['q'].value){var searchUrl =  'https://www.bing.com/search?q=' +  encodeURIComponent(f['q'].value + ' site:' + f['sitesearch'].value) ;window.open(searchUrl, 'blank') };return false;" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="検索"><button type="submit" id="nav-search-btn" class="search-form-submit"></button><input type="hidden" name="sitesearch" value="https://jpwinsup.github.io/blog"></form>
+      </div>
+    </div>
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/blog/" id="logo">Microsoft Japan Windows Technology Support Blog</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/blog/" id="subtitle">日本マイクロソフト Windows Support チームによる、サポート情報 Blog です。</a>
+        </h2>
+      
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-ActiveDirectory/Authentication/domain-controller-migration-trust-issue" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    
+    
+      <header class="article-header-single">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      ドメイン コントローラー移行後に信頼関係が正常に動作しなくなる事象について
+    </h1>
+  
+
+      </header>
+      <div class="article-share">
+        Last Update: 
+        <a href="/blog/2024/10/11/ActiveDirectory/Authentication/domain-controller-migration-trust-issue/" class="article-date-single">
+  <time datetime="2024-10-11T02:24:58.000Z" itemprop="datePublished">2024-10-11</time>
+</a>
+        
+  <div class="article-category">
+    <a class="article-category-link" href="/blog/categories/Active-Directory/">Active Directory</a>►<a class="article-category-link" href="/blog/categories/Active-Directory/Authentication/">Authentication</a>
+  </div>
+
+        
+        <a href="https://github.com/jpwinsup/blog/issues/new?title=&body=%EF%BB%BF%0A%0A---%0A%0A%23%23%23%23+Document+Details%0A%0A*+Article+ID%3A+98e39e8f-a4fa-5ca5-bcf8-fba509df24f6%0A*+TITLE%3A+%E3%83%89%E3%83%A1%E3%82%A4%E3%83%B3+%E3%82%B3%E3%83%B3%E3%83%88%E3%83%AD%E3%83%BC%E3%83%A9%E3%83%BC%E7%A7%BB%E8%A1%8C%E5%BE%8C%E3%81%AB%E4%BF%A1%E9%A0%BC%E9%96%A2%E4%BF%82%E3%81%8C%E6%AD%A3%E5%B8%B8%E3%81%AB%E5%8B%95%E4%BD%9C%E3%81%97%E3%81%AA%E3%81%8F%E3%81%AA%E3%82%8B%E4%BA%8B%E8%B1%A1%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6%0A*+URL+https%3A%2F%2Fjpwinsup.github.io%2Fblog%2F2024%2F10%2F11%2FActiveDirectory%2FAuthentication%2Fdomain-controller-migration-trust-issue%2F%0A*+SourceFileName%3A+source%2F_posts%2FActiveDirectory%2FAuthentication%2Fdomain-controller-migration-trust-issue.md%0A" class="article-github-issue-link" target="_blank" rel="noopener noreferrer">feedback</a>
+        
+        <a data-url="https://jpwinsup.github.io/blog/2024/10/11/ActiveDirectory/Authentication/domain-controller-migration-trust-issue/" data-id="cmlsvjdab005oru3yflwz047l" class="article-share-link">共有</a>
+      </div>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>こんにちは。Windows Commercial Support Directory Services チームです。<br>ドメイン コントローラーを移行した後にドメイン間の認証 (信頼関係) が正常に動作しなくなった場合、その要因は DNS に起因しているケースが多くあります。様々なシナリオがありますが、その中の 1 つのシナリオを紹介します。</p>
+<p>本稿では、下記の条件で発生するシナリオを紹介します。</p>
+<ol>
+<li>contoso.com と fabrikam.com のドメイン間で信頼関係を結んでいる。</li>
+<li>contoso.com では、DNS サーバーに fabrikam.com のセカンダリ ゾーンを構成している。<br>(fabrikam.com ゾーンの下には _msdcs 委任レコードが登録されている)</li>
+<li>fabrikam.com でドメインコントローラーの移行をおこない、ドメイン コントローラーのホスト名が変更された。</li>
+</ol>
+<h2 id="症状"><a href="#症状" class="headerlink" title="症状:"></a>症状:</h2><p>以下の図のように contoso.com ( DNS サーバー) において、信頼関係先である fabrikam.com に対する名前解決をセカンダリ ゾーンで実現している場合に、プライマリからのゾーン転送が成功しているにもかかわらず、SRV レコードの名前解決に失敗し、信頼関係が正常に動作しなくなる場合がございます。この事象は fabrikam.com のドメイン コントローラーが移行され、ホスト名が変更になったことをきっかけにして発生します。</p>
+<p>＜移行前＞</p>
+<img src="/blog/2024/10/11/ActiveDirectory/Authentication/domain-controller-migration-trust-issue/before.png" class="">
+
+<p>＜移行後＞</p>
+<img src="/blog/2024/10/11/ActiveDirectory/Authentication/domain-controller-migration-trust-issue/after.png" class="">
+
+<p>信頼関係先 (fabrikam.com) にセキュア チャネルの検証を行うと、 “ERROR_NO_LOGON_SERVERS” が表示されます。</p>
+<img src="/blog/2024/10/11/ActiveDirectory/Authentication/domain-controller-migration-trust-issue/ERROR_NO_LOGON_SERVER.png" class="">
+
+<h2 id="原因"><a href="#原因" class="headerlink" title="原因:"></a>原因:</h2><p>fabrikam.com の _msdcs 委任レコードが古いドメイン コントローラーのホスト名のままになっており、contoso.com のドメイン コントローラーが、 _msdcs.fabrikam.com ゾーンに格納された SRV レコードの名前解決を新しいドメイン コントローラー (DNS サーバー) に委任できていない可能性がございます。<br>_msdcs 委任レコードは、ドメイン コントローラーが昇格および降格された情報が、自動で反映されない実装になっています。このため、_msdcs 委任レコードに登録されたドメイン コントローラーが降格されると、名前解決の委任先が居なくなり、結果として SRV レコードの名前解決に失敗します。</p>
+<img src="/blog/2024/10/11/ActiveDirectory/Authentication/domain-controller-migration-trust-issue/DNS_MANAGER.png" class="">
+
+<h2 id="解決"><a href="#解決" class="headerlink" title="解決:"></a>解決:</h2><p>本事象を回避するためには、以下の 3 つの方法のいずれかを実施します。<br>a) fabrikam.com のドメイン コントローラー (DNS サーバー) で _msdcs 委任レコードを更新する<br>b) contoso.com のドメイン コントローラー (DNS サーバー) で条件付きフォワーダーによる名前解決を設定する<br>c) contoso.com のドメイン コントローラー (DNS サーバー) で _msdcs.fabrikam.com のセカンダリ ゾーンを構成する</p>
+<p>それぞれの方法について手順をご案内いたします。</p>
+<h3 id="a-fabrikam-com-のドメイン-コントローラー-DNS-サーバー-で-msdcs-委任レコードを更新する"><a href="#a-fabrikam-com-のドメイン-コントローラー-DNS-サーバー-で-msdcs-委任レコードを更新する" class="headerlink" title="a) fabrikam.com のドメイン コントローラー (DNS サーバー) で _msdcs 委任レコードを更新する"></a>a) fabrikam.com のドメイン コントローラー (DNS サーバー) で _msdcs 委任レコードを更新する</h3><p>fabrikam.com の _msdcs 委任レコードに、現存するドメイン コントローラー (DNS サーバー) を追加します。 これによって、contoso.com のドメイン コントローラーが _msdcs.fabrikam.com 内の SRV レコードを解決する際に、fabrikam.com の現存するドメイン コントローラー (DNS サーバー) に名前解決を委任するようになります。</p>
+<h4 id="msdcs-委任レコードの更新"><a href="#msdcs-委任レコードの更新" class="headerlink" title="_msdcs 委任レコードの更新"></a>_msdcs 委任レコードの更新</h4><ol>
+<li><p>fabrikam.com のドメイン コントローラー (DNS サーバー) に管理者権限を持ったユーザーでログオンします。</p>
+</li>
+<li><p>[DNS マネージャ] を起動します。</p>
+</li>
+<li><p>[前方参照ゾーン] - [fabrikam.com] 配下の [_msdcs] を右クリックし、[プロパティ] をクリックします。</p>
+</li>
+<li><p>すでに存在しないドメイン コントローラー (DNS サーバー) を選択し、[削除] をクリックします。</p>
+</li>
+<li><p>[追加] をクリックします。</p>
+</li>
+<li><p>“サーバーの完全修飾ドメイン名 (FQDN) (S):” 欄に現存するドメイン コントローラー (DNS サーバー) の FQDN を入力し、 [OK] をクリックします。<br>例) fabrikam.com に現存するドメイン コントローラーのホスト名が dc1 の場合 dc1.fabrikam.com.</p>
+</li>
+<li><p>委任先を複数登録する場合は、登録する FQDN を変えて、手順 5. ～ 6. を実施します。</p>
+</li>
+<li><p>[OK] をクリックし、”_msdcs のプロパティ” 画面を閉じます。</p>
+</li>
+<li><p>コマンド プロンプト (管理者) を起動します。</p>
+</li>
+<li><p>以下のコマンドを実行し、fabrikam.com のドメイン コントローラーへ情報を複製します。<br>repadmin /syncall /AeP</p>
+</li>
+</ol>
+<h4 id="ゾーン転送の強制"><a href="#ゾーン転送の強制" class="headerlink" title="ゾーン転送の強制"></a>ゾーン転送の強制</h4><ol>
+<li>contoso.com のドメイン コントローラー (DNS サーバー)に管理者権限を持ったユーザーでログオンします。</li>
+<li>[DNS マネージャ] を起動します。</li>
+<li>[前方参照ゾーン] 配下の [fabrikam.com]を右クリックし、[マスターからゾーンの新しいコピーを転送 (O)] をクリックします。</li>
+</ol>
+<h3 id="b-contoso-com-のドメイン-コントローラー-DNS-サーバー-で条件付きフォワーダーによる名前解決を設定する"><a href="#b-contoso-com-のドメイン-コントローラー-DNS-サーバー-で条件付きフォワーダーによる名前解決を設定する" class="headerlink" title="b) contoso.com のドメイン コントローラー (DNS サーバー) で条件付きフォワーダーによる名前解決を設定する"></a>b) contoso.com のドメイン コントローラー (DNS サーバー) で条件付きフォワーダーによる名前解決を設定する</h3><p>fabrikam.com に対する名前解決をセカンダリ ゾーンではなく、条件付きフォワーダーを利用することで、_msdcs 委任レコードを参照することなく SRV レコードの名前解決が行えるようになります。</p>
+<h4 id="セカンダリ-ゾーンの削除"><a href="#セカンダリ-ゾーンの削除" class="headerlink" title="セカンダリ ゾーンの削除"></a>セカンダリ ゾーンの削除</h4><ol>
+<li>contoso.com のドメイン コントローラー (DNS サーバー)に管理者権限を持ったユーザーでログオンします。</li>
+<li>[DNS マネージャ] を起動します。</li>
+<li>[前方参照ゾーン] 配下の [fabrikam.com]を右クリックし、[削除] をクリックします。</li>
+<li>確認画面が表示されたら、[はい] をクリックします。</li>
+<li>contoso.com のすべてのドメイン コントローラー (DNS サーバー)に対して、手順 1. ～ 4. を実施します。</li>
+</ol>
+<h4 id="条件付きフォワーダーの設定"><a href="#条件付きフォワーダーの設定" class="headerlink" title="条件付きフォワーダーの設定"></a>条件付きフォワーダーの設定</h4><ol>
+<li>contoso.com のドメイン コントローラー (DNS サーバー)に管理者権限を持ったユーザーでログオンします。</li>
+<li>[DNS マネージャ] を起動します。</li>
+<li>[条件付きフォワーダー] を右クリックし、[新規条件付きフォワーダー(C)…] をクリックします。</li>
+<li>“DNS ドメイン:” 欄に fabrikam.com と入力し、”マスター サーバーの IP アドレス (S)” 欄に  fabrikam.com の現存するドメイン コントローラー (DNS サーバー) の IP アドレスを入力します。 入力後、[OK] をクリックします。<br>※ DNS サーバーが複数存在する場合は、複数の IP アドレスを登録してください。</li>
+<li>contoso.com のすべてのドメイン コントローラー (DNS サーバー)に対して、手順 1. ～ 4. を実施します。</li>
+</ol>
+<h3 id="c-contoso-com-のドメイン-コントローラー-DNS-サーバー-で-msdcs-fabrikam-com-のセカンダリ-ゾーンを構成する"><a href="#c-contoso-com-のドメイン-コントローラー-DNS-サーバー-で-msdcs-fabrikam-com-のセカンダリ-ゾーンを構成する" class="headerlink" title="c) contoso.com のドメイン コントローラー (DNS サーバー) で _msdcs.fabrikam.com のセカンダリ ゾーンを構成する"></a>c) contoso.com のドメイン コントローラー (DNS サーバー) で _msdcs.fabrikam.com のセカンダリ ゾーンを構成する</h3><p>contoso.com のドメイン コントローラー (DNS サーバー) 上に fabrikam.com セカンダリ ゾーンだけでなく、_msdcs.fabrikam.com セカンダリ ゾーンを追加で構成します。これにより、_msdcs.fabrikam.com ゾーン内のSRV レコードを解決する際に、fabrikam.com 内の _msdcs 委任レコードを参照するのではなく、_msdcs.fabrikam.com ゾーンを直接参照する動作となり、名前解決が行えるようになります。</p>
+<h4 id="ゾーン転送の許可"><a href="#ゾーン転送の許可" class="headerlink" title="ゾーン転送の許可"></a>ゾーン転送の許可</h4><ol>
+<li>fabrikam.com のドメイン コントローラー (DNS サーバー)に管理者権限を持ったユーザーでログオンします。</li>
+<li>[DNS マネージャ] を起動します。</li>
+<li>[前方参照ゾーン] 配下の [_msdcs.fabrikam.com]を右クリックし、[プロパティ] をクリックします。</li>
+<li>[ゾーンの転送] タブをクリックします。</li>
+<li>“ゾーン転送を許可するサーバー” にチェックを入れ、”次のサーバーのみ” を選択してから、[編集] をクリックします。<br>※ “すべてのサーバー” を選択してもゾーン転送の許可は可能となりますが、ここでは特定の IP アドレスに対してのみゾーン転送を許可する設定とします</li>
+<li>セカンダリとなる DNS サーバー (contoso.com の DNS サーバー) の IP アドレスを入力し、[OK] をクリックします。<br>※ DNS サーバーが複数存在する場合は、複数の IP アドレスを登録してください。</li>
+<li>[OK] をクリックし、プロパティ画面を閉じます。</li>
+<li>ゾーン転送元となる fabrikam.com のすべてのドメイン コントローラー (DNS サーバー)に対して、 手順 1. ～ 7. を実施します。</li>
+</ol>
+<h4 id="msdcs-fabrikam-com-セカンダリ-ゾーンの作成"><a href="#msdcs-fabrikam-com-セカンダリ-ゾーンの作成" class="headerlink" title="_msdcs.fabrikam.com セカンダリ ゾーンの作成"></a>_msdcs.fabrikam.com セカンダリ ゾーンの作成</h4><ol>
+<li>contoso.com のドメイン コントローラー (DNS サーバー)に管理者権限を持ったユーザーでログオンします。</li>
+<li>[DNS マネージャ] を起動します。</li>
+<li>[前方参照ゾーン] を右クリックし、[新しいゾーン(Z)… ] をクリックします。</li>
+<li>[次へ] をクリックします。</li>
+<li>[セカンダリ ゾーン] を選択し、[次へ] をクリックします。</li>
+<li>ゾーン名(Z): 欄に “_msdcs.fabrikam.com” と入力し、[次へ] をクリックします。</li>
+<li>ゾーン転送元の DNS サーバー (fabrikam.com の DNS サーバー) の IP アドレスを入力し、[次へ] をクリックします。<br>※ DNS サーバーが複数存在する場合は、複数の IP アドレスを登録してください。</li>
+<li>[完了] をクリックします。</li>
+<li>[前方参照ゾーン] – [_msdcs.fabrikam.com] の順にクリックし、レコードが転送されていることを確認します。</li>
+<li>contoso.com のすべてのドメイン コントローラー (DNS サーバー)に対して、手順 1. ～ 9. を実施します。 </li>
+</ol>
+<p>本投稿が少しでも皆様のお役に立てば幸いです。<br>※ 本情報の内容 (リンク先などを含む) は、作成日時点でのものであり、予告なく変更される場合があります。</p>
+
+      
+      
+    </div>
+    <footer class="article-footer">
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/blog/2024/10/24/PublicKeyInfrastructure/CertificateManagement/NTauth/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">次の記事</strong>
+      <div class="article-nav-title">
+        
+          NTAuth ストアの証明書の登録方法について
+        
+      </div>
+    </a>
+  
+  
+    <a href="/blog/2024/10/07/PublicKeyInfrastructure/CertificateAuthority/renew-ca-certificates/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">前の記事</strong>
+      <div class="article-nav-title">証明機関の CA 証明書の書き換えについて</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">カテゴリ</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Activation/">Activation</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Activation/ESU/">ESU</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Activation/security-SPP/">security-SPP</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/">Active Directory</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Authentication/">Authentication</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/DFSR/">DFSR</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/FunctionalLevel/">FunctionalLevel</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Group-Policy/">Group Policy</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Promotion-and-Demotion/">Promotion and Demotion</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/User-Profile/">User Profile</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Windows-Hello/">Windows Hello</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Windows-Time-Service/">Windows Time Service</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/AppLocker/">AppLocker</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/AppLocker/Active-Directory/">Active Directory</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/AppLocker/Microsoft-Intune/">Microsoft Intune</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Deployment/">Deployment</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Deployment/Feature-on-demand/">Feature on demand</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Deployment/Sysprep/">Sysprep</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Failover-Clustering/">Failover Clustering</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Failover-Clustering/Configuration-and-Management/">Configuration and Management</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/FileServices/">FileServices</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/FileServices/FTP/">FTP</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/FileServices/SMB/">SMB</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Hyper-V/">Hyper-V</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Hyper-V/Configuration-and-Management/">Configuration and Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Hyper-V/Migration/">Migration</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Microsoft-Connected-Cache/">Microsoft Connected Cache</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/">Networking</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/BITS/">BITS</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/Bluetooth/">Bluetooth</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/DHCP/">DHCP</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/DNS/">DNS</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/Firewall/">Firewall</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/LBFO/">LBFO</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/NCSI/">NCSI</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/NetworkInterface/">NetworkInterface</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/Proxy/">Proxy</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/TCPIP/">TCPIP</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/OpenSSH/">OpenSSH</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/">Performance</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/Hang-up-BSoD/">Hang-up/BSoD</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/No-Boot/">No Boot</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/Slow-Response/">Slow Response</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/System-Resource/">System Resource</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/Tools/">Tools</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/">Public Key Infrastructure</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Certificate-Authority/">Certificate Authority</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Certificate-Management/">Certificate Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Code-Signing/">Code Signing</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/SSL-TLS-Communication/">SSL TLS Communication</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/SSL-TLS-Connection/">SSL TLS Connection</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Smart-Card-Logon/">Smart Card Logon</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/">Remote Desktop</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/Azure-Virtual-Desktop-AVD/">Azure Virtual Desktop (AVD)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/Remote-Desktop-Service-RDS/">Remote Desktop Service (RDS)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/Windows-Virtual-Desktop-WVD/">Windows Virtual Desktop (WVD)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/RemoteAccess/">RemoteAccess</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/RemoteAccess/%E3%83%80%E3%82%A4%E3%83%A4%E3%83%AB%E3%82%A2%E3%83%83%E3%83%97%E6%8E%A5%E7%B6%9A/">ダイヤルアップ接続</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Setup/">Setup</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Setup/Feature-Update-FU/">Feature Update (FU)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Shell/">Shell</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Shell/Explorer/">Explorer</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/">Storage</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/Backup/">Backup</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/FSRM/">FSRM</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/Management/">Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/StorageMigrationService/">StorageMigrationService</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/UEFI/">UEFI</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/UEFI/Secure-Boot/">Secure Boot</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/">User Interface and Apps</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Command-Prompt/">Command Prompt</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/EventLog/">EventLog</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Language-Support/">Language Support</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Microsoft-Store/">Microsoft Store</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Performance/">Performance</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/PowerShell/">PowerShell</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Printing-%E5%8D%B0%E5%88%B7/">Printing (印刷)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Server-Management/">Server Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Taskscheduler/">Taskscheduler</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Windows-Management-Instrumentation/">Windows Management Instrumentation</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps-Language-support/">User Interface and Apps - Language support</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-365/">Windows 365</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Admin-Center/">Windows Admin Center</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Search/">Windows Search</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/">Windows Update</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Delivery-Optimization-DO/">Delivery Optimization (DO)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Feature-Update-FU/">Feature Update (FU)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Quality-Update-QU/">Quality Update (QU)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Windows-Update-Agent/">Windows Update Agent</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Windows-Update-Agent-WUA/">Windows Update Agent (WUA)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/">WirelessNetwork</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/NPS/">NPS</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/Wi-Fi/">Wi-Fi</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/%E3%83%A2%E3%83%90%E3%82%A4%E3%83%AB-%E3%83%96%E3%83%AD%E3%83%BC%E3%83%89%E3%83%90%E3%83%B3%E3%83%89%E6%8E%A5%E7%B6%9A-LTE/">モバイル ブロードバンド接続 (LTE)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/%E7%B5%84%E7%B9%94%E7%B4%B9%E4%BB%8B%E3%83%96%E3%83%AD%E3%82%B0%EF%BC%88Windows-Commercial%EF%BC%89/">組織紹介ブログ（Windows Commercial）</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最近の投稿</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/blog/2026/02/16/ActiveDirectory/GroupPolicy/UacPolicyIsEnabled/">「ユーザー アカウント制御：ビルトイン Administrator アカウントのための管理者承認モード」ポリシーが有効になる動作ついて</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/02/15/UserInterfaceAndApps/Printing/printer-queue-app-preview/">印刷キューアプリのプレビュー機能について</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/02/02/ActiveDirectory/Authentication/kerberos-rc4-for-service-account-ticket-issuance-changes-related-to-cve-2026-20833/">CVE‑2026‑20833 への対応とその影響について [KB5073381]</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/01/12/Hyper-V/vmwp-does-not-save-the-RTC-value-of-a-virtual-machine-when-performing-Live-Migration/">ライブ マイグレーション後の再起動でゲスト OS の時刻がずれる場合がある</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/01/07/WindowsUpdate/FU/fublog-txt/">ISO メディア経由かつ動的更新無効な状態で Windows 11 バージョン 24H2 または 25H2 へのアップグレードが失敗 (0x8007042B 0x2000D) する事象と対策について</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">アーカイブ</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2026/02/">2026 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2026/01/">2026 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/12/">2025 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/11/">2025 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/10/">2025 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/09/">2025 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/08/">2025 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/07/">2025 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/06/">2025 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/05/">2025 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/04/">2025 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/03/">2025 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/02/">2025 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/01/">2025 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/12/">2024 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/11/">2024 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/10/">2024 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/09/">2024 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/08/">2024 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/07/">2024 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/06/">2024 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/05/">2024 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/04/">2024 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/03/">2024 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/02/">2024 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/01/">2024 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/12/">2023 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/11/">2023 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/10/">2023 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/09/">2023 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/08/">2023 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/07/">2023 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/06/">2023 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/05/">2023 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/04/">2023 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/03/">2023 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/02/">2023 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/01/">2023 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/12/">2022 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/11/">2022 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/10/">2022 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/09/">2022 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/08/">2022 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/07/">2022 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/06/">2022 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/05/">2022 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/04/">2022 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/03/">2022 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/02/">2022 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/01/">2022 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/12/">2021 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/11/">2021 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/10/">2021 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/09/">2021 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/08/">2021 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/07/">2021 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/06/">2021 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/05/">2021 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/04/">2021 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/03/">2021 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/02/">2021 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/01/">2021 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/12/">2020 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/11/">2020 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/10/">2020 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/07/">2020 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/03/">2020 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2019/03/">2019 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/11/">2018 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/10/">2018 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/09/">2018 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/08/">2018 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/07/">2018 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/06/">2018 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/04/">2018 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/02/">2018 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/12/">2017 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/11/">2017 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/09/">2017 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/05/">2017 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/03/">2017 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/02/">2017 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2016/08/">2016 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2016/05/">2016 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2014/03/">2014 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2012/02/">2012 / 02</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2026 Microsoft Japan Windows Technology Support Team<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/blog/" class="mobile-nav-link">Home</a>
+  
+    <a href="/blog/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+<script src="/blog/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

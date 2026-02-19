@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-180187723-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-180187723-1');
+</script>
+<!-- End Google Analytics -->
+
+  
+  <title>MSDTCを動作させるために必要な設定について | Microsoft Japan Windows Technology Support Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="※ 本記事は弊社の Technet のサイトから移行した記事です。 いつも弊社製品をご利用いただきまして誠にありがとうございます。日本マイクロソフトの Windows サポートチームです。 今回は、Web アプリケーションでもよく利用される MS DTC (Distributed Transaction Coordinator) を介した分散トランザクションを実行する際、MSDTC を動作させるた">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MSDTCを動作させるために必要な設定について">
+<meta property="og:url" content="https://jpwinsup.github.io/blog/2024/02/05/FailoverClustering/SettingForMsdtc/index.html">
+<meta property="og:site_name" content="Microsoft Japan Windows Technology Support Blog">
+<meta property="og:description" content="※ 本記事は弊社の Technet のサイトから移行した記事です。 いつも弊社製品をご利用いただきまして誠にありがとうございます。日本マイクロソフトの Windows サポートチームです。 今回は、Web アプリケーションでもよく利用される MS DTC (Distributed Transaction Coordinator) を介した分散トランザクションを実行する際、MSDTC を動作させるた">
+<meta property="og:locale" content="ja_JP">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2024/02/05/FailoverClustering/SettingForMsdtc/image1.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2024/02/05/FailoverClustering/SettingForMsdtc/image2.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2024/02/05/FailoverClustering/SettingForMsdtc/image3.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2024/02/05/FailoverClustering/SettingForMsdtc/image4.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2024/02/05/FailoverClustering/SettingForMsdtc/image5.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2024/02/05/FailoverClustering/SettingForMsdtc/image6.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2024/02/05/FailoverClustering/SettingForMsdtc/image7.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2024/02/05/FailoverClustering/SettingForMsdtc/image8.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2024/02/05/FailoverClustering/SettingForMsdtc/image9.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2024/02/05/FailoverClustering/SettingForMsdtc/image10.png">
+<meta property="article:published_time" content="2024-02-05T03:00:00.000Z">
+<meta property="article:modified_time" content="2026-02-19T02:53:58.368Z">
+<meta property="article:author" content="Microsoft Japan Windows Technology Support Team">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://jpwinsup.github.io/blog/2024/02/05/FailoverClustering/SettingForMsdtc/image1.png">
+  
+    <link rel="alternate" href="/blog/atom.xml" title="Microsoft Japan Windows Technology Support Blog" type="application/atom+xml">
+  
+
+  <link rel="icon" href="/blog/favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="/blog/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/blog/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/blog/favicon-16x16.png">
+  <link rel="manifest" href="/blog/site.webmanifest">
+  <link rel="mask-icon" href="/blog/safari-pinned-tab.svg" color="#5bbad5">
+  <meta name="msapplication-TileColor" content="#ffffff">
+  <meta name="theme-color" content="#ffffff">
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/blog/css/style.css">
+
+<meta name="generator" content="Hexo 5.2.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="site-header-logo"></div>
+  <div id="site-header-blog-wrapper"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        <div id="ms-logo"></div>
+        
+          <a class="main-nav-link" href="/blog/">Home</a>
+        
+          <a class="main-nav-link" href="/blog/archives">Archives</a>
+        
+        <a class="main-nav-link" target="_blank" rel="noopener" href="https://cssjpn.github.io/">サポート情報</a>
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/blog/atom.xml" title="RSSフィード"></a>
+        
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//www.bing.com/search" method="get" accept-charset="UTF-8" name="bing-search" onsubmit="var f=this;if(f['q'].value){var searchUrl =  'https://www.bing.com/search?q=' +  encodeURIComponent(f['q'].value + ' site:' + f['sitesearch'].value) ;window.open(searchUrl, 'blank') };return false;" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="検索"><button type="submit" id="nav-search-btn" class="search-form-submit"></button><input type="hidden" name="sitesearch" value="https://jpwinsup.github.io/blog"></form>
+      </div>
+    </div>
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/blog/" id="logo">Microsoft Japan Windows Technology Support Blog</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/blog/" id="subtitle">日本マイクロソフト Windows Support チームによる、サポート情報 Blog です。</a>
+        </h2>
+      
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-FailoverClustering/SettingForMsdtc" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    
+    
+      <header class="article-header-single">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      MSDTCを動作させるために必要な設定について
+    </h1>
+  
+
+      </header>
+      <div class="article-share">
+        Last Update: 
+        <a href="/blog/2024/02/05/FailoverClustering/SettingForMsdtc/" class="article-date-single">
+  <time datetime="2024-02-05T03:00:00.000Z" itemprop="datePublished">2024-02-05</time>
+</a>
+        
+  <div class="article-category">
+    <a class="article-category-link" href="/blog/categories/Failover-Clustering/">Failover Clustering</a>►<a class="article-category-link" href="/blog/categories/Failover-Clustering/Configuration-and-Management/">Configuration and Management</a>
+  </div>
+
+        
+        <a href="https://github.com/jpwinsup/blog/issues/new?title=&body=%EF%BB%BF%0A%0A---%0A%0A%23%23%23%23+Document+Details%0A%0A*+Article+ID%3A+533af2e2-c593-5f6c-aead-85910d18719a%0A*+TITLE%3A+MSDTC%E3%82%92%E5%8B%95%E4%BD%9C%E3%81%95%E3%81%9B%E3%82%8B%E3%81%9F%E3%82%81%E3%81%AB%E5%BF%85%E8%A6%81%E3%81%AA%E8%A8%AD%E5%AE%9A%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6%0A*+URL+https%3A%2F%2Fjpwinsup.github.io%2Fblog%2F2024%2F02%2F05%2FFailoverClustering%2FSettingForMsdtc%2F%0A*+SourceFileName%3A+source%2F_posts%2FFailoverClustering%2FSettingForMsdtc.md%0A" class="article-github-issue-link" target="_blank" rel="noopener noreferrer">feedback</a>
+        
+        <a data-url="https://jpwinsup.github.io/blog/2024/02/05/FailoverClustering/SettingForMsdtc/" data-id="cmlsvjd85000lru3y4q1f9ovn" class="article-share-link">共有</a>
+      </div>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>※ 本記事は弊社の Technet のサイトから移行した記事です。</p>
+<p>いつも弊社製品をご利用いただきまして誠にありがとうございます。日本マイクロソフトの Windows サポートチームです。</p>
+<p>今回は、Web アプリケーションでもよく利用される MS DTC (Distributed Transaction Coordinator) を介した分散トランザクションを実行する際、MSDTC を動作させるために必要な構成や設定について案内します。  </p>
+<p>「MSDTC の設定をしてみたけど、うまく動かない」「アプリケーションを動かしたら、分散トランザクションが失敗したことを示すエラーが記録された」といったことがありましたら、下記の設定が正しくできているか、まずは確認してみてください。  </p>
+<p>MSDTC を介した分散トランザクションが正常に動作するには、以下の 5 つが必要になります。  </p>
+<ol>
+<li>MSDTC サービスの起動を確認する  </li>
+<li>MSDTC のセキュリティ設定をする  </li>
+<li>MSDTC が利用するポートを空ける  </li>
+<li>NetBIOS 名での名前解決可否を確認する  </li>
+<li>CID の一意性を確認する  </li>
+</ol>
+<h2 id="1-MSDTC-サービスの起動を確認する"><a href="#1-MSDTC-サービスの起動を確認する" class="headerlink" title="1. MSDTC サービスの起動を確認する"></a>1. MSDTC サービスの起動を確認する</h2><p>MSDTC は Windows のサービス プログラムの 1 つとして実装されており、MSDTC を介して分散トランザクションを実行するには、MSDTC サービスが起動している必要があります。  </p>
+<p>MSDTC を利用する全てのサーバーノードで、[管理ツール] - [サービス] 等から [Distributed Transaction Coordinator] サービスが実行中となっており、ログオン アカウントとして NETWORK SERVICE アカウントで動作している事をご確認ください。<br><img src="image1.png"><br>また、もし、クラスター上でクラスター リソースとして分散トランザクション コーディネーター (MSDTC) をリソースとして作成されている場合、既定ではそちらが優先して利用されます。その場合、同様に [管理ツール] - [サービス] 等を確認しますと、MSDTC クラスター リソースを持っているアクティブノード上に [Distributed Transaction Coordinator (xxxxxx)] (xxxxx は一意の GUID) という名前のサービスがありますので、こちらが実行中となっているか、ご確認ください。<br><img src="image2.png"></p>
+<h2 id="2-MSDTC-のセキュリティ設定をする"><a href="#2-MSDTC-のセキュリティ設定をする" class="headerlink" title="2. MSDTC のセキュリティ設定をする"></a>2. MSDTC のセキュリティ設定をする</h2><p>MSDTC がネットワークアクセスを許可している事をご確認ください。こちらも MSDTC を利用する全てのサーバーでご確認ください。  </p>
+<ol>
+<li><p>[管理ツール] - [コンポーネントサービス」を起動します。  </p>
+</li>
+<li><p>左ペインのツリーにて、 [コンポーネントサービス] - [コンピュータ] - [マイコンピュータ] - [Distributed Transaction Coordinator] 内、[ローカル DTC] 内のコンピューターアイコンを右クリックし、[プロパティ] を開きます。なお、クラスター上に MSDTC をリソースを作成されている場合は、[クラスタ化された DTC] 内のアイコンを確認します。<br><img src="image3.png"></p>
+</li>
+<li><p>[セキュリティ] タブを以下のように構成します。この設定を変更すると MSDTC サービスの再起動が自動的に実施されます。また、設定の反映のためには MSDTC を使用しているサービス等の再起動を要する場合があります。  </p>
+</li>
+</ol>
+<ul>
+<li>ネットワーク DTC アクセス  </li>
+<li>トランザクションマネージャー通信  </li>
+<li>受信を許可する  </li>
+<li>送信を許可する  </li>
+<li>認証を必要としない (*)  </li>
+<li>XA トランザクションを有効にする (※Oracle、DB2 等と分散トランザクションを実施する場合に有効)<br><img src="image4.png"></li>
+</ul>
+<p>＊過去、MSDTC を利用するお客様の環境では、認証機能は Domain など状態に影響を受けることから、外因により障害へ発展する可能性が高く、この様なトラブルの発生を避けるため、”認証を必要としない” を選択されていることが一般的です。<br>なお、”認証を必要としない” を設定しても、MSDTC を利用する側 (例えば IIS や SQL Server など) で認証が行われていることが想定されます。  </p>
+<ol start="4">
+<li>[DTC ログオン アカウント] に NT Authority\NetworkService が指定されていることを確認します。  </li>
+</ol>
+<h2 id="3-MSDTC-が利用するポートを空ける"><a href="#3-MSDTC-が利用するポートを空ける" class="headerlink" title="3. MSDTC が利用するポートを空ける"></a>3. MSDTC が利用するポートを空ける</h2><p>以下のポート範囲について、経路上でブロックされていないか、ご確認ください。  </p>
+<p><strong>3.1.</strong><br>MSDTC は通信にリモート プロシージャ コール (以下、RPC) を利用するため、135 番ポート、および RPC により動的に利用されるランダムなポートを使用します。  </p>
+<p>＊OS により、RPC が利用するランダムポートに相違があります。<br>Windows Server 2008 、及びそれ以降の OS では、既定では 49152 - 65535 までの範囲となります。<br>一方、Windows XP や Windows Server 2003 では、1025 - 5000 までの範囲が利用されます。  </p>
+<p>Windows のサービス概要およびネットワーク ポート要件<br><a target="_blank" rel="noopener" href="http://support.microsoft.com/kb/832017/ja">http://support.microsoft.com/kb/832017/ja</a>  </p>
+<p>Windows 上の F/W に対しては、分散トランザクション コーディネイターに対するルールを許可していただくことになります。<br><img src="image5.png"><br><img src="image6.png"></p>
+<p>マシン上やネットワーク上に 3rd party 製の F/W 等がある場合は、上述のポートが空いているかどうか、ご確認ください。  </p>
+<p>なお、コンポーネントサービスの設定により、利用するポートの範囲を指定することも可能です。以下手順で設定を確認してください。  </p>
+<ol>
+<li>コンポーネントサービスの “マイコンピューター” を選択し、右クリックにてプロパティを表示します。  </li>
+<li>表示されたマイコンピューターのプロパティにおいて、”既定のプロトコル” タブを選択し、”接続指向 TCP/IP” を選択の “プロパティ” をクリックします。<br><img src="image7.png"></li>
+<li>表示された “COM インターネットサービスのプロパティ” のポート範囲に何らかの範囲が指定されていないか、確認します。指定されている場合、設定されているポートを利用して (MSDTC を含む) RPC 通信が行われます。<br><img src="image8.png"></li>
+</ol>
+<p><strong>3.2.</strong><br>後述する NetBIOS の名前解決のために、UDP 137 ～ 139 番、さらに、もし前項で認証を使用していた場合は Kerberos の UDP 88番および TCP 88番を使用します。  </p>
+<p><strong>3.3.</strong><br>MSDTC通信を許可するために、Windows のファイアウォールを設定します。  </p>
+<ol>
+<li>[コントロールパネル] - [システムとセキュリティ] - [Windows ファイアウォール] を起動します。  </li>
+<li>左ペインの、[詳細設定] をクリックします。  </li>
+<li>左ペインの、[受信の規則] をクリックし、 [分散トランザクション コーディネーター] (RPC / PRC-EPMAP / TCP 受信のそれぞれ) を選択し、右ペインの [規則の有効化] をクリックします。  </li>
+<li>左ペインの、[送信の規則] をクリックし、 [分散トランザクション コーディネーター] (TCP 送信) を選択し、右ペインの [規則の有効化] をクリックします。<br>これにより MSDTC が RPC を使用して通信する際のポートが許可されます。  </li>
+</ol>
+<h2 id="4-NetBIOS-名での名前解決可否を確認する"><a href="#4-NetBIOS-名での名前解決可否を確認する" class="headerlink" title="4. NetBIOS 名での名前解決可否を確認する"></a>4. NetBIOS 名での名前解決可否を確認する</h2><p>MSDTC は、サーバー間でお互いに名前解決できる必要があります。<br>名前解決の動作検証は、以下コマンドにてエラーが起きないことを確認いただくことで可能です。  </p>
+<pre><code>ping &lt;相手サーバー名&gt;  </code></pre>
+<p>それぞれのサーバーから、接続先のサーバーについて、名前解決が可能かをご確認ください。<br>クラスター環境では、さらに MSDTC に関連付けたクライアントアクセスポイント名も解決できる様に構成をお願いします。  </p>
+<p>a. 相手サーバー名<br>b. クラスターのネットワーク名<br>c. MSDTC クラスター リソースのネットワーク名 (クライアント アクセスポイント名。下記図の場合、msdtc99)<br><img src="image9.png"></p>
+<p>なお、名前解決に失敗する場合、hosts ファイルに対しサーバー名と IP アドレスを記述することで、明確に利用するアドレスを指定することが可能です。  </p>
+<p>hosts ファイルは、c:\Windows\System32\Drivers\etc 配下に保存されており、管理者権限で昇格したメモ帳などで編集することが可能です。  </p>
+<p>その際、以下の様なフォーマット (IPアドレス [スペース] サーバー名、もしくは MSDTC に依存関係を結んだサーバー名) で指定いたします。  </p>
+<p>例：  </p>
+<pre><code>192.168.0.101 testServer1  
+192.168.0.102 testServer2  </code></pre>
+<p>複数設定されたアドレスの内、対象のサーバーに対して接続する際に、利用するべき IP アドレスを指定いただければ幸いです。  </p>
+<p>なお、クラスター環境では、両方の系で hosts ファイルを編集し、指定したアドレスに差が無いように設定くださいますようお願い申し上げます。<br>＊ここで差が出ますと、系が切り替わった瞬間からトランザクションが失敗するという問題が起きる可能性があります。  </p>
+<h2 id="5-CID-の一意性を確認する"><a href="#5-CID-の一意性を確認する" class="headerlink" title="5. CID の一意性を確認する"></a>5. CID の一意性を確認する</h2><p>MSDTC は、相互に通信を行う際に自身を特定するために CID と呼ばれる一意の ID をインストール時に採番しそれを通信に利用します。<br>この ID はレジストリに保持されることとなりますが、仮想マシンの利用などで、ディスクイメージをコピーし、それをそのまま利用した場合、レジストリの内容もコピーされて ID が衝突してしまうこと考えられます。<br>この場合も、MSDTC は通信に失敗してしまいます。  </p>
+<p>それぞれのサーバーにおいて、HKEY_CLASSES_ROOT\CID のレジストリ値に同一エントリーが含まれている場合、本状況に合致していると判断可能です。<br><img src="image10.png"></p>
+<p>この CID を改めて採番したい場合、MSDTC の再インストールが有効です。<br>以下に手順を記載します。  </p>
+<pre><code>a. 管理者権限でコマンド プロンプトを起動し、以下のコマンドを実行して MSDTC サービスを停止します  
+
+&gt;net stop msdtc  
+
+b. 続けて、以下のコマンドを実行します  
+
+&gt;msdtc -uninstall  
+
+c. レジストリ エディターを開いていただき、以下のレジストリが存在すれば、手動で削除します  
+
+HKEY_LOCAL_MACHINE\System\CurrentControlSet\Services\MSDTC  
+HKEY_CLASSES_ROOT\CID  
+HKEY_CLASSES_ROOT\CID.Local  
+HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\MSDTC  
+
+d. 以下のコマンドを実行します  
+
+&gt;msdtc -install  
+&gt;msdtc -resetlog  
+
+e. 以下の手順にてパフォーマンスカウンターの再登録を実行します  
+
+&gt;cd %windir%\inf\msdtc\0000  
+&gt;copy ..\msdtcprf.h msdtcprf.h  
+&gt;lodctr msdtcprf.ini  
+
+f. OS を再起動します  </code></pre>
+<p>なお、クラスター上に MSDTC が構成されている場合、一度 MSDTC リソースを削除してから、上記手順を実施し、その後、改めて MSDTC のリソースを追加いただければ幸いです。  </p>
+<p>また、本手順により MSDTC の設定がクリアされることとなります。<br>本手順の 2. も参考に、必ずコンポーネントサービスから MSDTC の再設定 (ローカル 及び クラスター上) を行ってください。  </p>
+<p>以上となります。  </p>
+
+      
+      
+    </div>
+    <footer class="article-footer">
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/blog/2024/02/29/WindowsSearch/WSearchIndexOnMultiSessionOS/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">次の記事</strong>
+      <div class="article-nav-title">
+        
+          Windows マルチセッション OS における Windows Search のインデックスについて
+        
+      </div>
+    </a>
+  
+  
+    <a href="/blog/2024/02/05/FailoverClustering/EventID1206-1207/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">前の記事</strong>
+      <div class="article-nav-title">フェールオーバー クラスターのイベント ID 1206 および 1207 の対応策</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">カテゴリ</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Activation/">Activation</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Activation/ESU/">ESU</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Activation/security-SPP/">security-SPP</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/">Active Directory</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Authentication/">Authentication</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/DFSR/">DFSR</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/FunctionalLevel/">FunctionalLevel</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Group-Policy/">Group Policy</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Promotion-and-Demotion/">Promotion and Demotion</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/User-Profile/">User Profile</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Windows-Hello/">Windows Hello</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Windows-Time-Service/">Windows Time Service</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/AppLocker/">AppLocker</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/AppLocker/Active-Directory/">Active Directory</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/AppLocker/Microsoft-Intune/">Microsoft Intune</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Deployment/">Deployment</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Deployment/Feature-on-demand/">Feature on demand</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Deployment/Sysprep/">Sysprep</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Failover-Clustering/">Failover Clustering</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Failover-Clustering/Configuration-and-Management/">Configuration and Management</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/FileServices/">FileServices</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/FileServices/FTP/">FTP</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/FileServices/SMB/">SMB</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Hyper-V/">Hyper-V</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Hyper-V/Configuration-and-Management/">Configuration and Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Hyper-V/Migration/">Migration</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Microsoft-Connected-Cache/">Microsoft Connected Cache</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/">Networking</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/BITS/">BITS</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/Bluetooth/">Bluetooth</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/DHCP/">DHCP</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/DNS/">DNS</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/Firewall/">Firewall</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/LBFO/">LBFO</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/NCSI/">NCSI</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/NetworkInterface/">NetworkInterface</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/Proxy/">Proxy</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/TCPIP/">TCPIP</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/OpenSSH/">OpenSSH</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/">Performance</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/Hang-up-BSoD/">Hang-up/BSoD</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/No-Boot/">No Boot</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/Slow-Response/">Slow Response</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/System-Resource/">System Resource</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/Tools/">Tools</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/">Public Key Infrastructure</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Certificate-Authority/">Certificate Authority</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Certificate-Management/">Certificate Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Code-Signing/">Code Signing</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/SSL-TLS-Communication/">SSL TLS Communication</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/SSL-TLS-Connection/">SSL TLS Connection</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Smart-Card-Logon/">Smart Card Logon</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/">Remote Desktop</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/Azure-Virtual-Desktop-AVD/">Azure Virtual Desktop (AVD)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/Remote-Desktop-Service-RDS/">Remote Desktop Service (RDS)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/Windows-Virtual-Desktop-WVD/">Windows Virtual Desktop (WVD)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/RemoteAccess/">RemoteAccess</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/RemoteAccess/%E3%83%80%E3%82%A4%E3%83%A4%E3%83%AB%E3%82%A2%E3%83%83%E3%83%97%E6%8E%A5%E7%B6%9A/">ダイヤルアップ接続</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Setup/">Setup</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Setup/Feature-Update-FU/">Feature Update (FU)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Shell/">Shell</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Shell/Explorer/">Explorer</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/">Storage</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/Backup/">Backup</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/FSRM/">FSRM</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/Management/">Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/StorageMigrationService/">StorageMigrationService</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/UEFI/">UEFI</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/UEFI/Secure-Boot/">Secure Boot</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/">User Interface and Apps</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Command-Prompt/">Command Prompt</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/EventLog/">EventLog</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Language-Support/">Language Support</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Microsoft-Store/">Microsoft Store</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Performance/">Performance</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/PowerShell/">PowerShell</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Printing-%E5%8D%B0%E5%88%B7/">Printing (印刷)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Server-Management/">Server Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Taskscheduler/">Taskscheduler</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Windows-Management-Instrumentation/">Windows Management Instrumentation</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps-Language-support/">User Interface and Apps - Language support</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-365/">Windows 365</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Admin-Center/">Windows Admin Center</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Search/">Windows Search</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/">Windows Update</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Delivery-Optimization-DO/">Delivery Optimization (DO)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Feature-Update-FU/">Feature Update (FU)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Quality-Update-QU/">Quality Update (QU)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Windows-Update-Agent/">Windows Update Agent</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Windows-Update-Agent-WUA/">Windows Update Agent (WUA)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/">WirelessNetwork</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/NPS/">NPS</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/Wi-Fi/">Wi-Fi</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/%E3%83%A2%E3%83%90%E3%82%A4%E3%83%AB-%E3%83%96%E3%83%AD%E3%83%BC%E3%83%89%E3%83%90%E3%83%B3%E3%83%89%E6%8E%A5%E7%B6%9A-LTE/">モバイル ブロードバンド接続 (LTE)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/%E7%B5%84%E7%B9%94%E7%B4%B9%E4%BB%8B%E3%83%96%E3%83%AD%E3%82%B0%EF%BC%88Windows-Commercial%EF%BC%89/">組織紹介ブログ（Windows Commercial）</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最近の投稿</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/blog/2026/02/16/ActiveDirectory/GroupPolicy/UacPolicyIsEnabled/">「ユーザー アカウント制御：ビルトイン Administrator アカウントのための管理者承認モード」ポリシーが有効になる動作ついて</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/02/15/UserInterfaceAndApps/Printing/printer-queue-app-preview/">印刷キューアプリのプレビュー機能について</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/02/02/ActiveDirectory/Authentication/kerberos-rc4-for-service-account-ticket-issuance-changes-related-to-cve-2026-20833/">CVE‑2026‑20833 への対応とその影響について [KB5073381]</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/01/12/Hyper-V/vmwp-does-not-save-the-RTC-value-of-a-virtual-machine-when-performing-Live-Migration/">ライブ マイグレーション後の再起動でゲスト OS の時刻がずれる場合がある</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/01/07/WindowsUpdate/FU/fublog-txt/">ISO メディア経由かつ動的更新無効な状態で Windows 11 バージョン 24H2 または 25H2 へのアップグレードが失敗 (0x8007042B 0x2000D) する事象と対策について</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">アーカイブ</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2026/02/">2026 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2026/01/">2026 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/12/">2025 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/11/">2025 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/10/">2025 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/09/">2025 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/08/">2025 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/07/">2025 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/06/">2025 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/05/">2025 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/04/">2025 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/03/">2025 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/02/">2025 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/01/">2025 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/12/">2024 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/11/">2024 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/10/">2024 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/09/">2024 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/08/">2024 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/07/">2024 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/06/">2024 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/05/">2024 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/04/">2024 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/03/">2024 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/02/">2024 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/01/">2024 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/12/">2023 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/11/">2023 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/10/">2023 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/09/">2023 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/08/">2023 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/07/">2023 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/06/">2023 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/05/">2023 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/04/">2023 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/03/">2023 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/02/">2023 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/01/">2023 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/12/">2022 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/11/">2022 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/10/">2022 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/09/">2022 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/08/">2022 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/07/">2022 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/06/">2022 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/05/">2022 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/04/">2022 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/03/">2022 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/02/">2022 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/01/">2022 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/12/">2021 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/11/">2021 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/10/">2021 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/09/">2021 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/08/">2021 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/07/">2021 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/06/">2021 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/05/">2021 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/04/">2021 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/03/">2021 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/02/">2021 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/01/">2021 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/12/">2020 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/11/">2020 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/10/">2020 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/07/">2020 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/03/">2020 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2019/03/">2019 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/11/">2018 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/10/">2018 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/09/">2018 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/08/">2018 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/07/">2018 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/06/">2018 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/04/">2018 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/02/">2018 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/12/">2017 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/11/">2017 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/09/">2017 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/05/">2017 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/03/">2017 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/02/">2017 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2016/08/">2016 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2016/05/">2016 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2014/03/">2014 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2012/02/">2012 / 02</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2026 Microsoft Japan Windows Technology Support Team<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/blog/" class="mobile-nav-link">Home</a>
+  
+    <a href="/blog/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+<script src="/blog/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

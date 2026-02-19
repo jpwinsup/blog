@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-180187723-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-180187723-1');
+</script>
+<!-- End Google Analytics -->
+
+  
+  <title>コンポーネント破損の修復方法 | Microsoft Japan Windows Technology Support Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="作成日: 2025&#x2F;4&#x2F;18最終更新日: 2025&#x2F;6&#x2F;18 ※本記事はマイクロソフト社員によって公開されております。 概要Windows Update の際の品質更新プラグラムの適用や手動での更新プログラムでの適用、機能および役割の追加に際して、OS のコンポーネント破損が原因で適用処理や追加処理が失敗してしまう場合がございます。本ブログでは、OS のコンポーネント破損についての説明と対処方法に">
+<meta property="og:type" content="article">
+<meta property="og:title" content="コンポーネント破損の修復方法">
+<meta property="og:url" content="https://jpwinsup.github.io/blog/2025/04/17/WindowsUpdate/QU/RepairCorruption/index.html">
+<meta property="og:site_name" content="Microsoft Japan Windows Technology Support Blog">
+<meta property="og:description" content="作成日: 2025&#x2F;4&#x2F;18最終更新日: 2025&#x2F;6&#x2F;18 ※本記事はマイクロソフト社員によって公開されております。 概要Windows Update の際の品質更新プラグラムの適用や手動での更新プログラムでの適用、機能および役割の追加に際して、OS のコンポーネント破損が原因で適用処理や追加処理が失敗してしまう場合がございます。本ブログでは、OS のコンポーネント破損についての説明と対処方法に">
+<meta property="og:locale" content="ja_JP">
+<meta property="article:published_time" content="2025-04-17T15:00:00.000Z">
+<meta property="article:modified_time" content="2026-02-19T02:53:58.995Z">
+<meta property="article:author" content="Microsoft Japan Windows Technology Support Team">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/blog/atom.xml" title="Microsoft Japan Windows Technology Support Blog" type="application/atom+xml">
+  
+
+  <link rel="icon" href="/blog/favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="/blog/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/blog/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/blog/favicon-16x16.png">
+  <link rel="manifest" href="/blog/site.webmanifest">
+  <link rel="mask-icon" href="/blog/safari-pinned-tab.svg" color="#5bbad5">
+  <meta name="msapplication-TileColor" content="#ffffff">
+  <meta name="theme-color" content="#ffffff">
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/blog/css/style.css">
+
+<meta name="generator" content="Hexo 5.2.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="site-header-logo"></div>
+  <div id="site-header-blog-wrapper"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        <div id="ms-logo"></div>
+        
+          <a class="main-nav-link" href="/blog/">Home</a>
+        
+          <a class="main-nav-link" href="/blog/archives">Archives</a>
+        
+        <a class="main-nav-link" target="_blank" rel="noopener" href="https://cssjpn.github.io/">サポート情報</a>
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/blog/atom.xml" title="RSSフィード"></a>
+        
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//www.bing.com/search" method="get" accept-charset="UTF-8" name="bing-search" onsubmit="var f=this;if(f['q'].value){var searchUrl =  'https://www.bing.com/search?q=' +  encodeURIComponent(f['q'].value + ' site:' + f['sitesearch'].value) ;window.open(searchUrl, 'blank') };return false;" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="検索"><button type="submit" id="nav-search-btn" class="search-form-submit"></button><input type="hidden" name="sitesearch" value="https://jpwinsup.github.io/blog"></form>
+      </div>
+    </div>
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/blog/" id="logo">Microsoft Japan Windows Technology Support Blog</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/blog/" id="subtitle">日本マイクロソフト Windows Support チームによる、サポート情報 Blog です。</a>
+        </h2>
+      
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-WindowsUpdate/QU/RepairCorruption" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    
+    
+      <header class="article-header-single">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      コンポーネント破損の修復方法
+    </h1>
+  
+
+      </header>
+      <div class="article-share">
+        Last Update: 
+        <a href="/blog/2025/04/17/WindowsUpdate/QU/RepairCorruption/" class="article-date-single">
+  <time datetime="2025-04-17T15:00:00.000Z" itemprop="datePublished">2025-04-18</time>
+</a>
+        
+  <div class="article-category">
+    <a class="article-category-link" href="/blog/categories/Windows-Update/">Windows Update</a>►<a class="article-category-link" href="/blog/categories/Windows-Update/Quality-Update-QU/">Quality Update (QU)</a>
+  </div>
+
+        
+        <a href="https://github.com/jpwinsup/blog/issues/new?title=&body=%EF%BB%BF%0A%0A---%0A%0A%23%23%23%23+Document+Details%0A%0A*+Article+ID%3A+0ffadd4e-7e09-509d-b9ff-72bd85bd93e2%0A*+TITLE%3A+%E3%82%B3%E3%83%B3%E3%83%9D%E3%83%BC%E3%83%8D%E3%83%B3%E3%83%88%E7%A0%B4%E6%90%8D%E3%81%AE%E4%BF%AE%E5%BE%A9%E6%96%B9%E6%B3%95%0A*+URL+https%3A%2F%2Fjpwinsup.github.io%2Fblog%2F2025%2F04%2F17%2FWindowsUpdate%2FQU%2FRepairCorruption%2F%0A*+SourceFileName%3A+source%2F_posts%2FWindowsUpdate%2FQU%2FRepairCorruption.md%0A" class="article-github-issue-link" target="_blank" rel="noopener noreferrer">feedback</a>
+        
+        <a data-url="https://jpwinsup.github.io/blog/2025/04/17/WindowsUpdate/QU/RepairCorruption/" data-id="cmlsvjdoi01imru3ya4oa62jg" class="article-share-link">共有</a>
+      </div>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>作成日: 2025/4/18<br>最終更新日: 2025/6/18</p>
+<p>※本記事はマイクロソフト社員によって公開されております。</p>
+<h1 id="概要"><a href="#概要" class="headerlink" title="概要"></a>概要</h1><p>Windows Update の際の品質更新プラグラムの適用や手動での更新プログラムでの適用、機能および役割の追加に際して、OS のコンポーネント破損が原因で適用処理や追加処理が失敗してしまう場合がございます。<br>本ブログでは、OS のコンポーネント破損についての説明と対処方法についてご説明いたします。<br>ただし、本ブログ内でご説明をするコンポーネント破損の修復を試行しても修復ができないケースもございます。<br>その場合はインプレース アップグレードやクラウド ダウンロードを用いた OS の初期化によるコンポーネント修復を行う必要がございます。<br>インプレース アップグレードやクラウド ダウンロードを用いた OS の初期化についても本ブログの後半に記載をしておりますのでご参考にしていただければと思います。</p>
+<h1 id="コンポーネント破損の説明"><a href="#コンポーネント破損の説明" class="headerlink" title="コンポーネント破損の説明"></a>コンポーネント破損の説明</h1><p>OS のコンポーネント破損は、OS の動作に必要なファイルが何かしらの要因により不正な状態になってしまっている状態を指します。<br>不正な状態についてもう少し詳細にお伝えをさせていただくと、コンポーネントの実体が存在する <code>C:\Windows\WinSxS</code> のフォルダーや <code>C:\Windows\System32</code> のフォルダーで管理されているファイルの欠損やファイル破損、あるいはコンポーネントに関連するレジストリの情報の欠損や無効なデータであること、など様々なパターンのコンポーネントの破損があります。<br>コンポーネント破損が発生した際の一般的なエラーについては <a target="_blank" rel="noopener" href="https://learn.microsoft.com/ja-jp/troubleshoot/windows-server/installing-updates-features-roles/fix-windows-update-errors">Windows Update の破損とインストールエラーを修正する</a> に記述がありますので、簡易的な方法ではございますが、更新プログラムの適用などに失敗した際のエラーコードと照らし合わせることでご自身でコンポーネント破損に起因した更新プログラムの失敗であるか、ということを切り分けを行うことができます。<br>なお、特殊な事例やコンポーネント破損を任意のタイミングで再現させられる場合を除き、コンポーネント破損の根本原因を事後に特定することは叶いません。<br>理由としては、コンポーネントの実体であるファイルやレジストリの状態が不正な状態になる瞬間を捕えなければ、なぜコンポーネントの破損が発生してしまったのかという原因を特定することが困難であるためです。</p>
+<h1 id="コンポーネント破損の修復方法"><a href="#コンポーネント破損の修復方法" class="headerlink" title="コンポーネント破損の修復方法"></a>コンポーネント破損の修復方法</h1><h2 id="コマンドによるコンポーネント破損の修復"><a href="#コマンドによるコンポーネント破損の修復" class="headerlink" title="コマンドによるコンポーネント破損の修復"></a>コマンドによるコンポーネント破損の修復</h2><p>コマンドによるコンポーネント破損の修復は、大まかに以下のステップで試行します。</p>
+<ol>
+<li><code>Dism /Online /Cleanup-Image /RestoreHealth</code> による修復</li>
+<li><code>sfc /scannow</code> による修復</li>
+</ol>
+<p>具体的なコマンドの実行手順は以下の通りでございます。<br>以下のコマンドを実行しましたら、発生している事象が改善されるかを確認します。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">1. コマンド プロンプトを管理者権限で起動します。</span><br><span class="line"></span><br><span class="line">2. 以下のコマンドを実行します。</span><br><span class="line"></span><br><span class="line">&gt; Dism &#x2F;Online &#x2F;Cleanup-Image &#x2F;RestoreHealth</span><br><span class="line"></span><br><span class="line">3.  以下のコマンドを実行します。</span><br><span class="line"></span><br><span class="line">&gt; sfc &#x2F;scannow</span><br></pre></td></tr></table></figure>
+
+<p>実行するコマンドは上記でございますが、ここで上記のコマンドについて以下で詳細にご説明をさせていただきます。<br>今回修復を行う OS のコンポーネントにつきまして、OS のコンポーネントの実体が管理されているフォルダーは大きく分けて <code>C:\Windows\WinSxS</code> フォルダーと <code>C:\Windows\System32</code> フォルダーがあります。<br><code>C:\Windows\WinSxS</code> フォルダーはコンポーネント ストアと呼ばれる場合がありますが、コンポーネント ストアと呼ばれる通り、OS のコンポーネントはこのフォルダーで管理されています。<br>このコンポーネント ストアでは、現在 OS が利用している OS のコンポーネントだけではなく、過去に適用された OS のコンポーネントも管理されています。<br>補足情報として、コンポーネント ストア内のコンポーネントは定期的にクリーンアップされ、ディスク容量の消費が必要最低限になるように工夫されています。<br>詳細については、<a target="_blank" rel="noopener" href="https://learn.microsoft.com/ja-jp/windows-hardware/manufacture/desktop/clean-up-the-winsxs-folder">WinSxS フォルダーのクリーンアップ</a> に説明がございます。<br>対して、<code>C:\Windows\System32</code> には OS が現在利用しているコンポーネントが配置されます。<br>なお、実際には <code>C:\Windows\System32</code> 配下に配置されている OS のコンポーネントは、<code>C:\Windows\WinSxS</code> フォルダーのファイルとのハードリンクとなっています。<br>例えば Windows カーネルのコンポーネントは、以下のようなハードリンクで関連付けが行われています。<br>更新プログラムの適用を行った際は、新しい更新プログラムのコンポーネントが <code>C:\Windows\WinSxS</code> に配置され、更新プログラム適用後の OS 再起動の処理の中でハードリンクが新しく追加されたコンポーネント (つまり新しく適用した更新プログラムに含まれるコンポーネント) に貼りなおされるような動作となります。 </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">C:\&gt;fsutil hardlink list C:\Windows\System32\ntoskrnl.exe</span><br><span class="line">\Windows\WinSxS\amd64_microsoft-windows-os-kernel_31bf3856ad364e35_10.0.22621.1992_none_4be8e35c2fda8a91\ntoskrnl.exe ★ リンクされているパス</span><br><span class="line">\Windows\System32\ntoskrnl.exe ★ システムが利用するパス</span><br></pre></td></tr></table></figure>
+
+<p>上記をもとにコマンドについて説明をすると、<code>Dism /Online /Cleanup-Image /RestoreHealth</code> コマンドでは <code>C:\Windows\WinSxS</code> を対象に修復を試みます。<br>対して、<code>sfc /scannow</code> のコマンドでは <code>C:\Windows\System32</code> を対象に修復を試みます。<br>各コマンドは、本記事の冒頭のステップに記載の順序で実行いただく必要がございます。<br>理由として、<code>sfc /scannow</code> は <code>C:\Windows\WinSxS</code> をもとに <code>C:\Windows\System32</code> の修復を試みるため、<code>Dism /Online /Cleanup-Image /RestoreHealth</code> にて先に <code>C:\Windows\WinSxS</code> を修復する必要がある点にございます。</p>
+<p>なお、上記の <code>Dism /Online /Cleanup-Image /RestoreHealth</code> コマンドではインターネット上のリソースを用いて修復を行います。<br>本コマンドでは修復ソースを指定することができ、<a target="_blank" rel="noopener" href="https://learn.microsoft.com/ja-jp/windows-hardware/manufacture/desktop/configure-a-windows-repair-source">Windows 修復ソースの構成</a> の公開情報が参考になりますので、修復ソースを指定する必要がある場合はご参考にしていただければと思います。</p>
+<p>加えて、ある程度の範囲であれば、手動でのコンポーネントの修復が可能である場合もございますが、推奨されている手順ではない点についてご留意ください。<br>理由として、<code>C:\Windows\WinSxS</code> などのフォルダーは TrustedInstaller と呼ばれる OS コンポーネントを管理するための特殊なビルトイン アカウントによって所有されており、アクセス権の制限により書き込みができないよう保護されております。<br>OS として TrustedInstaller (Windows Modules Installer サービス) 以外からのファイル操作は許可しないよう保護しているにもかかわらず、OS の標準機能を利用せずにアクセス権を変更してファイル操作を行うことは、より重大な問題を引き起こす可能性があります。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">C:\&gt;icacls C:\Windows\WinSxS</span><br><span class="line">C:\Windows\WinSxS NT SERVICE\TrustedInstaller:(OI)(CI)(F) ★フルコントロール権限は TrustedInstaller サービスのみで、その他は読み込みのみ</span><br><span class="line">                  BUILTIN\Administrators:(RX) </span><br><span class="line">                  BUILTIN\Administrators:(OI)(CI)(IO)(GR,GE)</span><br><span class="line">                  NT AUTHORITY\SYSTEM:(RX)</span><br><span class="line">                  NT AUTHORITY\SYSTEM:(OI)(CI)(IO)(GR,GE)</span><br><span class="line">                  BUILTIN\Users:(RX)</span><br><span class="line">                  BUILTIN\Users:(OI)(CI)(IO)(GR,GE)</span><br><span class="line">                  APPLICATION PACKAGE AUTHORITY\ALL APPLICATION PACKAGES:(RX)</span><br><span class="line">                  APPLICATION PACKAGE AUTHORITY\ALL APPLICATION PACKAGES:(OI)(CI)(IO)(GR,GE)</span><br><span class="line">                  APPLICATION PACKAGE AUTHORITY\制限されたすべてのアプリケーション パッケージ:(RX)</span><br><span class="line">                  APPLICATION PACKAGE AUTHORITY\制限されたすべてのアプリケーション パッケージ:(OI)(CI)(IO)(GR,GE)</span><br><span class="line"> </span><br><span class="line">1 個のファイルが正常に処理されました。0 個のファイルを処理できませんでした</span><br></pre></td></tr></table></figure>
+
+<p>以上がコンポーネント修復のステップです。<br>補足情報として弊社の公開情報にて <a target="_blank" rel="noopener" href="https://support.microsoft.com/ja-jp/topic/%E3%82%B7%E3%82%B9%E3%83%86%E3%83%A0-%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB-%E3%83%81%E3%82%A7%E3%83%83%E3%82%AB%E3%83%BC-%E3%83%84%E3%83%BC%E3%83%AB%E3%82%92%E4%BD%BF%E7%94%A8%E3%81%97%E3%81%A6%E4%B8%8D%E8%B6%B3%E3%81%BE%E3%81%9F%E3%81%AF%E7%A0%B4%E6%90%8D%E3%81%97%E3%81%A6%E3%81%84%E3%82%8B%E3%82%B7%E3%82%B9%E3%83%86%E3%83%A0-%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB%E3%82%92%E4%BF%AE%E5%BE%A9%E3%81%99%E3%82%8B-79aa86cb-ca52-166a-92a3-966e85d4094e">システム ファイル チェッカー ツールを使用して不足または破損しているシステム ファイルを修復する</a> でも同様の記載がございますのでぜひご参考にしていただければと思います。</p>
+<p>しかしながら、コンポーネント破損が多岐にわたる場合や上記の対応で解決できない場合は、上述の通りインプレース アップグレードやクラウド ダウンロードを用いた Windows の初期化を行う必要があります。</p>
+<h2 id="インプレース-アップグレードによるコンポーネント破損の修復"><a href="#インプレース-アップグレードによるコンポーネント破損の修復" class="headerlink" title="インプレース アップグレードによるコンポーネント破損の修復"></a>インプレース アップグレードによるコンポーネント破損の修復</h2><p>インプレース アップグレードによるコンポーネント破損の修復とは、現在の Windows と同じバージョンの OS メディアを利用してアップグレードを行うことで、コンポーネント破損の修復を行う方法です (インプレース アップグレードも上記のコマンドによるコンポーネント破損修復と同等にサポート範囲内の対処方法でございます)。<br>例を挙げると、Windows 11 バージョン 24H2 でコンポーネント破損が発生している環境に対して、Windows 11 バージョン 24H2 の OS メディアを利用して同一バージョンでのアップグレードを行います。<br>インプレース アップグレードを用いることで、個人設定やアプリケーションやドライバーなどを可能な限り引継ぎながら OS 領域のみ初期状態に上書きすることができ、結果的に破損や欠損が発生していた部分を広範囲に修復することができます。<br>ブログ執筆時点 (2025 年 4 月) では、最新版のコンシューマー版の Windows OS のメディアは <a target="_blank" rel="noopener" href="https://www.microsoft.com/ja-jp/software-download/windows11">Windows 11 のダウンロード</a> にてダウンロード可能です。<br>ビジネス版の Windows OS のメディアは Microsoft 365 管理センター (旧称: ボリューム ライセンス サービス センター (VLSC)) にて入手する必要がございますので、ご利用の OS に応じて適切なメディアをご利用ください。<br>それでは、以下にインプレース アップグレードの手順を記載します。</p>
+<ol>
+<li>ご利用の Windows と同じバージョンの OS イメージ (ISO ファイルでも、メディアでも可) を用意します。</li>
+<li>対象となるマシンへ OS イメージをマウントします。</li>
+<li>OS イメージ内の <code>setup.exe</code> を実行します。</li>
+<li>「セットアップ」の画面が立ち上がりますので、画面にしたがって進めていきます。</li>
+<li>「インストール準備完了」という画面で、ユーザー情報およびアプリケーションが引き継がれる形となっているかを確認します。</li>
+<li>引き継がれる設定となっている場合は「インストール」を選択し、インプレース アップグレードを進めます。</li>
+<li>インプレース アップグレードの完了を待ちます。処理中は複数回の OS 再起動が発生します。</li>
+</ol>
+<p>なお、現在ご利用中の OS のシステム言語とメディアの言語が一致しない場合や、コンシューマー版やビジネス版などのメディアのエディションの情報が現在ご利用中の OS メディアと一致しない場合は、インプレース アップグレードの際に個人設定やアプリケーションを引き継ぐことはできません。<br>その際は、ご用意いただいた OS メディアの言語やエディションの観点で問題ないかを確認します。<br>Azure 環境ではご利用いただいている環境によって、個人設定やアプリケーションを引き継ぐことはできないこと場合やインプレース アップグレードがサポートされない場合がございますのでご留意ください。</p>
+<p>加えて、インプレース アップグレードの際は主に以下の留意点がございます。</p>
+<p>・インプレース アップグレードを実施した場合、OS 領域 (C:\Windows 配下) が初期状態に戻るため、更新プログラムの適用レベルはインストールを実施したメディアのレベルに依存します。ただし、外部インターネット アクセス可能な状態でインプレース アップグレードを実施した場合は、<a target="_blank" rel="noopener" href="https://learn.microsoft.com/ja-jp/windows/deployment/update/media-dynamic-update">動的更新 (Dynamic Update)</a> により最新の更新プログラムの適用が同時に行われます。<br>・原則的に役割と機能については引き継がれますが、サーバー OS の場合、その役割や機能によっては事前に作業が必要となる場合があるため注意点などが弊社技術情報参照ください。<br>・サービスの状態などを変更されている場合は既定値に戻る可能性があります。<br>・インプレース アップグレードの際、原則として各ユーザーの個人設定やアプリケーションやドライバーを移行しますが、何らかの要因で移行に失敗する可能性がございます。インプレース アップグレード後、重要なユーザーの設定やアプリケーションやドライバーが利用できる状態となっているかご確認をお願いします。また、意図しない問題が発生した場合に備えて、事前に OS のバックアップも取得しますとより安心であるものと存じます。<br>・プロキシ設定などによりインターネット上の弊社サーバーへのアクセスが制限されている環境では、<a target="_blank" rel="noopener" href="https://learn.microsoft.com/ja-jp/windows/deployment/update/media-dynamic-update">動的更新 (Dynamic Update)</a> が動作できないことに起因し OS のインストール言語以外の追加した言語パックが引き継がれません。そのため、インプレース アップグレードを行う際はインターネット上の弊社サーバーへのアクセス可能環境でアップグレードを実施いただくか、アップグレード後に再度言語パックのインストールをご検討ください。</p>
+<h2 id="OS-初期化によるコンポーネントの修復方法"><a href="#OS-初期化によるコンポーネントの修復方法" class="headerlink" title="OS 初期化によるコンポーネントの修復方法"></a>OS 初期化によるコンポーネントの修復方法</h2><p>通常、OS のコンポーネント破損がコマンドで修復できない場合はインプレース アップグレードによる修復を行うケースが大半でございますが、クラウド ダウンロードを用いた Windows の初期化を行うことでも OS のコンポーネント修復を行うことができます。<br>Windows を初期化する方法は <a target="_blank" rel="noopener" href="https://support.microsoft.com/ja-jp/windows/pc-%E3%82%92%E5%88%9D%E6%9C%9F%E7%8A%B6%E6%85%8B%E3%81%AB%E6%88%BB%E3%81%99-0ef73740-b927-549b-b7c9-e6f2b48d275e">PC を初期状態に戻す</a> に詳細な記述がございます。<br>この方法を行った場合、上記のインプレース アップグレードと比較して、アプリや設定は削除されてしまいますがユーザー データを保持させた状態で OS 初期化をさせることができますので、OS メディアの用意ができない場合に実施できる手段としてご紹介いたします。</p>
+<h1 id="補足情報"><a href="#補足情報" class="headerlink" title="補足情報"></a>補足情報</h1><p>本ブログ中でも、コンポーネント破損が発生した際の一般的なエラーは <a target="_blank" rel="noopener" href="https://learn.microsoft.com/ja-jp/troubleshoot/windows-server/installing-updates-features-roles/fix-windows-update-errors">Windows Update の破損とインストールエラーを修正する</a> へ記載がある点について言及しておりますが、エラー コードでのブログの検索しやすさの観点から本ブログでも同じ表を掲載いたします。</p>
+<table>
+<thead>
+<tr>
+<th>Code</th>
+<th>Error</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>0x80070002</td>
+<td>ERROR_FILE_NOT_FOUND</td>
+<td>The system cannot find the file specified.</td>
+</tr>
+<tr>
+<td>0x800f0831</td>
+<td>CBS_E_STORE_CORRUPTION</td>
+<td>CBS store is corrupted.</td>
+</tr>
+<tr>
+<td>0x8007000D</td>
+<td>ERROR_INVALID_DATA</td>
+<td>The data is invalid.</td>
+</tr>
+<tr>
+<td>0x800F081F</td>
+<td>CBS_E_SOURCE_MISSING</td>
+<td>The source for the package or file not found.</td>
+</tr>
+<tr>
+<td>0x80073712</td>
+<td>ERROR_SXS_COMPONENT_STORE_CORRUPT</td>
+<td>The component store is in an inconsistent state.</td>
+</tr>
+<tr>
+<td>0x800736CC</td>
+<td>ERROR_SXS_FILE_HASH_MISMATCH</td>
+<td>A component’s file does not match the verification information present in the component manifest.</td>
+</tr>
+<tr>
+<td>0x800705B9</td>
+<td>ERROR_XML_PARSE_ERROR</td>
+<td>Unable to parse the requested XML data.</td>
+</tr>
+<tr>
+<td>0x80070246</td>
+<td>ERROR_ILLEGAL_CHARACTER</td>
+<td>An invalid character was encountered.</td>
+</tr>
+<tr>
+<td>0x8007370D</td>
+<td>ERROR_SXS_IDENTITY_PARSE_ERROR</td>
+<td>An identity string is malformed.</td>
+</tr>
+<tr>
+<td>0x8007370B</td>
+<td>ERROR_SXS_INVALID_IDENTITY_ATTRIBUTE_NAME</td>
+<td>The name of an attribute in an identity is not within the valid range.</td>
+</tr>
+<tr>
+<td>0x8007370A</td>
+<td>ERROR_SXS_INVALID_IDENTITY_ATTRIBUTE_VALUE</td>
+<td>The value of an attribute in an identity is not within the valid range.</td>
+</tr>
+<tr>
+<td>0x80070057</td>
+<td>ERROR_INVALID_PARAMETER</td>
+<td>The parameter is incorrect.</td>
+</tr>
+<tr>
+<td>0x800B0100</td>
+<td>TRUST_E_NOSIGNATURE</td>
+<td>No signature was present in the subject.</td>
+</tr>
+<tr>
+<td>0x80092003</td>
+<td>CRYPT_E_FILE_ERROR</td>
+<td>An error occurred while Windows Update reads or writes to a file.</td>
+</tr>
+<tr>
+<td>0x800B0101</td>
+<td>CERT_E_EXPIRED</td>
+<td>A required certificate is not within its validity period when verifying against the current system clock or the time stamp in the signed file.</td>
+</tr>
+<tr>
+<td>0x8007371B</td>
+<td>ERROR_SXS_TRANSACTION_CLOSURE_INCOMPLETE</td>
+<td>One or more required members of the transaction are not present.</td>
+</tr>
+<tr>
+<td>0x80070490</td>
+<td>ERROR_NOT_FOUND</td>
+<td>Windows could not search for new updates.</td>
+</tr>
+<tr>
+<td>0x800f0984</td>
+<td>PSFX_E_MATCHING_BINARY_MISSING</td>
+<td>Matching component directory exist but binary missing</td>
+</tr>
+<tr>
+<td>0x800f0986</td>
+<td>PSFX_E_APPLY_FORWARD_DELTA_FAILED</td>
+<td>Applying forward delta failed</td>
+</tr>
+<tr>
+<td>0x800f0982</td>
+<td>PSFX_E_MATCHING_COMPONENT_NOT_FOUND</td>
+<td>Can’t identify matching component for hydration</td>
+</tr>
+<tr>
+<td><a target="_blank" rel="noopener" href="https://learn.microsoft.com/ja-jp/troubleshoot/windows-server/installing-updates-features-roles/troubleshoot-windows-update-error-code-0x8024002e">0x8024002E</a></td>
+<td>WU_E_WU_DISABLED</td>
+<td>Windows Update Client service is disabled</td>
+</tr>
+</tbody></table>
+
+      
+      
+    </div>
+    <footer class="article-footer">
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/blog/2025/04/23/UserInterfaceAndApps/WMP-error-0x80070456/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">次の記事</strong>
+      <div class="article-nav-title">
+        
+          Windows Media Playerにおいて、エラーコード 0x80070456 が発生する事象について
+        
+      </div>
+    </a>
+  
+  
+    <a href="/blog/2025/04/15/UserInterfaceAndApps/Printing/printer-queue-app-blank-page-issue/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">前の記事</strong>
+      <div class="article-nav-title">印刷キューアプリによる印刷失敗・白紙出力の可能性について</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">カテゴリ</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Activation/">Activation</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Activation/ESU/">ESU</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Activation/security-SPP/">security-SPP</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/">Active Directory</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Authentication/">Authentication</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/DFSR/">DFSR</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/FunctionalLevel/">FunctionalLevel</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Group-Policy/">Group Policy</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Promotion-and-Demotion/">Promotion and Demotion</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/User-Profile/">User Profile</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Windows-Hello/">Windows Hello</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Windows-Time-Service/">Windows Time Service</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/AppLocker/">AppLocker</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/AppLocker/Active-Directory/">Active Directory</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/AppLocker/Microsoft-Intune/">Microsoft Intune</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Deployment/">Deployment</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Deployment/Feature-on-demand/">Feature on demand</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Deployment/Sysprep/">Sysprep</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Failover-Clustering/">Failover Clustering</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Failover-Clustering/Configuration-and-Management/">Configuration and Management</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/FileServices/">FileServices</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/FileServices/FTP/">FTP</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/FileServices/SMB/">SMB</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Hyper-V/">Hyper-V</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Hyper-V/Configuration-and-Management/">Configuration and Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Hyper-V/Migration/">Migration</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Microsoft-Connected-Cache/">Microsoft Connected Cache</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/">Networking</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/BITS/">BITS</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/Bluetooth/">Bluetooth</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/DHCP/">DHCP</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/DNS/">DNS</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/Firewall/">Firewall</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/LBFO/">LBFO</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/NCSI/">NCSI</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/NetworkInterface/">NetworkInterface</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/Proxy/">Proxy</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/TCPIP/">TCPIP</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/OpenSSH/">OpenSSH</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/">Performance</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/Hang-up-BSoD/">Hang-up/BSoD</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/No-Boot/">No Boot</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/Slow-Response/">Slow Response</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/System-Resource/">System Resource</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/Tools/">Tools</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/">Public Key Infrastructure</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Certificate-Authority/">Certificate Authority</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Certificate-Management/">Certificate Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Code-Signing/">Code Signing</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/SSL-TLS-Communication/">SSL TLS Communication</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/SSL-TLS-Connection/">SSL TLS Connection</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Smart-Card-Logon/">Smart Card Logon</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/">Remote Desktop</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/Azure-Virtual-Desktop-AVD/">Azure Virtual Desktop (AVD)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/Remote-Desktop-Service-RDS/">Remote Desktop Service (RDS)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/Windows-Virtual-Desktop-WVD/">Windows Virtual Desktop (WVD)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/RemoteAccess/">RemoteAccess</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/RemoteAccess/%E3%83%80%E3%82%A4%E3%83%A4%E3%83%AB%E3%82%A2%E3%83%83%E3%83%97%E6%8E%A5%E7%B6%9A/">ダイヤルアップ接続</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Setup/">Setup</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Setup/Feature-Update-FU/">Feature Update (FU)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Shell/">Shell</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Shell/Explorer/">Explorer</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/">Storage</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/Backup/">Backup</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/FSRM/">FSRM</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/Management/">Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/StorageMigrationService/">StorageMigrationService</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/UEFI/">UEFI</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/UEFI/Secure-Boot/">Secure Boot</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/">User Interface and Apps</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Command-Prompt/">Command Prompt</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/EventLog/">EventLog</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Language-Support/">Language Support</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Microsoft-Store/">Microsoft Store</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Performance/">Performance</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/PowerShell/">PowerShell</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Printing-%E5%8D%B0%E5%88%B7/">Printing (印刷)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Server-Management/">Server Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Taskscheduler/">Taskscheduler</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Windows-Management-Instrumentation/">Windows Management Instrumentation</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps-Language-support/">User Interface and Apps - Language support</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-365/">Windows 365</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Admin-Center/">Windows Admin Center</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Search/">Windows Search</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/">Windows Update</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Delivery-Optimization-DO/">Delivery Optimization (DO)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Feature-Update-FU/">Feature Update (FU)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Quality-Update-QU/">Quality Update (QU)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Windows-Update-Agent/">Windows Update Agent</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Windows-Update-Agent-WUA/">Windows Update Agent (WUA)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/">WirelessNetwork</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/NPS/">NPS</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/Wi-Fi/">Wi-Fi</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/%E3%83%A2%E3%83%90%E3%82%A4%E3%83%AB-%E3%83%96%E3%83%AD%E3%83%BC%E3%83%89%E3%83%90%E3%83%B3%E3%83%89%E6%8E%A5%E7%B6%9A-LTE/">モバイル ブロードバンド接続 (LTE)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/%E7%B5%84%E7%B9%94%E7%B4%B9%E4%BB%8B%E3%83%96%E3%83%AD%E3%82%B0%EF%BC%88Windows-Commercial%EF%BC%89/">組織紹介ブログ（Windows Commercial）</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最近の投稿</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/blog/2026/02/16/ActiveDirectory/GroupPolicy/UacPolicyIsEnabled/">「ユーザー アカウント制御：ビルトイン Administrator アカウントのための管理者承認モード」ポリシーが有効になる動作ついて</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/02/15/UserInterfaceAndApps/Printing/printer-queue-app-preview/">印刷キューアプリのプレビュー機能について</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/02/02/ActiveDirectory/Authentication/kerberos-rc4-for-service-account-ticket-issuance-changes-related-to-cve-2026-20833/">CVE‑2026‑20833 への対応とその影響について [KB5073381]</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/01/12/Hyper-V/vmwp-does-not-save-the-RTC-value-of-a-virtual-machine-when-performing-Live-Migration/">ライブ マイグレーション後の再起動でゲスト OS の時刻がずれる場合がある</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/01/07/WindowsUpdate/FU/fublog-txt/">ISO メディア経由かつ動的更新無効な状態で Windows 11 バージョン 24H2 または 25H2 へのアップグレードが失敗 (0x8007042B 0x2000D) する事象と対策について</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">アーカイブ</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2026/02/">2026 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2026/01/">2026 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/12/">2025 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/11/">2025 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/10/">2025 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/09/">2025 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/08/">2025 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/07/">2025 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/06/">2025 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/05/">2025 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/04/">2025 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/03/">2025 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/02/">2025 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/01/">2025 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/12/">2024 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/11/">2024 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/10/">2024 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/09/">2024 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/08/">2024 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/07/">2024 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/06/">2024 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/05/">2024 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/04/">2024 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/03/">2024 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/02/">2024 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/01/">2024 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/12/">2023 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/11/">2023 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/10/">2023 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/09/">2023 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/08/">2023 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/07/">2023 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/06/">2023 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/05/">2023 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/04/">2023 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/03/">2023 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/02/">2023 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/01/">2023 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/12/">2022 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/11/">2022 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/10/">2022 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/09/">2022 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/08/">2022 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/07/">2022 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/06/">2022 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/05/">2022 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/04/">2022 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/03/">2022 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/02/">2022 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/01/">2022 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/12/">2021 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/11/">2021 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/10/">2021 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/09/">2021 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/08/">2021 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/07/">2021 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/06/">2021 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/05/">2021 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/04/">2021 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/03/">2021 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/02/">2021 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/01/">2021 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/12/">2020 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/11/">2020 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/10/">2020 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/07/">2020 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/03/">2020 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2019/03/">2019 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/11/">2018 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/10/">2018 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/09/">2018 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/08/">2018 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/07/">2018 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/06/">2018 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/04/">2018 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/02/">2018 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/12/">2017 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/11/">2017 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/09/">2017 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/05/">2017 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/03/">2017 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/02/">2017 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2016/08/">2016 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2016/05/">2016 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2014/03/">2014 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2012/02/">2012 / 02</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2026 Microsoft Japan Windows Technology Support Team<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/blog/" class="mobile-nav-link">Home</a>
+  
+    <a href="/blog/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+<script src="/blog/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

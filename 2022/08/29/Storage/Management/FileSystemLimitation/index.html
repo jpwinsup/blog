@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-180187723-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-180187723-1');
+</script>
+<!-- End Google Analytics -->
+
+  
+  <title>ファイル システム制限により I/O 処理が失敗する事象について | Microsoft Japan Windows Technology Support Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="本記事はマイクロソフト社員によって公開されております。   こんにちは、Windows サポートチームです。本日はファイル システム制限により I&#x2F;O 処理が失敗する事象について紹介させていただきます。 事象新しいファイルの作成や既存ファイルへの書き込みを行った際に、以下のメッセージが表示され、当該操作や I&#x2F;O 処理が失敗する場合があります。 &#x2F;&#x2F; メッセージ内容 ファイル システム制限のため、">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ファイル システム制限により I&#x2F;O 処理が失敗する事象について">
+<meta property="og:url" content="https://jpwinsup.github.io/blog/2022/08/29/Storage/Management/FileSystemLimitation/index.html">
+<meta property="og:site_name" content="Microsoft Japan Windows Technology Support Blog">
+<meta property="og:description" content="本記事はマイクロソフト社員によって公開されております。   こんにちは、Windows サポートチームです。本日はファイル システム制限により I&#x2F;O 処理が失敗する事象について紹介させていただきます。 事象新しいファイルの作成や既存ファイルへの書き込みを行った際に、以下のメッセージが表示され、当該操作や I&#x2F;O 処理が失敗する場合があります。 &#x2F;&#x2F; メッセージ内容 ファイル システム制限のため、">
+<meta property="og:locale" content="ja_JP">
+<meta property="article:published_time" content="2022-08-29T03:00:00.000Z">
+<meta property="article:modified_time" content="2026-02-19T02:53:58.655Z">
+<meta property="article:author" content="Microsoft Japan Windows Technology Support Team">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/blog/atom.xml" title="Microsoft Japan Windows Technology Support Blog" type="application/atom+xml">
+  
+
+  <link rel="icon" href="/blog/favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="/blog/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/blog/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/blog/favicon-16x16.png">
+  <link rel="manifest" href="/blog/site.webmanifest">
+  <link rel="mask-icon" href="/blog/safari-pinned-tab.svg" color="#5bbad5">
+  <meta name="msapplication-TileColor" content="#ffffff">
+  <meta name="theme-color" content="#ffffff">
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/blog/css/style.css">
+
+<meta name="generator" content="Hexo 5.2.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="site-header-logo"></div>
+  <div id="site-header-blog-wrapper"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        <div id="ms-logo"></div>
+        
+          <a class="main-nav-link" href="/blog/">Home</a>
+        
+          <a class="main-nav-link" href="/blog/archives">Archives</a>
+        
+        <a class="main-nav-link" target="_blank" rel="noopener" href="https://cssjpn.github.io/">サポート情報</a>
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/blog/atom.xml" title="RSSフィード"></a>
+        
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//www.bing.com/search" method="get" accept-charset="UTF-8" name="bing-search" onsubmit="var f=this;if(f['q'].value){var searchUrl =  'https://www.bing.com/search?q=' +  encodeURIComponent(f['q'].value + ' site:' + f['sitesearch'].value) ;window.open(searchUrl, 'blank') };return false;" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="検索"><button type="submit" id="nav-search-btn" class="search-form-submit"></button><input type="hidden" name="sitesearch" value="https://jpwinsup.github.io/blog"></form>
+      </div>
+    </div>
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/blog/" id="logo">Microsoft Japan Windows Technology Support Blog</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/blog/" id="subtitle">日本マイクロソフト Windows Support チームによる、サポート情報 Blog です。</a>
+        </h2>
+      
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-Storage/Management/FileSystemLimitation" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    
+    
+      <header class="article-header-single">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      ファイル システム制限により I/O 処理が失敗する事象について
+    </h1>
+  
+
+      </header>
+      <div class="article-share">
+        Last Update: 
+        <a href="/blog/2022/08/29/Storage/Management/FileSystemLimitation/" class="article-date-single">
+  <time datetime="2022-08-29T03:00:00.000Z" itemprop="datePublished">2022-08-29</time>
+</a>
+        
+  <div class="article-category">
+    <a class="article-category-link" href="/blog/categories/Storage/">Storage</a>►<a class="article-category-link" href="/blog/categories/Storage/Management/">Management</a>
+  </div>
+
+        
+        <a href="https://github.com/jpwinsup/blog/issues/new?title=&body=%EF%BB%BF%0A%0A---%0A%0A%23%23%23%23+Document+Details%0A%0A*+Article+ID%3A+c5cffd91-7f90-5dfb-b800-39522a2dfb1f%0A*+TITLE%3A+%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB+%E3%82%B7%E3%82%B9%E3%83%86%E3%83%A0%E5%88%B6%E9%99%90%E3%81%AB%E3%82%88%E3%82%8A+I%2FO+%E5%87%A6%E7%90%86%E3%81%8C%E5%A4%B1%E6%95%97%E3%81%99%E3%82%8B%E4%BA%8B%E8%B1%A1%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6%0A*+URL+https%3A%2F%2Fjpwinsup.github.io%2Fblog%2F2022%2F08%2F29%2FStorage%2FManagement%2FFileSystemLimitation%2F%0A*+SourceFileName%3A+source%2F_posts%2FStorage%2FManagement%2FFileSystemLimitation.md%0A" class="article-github-issue-link" target="_blank" rel="noopener noreferrer">feedback</a>
+        
+        <a data-url="https://jpwinsup.github.io/blog/2022/08/29/Storage/Management/FileSystemLimitation/" data-id="cmlsvjdfs00jtru3y7hr187ay" class="article-share-link">共有</a>
+      </div>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>本記事はマイクロソフト社員によって公開されております。  </p>
+<p>こんにちは、Windows サポートチームです。<br>本日はファイル システム制限により I/O 処理が失敗する事象について紹介させていただきます。</p>
+<h2 id="事象"><a href="#事象" class="headerlink" title="事象"></a>事象</h2><p>新しいファイルの作成や既存ファイルへの書き込みを行った際に、以下のメッセージが表示され、当該操作や I/O 処理が失敗する場合があります。</p>
+<p>// メッセージ内容</p>
+<h5 id="ファイル-システム制限のため、要求された操作を完了できませんでした。"><a href="#ファイル-システム制限のため、要求された操作を完了できませんでした。" class="headerlink" title="ファイル システム制限のため、要求された操作を完了できませんでした。"></a>ファイル システム制限のため、要求された操作を完了できませんでした。</h5><br>
+この問題の多くは、ATTRIBUTE LIST と呼ばれるファイル システムの管理領域が要因になります。<br>
+※ ATTRIBUTE LIST の詳細については後述いたします。
+
+<p>弊社では以下のような環境でお問合せをいただくことが多い状況です。</p>
+<h6 id="lt-Case1-ファイルサーバと利用しているボリュームに多くのセキュリティ設定をされている環境-gt"><a href="#lt-Case1-ファイルサーバと利用しているボリュームに多くのセキュリティ設定をされている環境-gt" class="headerlink" title="&lt;Case1:ファイルサーバと利用しているボリュームに多くのセキュリティ設定をされている環境&gt;"></a>&lt;Case1:ファイルサーバと利用しているボリュームに多くのセキュリティ設定をされている環境&gt;</h6><p>この環境では多くのセキュリティ設定がされているため、ファイル システムのセキュリティ設定を管理している $Secure の ATTRIBUTE LIST が上限値に達するケースです。</p>
+<h6 id="lt-Case2-1-ファイルのサイズが大きくなるファイルを利用している環境-gt"><a href="#lt-Case2-1-ファイルのサイズが大きくなるファイルを利用している環境-gt" class="headerlink" title="&lt;Case2:1 ファイルのサイズが大きくなるファイルを利用している環境&gt;"></a>&lt;Case2:1 ファイルのサイズが大きくなるファイルを利用している環境&gt;</h6><p>ファイルサイズが大きくなると、それに合わせてファイルの管理領域が拡張されます。これに伴い、ATTRIBUTE LIST も肥大化し、ATTRIBUTE LIST が上限値に達するケースです。</p>
+<p>弊社へのお問合せにおいては、SQL Server のデータベースファイルがこのパターンとしてお問合せいただくことが多いです。<br>(データべースファイルが自動拡張に設定されている場合。)</p>
+<h2 id="原因"><a href="#原因" class="headerlink" title="原因"></a>原因</h2><p>これは ATTRIBUTE LIST と呼ばれるファイル システムの管理領域の上限値を超えてしまったことを示すメッセージになります。ATTRIBUTE_LIST はファイルのデータがディスク上のどの位置に格納されているかなどの情報を保存しております。ファイルのデータ サイズが大きかったり、断片化が発生している場合に、ファイルの管理情報の拡張が繰り返され、この ATTRIBUTE_LIST の値が増加していきます。</p>
+<p>詳細な ATTRIBUTE LIST の挙動につきましては、以下の公開情報を参照ください。</p>
+<p>The Four Stages of NTFS File Growth<br><a target="_blank" rel="noopener" href="https://docs.microsoft.com/en-us/archive/blogs/askcore/the-four-stages-of-ntfs-file-growth">https://docs.microsoft.com/en-us/archive/blogs/askcore/the-four-stages-of-ntfs-file-growth</a></p>
+<p>NTFS ファイルシステムでは各種ファイルを 1 KB のファイル レコードとして保存し、その中にファイル名 ($FILE_NAME) や実データ ($DATA) などの属性情報を格納します。<br>(上記公開情報の Stage 1)</p>
+<p>ファイルのデータ サイズが肥大化し、この 1 KB のレコードに格納できない場合には、肥大化したデータ属性情報をファイル レコードとは別の領域へ格納し、マッピング情報のみ対象ファイル レコード内に保持します。<br>(上記公開情報の Stage 2)</p>
+<p>また、さらにデータ サイズが肥大化して、このマッピング情報も1 KB の ファイル レコード内に保持できない場合には、子ファイル レコードとしてそれらの情報が保存され、ファイル レコードには子ファイル レコードを 管理するための属性 (ATTRIBUTE_LIST) 情報が追加されます。<br>(上記公開情報の Stage 3 および 4)</p>
+<p>従いまして、データの増加や断片化によって子ファイル レコードが増加するのに比例して、ATRIBUTE_LIST 属性も増加することになり、この属性のサイズが上限値 (256KB) に達すると、データの書き込みが出来ない状態になります。</p>
+<p>ATTRIBUTE_LIST のサイズについては以下の方法で確認が可能です。</p>
+<h6 id="lt-Windows-Server-2012-R2-以前-gt"><a href="#lt-Windows-Server-2012-R2-以前-gt" class="headerlink" title="&lt;Windows Server 2012 R2 以前&gt;"></a>&lt;Windows Server 2012 R2 以前&gt;</h6><p>Windows Server 2012 R2 以前におきましては、明確に ATTRIBUTE_LIST のサイズを確認する方法はありません。代わりに以下の資料採取を行うことによって、ATTRIBUTE_LIST の数を確認することで、上限値のサイズに近いかどうかの判断をすることが可能です。</p>
+<p>// 公開情報<br>ファイルシステムの制限に達してしまった事象の調査<br><a href="https://jpwinsup.github.io/mslog/storage/%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB%E3%82%B7%E3%82%B9%E3%83%86%E3%83%A0/filesystem-limitation.html">https://jpwinsup.github.io/mslog/storage/%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB%E3%82%B7%E3%82%B9%E3%83%86%E3%83%A0/filesystem-limitation.html</a></p>
+<h6 id="lt-Windows-Server-2016-以降-gt"><a href="#lt-Windows-Server-2016-以降-gt" class="headerlink" title="&lt;Windows Server 2016 以降&gt;"></a>&lt;Windows Server 2016 以降&gt;</h6><p>fsutil コマンドを利用することによって、ATRIBUTE_LIST のサイズを確認することが可能です。</p>
+<p>// $Secure の ATRIBUTE_LIST (属性リスト) のサイズを確認する場合</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">C:\WINDOWS\system32&gt;fsutil file queryoptimizemetadata c:\$Secure:$SDS</span><br><span class="line">ファイル メタデータの最適化                  : なし</span><br><span class="line">属性リスト サイズ                         : 464 (0x1d0)　☆</span><br><span class="line">使用されているファイル メタデータ領域                    : 1704 (0x6a8)</span><br><span class="line">割り当てられたファイル メタデータ領域               : 6144 (0x1800)</span><br><span class="line">ファイル メタデータ領域の使用率                   : 27%</span><br><span class="line">ファイル レコード数                       : 6</span><br><span class="line">常駐属性の数             : 6</span><br><span class="line">非常駐属性の数          : 4</span><br><span class="line">属性の合計数                  : 10</span><br><span class="line">アクティブなファイル メタデータ最適化の合計  : 0</span><br><span class="line">保留中のファイル メタデータ最適化の合計 : 0</span><br></pre></td></tr></table></figure>
+
+<p>// 通常のファイルの ATRIBUTE_LIST (属性リスト) のサイズを確認する場合</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">C:\WINDOWS\system32&gt;fsutil file queryoptimizemetadata C:\test.txt</span><br><span class="line">ファイル メタデータの最適化                  : なし</span><br><span class="line">属性リスト サイズ                         : 0 (0) ☆</span><br><span class="line">使用されているファイル メタデータ領域                    : 736 (0x2e0)</span><br><span class="line">割り当てられたファイル メタデータ領域               : 1024 (0x400)</span><br><span class="line">ファイル メタデータ領域の使用率                   : 71%</span><br><span class="line">ファイル レコード数                       : 1</span><br><span class="line">常駐属性の数             : 6</span><br><span class="line">非常駐属性の数          : 0</span><br><span class="line">属性の合計数                  : 6</span><br><span class="line">アクティブなファイル メタデータ最適化の合計  : 0</span><br><span class="line">保留中のファイル メタデータ最適化の合計 : 0</span><br></pre></td></tr></table></figure>
+
+<h2 id="対処策"><a href="#対処策" class="headerlink" title="対処策"></a>対処策</h2><p>ATTRIBUTE_LIST の枯渇が生じた場合に最も効果的な対処策は、”/L” オプションを利用したボリュームの再フォーマットになります。再フォーマットを行ったボリューム上にデータをファイル レベルでコピーすることで、データが再配置されるため、ATTRIBUTE_LIST が枯渇している状況を解消することが可能です。</p>
+<p>また、”/L” オプションを付与したフォーマットを実施することで、当該ボリュームのファイル レコードのサイズが、既定の 1 KB から 4KB へ変更されます。そのため、属性情報やマッピング情報が格納できる領域が 4 倍 (4 KB) へ拡張され、結果として、ATTRIBUTE_LIST が 256 KB の上限に達するリスクを緩和することが可能となります。</p>
+<p>以下に手順をご案内いたしますので、ご確認いただきますようお願いいたします。</p>
+<p>-—————-<br>- 手順<br>-—————-<br>1.事象の発生ドライブの代替となるドライブを用意します。</p>
+<p>2.管理者権限のコマンド プロンプトから、用意した代替ドライブを “L” オプション付きでフォーマットします。</p>
+<p>// 実行コマンド</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Format &lt;代替ドライブ&gt; &#x2F;FS:NTFS &#x2F;L</span><br></pre></td></tr></table></figure>
+
+<p>// 実行例</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Format G: &#x2F;FS:NTFS &#x2F;L</span><br></pre></td></tr></table></figure>
+
+<p>3.事象の発生ドライブ上のファイルを代替ドライブにファイル レベルでコピーします。</p>
+<p>// Robocopy を利用する場合のサンプル コマンド</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">robocopy &lt;事象の発生ドライブ&gt; &lt;代替ドライブ&gt; &#x2F;E &#x2F;B &#x2F;COPYALL &#x2F;DCOPY:DAT &#x2F;MIR &#x2F;R:5 &#x2F;W:10 &#x2F;NP &#x2F;V &#x2F;XF &quot;pagefile.sys&quot; &#x2F;XD &quot;System Volume Information&quot; &quot;&#96;$RECYCLE.BIN&quot; &quot;$RECYCLE.BIN&quot; &#x2F;LOG:&lt;ログの出力先&gt;</span><br></pre></td></tr></table></figure>
+
+<p>// 実行例</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">robocopy F:\ G:\ &#x2F;E &#x2F;B &#x2F;COPYALL &#x2F;DCOPY:DAT &#x2F;MIR &#x2F;R:5 &#x2F;W:10 &#x2F;NP &#x2F;V &#x2F;XF &quot;pagefile.sys&quot; &#x2F;XD &quot;System Volume Information&quot; &quot;&#96;$RECYCLE.BIN&quot; &quot;$RECYCLE.BIN&quot; &#x2F;LOG:C:\Temp\RoboCopy.txt</span><br></pre></td></tr></table></figure>
+<p>※ 上記サンプルでは、F ドライブ内の各ファイル/フォルダーを、アクセス権や属性情報を含めて G ドライブにコピーしております。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(コピーができないゴミ箱や pagefile などは除外しております。)</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Robocopy の各オプションの詳細は、下記の弊社公開情報に記載がございますので、必要に応じてご参照ください。</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- 弊社公開情報<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Title : robocopy<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;URL : <a target="_blank" rel="noopener" href="https://docs.microsoft.com/ja-jp/windows-server/administration/windows-commands/robocopy">https://docs.microsoft.com/ja-jp/windows-server/administration/windows-commands/robocopy</a></p>
+<p>4.データの移行が完了後、必要に応じて、ファイル共有の再設定を行います。</p>
+<p>※ ファイル共有設定は Robocopy で移行が行えないため、別途再設定が必要となります。</p>
+<p>以上で作業は完了となります。</p>
+<p>なお、代替となるドライブを用意せずに、事象の発生ドライブ内のデータを別の領域に一時的に退避し、フォーマット後に退避したデータから復旧、および、ファイル共有の再設定を行う方法でも問題ございません。<br>-———</p>
+<p>いかがでしたでしょうか。本投稿が少しでも皆様のお役に立てば幸いです。<br>本情報の内容（添付文書、リンク先などを含む）は、作成日時でのものであり、予告なく変更される場合があります。</p>
+
+      
+      
+    </div>
+    <footer class="article-footer">
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/blog/2022/09/02/Storage/Storage%20Migration%20Service/SMS-AFS-Restriction/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">次の記事</strong>
+      <div class="article-nav-title">
+        
+          Storage Migration Service と Azure File Sync の連携機能における制限事項
+        
+      </div>
+    </a>
+  
+  
+    <a href="/blog/2022/08/29/Storage/Management/Failure-to-extend-filesystem/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">前の記事</strong>
+      <div class="article-nav-title">ファイル システムの拡張に失敗する事象について</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">カテゴリ</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Activation/">Activation</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Activation/ESU/">ESU</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Activation/security-SPP/">security-SPP</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/">Active Directory</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Authentication/">Authentication</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/DFSR/">DFSR</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/FunctionalLevel/">FunctionalLevel</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Group-Policy/">Group Policy</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Promotion-and-Demotion/">Promotion and Demotion</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/User-Profile/">User Profile</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Windows-Hello/">Windows Hello</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Windows-Time-Service/">Windows Time Service</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/AppLocker/">AppLocker</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/AppLocker/Active-Directory/">Active Directory</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/AppLocker/Microsoft-Intune/">Microsoft Intune</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Deployment/">Deployment</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Deployment/Feature-on-demand/">Feature on demand</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Deployment/Sysprep/">Sysprep</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Failover-Clustering/">Failover Clustering</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Failover-Clustering/Configuration-and-Management/">Configuration and Management</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/FileServices/">FileServices</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/FileServices/FTP/">FTP</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/FileServices/SMB/">SMB</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Hyper-V/">Hyper-V</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Hyper-V/Configuration-and-Management/">Configuration and Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Hyper-V/Migration/">Migration</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Microsoft-Connected-Cache/">Microsoft Connected Cache</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/">Networking</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/BITS/">BITS</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/Bluetooth/">Bluetooth</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/DHCP/">DHCP</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/DNS/">DNS</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/Firewall/">Firewall</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/LBFO/">LBFO</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/NCSI/">NCSI</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/NetworkInterface/">NetworkInterface</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/Proxy/">Proxy</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/TCPIP/">TCPIP</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/OpenSSH/">OpenSSH</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/">Performance</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/Hang-up-BSoD/">Hang-up/BSoD</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/No-Boot/">No Boot</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/Slow-Response/">Slow Response</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/System-Resource/">System Resource</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/Tools/">Tools</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/">Public Key Infrastructure</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Certificate-Authority/">Certificate Authority</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Certificate-Management/">Certificate Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Code-Signing/">Code Signing</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/SSL-TLS-Communication/">SSL TLS Communication</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/SSL-TLS-Connection/">SSL TLS Connection</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Smart-Card-Logon/">Smart Card Logon</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/">Remote Desktop</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/Azure-Virtual-Desktop-AVD/">Azure Virtual Desktop (AVD)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/Remote-Desktop-Service-RDS/">Remote Desktop Service (RDS)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/Windows-Virtual-Desktop-WVD/">Windows Virtual Desktop (WVD)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/RemoteAccess/">RemoteAccess</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/RemoteAccess/%E3%83%80%E3%82%A4%E3%83%A4%E3%83%AB%E3%82%A2%E3%83%83%E3%83%97%E6%8E%A5%E7%B6%9A/">ダイヤルアップ接続</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Setup/">Setup</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Setup/Feature-Update-FU/">Feature Update (FU)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Shell/">Shell</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Shell/Explorer/">Explorer</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/">Storage</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/Backup/">Backup</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/FSRM/">FSRM</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/Management/">Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/StorageMigrationService/">StorageMigrationService</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/UEFI/">UEFI</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/UEFI/Secure-Boot/">Secure Boot</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/">User Interface and Apps</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Command-Prompt/">Command Prompt</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/EventLog/">EventLog</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Language-Support/">Language Support</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Microsoft-Store/">Microsoft Store</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Performance/">Performance</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/PowerShell/">PowerShell</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Printing-%E5%8D%B0%E5%88%B7/">Printing (印刷)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Server-Management/">Server Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Taskscheduler/">Taskscheduler</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Windows-Management-Instrumentation/">Windows Management Instrumentation</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps-Language-support/">User Interface and Apps - Language support</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-365/">Windows 365</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Admin-Center/">Windows Admin Center</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Search/">Windows Search</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/">Windows Update</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Delivery-Optimization-DO/">Delivery Optimization (DO)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Feature-Update-FU/">Feature Update (FU)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Quality-Update-QU/">Quality Update (QU)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Windows-Update-Agent/">Windows Update Agent</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Windows-Update-Agent-WUA/">Windows Update Agent (WUA)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/">WirelessNetwork</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/NPS/">NPS</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/Wi-Fi/">Wi-Fi</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/%E3%83%A2%E3%83%90%E3%82%A4%E3%83%AB-%E3%83%96%E3%83%AD%E3%83%BC%E3%83%89%E3%83%90%E3%83%B3%E3%83%89%E6%8E%A5%E7%B6%9A-LTE/">モバイル ブロードバンド接続 (LTE)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/%E7%B5%84%E7%B9%94%E7%B4%B9%E4%BB%8B%E3%83%96%E3%83%AD%E3%82%B0%EF%BC%88Windows-Commercial%EF%BC%89/">組織紹介ブログ（Windows Commercial）</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最近の投稿</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/blog/2026/02/16/ActiveDirectory/GroupPolicy/UacPolicyIsEnabled/">「ユーザー アカウント制御：ビルトイン Administrator アカウントのための管理者承認モード」ポリシーが有効になる動作ついて</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/02/15/UserInterfaceAndApps/Printing/printer-queue-app-preview/">印刷キューアプリのプレビュー機能について</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/02/02/ActiveDirectory/Authentication/kerberos-rc4-for-service-account-ticket-issuance-changes-related-to-cve-2026-20833/">CVE‑2026‑20833 への対応とその影響について [KB5073381]</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/01/12/Hyper-V/vmwp-does-not-save-the-RTC-value-of-a-virtual-machine-when-performing-Live-Migration/">ライブ マイグレーション後の再起動でゲスト OS の時刻がずれる場合がある</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/01/07/WindowsUpdate/FU/fublog-txt/">ISO メディア経由かつ動的更新無効な状態で Windows 11 バージョン 24H2 または 25H2 へのアップグレードが失敗 (0x8007042B 0x2000D) する事象と対策について</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">アーカイブ</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2026/02/">2026 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2026/01/">2026 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/12/">2025 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/11/">2025 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/10/">2025 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/09/">2025 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/08/">2025 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/07/">2025 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/06/">2025 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/05/">2025 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/04/">2025 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/03/">2025 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/02/">2025 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/01/">2025 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/12/">2024 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/11/">2024 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/10/">2024 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/09/">2024 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/08/">2024 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/07/">2024 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/06/">2024 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/05/">2024 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/04/">2024 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/03/">2024 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/02/">2024 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/01/">2024 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/12/">2023 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/11/">2023 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/10/">2023 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/09/">2023 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/08/">2023 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/07/">2023 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/06/">2023 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/05/">2023 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/04/">2023 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/03/">2023 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/02/">2023 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/01/">2023 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/12/">2022 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/11/">2022 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/10/">2022 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/09/">2022 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/08/">2022 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/07/">2022 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/06/">2022 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/05/">2022 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/04/">2022 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/03/">2022 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/02/">2022 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/01/">2022 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/12/">2021 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/11/">2021 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/10/">2021 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/09/">2021 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/08/">2021 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/07/">2021 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/06/">2021 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/05/">2021 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/04/">2021 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/03/">2021 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/02/">2021 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/01/">2021 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/12/">2020 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/11/">2020 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/10/">2020 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/07/">2020 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/03/">2020 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2019/03/">2019 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/11/">2018 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/10/">2018 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/09/">2018 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/08/">2018 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/07/">2018 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/06/">2018 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/04/">2018 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/02/">2018 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/12/">2017 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/11/">2017 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/09/">2017 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/05/">2017 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/03/">2017 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/02/">2017 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2016/08/">2016 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2016/05/">2016 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2014/03/">2014 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2012/02/">2012 / 02</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2026 Microsoft Japan Windows Technology Support Team<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/blog/" class="mobile-nav-link">Home</a>
+  
+    <a href="/blog/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+<script src="/blog/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

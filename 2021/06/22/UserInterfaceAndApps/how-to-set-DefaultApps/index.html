@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-180187723-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-180187723-1');
+</script>
+<!-- End Google Analytics -->
+
+  
+  <title>既定のアプリの設定および配布方法について | Microsoft Japan Windows Technology Support Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="本記事はマイクロソフト社員によって公開されております。    こんにちは。Windows サポートチームの木村です。   マスター環境の作成や、組織内で利用するアプリケーションを変更する場合などに、既定のアプリの設定を変更したいことがあるかと存じます。今回は Windows 10 の 既定のアプリの設定および配布方法についてご案内を致します。    目次 設定を行う方法  1. ユーザーによる手動">
+<meta property="og:type" content="article">
+<meta property="og:title" content="既定のアプリの設定および配布方法について">
+<meta property="og:url" content="https://jpwinsup.github.io/blog/2021/06/22/UserInterfaceAndApps/how-to-set-DefaultApps/index.html">
+<meta property="og:site_name" content="Microsoft Japan Windows Technology Support Blog">
+<meta property="og:description" content="本記事はマイクロソフト社員によって公開されております。    こんにちは。Windows サポートチームの木村です。   マスター環境の作成や、組織内で利用するアプリケーションを変更する場合などに、既定のアプリの設定を変更したいことがあるかと存じます。今回は Windows 10 の 既定のアプリの設定および配布方法についてご案内を致します。    目次 設定を行う方法  1. ユーザーによる手動">
+<meta property="og:locale" content="ja_JP">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2021/06/22/UserInterfaceAndApps/how-to-set-DefaultApps/FileAssociations.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2021/06/22/UserInterfaceAndApps/how-to-set-DefaultApps/PolicyHelp.png">
+<meta property="article:published_time" content="2021-06-22T00:00:00.000Z">
+<meta property="article:modified_time" content="2026-02-19T02:53:58.951Z">
+<meta property="article:author" content="Microsoft Japan Windows Technology Support Team">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://jpwinsup.github.io/blog/2021/06/22/UserInterfaceAndApps/how-to-set-DefaultApps/FileAssociations.png">
+  
+    <link rel="alternate" href="/blog/atom.xml" title="Microsoft Japan Windows Technology Support Blog" type="application/atom+xml">
+  
+
+  <link rel="icon" href="/blog/favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="/blog/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/blog/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/blog/favicon-16x16.png">
+  <link rel="manifest" href="/blog/site.webmanifest">
+  <link rel="mask-icon" href="/blog/safari-pinned-tab.svg" color="#5bbad5">
+  <meta name="msapplication-TileColor" content="#ffffff">
+  <meta name="theme-color" content="#ffffff">
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/blog/css/style.css">
+
+<meta name="generator" content="Hexo 5.2.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="site-header-logo"></div>
+  <div id="site-header-blog-wrapper"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        <div id="ms-logo"></div>
+        
+          <a class="main-nav-link" href="/blog/">Home</a>
+        
+          <a class="main-nav-link" href="/blog/archives">Archives</a>
+        
+        <a class="main-nav-link" target="_blank" rel="noopener" href="https://cssjpn.github.io/">サポート情報</a>
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/blog/atom.xml" title="RSSフィード"></a>
+        
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//www.bing.com/search" method="get" accept-charset="UTF-8" name="bing-search" onsubmit="var f=this;if(f['q'].value){var searchUrl =  'https://www.bing.com/search?q=' +  encodeURIComponent(f['q'].value + ' site:' + f['sitesearch'].value) ;window.open(searchUrl, 'blank') };return false;" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="検索"><button type="submit" id="nav-search-btn" class="search-form-submit"></button><input type="hidden" name="sitesearch" value="https://jpwinsup.github.io/blog"></form>
+      </div>
+    </div>
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/blog/" id="logo">Microsoft Japan Windows Technology Support Blog</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/blog/" id="subtitle">日本マイクロソフト Windows Support チームによる、サポート情報 Blog です。</a>
+        </h2>
+      
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-UserInterfaceAndApps/how-to-set-DefaultApps" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    
+    
+      <header class="article-header-single">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      既定のアプリの設定および配布方法について
+    </h1>
+  
+
+      </header>
+      <div class="article-share">
+        Last Update: 
+        <a href="/blog/2021/06/22/UserInterfaceAndApps/how-to-set-DefaultApps/" class="article-date-single">
+  <time datetime="2021-06-22T00:00:00.000Z" itemprop="datePublished">2021-06-22</time>
+</a>
+        
+  <div class="article-category">
+    <a class="article-category-link" href="/blog/categories/User-Interface-and-Apps/">User Interface and Apps</a>
+  </div>
+
+        
+        <a href="https://github.com/jpwinsup/blog/issues/new?title=&body=%EF%BB%BF%0A%0A---%0A%0A%23%23%23%23+Document+Details%0A%0A*+Article+ID%3A+c19df938-7f9a-5afb-a010-0387405b0163%0A*+TITLE%3A+%E6%97%A2%E5%AE%9A%E3%81%AE%E3%82%A2%E3%83%97%E3%83%AA%E3%81%AE%E8%A8%AD%E5%AE%9A%E3%81%8A%E3%82%88%E3%81%B3%E9%85%8D%E5%B8%83%E6%96%B9%E6%B3%95%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6%0A*+URL+https%3A%2F%2Fjpwinsup.github.io%2Fblog%2F2021%2F06%2F22%2FUserInterfaceAndApps%2Fhow-to-set-DefaultApps%2F%0A*+SourceFileName%3A+source%2F_posts%2FUserInterfaceAndApps%2Fhow-to-set-DefaultApps.md%0A" class="article-github-issue-link" target="_blank" rel="noopener noreferrer">feedback</a>
+        
+        <a data-url="https://jpwinsup.github.io/blog/2021/06/22/UserInterfaceAndApps/how-to-set-DefaultApps/" data-id="cmlsvjd9u0048ru3ybe032414" class="article-share-link">共有</a>
+      </div>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>本記事はマイクロソフト社員によって公開されております。   </p>
+<p>こんにちは。Windows サポートチームの木村です。  </p>
+<p>マスター環境の作成や、組織内で利用するアプリケーションを変更する場合などに、既定のアプリの設定を変更したいことがあるかと存じます。<br>今回は Windows 10 の 既定のアプリの設定および配布方法についてご案内を致します。   </p>
+<h3 id="目次"><a href="#目次" class="headerlink" title="目次"></a>目次</h3><ul>
+<li><a href="#HowtoConfig">設定を行う方法</a><br>  <a href="#ChangedByUser">1. ユーザーによる手動変更</a><br>  <a href="#GroupPolicy">2. グループ ポリシーを使用する</a><br>  <a href="#DISM">3. DISM コマンドで既定のアプリの初期設定をインポートする</a><br>  <a href="#SettingFile">4. 設定ファイルの準備方法</a>   </li>
+<li><a href="#diffGPOandDISM">グループ ポリシーと DISM コマンドのちがい</a>   </li>
+<li><a href="#%E9%9D%9E%E6%8E%A8%E5%A5%A8%E3%81%A8%E3%81%AA%E3%82%8B%E8%A8%AD%E5%AE%9A%E6%96%B9%E6%B3%95">非推奨となる設定方法</a><br>  <a href="#EditRegistry">1. レジストリの直接編集</a><br>  <a href="#AssocAndFtype">2. assoc コマンドと ftype コマンドについて</a>   </li>
+<li><a href="#FAQ">よくある質問</a><br>  <a href="#Q1">Q1. 既存ユーザーに 1 度だけ既定のアプリの設定を反映させる方法を教えてください。</a><br>  <a href="#Q2">Q2. コマンドを用いて既定のアプリの設定を変更する方法を教えてください。</a><br>  <a href="#Q3">Q3. 一部の既定のアプリの設定のみを変更する方法を教えてください。</a><br>  <a href="#Q4">Q4. なぜ既定のアプリをレジストリの直接編集によって変更することができないのでしょうか。</a>   </li>
+<li><a href="#Link">関連情報</a></li>
+</ul>
+<h2 id="設定を行う方法"><a href="#設定を行う方法" class="headerlink" title="設定を行う方法"></a>設定を行う方法<a id = "HowtoConfig"></a></h2><h3 id="1-ユーザーによる手動変更"><a href="#1-ユーザーによる手動変更" class="headerlink" title="1. ユーザーによる手動変更"></a>1. ユーザーによる手動変更<a id = "ChangedByUser"></a></h3><p>設定画面の [アプリ] &gt; [既定のアプリ] の項目から既定のアプリの設定を確認、変更することが可能です。   </p>
+<p><img src="./FileAssociations.png">    </p>
+<p>上の画面では、よく使用される以下の 6 つの項目に関連した既定のアプリの設定を変更することが可能です。   </p>
+<ul>
+<li>メール</li>
+<li>マップ</li>
+<li>音楽プレーヤー</li>
+<li>フォト ビューアー</li>
+<li>ビデオ プレーヤー</li>
+<li>Web ブラウザー</li>
+</ul>
+<p>このほかに、以下の項目を用いることで、既定のアプリの設定をより詳細に変更することが可能です。   </p>
+<ul>
+<li><p>[ファイルの種類ごとに既定のアプリを選ぶ]<br>拡張子ごとに既定のアプリの設定を変更することが可能です。<br>(使用例) .jpg を開くアプリをペイントからフォトに変更する。</p>
+</li>
+<li><p>[プロトコルごとに既定のアプリを選ぶ]<br>各プロトコルごとに既定のアプリの設定を行うことが可能です。<br>(例) メール アドレスをクリックしたときに起動するアプリを メール アプリから Outlook に変更する。</p>
+</li>
+</ul>
+<h3 id="2-グループ-ポリシーを使用する"><a href="#2-グループ-ポリシーを使用する" class="headerlink" title="2. グループ ポリシーを使用する"></a>2. グループ ポリシーを使用する<a id = "GroupPolicy"></a></h3><p>グループ ポリシーを用いることで既定のアプリの設定を配布することが可能です。   </p>
+<p>[コンピューターの構成] &gt; [管理用テンプレート] &gt; [Windows コンポーネント] &gt; [エクスプローラー]<br>[既定の関連付け構成ファイルの設定] : 有効<br>[既定の関連付け構成ファイル] : 設定ファイルのフルパスを入力してください。   </p>
+<p>※ 設定ファイルのご用意については、後述の <a href="#settingFile">“4. 設定ファイルの準備方法”</a> を参照ください。   </p>
+<p><img src="./PolicyHelp.png">   </p>
+<p>本ポリシーを適用する際には、ローカル グループ ポリシーから設定をする場合にも、ドメインに参加している必要がございます。<br>このことはグループ ポリシーの注意書きにも以下のように注意書きがございます。   </p>
+<p>– 該当箇所引用 –<br>このグループ ポリシーを構成しなかった場合、無効にした場合、または<strong>クライアント コンピューターがドメインに参加していない場合</strong>、ログオン時に既定の関連付けは適用されません。   </p>
+<p>なお、ポリシーにて選択したフルパス上に設定ファイルが存在しなくなったときや、アクセスができない場合、設定は反映されません。</p>
+<h3 id="3-DISM-コマンドで既定のアプリの初期設定をインポートする"><a href="#3-DISM-コマンドで既定のアプリの初期設定をインポートする" class="headerlink" title="3. DISM コマンドで既定のアプリの初期設定をインポートする"></a>3. DISM コマンドで既定のアプリの初期設定をインポートする<a id = "DISM"></a></h3><p>DISM コマンドを使用することで、新規ユーザーの既定のアプリの設定を変更することが可能です。<br>例えば、現在ログオンしている環境に C:\temp 配下に存在している Associations.xml という名前の設定ファイルをインポートする場合には、管理者権限で実行したコマンド プロンプトから以下のコマンドを実行します。 </p>
+<pre><code>    DISM /online /Import-DefaultAppAssociations:C:\temp\Associations.xml   </code></pre>
+<p>設定のインポート方法の詳細につきましては、弊社の公開情報をご参考ください。</p>
+<p>(参考) 既定のアプリケーションの関連付けをエクスポートまたはインポートする<br><a target="_blank" rel="noopener" href="https://docs.microsoft.com/ja-jp/windows-hardware/manufacture/desktop/export-or-import-default-application-associations">https://docs.microsoft.com/ja-jp/windows-hardware/manufacture/desktop/export-or-import-default-application-associations</a>   </p>
+<p>本手順の注意事項として、OS のアップグレードを実行した際には OS の既定の設定が上書きされてしまいます。<br>そのため、OS のアップグレード時には SetupComplete.cmd を用いてアップグレード直後に再度設定を行うといった方法でこの動作を回避することが可能です。   </p>
+<p>(参考) カスタム スクリプトを Windows セットアップに追加する<br><a target="_blank" rel="noopener" href="https://docs.microsoft.com/ja-jp/windows-hardware/manufacture/desktop/add-a-custom-script-to-windows-setup">https://docs.microsoft.com/ja-jp/windows-hardware/manufacture/desktop/add-a-custom-script-to-windows-setup</a>   </p>
+<h3 id="4-設定ファイルの準備方法"><a href="#4-設定ファイルの準備方法" class="headerlink" title="4. 設定ファイルの準備方法"></a>4. 設定ファイルの準備方法<a id = "settingFile"></a></h3><p>既定のアプリの設定を手動以外の方法で設定したり配布をするためには、既定のアプリの設定ファイルが必要となります。<br>本項ではグループ ポリシーや DISM コマンドによるインポートの際に利用する設定ファイルの作成方法をご紹介致します。   </p>
+<p>手順 1) <a href="#ChangedByUser">1. ユーザーによる手動変更</a> の方法を用いて、配布したい既定のアプリの設定を行います。<br>手順 2) 管理者権限にて実行したコマンド プロンプト上から DISM コマンドを実行します。<br>        例えば、現在ログオンしているユーザーの既定のアプリの情報を C:\temp 配下に Associations.xml として出力する場合は以下のようなコマンドを実行します。</p>
+<pre><code>    DISM /online /Export-DefaultAppAssociations:C:\temp\Associations.xml   </code></pre>
+<p>以上の手順によって “手順 1” で予め設定をした既定のアプリの設定情報が、設定ファイルとして出力されます。<br>ここで出力された設定ファイルは、そのままグループ ポリシーや DISM コマンドを用いて配布することが可能です。<br>本手順については以下の公開情報に詳細がございますのでご確認ください。   </p>
+<p>(参考) 既定のアプリケーションの関連付けをエクスポートまたはインポートする<br><a target="_blank" rel="noopener" href="https://docs.microsoft.com/ja-jp/windows-hardware/manufacture/desktop/export-or-import-default-application-associations">https://docs.microsoft.com/ja-jp/windows-hardware/manufacture/desktop/export-or-import-default-application-associations</a>   </p>
+<h2 id="グループ-ポリシーと-DISM-コマンドの違い"><a href="#グループ-ポリシーと-DISM-コマンドの違い" class="headerlink" title="グループ ポリシーと DISM コマンドの違い"></a>グループ ポリシーと DISM コマンドの違い<a id = "DiffGPOandDISM"></a></h2><h3 id="1-適用範囲の違い"><a href="#1-適用範囲の違い" class="headerlink" title="1. 適用範囲の違い"></a>1. 適用範囲の違い</h3><table>
+<thead>
+<tr>
+<th align="left"></th>
+<th align="center">グループ ポリシー</th>
+<th align="center">DISM コマンド</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">新規ユーザー</td>
+<td align="center">〇</td>
+<td align="center">〇</td>
+</tr>
+<tr>
+<td align="left">既存ユーザー</td>
+<td align="center">〇</td>
+<td align="center">×</td>
+</tr>
+</tbody></table>
+<p>〇 : 設定が反映される<br>× : 設定が反映されない   </p>
+<p>グループ ポリシーは新規ユーザーと既存ユーザーの両方に設定が反映されます。<br>しかし、DISM コマンドを用いた設定の配布は、DISM コマンドでインポートして以降の新規ユーザーにのみ反映されます。使い分けるケースとしては、現在運用中の環境に対して設定を配布したい場合にはグループ ポリシーを、これから配布するためのマスター環境を作成している際には DISM コマンドを用いるといった使い分けが考えられます。   </p>
+<h3 id="2-ユーザーが自由に変更できるかどうかの違い"><a href="#2-ユーザーが自由に変更できるかどうかの違い" class="headerlink" title="2. ユーザーが自由に変更できるかどうかの違い"></a>2. ユーザーが自由に変更できるかどうかの違い</h3><table>
+<thead>
+<tr>
+<th align="left"></th>
+<th align="center">グループ ポリシー</th>
+<th align="center">DISM コマンド</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">新規ユーザー</td>
+<td align="center">×</td>
+<td align="center">〇</td>
+</tr>
+<tr>
+<td align="left">既存ユーザー</td>
+<td align="center">×</td>
+<td align="center">-</td>
+</tr>
+</tbody></table>
+<p>※ 既存ユーザーには DISM コマンドを用いた設定が反映されないため “-“ としています。<br>〇 : 変更可能<br>× : 変更不可   </p>
+<p>グループ ポリシーはユーザーのサインイン時、および Explorer.exe の再起動時に設定されるものとなります。<br>そのため、現在操作中の状態においては既定のアプリの設定を変更することが可能でございますが、ログオフ・ログオンおよび Explorer.exe の再起動が行われた際に、設定ファイルを用いて配布した設定が上書きされてしまいます。<br>一方で DISM コマンドを用いる方法の場合、新規ユーザーの初期値を設定するのみとなりますため、その後にユーザーが自由に既定のアプリの設定を変更することが可能となります。   </p>
+<h2 id="非推奨となる設定方法"><a href="#非推奨となる設定方法" class="headerlink" title="非推奨となる設定方法"></a>非推奨となる設定方法</h2><h3 id="1-レジストリの直接編集"><a href="#1-レジストリの直接編集" class="headerlink" title="1. レジストリの直接編集"></a>1. レジストリの直接編集<a id = "EditRegistry"></a></h3><p>Windows 8 以降ではレジストリの直接編集にて既定のアプリの設定を変更した場合、既定のアプリのリセットが発生し、OS の推奨の値が設定されるようになりました。<br>詳細については以下の公開情報をご参考ください。</p>
+<p>(参考) 既定のアプリのリセットについて<br><a href="https://jpwinsup.github.io/blog/2021/04/22/UserInterfaceAndApps/ResetFileAssociationsSubject/">https://jpwinsup.github.io/blog/2021/04/22/UserInterfaceAndApps/ResetFileAssociationsSubject/</a></p>
+<h3 id="2-assoc-コマンドと-ftype-コマンドについて"><a href="#2-assoc-コマンドと-ftype-コマンドについて" class="headerlink" title="2. assoc コマンドと ftype コマンドについて"></a>2. assoc コマンドと ftype コマンドについて<a id = "AssocAndFtype"></a></h3><p>上述のように、Windows 8 以降はレジストリの直接編集ができなくなるなど、既定のアプリの動作に変更が行われました。この変更によって、従来用いられていた assoc コマンドと ftype コマンドを用いて設定した値が、正しく参照されない場合がございます。   </p>
+<h2 id="よくある質問"><a href="#よくある質問" class="headerlink" title="よくある質問"></a>よくある質問<a id = "FAQ"></a></h2><h3 id="Q1-既存ユーザーに-1-度だけ既定のアプリの設定を反映させる方法を教えてください。"><a href="#Q1-既存ユーザーに-1-度だけ既定のアプリの設定を反映させる方法を教えてください。" class="headerlink" title="Q1. 既存ユーザーに 1 度だけ既定のアプリの設定を反映させる方法を教えてください。"></a>Q1. 既存ユーザーに 1 度だけ既定のアプリの設定を反映させる方法を教えてください。<a id = "Q1"></a></h3><p>OS 標準の方法ではご要望を実現できる方法のご用意がございません。<br>既存ユーザーに対し、設定を配布する方法はグループ ポリシーのみとなります。そのため、もしユーザーにて自由に変更することを希望されます場合には、ユーザー自身に手動で設定を変更いただく必要がございます。<br>もしユーザー様へ設定の変更のご依頼が難しく、管理者が配布する必要がございます場合には弊社までお気軽にご相談ください。   </p>
+<h3 id="Q2-コマンドを用いて既定のアプリの設定を変更する方法を教えてください。"><a href="#Q2-コマンドを用いて既定のアプリの設定を変更する方法を教えてください。" class="headerlink" title="Q2. コマンドを用いて既定のアプリの設定を変更する方法を教えてください。"></a>Q2. コマンドを用いて既定のアプリの設定を変更する方法を教えてください。<a id = "Q2"></a></h3><p>Windows 8 からの OS ではコマンドを用いて既定のアプリの設定を変更する方法はご用意がございません。<br>Windows 7 までは ftype および assoc コマンドを用いることでコマンドによる変更を行うことができました。<br>しかし、Windows 8 からは既定のアプリケーションの設定に関する仕様変更の影響により使用できなくなりました。</p>
+<p>(参考) Windows 8 でプログラムからファイルの種類とプロトコルの関連付けができない<br><a target="_blank" rel="noopener" href="http://support.microsoft.com/kb/2846141/ja">http://support.microsoft.com/kb/2846141/ja</a></p>
+<h3 id="Q3-一部の既定のアプリの設定のみを変更する方法を教えてください。"><a href="#Q3-一部の既定のアプリの設定のみを変更する方法を教えてください。" class="headerlink" title="Q3. 一部の既定のアプリの設定のみを変更する方法を教えてください。"></a>Q3. 一部の既定のアプリの設定のみを変更する方法を教えてください。<a id = "Q3"></a></h3><p>グループ ポリシーを用いて設定の配布を行う場合に限り、設定ファイルの不要な項目を削除することが可能でございます。例えば pdf ファイルに対する既定のアプリの設定を残すことで、それ以外の既定のアプリの設定の変更を可能にしつつ、pdf ファイルのみの設定を配布することが可能です。<br>ただし、DISM コマンドを用いて設定ファイルのインポートを行うことはできません。不要な項目を削除した設定ファイルをインポートしてしまうと、新規ユーザーの初回ログオン時に、削除した項目に対して 「既定のアプリがリセットされました」 という通知が発生することがございます。   </p>
+<h3 id="Q4-なぜ既定のアプリをレジストリの直接編集によって変更することができないのでしょうか。"><a href="#Q4-なぜ既定のアプリをレジストリの直接編集によって変更することができないのでしょうか。" class="headerlink" title="Q4. なぜ既定のアプリをレジストリの直接編集によって変更することができないのでしょうか。"></a>Q4. なぜ既定のアプリをレジストリの直接編集によって変更することができないのでしょうか。<a id = "Q4"></a></h3><p>Windows 8 からは、既定のアプリの設定の整合性を確認する動作がございます。システムを介さず直接レジストリの値を変更した場合、OS としては情報の不整合として検知します。<br>その結果、「既定のアプリがリセットされました」 という通知が発生し、OS が推奨するアプリが設定されることがございます。   </p>
+<hr>
+<h3 id="関連情報"><a href="#関連情報" class="headerlink" title="関連情報"></a>関連情報<a id = "Link"></a></h3><ul>
+<li><p>既定のアプリのリセットについて<br><a href="https://jpwinsup.github.io/blog/2021/04/22/UserInterfaceAndApps/ResetFileAssociationsSubject/">https://jpwinsup.github.io/blog/2021/04/22/UserInterfaceAndApps/ResetFileAssociationsSubject/</a></p>
+</li>
+<li><p>既定のアプリをグループ ポリシーで固定する方法<br><a href="https://jpwinsup.github.io/blog/2020/12/02/UserInterfaceAndApps/how-to-set-gpo-about-DefaultApps/">https://jpwinsup.github.io/blog/2020/12/02/UserInterfaceAndApps/how-to-set-gpo-about-DefaultApps/</a></p>
+</li>
+<li><p>「どのアプリで開きますか？」 というメッセージについてと表示抑止方法のご案内<br><a href="https://jpwinsup.github.io/blog/2021/05/29/UserInterfaceAndApps/WhatAppsDoYouWantToOpen/">https://jpwinsup.github.io/blog/2021/05/29/UserInterfaceAndApps/WhatAppsDoYouWantToOpen/</a></p>
+</li>
+<li><p>Windows 8 でプログラムからファイルの種類とプロトコルの関連付けができない<br><a target="_blank" rel="noopener" href="http://support.microsoft.com/kb/2846141/ja">http://support.microsoft.com/kb/2846141/ja</a></p>
+</li>
+<li><p>既定のアプリケーションの関連付けをエクスポートまたはインポートする<br><a target="_blank" rel="noopener" href="https://docs.microsoft.com/ja-jp/windows-hardware/manufacture/desktop/export-or-import-default-application-associations">https://docs.microsoft.com/ja-jp/windows-hardware/manufacture/desktop/export-or-import-default-application-associations</a></p>
+</li>
+</ul>
+<br>
+本情報が、ご利用者様の一助となりますと幸いでございます。
+<br>
+<br>
+<br>
+<br>  
+<br>
+※内容は予告なく変更される場合がございますことを何卒ご了承ください。
+      
+      
+    </div>
+    <footer class="article-footer">
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/blog/2021/06/24/Performance/Hang_BSOD/Bugcheck0xBE-NtfsCommonQueryEa-202101C/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">次の記事</strong>
+      <div class="article-nav-title">
+        
+          2021 年 1 月 21 日の更新プログラム適用後に NTFS.sys の不具合で Bugcheck 0xBE が発生する問題
+        
+      </div>
+    </a>
+  
+  
+    <a href="/blog/2021/06/15/Networking/TCPIP/IPv6-basic-2/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">前の記事</strong>
+      <div class="article-nav-title">連載 IPv6 入門 – 第二回 ホストが取得する IPv6 アドレスの種類</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">カテゴリ</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Activation/">Activation</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Activation/ESU/">ESU</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Activation/security-SPP/">security-SPP</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/">Active Directory</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Authentication/">Authentication</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/DFSR/">DFSR</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/FunctionalLevel/">FunctionalLevel</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Group-Policy/">Group Policy</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Promotion-and-Demotion/">Promotion and Demotion</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/User-Profile/">User Profile</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Windows-Hello/">Windows Hello</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Windows-Time-Service/">Windows Time Service</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/AppLocker/">AppLocker</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/AppLocker/Active-Directory/">Active Directory</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/AppLocker/Microsoft-Intune/">Microsoft Intune</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Deployment/">Deployment</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Deployment/Feature-on-demand/">Feature on demand</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Deployment/Sysprep/">Sysprep</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Failover-Clustering/">Failover Clustering</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Failover-Clustering/Configuration-and-Management/">Configuration and Management</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/FileServices/">FileServices</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/FileServices/FTP/">FTP</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/FileServices/SMB/">SMB</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Hyper-V/">Hyper-V</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Hyper-V/Configuration-and-Management/">Configuration and Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Hyper-V/Migration/">Migration</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Microsoft-Connected-Cache/">Microsoft Connected Cache</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/">Networking</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/BITS/">BITS</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/Bluetooth/">Bluetooth</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/DHCP/">DHCP</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/DNS/">DNS</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/Firewall/">Firewall</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/LBFO/">LBFO</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/NCSI/">NCSI</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/NetworkInterface/">NetworkInterface</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/Proxy/">Proxy</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/TCPIP/">TCPIP</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/OpenSSH/">OpenSSH</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/">Performance</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/Hang-up-BSoD/">Hang-up/BSoD</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/No-Boot/">No Boot</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/Slow-Response/">Slow Response</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/System-Resource/">System Resource</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/Tools/">Tools</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/">Public Key Infrastructure</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Certificate-Authority/">Certificate Authority</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Certificate-Management/">Certificate Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Code-Signing/">Code Signing</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/SSL-TLS-Communication/">SSL TLS Communication</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/SSL-TLS-Connection/">SSL TLS Connection</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Smart-Card-Logon/">Smart Card Logon</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/">Remote Desktop</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/Azure-Virtual-Desktop-AVD/">Azure Virtual Desktop (AVD)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/Remote-Desktop-Service-RDS/">Remote Desktop Service (RDS)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/Windows-Virtual-Desktop-WVD/">Windows Virtual Desktop (WVD)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/RemoteAccess/">RemoteAccess</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/RemoteAccess/%E3%83%80%E3%82%A4%E3%83%A4%E3%83%AB%E3%82%A2%E3%83%83%E3%83%97%E6%8E%A5%E7%B6%9A/">ダイヤルアップ接続</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Setup/">Setup</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Setup/Feature-Update-FU/">Feature Update (FU)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Shell/">Shell</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Shell/Explorer/">Explorer</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/">Storage</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/Backup/">Backup</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/FSRM/">FSRM</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/Management/">Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/StorageMigrationService/">StorageMigrationService</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/UEFI/">UEFI</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/UEFI/Secure-Boot/">Secure Boot</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/">User Interface and Apps</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Command-Prompt/">Command Prompt</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/EventLog/">EventLog</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Language-Support/">Language Support</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Microsoft-Store/">Microsoft Store</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Performance/">Performance</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/PowerShell/">PowerShell</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Printing-%E5%8D%B0%E5%88%B7/">Printing (印刷)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Server-Management/">Server Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Taskscheduler/">Taskscheduler</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Windows-Management-Instrumentation/">Windows Management Instrumentation</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps-Language-support/">User Interface and Apps - Language support</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-365/">Windows 365</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Admin-Center/">Windows Admin Center</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Search/">Windows Search</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/">Windows Update</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Delivery-Optimization-DO/">Delivery Optimization (DO)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Feature-Update-FU/">Feature Update (FU)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Quality-Update-QU/">Quality Update (QU)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Windows-Update-Agent/">Windows Update Agent</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Windows-Update-Agent-WUA/">Windows Update Agent (WUA)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/">WirelessNetwork</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/NPS/">NPS</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/Wi-Fi/">Wi-Fi</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/%E3%83%A2%E3%83%90%E3%82%A4%E3%83%AB-%E3%83%96%E3%83%AD%E3%83%BC%E3%83%89%E3%83%90%E3%83%B3%E3%83%89%E6%8E%A5%E7%B6%9A-LTE/">モバイル ブロードバンド接続 (LTE)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/%E7%B5%84%E7%B9%94%E7%B4%B9%E4%BB%8B%E3%83%96%E3%83%AD%E3%82%B0%EF%BC%88Windows-Commercial%EF%BC%89/">組織紹介ブログ（Windows Commercial）</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最近の投稿</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/blog/2026/02/16/ActiveDirectory/GroupPolicy/UacPolicyIsEnabled/">「ユーザー アカウント制御：ビルトイン Administrator アカウントのための管理者承認モード」ポリシーが有効になる動作ついて</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/02/15/UserInterfaceAndApps/Printing/printer-queue-app-preview/">印刷キューアプリのプレビュー機能について</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/02/02/ActiveDirectory/Authentication/kerberos-rc4-for-service-account-ticket-issuance-changes-related-to-cve-2026-20833/">CVE‑2026‑20833 への対応とその影響について [KB5073381]</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/01/12/Hyper-V/vmwp-does-not-save-the-RTC-value-of-a-virtual-machine-when-performing-Live-Migration/">ライブ マイグレーション後の再起動でゲスト OS の時刻がずれる場合がある</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/01/07/WindowsUpdate/FU/fublog-txt/">ISO メディア経由かつ動的更新無効な状態で Windows 11 バージョン 24H2 または 25H2 へのアップグレードが失敗 (0x8007042B 0x2000D) する事象と対策について</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">アーカイブ</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2026/02/">2026 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2026/01/">2026 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/12/">2025 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/11/">2025 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/10/">2025 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/09/">2025 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/08/">2025 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/07/">2025 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/06/">2025 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/05/">2025 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/04/">2025 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/03/">2025 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/02/">2025 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/01/">2025 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/12/">2024 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/11/">2024 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/10/">2024 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/09/">2024 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/08/">2024 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/07/">2024 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/06/">2024 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/05/">2024 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/04/">2024 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/03/">2024 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/02/">2024 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/01/">2024 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/12/">2023 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/11/">2023 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/10/">2023 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/09/">2023 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/08/">2023 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/07/">2023 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/06/">2023 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/05/">2023 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/04/">2023 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/03/">2023 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/02/">2023 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/01/">2023 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/12/">2022 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/11/">2022 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/10/">2022 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/09/">2022 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/08/">2022 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/07/">2022 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/06/">2022 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/05/">2022 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/04/">2022 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/03/">2022 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/02/">2022 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/01/">2022 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/12/">2021 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/11/">2021 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/10/">2021 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/09/">2021 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/08/">2021 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/07/">2021 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/06/">2021 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/05/">2021 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/04/">2021 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/03/">2021 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/02/">2021 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/01/">2021 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/12/">2020 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/11/">2020 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/10/">2020 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/07/">2020 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/03/">2020 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2019/03/">2019 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/11/">2018 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/10/">2018 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/09/">2018 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/08/">2018 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/07/">2018 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/06/">2018 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/04/">2018 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/02/">2018 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/12/">2017 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/11/">2017 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/09/">2017 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/05/">2017 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/03/">2017 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/02/">2017 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2016/08/">2016 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2016/05/">2016 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2014/03/">2014 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2012/02/">2012 / 02</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2026 Microsoft Japan Windows Technology Support Team<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/blog/" class="mobile-nav-link">Home</a>
+  
+    <a href="/blog/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+<script src="/blog/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

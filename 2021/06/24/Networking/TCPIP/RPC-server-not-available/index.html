@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-180187723-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-180187723-1');
+</script>
+<!-- End Google Analytics -->
+
+  
+  <title>RPC サーバーを利用できません？ | Microsoft Japan Windows Technology Support Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="本記事は 2009 年 9 月 2 日に公開された記事を本ブログに移行した記事になります。 こんにちは。Windows プラットフォーム サポート担当の加山です。 ・ RPC サーバーを利用できません・ エンドポイント マッパーから使用できるエンドポイントはこれ以上ありません Windows のシステム管理者の方なら、一度はこのようなエラー メッセージを見たことがあるかも知れません。Active">
+<meta property="og:type" content="article">
+<meta property="og:title" content="RPC サーバーを利用できません？">
+<meta property="og:url" content="https://jpwinsup.github.io/blog/2021/06/24/Networking/TCPIP/RPC-server-not-available/index.html">
+<meta property="og:site_name" content="Microsoft Japan Windows Technology Support Blog">
+<meta property="og:description" content="本記事は 2009 年 9 月 2 日に公開された記事を本ブログに移行した記事になります。 こんにちは。Windows プラットフォーム サポート担当の加山です。 ・ RPC サーバーを利用できません・ エンドポイント マッパーから使用できるエンドポイントはこれ以上ありません Windows のシステム管理者の方なら、一度はこのようなエラー メッセージを見たことがあるかも知れません。Active">
+<meta property="og:locale" content="ja_JP">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2021/06/24/Networking/TCPIP/RPC-server-not-available/clip_image002_2.jpg">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2021/06/24/Networking/TCPIP/RPC-server-not-available/clip_image004_2.jpg">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2021/06/24/Networking/TCPIP/RPC-server-not-available/clip_image006_2.jpg">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2021/06/24/Networking/TCPIP/RPC-server-not-available/clip_image008_2.gif">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2021/06/24/Networking/TCPIP/RPC-server-not-available/clip_image010_2.gif">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2021/06/24/Networking/TCPIP/RPC-server-not-available/clip_image012_2.gif">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2021/06/24/Networking/TCPIP/RPC-server-not-available/clip_image013_2.jpg">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2021/06/24/Networking/TCPIP/RPC-server-not-available/clip_image015_2.jpg">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2021/06/24/Networking/TCPIP/RPC-server-not-available/clip_image017_2.jpg">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2021/06/24/Networking/TCPIP/RPC-server-not-available/clip_image019_3.jpg">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2021/06/24/Networking/TCPIP/RPC-server-not-available/clip_image021_2.jpg">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2021/06/24/Networking/TCPIP/RPC-server-not-available/clip_image023_2.jpg">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2021/06/24/Networking/TCPIP/RPC-server-not-available/clip_image024_19%5B1%5D.jpg">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2021/06/24/Networking/TCPIP/RPC-server-not-available/clip_image025_2.jpg">
+<meta property="article:published_time" content="2021-06-24T15:00:00.000Z">
+<meta property="article:modified_time" content="2026-02-19T02:53:58.433Z">
+<meta property="article:author" content="Microsoft Japan Windows Technology Support Team">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://jpwinsup.github.io/blog/2021/06/24/Networking/TCPIP/RPC-server-not-available/clip_image002_2.jpg">
+  
+    <link rel="alternate" href="/blog/atom.xml" title="Microsoft Japan Windows Technology Support Blog" type="application/atom+xml">
+  
+
+  <link rel="icon" href="/blog/favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="/blog/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/blog/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/blog/favicon-16x16.png">
+  <link rel="manifest" href="/blog/site.webmanifest">
+  <link rel="mask-icon" href="/blog/safari-pinned-tab.svg" color="#5bbad5">
+  <meta name="msapplication-TileColor" content="#ffffff">
+  <meta name="theme-color" content="#ffffff">
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/blog/css/style.css">
+
+<meta name="generator" content="Hexo 5.2.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="site-header-logo"></div>
+  <div id="site-header-blog-wrapper"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        <div id="ms-logo"></div>
+        
+          <a class="main-nav-link" href="/blog/">Home</a>
+        
+          <a class="main-nav-link" href="/blog/archives">Archives</a>
+        
+        <a class="main-nav-link" target="_blank" rel="noopener" href="https://cssjpn.github.io/">サポート情報</a>
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/blog/atom.xml" title="RSSフィード"></a>
+        
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//www.bing.com/search" method="get" accept-charset="UTF-8" name="bing-search" onsubmit="var f=this;if(f['q'].value){var searchUrl =  'https://www.bing.com/search?q=' +  encodeURIComponent(f['q'].value + ' site:' + f['sitesearch'].value) ;window.open(searchUrl, 'blank') };return false;" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="検索"><button type="submit" id="nav-search-btn" class="search-form-submit"></button><input type="hidden" name="sitesearch" value="https://jpwinsup.github.io/blog"></form>
+      </div>
+    </div>
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/blog/" id="logo">Microsoft Japan Windows Technology Support Blog</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/blog/" id="subtitle">日本マイクロソフト Windows Support チームによる、サポート情報 Blog です。</a>
+        </h2>
+      
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-Networking/TCPIP/RPC-server-not-available" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    
+    
+      <header class="article-header-single">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      RPC サーバーを利用できません？
+    </h1>
+  
+
+      </header>
+      <div class="article-share">
+        Last Update: 
+        <a href="/blog/2021/06/24/Networking/TCPIP/RPC-server-not-available/" class="article-date-single">
+  <time datetime="2021-06-24T15:00:00.000Z" itemprop="datePublished">2021-06-25</time>
+</a>
+        
+  <div class="article-category">
+    <a class="article-category-link" href="/blog/categories/Networking/">Networking</a>►<a class="article-category-link" href="/blog/categories/Networking/TCPIP/">TCPIP</a>
+  </div>
+
+        
+        <a href="https://github.com/jpwinsup/blog/issues/new?title=&body=%EF%BB%BF%0A%0A---%0A%0A%23%23%23%23+Document+Details%0A%0A*+Article+ID%3A+692eee65-7fa5-5d83-a202-9aad6c159bed%0A*+TITLE%3A+RPC+%E3%82%B5%E3%83%BC%E3%83%90%E3%83%BC%E3%82%92%E5%88%A9%E7%94%A8%E3%81%A7%E3%81%8D%E3%81%BE%E3%81%9B%E3%82%93%EF%BC%9F%0A*+URL+https%3A%2F%2Fjpwinsup.github.io%2Fblog%2F2021%2F06%2F24%2FNetworking%2FTCPIP%2FRPC-server-not-available%2F%0A*+SourceFileName%3A+source%2F_posts%2FNetworking%2FTCPIP%2FRPC-server-not-available.md%0A" class="article-github-issue-link" target="_blank" rel="noopener noreferrer">feedback</a>
+        
+        <a data-url="https://jpwinsup.github.io/blog/2021/06/24/Networking/TCPIP/RPC-server-not-available/" data-id="cmlsvjdo901i2ru3ygn1wa15w" class="article-share-link">共有</a>
+      </div>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>本記事は 2009 年 9 月 2 日に公開された記事を本ブログに移行した記事になります。</p>
+<p>こんにちは。Windows プラットフォーム サポート担当の加山です。</p>
+<p><strong>・ RPC サーバーを利用できません</strong><br><strong>・ エンドポイント マッパーから使用できるエンドポイントはこれ以上ありません</strong></p>
+<p>Windows のシステム管理者の方なら、一度はこのようなエラー メッセージを見たことがあるかも知れません。<br>Active Directory の複製処理を GUI から実行した時とか・・・</p>
+<img src="/blog/2021/06/24/Networking/TCPIP/RPC-server-not-available/clip_image002_2.jpg" class="">
+
+<p>ntdsutil コマンドで Active Directory の管理を行う時とか・・・</p>
+<img src="/blog/2021/06/24/Networking/TCPIP/RPC-server-not-available/clip_image004_2.jpg" class="">
+
+<p>デバッグ ログの中にも・・・</p>
+<img src="/blog/2021/06/24/Networking/TCPIP/RPC-server-not-available/clip_image006_2.jpg" class="">
+
+<p>今日は管理者の皆様を悩ませている（かも知れない？）このエラーメッセージの意味と対処方法について解説していきます。</p>
+<ol>
+<li><p>RPC とは？<br>RPC とは Remote Procedure Call の略で、その名の通りリモート コンピューター上に実装された機能を呼び出すための仕組みです。<br>しかしながら、Web や電子メールなどが普及していることからも明らかなように、昨今のシステムの多くはネットワーク上のコンピューターの機能を利用してすることを前提として動作しています。「リモートコンピューターの機能を呼び出す」 という言葉だけを見ると、HTTP や SMTP のような通常のクライアント / サーバー型のアプリケーションとの違いがわかりにくいかもしれません。そこで、まず簡単ではありますが、下記にその違いについて解説します。</p>
+<ul>
+<li>通常のクライアント / サーバー型アプリケーション<br>従来のクライアント / サーバー型のアプリケーションでは、クライアント側に実装された機能によってリクエストを生成します。リクエストを受けたサーバーはその内容を読み取って、サーバー側で実装された機能によって処理を行い、レスポンスを返します。</li>
+</ul>
+</li>
+</ol>
+<img src="/blog/2021/06/24/Networking/TCPIP/RPC-server-not-available/clip_image008_2.gif" class="">
+
+<ul>
+<li>RPC アプリケーション<br>一方で、RPC アプリケーションではサーバー側に実装された機能をプロシージャーの単位で呼び出します。イメージは、下図の通りです。</li>
+</ul>
+<img src="/blog/2021/06/24/Networking/TCPIP/RPC-server-not-available/clip_image010_2.gif" class="">
+
+<p>この例では、RPC クライアント アプリケーションが RemoteFunction という名前のプロシージャーを呼び出していますが、このプロシージャーによって呼び出される機能はクライアント側には実装されていません。RPC サーバーへのリクエストの作成、送信は RPC クライアント スタブライブラリが代行し、目的のプロシージャーはリモート コンピューター上で実行され、結果のみが RPC クライアントアプリケーションに返されます。このようにして、RPC クライアント アプリケーションは、サーバーに対してどのようにリクエストを送るかなどを意識せずに、その機能のみを利用できます。</p>
+<p>** もちろん、リモートだけではなく、ローカル コンピューター上に実装されている RPC サーバー アプリケーションの機能を呼び出すことも可能です。呼び出すプロシージャーが同じであれば、実装されているのがローカルかリモートかによらず、同一の手順で処理を行えることも RPC の利点の一つです。</p>
+<ul>
+<li>それでは、「RPC サーバーを利用できません」とは？<br>前述の通り、RPC の機能を利用するクライアント アプリケーションは、「どのプロシージャーを呼び出すか」、「どのサーバーから呼び出すか」などの情報を RPC クライアント スタブ ライブラリに渡してプロシージャーの実行結果を待ちます。</li>
+</ul>
+<p>通常は、前述の通り目的のプロシージャーが RPC サーバーによって実行され、成功、失敗などのメッセージが応答として RPC クライアントアプリケーションに返されるのですが、ネットワーク通信の問題などによって RPC サーバーに対してリクエストを送信できない場合、RPC クライアント アプリケーションは RPC スタブ ライブラリからエラーメッセージを受け取ります。</p>
+<img src="/blog/2021/06/24/Networking/TCPIP/RPC-server-not-available/clip_image012_2.gif" class="">
+
+<p>これが、問題のエラー メッセージ “RPC サーバーを利用できません” が発生する仕組みです。</p>
+<p>RPC スタブ ライブラリは、OS で共通のコンポーネントが使用されます。多くの場合、アプリケーション側ではプロシージャーの実行結果として受け取ったエラーコードやメッセージをそのままの形でイベント ビューアやダイアログ ボックス、デバッグ ログなどに出力するので、RPC で利用する様々なアプリケーションでこの共通のエラーメッセージが出力されることになります。</p>
+<ol>
+<li>主に考えられる原因と RPC エンドポイント マッパー</li>
+</ol>
+<p>エラー メッセージの意味がわかったところで、実際に RPC サーバーへの通信に失敗する原因にはどのようなものがあるのでしょうか。下記に、代表的な例をご紹介します。</p>
+<ul>
+<li><p>名前解決のトラブル、経路上の障害<br>まず第一に考えられるのが、名前解決のトラブルや、ネットワーク経路上の通信トラブルです。多くの場合、RPC の通信は TCP/IP プロトコル上で動作しますので、IP 層での疎通ができていることがまず第一の条件となります。問題の発生しているコンピューターが宛先のコンピューターと疎通できているか、宛先として指定しているコンピューター名の名前解決が正常に行えているかを、ping コマンドや nslookup コマンドで確認してみましょう。名前解決の仕組みやネットワークの疎通の確認方法については、本 Blog の過去の記事 &lt;Windows 名前解決の順序&gt; もご参考にしていただければ幸いです。</p>
+</li>
+<li><p>ファイアウォールによる RPC に必要な通信のフィルタリング<br>さて、上記の確認を行ったところ、名前解決も正しく行えていて、ping コマンドでネットワークの疎通も確認できている・・・にも拘わらず、何故か “RPC サーバーを利用できません” のエラーが出力されてしまう場合は、RPC で使用するポートが経路途中のファイアウォールや、コンピューター上のパーソナル ファイアウォールによってフィルタリングされている可能性があります。</p>
+</li>
+</ul>
+<p>Windows における RPC の実装では RPC エンドポイントマッパーと呼ばれる仕組みが用意されており、多くの RPC アプリケーションがこの仕組みを利用しています。この仕組みを使って RPC の通信が行われる場合、使用されるポートの選択方法が通常のクライアント / サーバーアプリケーションと比較して少しだけ複雑になっています。このため、これらの正しく仕組みを理解した上で、必要なポート番号による通信をあらかじめ許可しておくことが肝要となります。</p>
+<ul>
+<li>RPC エンドポイント マッパーによる RPC 動的ポート通知の仕組み<br>それでは、RPC エンドポイント マッパーの動作の仕組みを見ていきましょう。まずは、下の図をご覧ください。</li>
+</ul>
+<img src="/blog/2021/06/24/Networking/TCPIP/RPC-server-not-available/clip_image013_2.jpg" class="">
+
+<p>図の通り、RPC サーバー側では、RPC エンドポイント マッパーが 135/tcp でリッスンしており、RPC クライアント アプリケーションからの要求を受け付けています。RPC エンドポイント マッパーの役割は、RPC クライアントが呼び出そうとしているアプリケーションの ID から、そのアプリケーションが使用しているリッスン ポート番号を伝えることです。エンドポイント マッパーからポート番号を受け取った RPC クライアントは、そのポート番号を宛先として目的のプロシージャーの呼び出しを実行します。</p>
+<ul>
+<li>RPC 動的ポート割り当てについて<br>RPC は数多くの Windows 標準のコンポーネントで使用されており、呼び出しの際にオンデマンドでアクティブ化されるものも存在します。また、Windows 標準のコンポーネントに限らず、個別に開発されたサード パーティー製のアプリケーションも RPC の仕組みを利用することも多々あります。このように、多数の RPC アプリケーションが様々なタイミングで起動することから、各アプリケーションに固定的にポート番号を割り当てるような実装方法では、ポート番号のバッティングが発生した際にアプリケーションの起動に失敗する可能性が出てきます。その度にポート番号の調整を行うことは、管理面から考えると非効率的と言えるでしょう。</li>
+</ul>
+<p>このような背景もあって、RPC サーバー アプリケーションの多くは固定のポート番号でリッスンするのではなく、”RPC 動的ポート” の範囲から現在利用可能なポート番号を取得して使用します。そして、アプリケーションの起動時に自身が使用するポート番号を RPC エンドポイント マッパーに登録して、前述したような仕組みでクライアントがどのポート番号に対してアクセスすればよいかを取得できるようにしているのです。</p>
+<p>** RPC 動的ポート割り当てを使用せず、固定ポート番号でリッスンを行い、クライアント側からも直接そのポート番号への通信を行う RPC アプリケーションも存在します。例えば、Windows Server 2003 R2 以降で実装された DFS Replication の機能では、5722/tcp が固定的に使用されています。</p>
+<ul>
+<li>ファイアウォールで許可しなければならないポート番号<br>RPC サーバー アプリケーションは、起動時に自身がリッスンするポート番号をエンドポイントマッパーに登録します。RPC サーバー アプリケーションが使用するポート番号は、Windows Server 2003 / Windows XP の既定では 1024 番～ 5000 番、Windows Server 2008 / Windows Vista の既定では 49152 番 ～ 65535 番です。このため、RPC サーバーの下記のポート番号宛ての通信が、経路上のファイアウォール、コンピューター上のパーソナル ファイアウォールなどで許可されている必要があります。</li>
+</ul>
+<ul>
+<li>135/tcp (RPC エンドポイント マッパー / 全 OS バージョン共通)</li>
+<li>1024-5000/tcp,udp (RPC 動的ポート / Windows Server 2003, Windows XP の場合)</li>
+<li>49152-65535/tcp,udp (RPC 動的ポート / Windows Server 2008, Windows Vista の場合)</li>
+</ul>
+<p>しかしながら、”1024-5000/tcp,udp” や “49152-65535/tcp,udp” のように、広範囲のポート番号の通信をファイアウォールで許可することはセキュリティ上望ましくないと判断されるお客様も多くいらっしゃいます。このような要件を満たすために、RPC 動的ポートで使用されるポートの範囲を変更する方法が下記の弊社サイトにて公開されています。</p>
+<ul>
+<li>参考情報<br>ファイアウォールで動作するように RPC の動的ポート割り当てを構成する方法<br><a target="_blank" rel="noopener" href="http://support.microsoft.com/kb/154596/ja">http://support.microsoft.com/kb/154596/ja</a></li>
+</ul>
+<p>The default dynamic port range for TCP/IP has changed in Windows Vista and in Windows Server 2008 (英語)<br><a target="_blank" rel="noopener" href="http://support.microsoft.com/kb/929851/en-us">http://support.microsoft.com/kb/929851/en-us</a></p>
+<p>ただし、動的ポートの範囲をあまり狭くしすぎるとポートの枯渇が発生し、やはり RPC サーバー アプリケーションが正常に起動できなくなるなどの問題が発生します。お客様環境の要件合わせて、ある程度余裕を持たせた適切な範囲で設定していただくことをお勧めしております (サポート技術情報 154596 にて記載しております “最低でも 100” という数字も目安になります)。</p>
+<ol>
+<li>トラブルシューディング : ネットワーク トレースの解析</li>
+</ol>
+<p>最後に、実際にエラーが発生した場合に、ネットワーク トレースを用いてトラブル シューディングを行う方法をご紹介します。</p>
+<p>ネットワーク トレースを取得すると、通信のどの段階で問題が発生しているかを特定することが容易となります。弊社からも Microsoft Network Monitor というツールを公開しており、下記の Web サイトからダウンロードしてご利用いただくことが可能です。</p>
+<p>Microsoft Network Monitor 3.4<br><a target="_blank" rel="noopener" href="http://www.microsoft.com/downloads/details.aspx?displaylang=en&FamilyID=983b941d-06cb-4658-b7f6-3088333d062f">http://www.microsoft.com/downloads/details.aspx?displaylang=en&amp;FamilyID=983b941d-06cb-4658-b7f6-3088333d062f</a></p>
+<ul>
+<li>RPC エンドポイントマッパー (135/tcp) 宛の通信がフィルタリングされている場合<br>例えば、ntdsutil コマンドを用いて Active Directory の FSMO ロールをメンバー サーバーから変更しようとした際に、下記のようにエラーとなり、操作が行えない現象が発生しているとします。</li>
+</ul>
+<img src="/blog/2021/06/24/Networking/TCPIP/RPC-server-not-available/clip_image015_2.jpg" class="">
+
+<p>現象を再現させて、上記のエラーメッセージが出力されるタイミングでのネットワーク トレースを取得します。</p>
+<img src="/blog/2021/06/24/Networking/TCPIP/RPC-server-not-available/clip_image017_2.jpg" class="">
+
+<p>上の図が、採取されたネットワークトレースです。Frame 3 ～ Frame4 から、DNS の名前解決には成功していることがわかります。</p>
+<p>一方で、Frame 5 ～ Frame7 を見ると、目的のホストである 2k3r2sp2-01 の 135/tcp へのアクセスを行おうとしているにもかかわらず、応答が返されていないことがわかります。このことから、経路上、もしくは目的のサーバー上で、135/tcp 宛の通信がフィルタリングされていることが疑われます。</p>
+<ul>
+<li>RPC 動的ポート (1024-5000/tcp,udp or 49152-65535/tcp,udp) 宛の通信がフィルタリングされている場合<br>RPC 動的ポートが利用できない場合は、下記のように少し異なるエラーメッセージが出力されます。</li>
+</ul>
+<img src="/blog/2021/06/24/Networking/TCPIP/RPC-server-not-available/clip_image019_3.jpg" class="">
+
+<p>ネットワーク トレースを見てみましょう。</p>
+<img src="/blog/2021/06/24/Networking/TCPIP/RPC-server-not-available/clip_image021_2.jpg" class="">
+
+<p>Frame8 ～ Frame 11 を見ると、エンドポイント マッパー宛の通信に成功していることがわかります。目的のプロシージャーの呼び出しに使用するべきポート番号が 1026/tcp であることが通知されています。<br>** 使用される RPC の種類によってはパケットのフォーマットが異なり、この例と同じようにポート番号が表示されない場合があります。ご注意ください。</p>
+<img src="/blog/2021/06/24/Networking/TCPIP/RPC-server-not-available/clip_image023_2.jpg" class="">
+
+<p>その後、受領したポート番号 1026/tcp 宛に通信を行おうとして、応答が返されていない様子が確認できます。やはり同様に、RPC 動的ポートで使用する通信が経路上、宛先サーバー上でフィルタリングされている可能性が考えられます。</p>
+<ul>
+<li>RPC エンドポイントマッパーにアプリケーションが登録されていない場合<br>ポートの枯渇などが原因で、RPC サーバー アプリケーションが RPC 動的ポートのバインドに失敗して RPC エンドポイント マッパーにアプリケーションが登録されていない場合もやはり、ネットワーク トレースによってその状況を確認することができます。</li>
+</ul>
+<p>やはり同様に、下記のようなエラーメッセージが表示されます。</p>
+<img src="/blog/2021/06/24/Networking/TCPIP/RPC-server-not-available/clip_image024_19%5B1%5D.jpg" class="">
+
+<p>では、ネットワーク トレースを見てみましょう。</p>
+<img src="/blog/2021/06/24/Networking/TCPIP/RPC-server-not-available/clip_image025_2.jpg" class="">
+
+<p>経路上でポートがフィルタリングされている場合と異なり、RPC エンドポイント マッパー (135/tcp) から EP_S_NOT_REGISTERD のエラー コードが返されていることがわかります。これは、指定した RPC サーバー アプリケーションが RPC エンドポイント マッパーに登録されていないことを意味します。</p>
+<p>「RPC サーバーを利用できません」、「エンドポイント マッパーから使用できるエンドポイントはこれ以上ありません」 のメッセージが出力された場合は、前述したような、名前解決の問題、ネットワーク 通信の経路上の問題、RPC で使用されるポートのフィルタリング、ポートの枯渇などが原因となっていることがほとんどです。本記事が原因追求のご参考となれば幸いです。</p>
+<p>[特記事項]<br>本情報の内容（添付文書、リンク先などを含む）は、作成日時点でのものであり、予告なく変更される場合があります。</p>
+<hr>
+
+      
+      
+    </div>
+    <footer class="article-footer">
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/blog/2021/06/24/Networking/TCPIP/IPv6-basic/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">次の記事</strong>
+      <div class="article-nav-title">
+        
+          連載 IPv6 入門 – 第一回 IPv6 の概要
+        
+      </div>
+    </a>
+  
+  
+    <a href="/blog/2021/06/24/Networking/TCPIP/TCPIP-ports-are-not-closed-after-497-days-from-system-startup/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">前の記事</strong>
+      <div class="article-nav-title">497 日以上連続稼動させたときに生じる問題について</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">カテゴリ</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Activation/">Activation</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Activation/ESU/">ESU</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Activation/security-SPP/">security-SPP</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/">Active Directory</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Authentication/">Authentication</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/DFSR/">DFSR</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/FunctionalLevel/">FunctionalLevel</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Group-Policy/">Group Policy</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Promotion-and-Demotion/">Promotion and Demotion</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/User-Profile/">User Profile</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Windows-Hello/">Windows Hello</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Windows-Time-Service/">Windows Time Service</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/AppLocker/">AppLocker</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/AppLocker/Active-Directory/">Active Directory</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/AppLocker/Microsoft-Intune/">Microsoft Intune</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Deployment/">Deployment</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Deployment/Feature-on-demand/">Feature on demand</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Deployment/Sysprep/">Sysprep</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Failover-Clustering/">Failover Clustering</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Failover-Clustering/Configuration-and-Management/">Configuration and Management</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/FileServices/">FileServices</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/FileServices/FTP/">FTP</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/FileServices/SMB/">SMB</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Hyper-V/">Hyper-V</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Hyper-V/Configuration-and-Management/">Configuration and Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Hyper-V/Migration/">Migration</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Microsoft-Connected-Cache/">Microsoft Connected Cache</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/">Networking</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/BITS/">BITS</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/Bluetooth/">Bluetooth</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/DHCP/">DHCP</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/DNS/">DNS</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/Firewall/">Firewall</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/LBFO/">LBFO</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/NCSI/">NCSI</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/NetworkInterface/">NetworkInterface</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/Proxy/">Proxy</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/TCPIP/">TCPIP</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/OpenSSH/">OpenSSH</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/">Performance</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/Hang-up-BSoD/">Hang-up/BSoD</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/No-Boot/">No Boot</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/Slow-Response/">Slow Response</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/System-Resource/">System Resource</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/Tools/">Tools</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/">Public Key Infrastructure</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Certificate-Authority/">Certificate Authority</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Certificate-Management/">Certificate Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Code-Signing/">Code Signing</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/SSL-TLS-Communication/">SSL TLS Communication</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/SSL-TLS-Connection/">SSL TLS Connection</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Smart-Card-Logon/">Smart Card Logon</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/">Remote Desktop</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/Azure-Virtual-Desktop-AVD/">Azure Virtual Desktop (AVD)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/Remote-Desktop-Service-RDS/">Remote Desktop Service (RDS)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/Windows-Virtual-Desktop-WVD/">Windows Virtual Desktop (WVD)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/RemoteAccess/">RemoteAccess</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/RemoteAccess/%E3%83%80%E3%82%A4%E3%83%A4%E3%83%AB%E3%82%A2%E3%83%83%E3%83%97%E6%8E%A5%E7%B6%9A/">ダイヤルアップ接続</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Setup/">Setup</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Setup/Feature-Update-FU/">Feature Update (FU)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Shell/">Shell</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Shell/Explorer/">Explorer</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/">Storage</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/Backup/">Backup</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/FSRM/">FSRM</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/Management/">Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/StorageMigrationService/">StorageMigrationService</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/UEFI/">UEFI</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/UEFI/Secure-Boot/">Secure Boot</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/">User Interface and Apps</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Command-Prompt/">Command Prompt</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/EventLog/">EventLog</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Language-Support/">Language Support</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Microsoft-Store/">Microsoft Store</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Performance/">Performance</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/PowerShell/">PowerShell</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Printing-%E5%8D%B0%E5%88%B7/">Printing (印刷)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Server-Management/">Server Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Taskscheduler/">Taskscheduler</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Windows-Management-Instrumentation/">Windows Management Instrumentation</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps-Language-support/">User Interface and Apps - Language support</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-365/">Windows 365</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Admin-Center/">Windows Admin Center</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Search/">Windows Search</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/">Windows Update</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Delivery-Optimization-DO/">Delivery Optimization (DO)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Feature-Update-FU/">Feature Update (FU)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Quality-Update-QU/">Quality Update (QU)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Windows-Update-Agent/">Windows Update Agent</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Windows-Update-Agent-WUA/">Windows Update Agent (WUA)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/">WirelessNetwork</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/NPS/">NPS</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/Wi-Fi/">Wi-Fi</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/%E3%83%A2%E3%83%90%E3%82%A4%E3%83%AB-%E3%83%96%E3%83%AD%E3%83%BC%E3%83%89%E3%83%90%E3%83%B3%E3%83%89%E6%8E%A5%E7%B6%9A-LTE/">モバイル ブロードバンド接続 (LTE)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/%E7%B5%84%E7%B9%94%E7%B4%B9%E4%BB%8B%E3%83%96%E3%83%AD%E3%82%B0%EF%BC%88Windows-Commercial%EF%BC%89/">組織紹介ブログ（Windows Commercial）</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最近の投稿</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/blog/2026/02/16/ActiveDirectory/GroupPolicy/UacPolicyIsEnabled/">「ユーザー アカウント制御：ビルトイン Administrator アカウントのための管理者承認モード」ポリシーが有効になる動作ついて</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/02/15/UserInterfaceAndApps/Printing/printer-queue-app-preview/">印刷キューアプリのプレビュー機能について</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/02/02/ActiveDirectory/Authentication/kerberos-rc4-for-service-account-ticket-issuance-changes-related-to-cve-2026-20833/">CVE‑2026‑20833 への対応とその影響について [KB5073381]</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/01/12/Hyper-V/vmwp-does-not-save-the-RTC-value-of-a-virtual-machine-when-performing-Live-Migration/">ライブ マイグレーション後の再起動でゲスト OS の時刻がずれる場合がある</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/01/07/WindowsUpdate/FU/fublog-txt/">ISO メディア経由かつ動的更新無効な状態で Windows 11 バージョン 24H2 または 25H2 へのアップグレードが失敗 (0x8007042B 0x2000D) する事象と対策について</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">アーカイブ</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2026/02/">2026 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2026/01/">2026 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/12/">2025 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/11/">2025 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/10/">2025 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/09/">2025 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/08/">2025 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/07/">2025 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/06/">2025 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/05/">2025 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/04/">2025 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/03/">2025 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/02/">2025 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/01/">2025 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/12/">2024 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/11/">2024 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/10/">2024 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/09/">2024 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/08/">2024 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/07/">2024 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/06/">2024 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/05/">2024 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/04/">2024 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/03/">2024 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/02/">2024 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/01/">2024 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/12/">2023 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/11/">2023 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/10/">2023 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/09/">2023 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/08/">2023 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/07/">2023 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/06/">2023 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/05/">2023 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/04/">2023 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/03/">2023 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/02/">2023 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/01/">2023 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/12/">2022 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/11/">2022 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/10/">2022 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/09/">2022 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/08/">2022 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/07/">2022 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/06/">2022 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/05/">2022 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/04/">2022 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/03/">2022 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/02/">2022 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/01/">2022 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/12/">2021 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/11/">2021 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/10/">2021 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/09/">2021 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/08/">2021 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/07/">2021 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/06/">2021 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/05/">2021 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/04/">2021 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/03/">2021 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/02/">2021 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/01/">2021 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/12/">2020 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/11/">2020 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/10/">2020 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/07/">2020 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/03/">2020 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2019/03/">2019 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/11/">2018 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/10/">2018 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/09/">2018 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/08/">2018 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/07/">2018 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/06/">2018 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/04/">2018 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/02/">2018 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/12/">2017 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/11/">2017 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/09/">2017 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/05/">2017 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/03/">2017 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/02/">2017 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2016/08/">2016 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2016/05/">2016 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2014/03/">2014 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2012/02/">2012 / 02</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2026 Microsoft Japan Windows Technology Support Team<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/blog/" class="mobile-nav-link">Home</a>
+  
+    <a href="/blog/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+<script src="/blog/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

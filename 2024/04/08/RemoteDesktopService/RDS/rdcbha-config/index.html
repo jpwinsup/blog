@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-180187723-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-180187723-1');
+</script>
+<!-- End Google Analytics -->
+
+  
+  <title>RD 接続ブローカー高可用性環境の標準的な構築手順について | Microsoft Japan Windows Technology Support Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="本記事はマイクロソフト社員によって公開されております。   こんにちは、Windows サポートチームの佐々木です。 本記事では RD 接続ブローカー高可用性環境 (High Availability) の標準的な構築手順についてご紹介いたします。RD 接続ブローカーの高可用性について検討中の場合は、本記事が参考となれば幸いです。なおご案内する手順については Windows Server 2012">
+<meta property="og:type" content="article">
+<meta property="og:title" content="RD 接続ブローカー高可用性環境の標準的な構築手順について">
+<meta property="og:url" content="https://jpwinsup.github.io/blog/2024/04/08/RemoteDesktopService/RDS/rdcbha-config/index.html">
+<meta property="og:site_name" content="Microsoft Japan Windows Technology Support Blog">
+<meta property="og:description" content="本記事はマイクロソフト社員によって公開されております。   こんにちは、Windows サポートチームの佐々木です。 本記事では RD 接続ブローカー高可用性環境 (High Availability) の標準的な構築手順についてご紹介いたします。RD 接続ブローカーの高可用性について検討中の場合は、本記事が参考となれば幸いです。なおご案内する手順については Windows Server 2012">
+<meta property="og:locale" content="ja_JP">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2024/04/08/RemoteDesktopService/RDS/rdcbha-config/img-000.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2024/04/08/RemoteDesktopService/RDS/rdcbha-config/img-001.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2024/04/08/RemoteDesktopService/RDS/rdcbha-config/img-002.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2024/04/08/RemoteDesktopService/RDS/rdcbha-config/img-003.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2024/04/08/RemoteDesktopService/RDS/rdcbha-config/img-004.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2024/04/08/RemoteDesktopService/RDS/rdcbha-config/img-005.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2024/04/08/RemoteDesktopService/RDS/rdcbha-config/img-006.png">
+<meta property="article:published_time" content="2024-04-08T05:20:00.000Z">
+<meta property="article:modified_time" content="2026-02-19T02:53:58.583Z">
+<meta property="article:author" content="Microsoft Japan Windows Technology Support Team">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://jpwinsup.github.io/blog/2024/04/08/RemoteDesktopService/RDS/rdcbha-config/img-000.png">
+  
+    <link rel="alternate" href="/blog/atom.xml" title="Microsoft Japan Windows Technology Support Blog" type="application/atom+xml">
+  
+
+  <link rel="icon" href="/blog/favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="/blog/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/blog/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/blog/favicon-16x16.png">
+  <link rel="manifest" href="/blog/site.webmanifest">
+  <link rel="mask-icon" href="/blog/safari-pinned-tab.svg" color="#5bbad5">
+  <meta name="msapplication-TileColor" content="#ffffff">
+  <meta name="theme-color" content="#ffffff">
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/blog/css/style.css">
+
+<meta name="generator" content="Hexo 5.2.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="site-header-logo"></div>
+  <div id="site-header-blog-wrapper"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        <div id="ms-logo"></div>
+        
+          <a class="main-nav-link" href="/blog/">Home</a>
+        
+          <a class="main-nav-link" href="/blog/archives">Archives</a>
+        
+        <a class="main-nav-link" target="_blank" rel="noopener" href="https://cssjpn.github.io/">サポート情報</a>
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/blog/atom.xml" title="RSSフィード"></a>
+        
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//www.bing.com/search" method="get" accept-charset="UTF-8" name="bing-search" onsubmit="var f=this;if(f['q'].value){var searchUrl =  'https://www.bing.com/search?q=' +  encodeURIComponent(f['q'].value + ' site:' + f['sitesearch'].value) ;window.open(searchUrl, 'blank') };return false;" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="検索"><button type="submit" id="nav-search-btn" class="search-form-submit"></button><input type="hidden" name="sitesearch" value="https://jpwinsup.github.io/blog"></form>
+      </div>
+    </div>
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/blog/" id="logo">Microsoft Japan Windows Technology Support Blog</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/blog/" id="subtitle">日本マイクロソフト Windows Support チームによる、サポート情報 Blog です。</a>
+        </h2>
+      
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-RemoteDesktopService/RDS/rdcbha-config" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    
+    
+      <header class="article-header-single">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      RD 接続ブローカー高可用性環境の標準的な構築手順について
+    </h1>
+  
+
+      </header>
+      <div class="article-share">
+        Last Update: 
+        <a href="/blog/2024/04/08/RemoteDesktopService/RDS/rdcbha-config/" class="article-date-single">
+  <time datetime="2024-04-08T05:20:00.000Z" itemprop="datePublished">2024-04-08</time>
+</a>
+        
+  <div class="article-category">
+    <a class="article-category-link" href="/blog/categories/Remote-Desktop/">Remote Desktop</a>►<a class="article-category-link" href="/blog/categories/Remote-Desktop/Remote-Desktop-Service-RDS/">Remote Desktop Service (RDS)</a>
+  </div>
+
+        
+        <a href="https://github.com/jpwinsup/blog/issues/new?title=&body=%EF%BB%BF%0A%0A---%0A%0A%23%23%23%23+Document+Details%0A%0A*+Article+ID%3A+b7ed2d8e-474e-5b46-9823-467524c3cabb%0A*+TITLE%3A+RD+%E6%8E%A5%E7%B6%9A%E3%83%96%E3%83%AD%E3%83%BC%E3%82%AB%E3%83%BC%E9%AB%98%E5%8F%AF%E7%94%A8%E6%80%A7%E7%92%B0%E5%A2%83%E3%81%AE%E6%A8%99%E6%BA%96%E7%9A%84%E3%81%AA%E6%A7%8B%E7%AF%89%E6%89%8B%E9%A0%86%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6%0A*+URL+https%3A%2F%2Fjpwinsup.github.io%2Fblog%2F2024%2F04%2F08%2FRemoteDesktopService%2FRDS%2Frdcbha-config%2F%0A*+SourceFileName%3A+source%2F_posts%2FRemoteDesktopService%2FRDS%2Frdcbha-config.md%0A" class="article-github-issue-link" target="_blank" rel="noopener noreferrer">feedback</a>
+        
+        <a data-url="https://jpwinsup.github.io/blog/2024/04/08/RemoteDesktopService/RDS/rdcbha-config/" data-id="cmlsvjdof01ieru3y1mj5h2wk" class="article-share-link">共有</a>
+      </div>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>本記事はマイクロソフト社員によって公開されております。  </p>
+<p>こんにちは、Windows サポートチームの佐々木です。</p>
+<p>本記事では RD 接続ブローカー高可用性環境 (High Availability) の標準的な構築手順についてご紹介いたします。<br>RD 接続ブローカーの高可用性について検討中の場合は、本記事が参考となれば幸いです。<br>なおご案内する手順については Windows Server 2012 以降のリモート デスクトップ サービス環境を対象としています。</p>
+<p><a href="#1-RDCB-HA-%E6%A7%8B%E7%AF%89%E5%89%8D%E3%81%AE%E6%BA%96%E5%82%99">1. RDCB HA 構築前の準備</a><br><a href="#2-RDCB-HA-%E7%92%B0%E5%A2%83%E3%82%92%E6%A7%8B%E7%AF%89%E3%81%99%E3%82%8B">2. RDCB HA 環境を構築する</a><br><a href="#3-Windows-Server-2016-%E3%81%8B%E3%82%89%E3%81%AE%E6%96%B0%E6%A9%9F%E8%83%BD%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6-%E5%85%B1%E6%9C%89%E3%83%87%E3%83%BC%E3%82%BF%E3%83%BC%E3%83%99%E3%83%BC%E3%82%B9-SQL-%E8%AA%8D%E8%A8%BC">3. Windows Server 2016 からの新機能について (共有データーベース (SQL 認証))</a><br><a href="#4-FAQ">4. FAQ</a></p>
+<h1 id="1-RDCB-HA-構築前の準備"><a href="#1-RDCB-HA-構築前の準備" class="headerlink" title="1. RDCB HA 構築前の準備"></a>1. RDCB HA 構築前の準備</h1><p>RD 接続ブローカーの高可用性環境 (以降 RDCB HA) を構築するには、Active Directory や SQL サーバーが必要となります。<br>RDCB HA 環境の構築を行う前に構築対象のサーバーは予めドメインに参加し、データベースとして構築済みの SQL サーバーを用意して頂くようお願いします。<br>本手順では以下の構成を例として作業を進めて行きます。</p>
+<h2 id="a-事前準備が必要なサーバー"><a href="#a-事前準備が必要なサーバー" class="headerlink" title="a. 事前準備が必要なサーバー"></a>a. 事前準備が必要なサーバー</h2><p>•TEST-DC (ドメイン コントローラ)<br>•TEST-DC (DNS サーバー)<br>•TEST-SQL (SQL サーバー)<br><span style="color: red;">※ RD 接続ブローカー高可用性環境で利用する SQL サーバーの照合順序は、大文字と小文字を区別しない照合順序のみがサポートされています。</span><br>参考情報：<a target="_blank" rel="noopener" href="https://learn.microsoft.com/ja-jp/troubleshoot/windows-server/remote/error-configuration-rd-connection-brokers-high-availability#check-case-sensitivity-of-sql-server-collation">照合順序の大文字と小文字の区別SQL Server確認する</a></p>
+<h2 id="b-本手順で構築するサーバー"><a href="#b-本手順で構築するサーバー" class="headerlink" title="b. 本手順で構築するサーバー"></a>b. 本手順で構築するサーバー</h2><p>•RDCB01 (RD 接続ブローカー)<br>•RDCB02 (RD 接続ブローカー)<br>•RDSH (RD セッションホスト)<br>•RDWEB (RD Web アクセス)</p>
+<h2 id="c-構築に必要なその他設定"><a href="#c-構築に必要なその他設定" class="headerlink" title="c. 構築に必要なその他設定"></a>c. 構築に必要なその他設定</h2><p>•SQL サーバーが TCP 1433 で通信可能な状態であること<br>•データベースにアクセス可能なドライバー (※)が 2 台の RD 接続ブローカー用サーバーにインストール済みであること<br>※ODBC Driver, SQL Server Native Client など<br><a target="_blank" rel="noopener" href="https://learn.microsoft.com/ja-jp/sql/connect/odbc/download-odbc-driver-for-sql-server?view=sql-server-2017">Download ODBC Driver for SQL Server</a></p>
+<h1 id="2-RDCB-HA-環境を構築する"><a href="#2-RDCB-HA-環境を構築する" class="headerlink" title="2. RDCB HA 環境を構築する"></a>2. RDCB HA 環境を構築する</h1><p>– 手順<br><span style="color: black;">1) 基本的な RDS 環境を構築する (RDCB01)</span><br><span style="color: black;">2) RD 接続ブローカーをセキュリティ グループに追加する (TEST-DC)</span><br><span style="color: black;">3) RD 接続ブローカーのラウンドロビン用レコードを作成する (TEST-DC)</span><br><span style="color: black;">4) データベースへの認証権限を追加する (TEST-SQL)</span><br><span style="color: black;">5) RD 接続ブローカーの高可用性設定を行う (RDCB01)</span><br><span style="color: black;">6) データベースにメンバーシップを追加する(TEST-SQL)</span><br><span style="color: black;">7) 2 台目の RD 接続ブローカーを追加する (RDCB01)</span><br><span style="color: black;">※ (　) 内は操作対象サーバー</span></p>
+<h2 id="1-基本的な-RDS-環境を構築する-RDCB01"><a href="#1-基本的な-RDS-環境を構築する-RDCB01" class="headerlink" title="1) 基本的な RDS 環境を構築する (RDCB01)"></a>1) 基本的な RDS 環境を構築する (RDCB01)</h2><p>——————————————————————<br>※以下の手順は標準的な RDS 環境構築手順となるため既に実行済みであれば先へ進んでください<br>1.1. RDCB01 にドメインの管理者ユーザーでログオンします。<br>1.2. サーバー マネージャーを起動します。<br>1.3. 左ペインの [すべてのサーバー] を右クリックして [サーバーの追加] をクリックします。<br>1.4. “RDCB02”,”RDSH” そして ”RDWEB” を検索し、選択済みに移動して [OK] をクリックします。<br>1.5. サーバー マネージャーの [管理] – [役割と機能の追加] をクリックします。<br>1.6. ウィザードを進め [リモート デスクトップ サービスのインストール] にチェックし [次へ] をクリックします。<br>1.7. 展開の種類にて [標準の展開] にチェックし [次へ] をクリックします。<br>1.8. 展開シナリオにて [セッション ベースのデスクトップ展開] をチェックし [次へ] をクリックします。<br>1.9. 役割サービスにて [次へ] をクリックします。<br>1.10. RD 接続ブローカーにて RDCB01 を指定し [次へ] をクリックします。<br>※この時点で RDCB02 は選択済み欄には追加しません<br>1.11. RD Web アクセスにて RDWEB を指定し [次へ] をクリックします。<br>1.12. RD セッション ホストにて RDSH を指定し [次へ] をクリックします。<br>1.13. 確認にて ”必要に応じてターゲット サーバーを自動的に再起動する” にチェックして [展開] をクリックします。<br>1.14. 各役割のインストールが実行され、RDSH は再起動が実施されます。</p>
+<h2 id="2-RD-接続ブローカーをセキュリティ-グループに追加する-TEST-DC"><a href="#2-RD-接続ブローカーをセキュリティ-グループに追加する-TEST-DC" class="headerlink" title="2) RD 接続ブローカーをセキュリティ グループに追加する (TEST-DC)"></a>2) RD 接続ブローカーをセキュリティ グループに追加する (TEST-DC)</h2><p>———————————————————————-<br>2.1. TEST-DC に管理者ユーザーでログオンします。<br>2.2. [スタート] – [管理ツール] – [Active Directory ユーザーとコンピュータ] と展開します。<br>2.3. セキュリティ グループを追加する OU を選択し右クリックから [新規作成] – [グループ] をクリックします。<br>2.4. 任意のグループ名を指定しスコープを [グローバル] グループの種類を [セキュリティ] として [OK] をクリックします。<br>※RDCBGroup を例としてセキュリティ グループを作成して作業を進めて行きます。<br>2.5. 作成したセキュリティ グループを右クリックし [プロパティ] をクリックします。<br>2.6. [メンバー] タブを開き [追加] ボタンをクリックします。<br>2.7. [オブジェクトの種類」 ボタンをクリックし、[コンピュータ] にチェックをいれ [OK] をクリックします。<br>2.8. 選択するオブジェクト名の入力欄に、RDCB01 を指定し [OK] をクリックします。<br>2.9. 同様に RDCB02 もメンバーに追加し、プロパティを終了します。<br>2.10. セキュリティ グループに反映させるために、RCCB01 と RDCB02 を再起動します。</p>
+<h2 id="3-RD-接続ブローカーのラウンドロビン用レコードを作成する-TEST-DC"><a href="#3-RD-接続ブローカーのラウンドロビン用レコードを作成する-TEST-DC" class="headerlink" title="3) RD 接続ブローカーのラウンドロビン用レコードを作成する (TEST-DC)"></a>3) RD 接続ブローカーのラウンドロビン用レコードを作成する (TEST-DC)</h2><p>———————————————————————-<br>3.1. TEST-DC に管理者ユーザーでログオンします。<br>3.2. [スタート] – [管理ツール]- [DNS] を起動します。<br>3.3. [DNS マネージャー] の左ペインから [前方参照ゾーン] – [ドメイン名] を展開します。<br>3.4. [ドメイン名] を選択している状態から右クリック、[新しいホスト (A または AAAA)] を選択します。<br>3.5. [名前] にRD 接続ブローカー高可用性用の任意の名前を指定します。<br>※ 例として RDCB を指定して作業を進めていきます。<br>3.6. RDCB01 の IP アドレスを入力し [ホストの追加] をクリックします。<br>3.7. 同じく手順 3.4 から進め、名前に RDCB を指定し RDCB02 の IP アドレスを指定します。</p>
+<h2 id="4-データベースへの認証権限を追加する-TEST-SQL"><a href="#4-データベースへの認証権限を追加する-TEST-SQL" class="headerlink" title="4) データベースへの認証権限を追加する (TEST-SQL)"></a>4) データベースへの認証権限を追加する (TEST-SQL)</h2><p>———————————————————————-<br>4.1. TEST-SQL に管理者ユーザーでログオンします。<br>4.2. スタート メニューから [SQL Management Studio] を起動します。<br>4.3. 接続画面で、データベース エンジンに接続します。<br>4.4. 左ペインのオブジェクト エクスプローラで [セキュリティ] – [ログイン] を選択し右クリック、[新しいログイン] をクリックします。<br>4.5. 左ペインの [全般] をクリックします。<br>4.6. [ログイン名] で [検索] ボタンをクリックします。<br>4.7. [オブジェクトの種類] ボタンをクリックし [グループ] にチェックをいれ、[OK] ボタンをクリックします。<br>4.8. [場所] ボタンをクリックし [ディレクトリ全体] からドメイン名を選択します。<br>4.9. 選択するオブジェクト入力欄に、手順 2 のセキュリティ グループ名 (例:RDCBGroup) を入力し [OK] をクリックします。<br>4.10. 左ペインの [サーバー ロール] を選択します。<br>4.11. [dbcreator] にチェックを入れ [OK] ボタンをクリックします。</p>
+<img src="/blog/2024/04/08/RemoteDesktopService/RDS/rdcbha-config/img-000.png" class="">
+
+<h2 id="5-RD-接続ブローカーの高可用性設定を行う-RDCB01"><a href="#5-RD-接続ブローカーの高可用性設定を行う-RDCB01" class="headerlink" title="5) RD 接続ブローカーの高可用性設定を行う (RDCB01)"></a>5) RD 接続ブローカーの高可用性設定を行う (RDCB01)</h2><p>———————————————————————-<br>5.1. ドメインの管理者ユーザーで RDCB01 にログオンします。<br>5.2. [サーバー マネージャー] を起動し、[リモート デスクトップ サービス] – [概要] を展開します。<br>5.3. [展開の概要] の RD 接続ブローカーアイコンを右クリックし、[高可用性の構成] をクリックします。<br>※Windows Server 2016 の場合はデータベースのオプションを指定します。<br>以下の作業手順は [専用データベース サーバー] を選択して進めます。<br>5.4. 高可用性の構成にて必要な情報を入力し[次へ] をクリックします。<br>5.5. [構成] をクリックします。<br>5.6. 構成の成功後 [閉じる] をクリックします。</p>
+<p><strong>データベース接続文字列: (※)</strong><br><code>DRIVER=ODBC Driver 13 for SQL Server;SERVER=&lt;SQLサーバー名&gt;;Trusted_Connection=Yes;APP=Remote Desktop Services Connection Broker;DATABASE=&lt;任意のデータベース名&gt;</code></p>
+<p><code>DRIVER=SQL Server Native Client 11.0;SERVER=&lt;SQLサーバー名&gt;;Trusted_Connection=Yes;APP=Remote Desktop Services Connection Broker;DATABASE=&lt;任意のデータベース名&gt;</code><br>※”DRIVER=” 以降はインストール済みのドライバーにより変更してください。</p>
+<p><strong>データベース ファイルの保存先フォルダー :</strong><br><code>&lt;データベース ファイルの保存先パス&gt;</code></p>
+<p><strong>DNS ラウンド ロビン名:</strong><br><code>&lt;DNS ラウンドロビン名&gt;</code></p>
+<p><strong>例)</strong></p>
+<blockquote>
+<p><strong>データベース接続文字列 :</strong><br>DRIVER=ODBC Driver 13 for SQL Server;SERVER=TEST-SQL;Trusted_Connection=Yes;APP=Remote Desktop Services Connection Broker;DATABASE=RDCBDatabase<BR><br><strong>データベース ファイルの保存先フォルダー :</strong><br>C:\RDCBDatabase<BR><br><strong>DNS ラウンド ロビン名:</strong><br>RDCB.contoso.com</p>
+</blockquote>
+<img src="/blog/2024/04/08/RemoteDesktopService/RDS/rdcbha-config/img-001.png" class="">
+
+<h2 id="6-データベースにメンバーシップを追加する-TEST-SQL"><a href="#6-データベースにメンバーシップを追加する-TEST-SQL" class="headerlink" title="6) データベースにメンバーシップを追加する(TEST-SQL)"></a>6) データベースにメンバーシップを追加する(TEST-SQL)</h2><p>———————————————————————-<br>6.1 TEST-SQL に管理者ユーザーでログオンします。<br>6.2 スタート メニューから [SQL Management Studio] を起動します。<br>6.3 サーバーへの接続画面で、データベース エンジンに接続します。<br>6.4 左ペイン [セキュリティ] – [ログイン] – 手順 4) で追加したセキュリティ グループ (例 RDCBGroup) を選択します。<br>6.5 右クリックし、表示されるメニューから [プロパティ] をクリックします。<br>6.6 左ペインの [ユーザー マッピング] をクリックします。<br>6.7 作成した RDCB HA 用のデータベース名にチェックをします (例 RDCBDatabase)<br>6.8 画面下のデータベース ロール メンバーシップから “db_owner” にチェックをいれます。<br>6.9 [OK] をクリックします。</p>
+<img src="/blog/2024/04/08/RemoteDesktopService/RDS/rdcbha-config/img-002.png" class="">
+
+<h2 id="7-2-台目の-RD-接続ブローカーを追加する-RDCB01"><a href="#7-2-台目の-RD-接続ブローカーを追加する-RDCB01" class="headerlink" title="7) 2 台目の RD 接続ブローカーを追加する (RDCB01)"></a>7) 2 台目の RD 接続ブローカーを追加する (RDCB01)</h2><p>———————————————————————-<br>7.1. ドメインの管理者ユーザーで RDCB01 にログオンします。<br>7.2. [サーバー マネージャー] を起動し、左ペイン [リモート デスクトップ サービス] – [概要] を展開します。<br>7.3. [展開の概要] の RD 接続ブローカーを右クリックし、[RD 接続ブローカー サーバーの追加] をクリックします。<br>7.4. ウィザードを進め [サーバーの選択] にて RDCB02 を指定し [次へ] をクリックします。<br>7.5. 確認にて [追加] をクリックします。<br>7.6. RDCB02 に RD 接続ブローカーの役割がインストール後 [閉じる] をクリックします。</p>
+<h1 id="3-Windows-Server-2016-からの新機能について-共有データーベース-SQL-認証"><a href="#3-Windows-Server-2016-からの新機能について-共有データーベース-SQL-認証" class="headerlink" title="3. Windows Server 2016 からの新機能について (共有データーベース (SQL 認証))"></a>3. Windows Server 2016 からの新機能について (共有データーベース (SQL 認証))</h1><p>Windows Server 2012 R2 よりも以前の RD 接続ブローカーの高可用性を設定する際には SQL Server への接続は既定で Windows 認証が使用されました。<br> Windows Server 2016 以降の RD 接続ブローカーでは SQL 認証を使用した SQL Server へのアクセスも行えるようになりました。その手順について以下にてご紹介します。</p>
+<h2 id="RDCB-HA-環境を構築する"><a href="#RDCB-HA-環境を構築する" class="headerlink" title="RDCB HA 環境を構築する"></a>RDCB HA 環境を構築する</h2><p><strong>手順</strong><br><span style="color: black;">1) 基本的な RDS 環境を構築する (RDCB01) &lt;——- Windows Server 2012 R2 以前と同様</span><br><span style="color: black;">2) RD 接続ブローカーをセキュリティ グループに追加する (TEST-DC)   &lt;——- “共有データベース” を使用する場合は不要</span><br><span style="color: black;">3) RD 接続ブローカーのラウンドロビン用レコードを作成する (TEST-DC) &lt;——- Windows Server 2012 R2 以前と同様</span><br><span style="color: black;">4) データベースへの認証権限を追加する (TEST-SQL)&lt;——- “共有データベース” を使用する場合は不要</span><br><span style="color: red;">4) 移行先のデータベースおよび接続用アカウントの作成 (TEST-SQL)</span><br><span style="color: red;">5) RD 接続ブローカーの高可用性設定を行う (RDCB01)</span><br><span style="color: black;">6) データベースにメンバーシップを追加する(TEST-SQL)&lt;——- “共有データベース” を使用する場合は不要</span><br><span style="color: black;">7) 2 台目の RD 接続ブローカーを追加する (RDCB01) &lt;——- Windows Server 2012 R2 以前と同様</span></p>
+<p>以下では、<br><span style="color: black;">4) 移行先のデータベースおよび接続用アカウントの作成 (TEST-SQL)</span><br><span style="color: black;">5) RD 接続ブローカーの高可用性設定を行う (RDCB01)</span><br>の手順についてご紹介します。</p>
+<h2 id="4-データベースへの認証権限を追加する-TEST-SQL-1"><a href="#4-データベースへの認証権限を追加する-TEST-SQL-1" class="headerlink" title="4) データベースへの認証権限を追加する (TEST-SQL)"></a>4) データベースへの認証権限を追加する (TEST-SQL)</h2><p>———————————————————————-<br>4.1. TEST-SQL に管理者ユーザーでログオンします。<br>4.2. スタート メニューから [SQL Management Studio] を起動します。<br>4.3. 接続画面で、データベースエンジンに接続します。<br>4.4. 左ペインのオブジェクトエクスプローラで [セキュリティ] – [ログイン] を選択し右クリック、[新しいログイン] をクリックします。<br>4.5. 各選択項目は以下の項目を選択し、ログオン名には任意の名前を入力し、 [OK] ボタンをクリックして接続用のユーザーを作成します。</p>
+<img src="/blog/2024/04/08/RemoteDesktopService/RDS/rdcbha-config/img-003.png" class="">
+<p>4.6. 左ペインのオブジェクト エクスプローラで [データベース]を選択し右クリック、[新しいデータベース] をクリックします。<br>4.7. 任意のデーターベース名を入力し、”所有者” は先ほど作成したユーザーを選択します。(例: rdsuser)<br>4.8. [OK] ボタンをクリックしてデータベースを作成します。</p>
+<img src="/blog/2024/04/08/RemoteDesktopService/RDS/rdcbha-config/img-004.png" class="">
+
+<h2 id="5-RD-接続ブローカーの高可用性設定を行う-RDCB01-1"><a href="#5-RD-接続ブローカーの高可用性設定を行う-RDCB01-1" class="headerlink" title="5) RD 接続ブローカーの高可用性設定を行う (RDCB01)"></a>5) RD 接続ブローカーの高可用性設定を行う (RDCB01)</h2><p>———————————————————————-<br>5.1. ドメインの管理者ユーザーで RDCB01 にログオンします。<br>5.2. [サーバー マネージャー] を起動し、[リモート デスクトップ サービス] – [概要] を展開します。<br>5.3. [展開の概要] の RD 接続ブローカーアイコンを右クリックし、[高可用性の構成] をクリックします。<br>5.4. [構成の種類] で [共有データベース サーバー] を選択して進めます。</p>
+<img src="/blog/2024/04/08/RemoteDesktopService/RDS/rdcbha-config/img-005.png" class="">
+<p>5.5. [RD 接続ブローカー クラスターの DNS] には “3) RD 接続ブローカーのラウンドロビン用レコードを作成する (TEST-DC)” で作成したラウンドロビン用の FQDN を指定します。<br>[データベースの設定] - [接続文字列] には SQL Server への接続用の接続文字列を指定します。</p>
+<p><strong>RD 接続ブローカー クラスターの DNS 名:</strong><br><code>&lt;RD 接続ブローカー クラスターの DNS 名&gt;</code></p>
+<p><strong>データベース接続文字列: (※)</strong><br><code>DRIVER=&#123;ODBC Driver 17 for SQL Server&#125;;SERVER=&lt;SQLサーバー名&gt;;APP=Remote Desktop Services Connection Broker;DATABASE=&lt;作成したデータベース名&gt;;Pwd=&lt;接続ユーザーのパスワード&gt;;UID=&lt;接続ユーザー名&gt;</code><br>※ “DRIVER=” 以降はインストール済みのドライバーにより変更してください。<br><span style="color: red;">※ “Pwd=” は接続文字列の末尾へは記載しないでください。</span><br><span style="color: red;">※ “Pwd=” は “P” のみ大文字で “wd” は小文字で指定してください。</span></p>
+<p><strong>例)</strong></p>
+<blockquote>
+<p><strong>RD 接続ブローカー クラスターの DNS:</strong><br>RDCB.contoso.com<BR><br><strong>接続文字列)</strong><br>DRIVER={ODBC Driver 17 for SQL Server};SERVER=TEST-SQL.contoso.com;APP=Remote Desktop Services Connection Broker;DATABASE=rdsdb;Pwd=rdspassword123;UID=rdsuser<BR></p>
+</blockquote>
+<img src="/blog/2024/04/08/RemoteDesktopService/RDS/rdcbha-config/img-006.png" class="">
+
+<p>5.6. [次へ] - [構成] をクリックします。<br>5.7. 構成の成功後 [閉じる] をクリックします。</p>
+<h1 id="4-FAQ"><a href="#4-FAQ" class="headerlink" title="4. FAQ"></a>4. FAQ</h1><p>Q. RD 接続ブローカーから指定する SQL のデータベースが名前付きインスタンスの場合に構築に失敗する事がある。<br>A. SQL のデータベースが名前付きインタンスの場合 SQL サーバーが TCP/UDP 1434 で通信可能である必要があります。<br>ポート設定後も構築に失敗する場合は、次の公開情報に合致している可能性があるためご確認をお願いします。<br><a target="_blank" rel="noopener" href="https://support.microsoft.com/en-us/help/3020474/communication-issues-occur-when-remote-desktop-connection-broker-conne">Communication issues occur when Remote Desktop Connection Broker connects to SQL Server in Windows Server 2012 R2</a></p>
+<p>Q. SQL サーバーを高可用性としている場合に構築に失敗する事がある。<br>A. SQL サーバーが高可用性環境の場合、接続文字列に SQL Cluster Name を指定する必要があります。<br>こちらの公開情報を参考に接続文字列を指定して下さい。<br><a target="_blank" rel="noopener" href="https://cloudblogs.microsoft.com/enterprisemobility/2012/10/16/configure-remote-desktop-connection-broker-in-windows-server-2012-with-sql-server-2012-high-availability/">Configure Remote Desktop Connection Broker in Windows Server 2012 with SQL Server 2012 High Availability</a></p>
+<p>———————-<br><strong>参考:</strong><br><a target="_blank" rel="noopener" href="https://social.technet.microsoft.com/wiki/contents/articles/10390.windows-server-2012-deploying-rd-connection-broker-high-availability.aspx">Windows Server 2012: Deploying RD Connection Broker High Availability</a><br><a target="_blank" rel="noopener" href="https://docs.microsoft.com/en-us/windows-server/remote/remote-desktop-services/rds-connection-broker-cluster">Add the RD Connection Broker server to the deployment and configure high availability</a><br><a target="_blank" rel="noopener" href="https://social.technet.microsoft.com/wiki/contents/articles/10390.windows-server-2012-deploying-rd-connection-broker-high-availability.aspx">Windows Server 2012: Deploying RD Connection Broker High Availability</a></p>
+
+      
+      
+    </div>
+    <footer class="article-footer">
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/blog/2024/05/01/RemoteDesktopService/RDS/HowToSetupRDS/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">次の記事</strong>
+      <div class="article-nav-title">
+        
+          Windows Server での標準的なリモート デスクトップ サービス環境構築手順について
+        
+      </div>
+    </a>
+  
+  
+    <a href="/blog/2024/04/07/RemoteDesktopService/AVD/AVD-Microsoft-entra-ID-joined-connection-failed-and-conditional-access/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">前の記事</strong>
+      <div class="article-nav-title">Microsoft Entra 参加の AVD セッション ホストの認証による接続不可事象と AVD の多要素認証に関して</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">カテゴリ</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Activation/">Activation</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Activation/ESU/">ESU</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Activation/security-SPP/">security-SPP</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/">Active Directory</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Authentication/">Authentication</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/DFSR/">DFSR</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/FunctionalLevel/">FunctionalLevel</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Group-Policy/">Group Policy</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Promotion-and-Demotion/">Promotion and Demotion</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/User-Profile/">User Profile</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Windows-Hello/">Windows Hello</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Windows-Time-Service/">Windows Time Service</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/AppLocker/">AppLocker</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/AppLocker/Active-Directory/">Active Directory</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/AppLocker/Microsoft-Intune/">Microsoft Intune</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Deployment/">Deployment</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Deployment/Feature-on-demand/">Feature on demand</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Deployment/Sysprep/">Sysprep</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Failover-Clustering/">Failover Clustering</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Failover-Clustering/Configuration-and-Management/">Configuration and Management</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/FileServices/">FileServices</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/FileServices/FTP/">FTP</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/FileServices/SMB/">SMB</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Hyper-V/">Hyper-V</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Hyper-V/Configuration-and-Management/">Configuration and Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Hyper-V/Migration/">Migration</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Microsoft-Connected-Cache/">Microsoft Connected Cache</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/">Networking</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/BITS/">BITS</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/Bluetooth/">Bluetooth</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/DHCP/">DHCP</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/DNS/">DNS</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/Firewall/">Firewall</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/LBFO/">LBFO</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/NCSI/">NCSI</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/NetworkInterface/">NetworkInterface</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/Proxy/">Proxy</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/TCPIP/">TCPIP</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/OpenSSH/">OpenSSH</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/">Performance</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/Hang-up-BSoD/">Hang-up/BSoD</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/No-Boot/">No Boot</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/Slow-Response/">Slow Response</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/System-Resource/">System Resource</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/Tools/">Tools</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/">Public Key Infrastructure</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Certificate-Authority/">Certificate Authority</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Certificate-Management/">Certificate Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Code-Signing/">Code Signing</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/SSL-TLS-Communication/">SSL TLS Communication</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/SSL-TLS-Connection/">SSL TLS Connection</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Smart-Card-Logon/">Smart Card Logon</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/">Remote Desktop</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/Azure-Virtual-Desktop-AVD/">Azure Virtual Desktop (AVD)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/Remote-Desktop-Service-RDS/">Remote Desktop Service (RDS)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/Windows-Virtual-Desktop-WVD/">Windows Virtual Desktop (WVD)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/RemoteAccess/">RemoteAccess</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/RemoteAccess/%E3%83%80%E3%82%A4%E3%83%A4%E3%83%AB%E3%82%A2%E3%83%83%E3%83%97%E6%8E%A5%E7%B6%9A/">ダイヤルアップ接続</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Setup/">Setup</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Setup/Feature-Update-FU/">Feature Update (FU)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Shell/">Shell</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Shell/Explorer/">Explorer</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/">Storage</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/Backup/">Backup</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/FSRM/">FSRM</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/Management/">Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/StorageMigrationService/">StorageMigrationService</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/UEFI/">UEFI</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/UEFI/Secure-Boot/">Secure Boot</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/">User Interface and Apps</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Command-Prompt/">Command Prompt</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/EventLog/">EventLog</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Language-Support/">Language Support</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Microsoft-Store/">Microsoft Store</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Performance/">Performance</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/PowerShell/">PowerShell</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Printing-%E5%8D%B0%E5%88%B7/">Printing (印刷)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Server-Management/">Server Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Taskscheduler/">Taskscheduler</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Windows-Management-Instrumentation/">Windows Management Instrumentation</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps-Language-support/">User Interface and Apps - Language support</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-365/">Windows 365</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Admin-Center/">Windows Admin Center</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Search/">Windows Search</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/">Windows Update</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Delivery-Optimization-DO/">Delivery Optimization (DO)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Feature-Update-FU/">Feature Update (FU)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Quality-Update-QU/">Quality Update (QU)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Windows-Update-Agent/">Windows Update Agent</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Windows-Update-Agent-WUA/">Windows Update Agent (WUA)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/">WirelessNetwork</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/NPS/">NPS</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/Wi-Fi/">Wi-Fi</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/%E3%83%A2%E3%83%90%E3%82%A4%E3%83%AB-%E3%83%96%E3%83%AD%E3%83%BC%E3%83%89%E3%83%90%E3%83%B3%E3%83%89%E6%8E%A5%E7%B6%9A-LTE/">モバイル ブロードバンド接続 (LTE)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/%E7%B5%84%E7%B9%94%E7%B4%B9%E4%BB%8B%E3%83%96%E3%83%AD%E3%82%B0%EF%BC%88Windows-Commercial%EF%BC%89/">組織紹介ブログ（Windows Commercial）</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最近の投稿</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/blog/2026/02/16/ActiveDirectory/GroupPolicy/UacPolicyIsEnabled/">「ユーザー アカウント制御：ビルトイン Administrator アカウントのための管理者承認モード」ポリシーが有効になる動作ついて</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/02/15/UserInterfaceAndApps/Printing/printer-queue-app-preview/">印刷キューアプリのプレビュー機能について</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/02/02/ActiveDirectory/Authentication/kerberos-rc4-for-service-account-ticket-issuance-changes-related-to-cve-2026-20833/">CVE‑2026‑20833 への対応とその影響について [KB5073381]</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/01/12/Hyper-V/vmwp-does-not-save-the-RTC-value-of-a-virtual-machine-when-performing-Live-Migration/">ライブ マイグレーション後の再起動でゲスト OS の時刻がずれる場合がある</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/01/07/WindowsUpdate/FU/fublog-txt/">ISO メディア経由かつ動的更新無効な状態で Windows 11 バージョン 24H2 または 25H2 へのアップグレードが失敗 (0x8007042B 0x2000D) する事象と対策について</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">アーカイブ</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2026/02/">2026 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2026/01/">2026 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/12/">2025 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/11/">2025 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/10/">2025 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/09/">2025 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/08/">2025 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/07/">2025 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/06/">2025 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/05/">2025 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/04/">2025 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/03/">2025 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/02/">2025 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/01/">2025 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/12/">2024 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/11/">2024 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/10/">2024 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/09/">2024 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/08/">2024 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/07/">2024 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/06/">2024 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/05/">2024 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/04/">2024 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/03/">2024 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/02/">2024 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/01/">2024 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/12/">2023 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/11/">2023 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/10/">2023 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/09/">2023 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/08/">2023 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/07/">2023 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/06/">2023 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/05/">2023 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/04/">2023 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/03/">2023 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/02/">2023 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/01/">2023 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/12/">2022 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/11/">2022 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/10/">2022 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/09/">2022 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/08/">2022 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/07/">2022 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/06/">2022 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/05/">2022 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/04/">2022 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/03/">2022 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/02/">2022 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/01/">2022 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/12/">2021 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/11/">2021 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/10/">2021 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/09/">2021 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/08/">2021 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/07/">2021 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/06/">2021 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/05/">2021 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/04/">2021 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/03/">2021 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/02/">2021 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/01/">2021 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/12/">2020 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/11/">2020 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/10/">2020 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/07/">2020 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/03/">2020 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2019/03/">2019 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/11/">2018 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/10/">2018 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/09/">2018 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/08/">2018 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/07/">2018 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/06/">2018 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/04/">2018 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/02/">2018 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/12/">2017 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/11/">2017 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/09/">2017 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/05/">2017 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/03/">2017 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/02/">2017 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2016/08/">2016 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2016/05/">2016 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2014/03/">2014 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2012/02/">2012 / 02</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2026 Microsoft Japan Windows Technology Support Team<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/blog/" class="mobile-nav-link">Home</a>
+  
+    <a href="/blog/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+<script src="/blog/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

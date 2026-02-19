@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-180187723-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-180187723-1');
+</script>
+<!-- End Google Analytics -->
+
+  
+  <title>AVD ARM 日本語化イメージ作成手順について - Windows 11 | Microsoft Japan Windows Technology Support Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="本記事はマイクロソフト社員によって公開されております。こんにちは、Windows Commercial Support User Experience チームの矢野です。 今回は、AVD (Azure Virtual Desktop) を展開する際に必要となるイメージをギャラリーからではなく、日本語化した Managed Image から展開する方法についてご案内いたします。 AVD をギャラリー">
+<meta property="og:type" content="article">
+<meta property="og:title" content="AVD ARM 日本語化イメージ作成手順について - Windows 11">
+<meta property="og:url" content="https://jpwinsup.github.io/blog/2024/08/30/RemoteDesktopService/AVD/AVD-ARM-Japanese-image-windows11/index.html">
+<meta property="og:site_name" content="Microsoft Japan Windows Technology Support Blog">
+<meta property="og:description" content="本記事はマイクロソフト社員によって公開されております。こんにちは、Windows Commercial Support User Experience チームの矢野です。 今回は、AVD (Azure Virtual Desktop) を展開する際に必要となるイメージをギャラリーからではなく、日本語化した Managed Image から展開する方法についてご案内いたします。 AVD をギャラリー">
+<meta property="og:locale" content="ja_JP">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2024/08/30/RemoteDesktopService/AVD/AVD-ARM-Japanese-image-windows11/img1.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2024/08/30/RemoteDesktopService/AVD/AVD-ARM-Japanese-image-windows11/v2image1.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2024/08/30/RemoteDesktopService/AVD/AVD-ARM-Japanese-image-windows11/intl.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2024/08/30/RemoteDesktopService/AVD/AVD-ARM-Japanese-image-windows11/img7.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2024/08/30/RemoteDesktopService/AVD/AVD-ARM-Japanese-image-windows11/v2image4.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2024/08/30/RemoteDesktopService/AVD/AVD-ARM-Japanese-image-windows11/img9.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2024/08/30/RemoteDesktopService/AVD/AVD-ARM-Japanese-image-windows11/img10.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2024/08/30/RemoteDesktopService/AVD/AVD-ARM-Japanese-image-windows11/img11.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2024/08/30/RemoteDesktopService/AVD/AVD-ARM-Japanese-image-windows11/img12.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2024/08/30/RemoteDesktopService/AVD/AVD-ARM-Japanese-image-windows11/img13.png">
+<meta property="article:published_time" content="2024-08-30T01:00:00.000Z">
+<meta property="article:modified_time" content="2026-02-19T02:53:58.502Z">
+<meta property="article:author" content="Microsoft Japan Windows Technology Support Team">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://jpwinsup.github.io/blog/2024/08/30/RemoteDesktopService/AVD/AVD-ARM-Japanese-image-windows11/img1.png">
+  
+    <link rel="alternate" href="/blog/atom.xml" title="Microsoft Japan Windows Technology Support Blog" type="application/atom+xml">
+  
+
+  <link rel="icon" href="/blog/favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="/blog/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/blog/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/blog/favicon-16x16.png">
+  <link rel="manifest" href="/blog/site.webmanifest">
+  <link rel="mask-icon" href="/blog/safari-pinned-tab.svg" color="#5bbad5">
+  <meta name="msapplication-TileColor" content="#ffffff">
+  <meta name="theme-color" content="#ffffff">
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/blog/css/style.css">
+
+<meta name="generator" content="Hexo 5.2.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="site-header-logo"></div>
+  <div id="site-header-blog-wrapper"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        <div id="ms-logo"></div>
+        
+          <a class="main-nav-link" href="/blog/">Home</a>
+        
+          <a class="main-nav-link" href="/blog/archives">Archives</a>
+        
+        <a class="main-nav-link" target="_blank" rel="noopener" href="https://cssjpn.github.io/">サポート情報</a>
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/blog/atom.xml" title="RSSフィード"></a>
+        
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//www.bing.com/search" method="get" accept-charset="UTF-8" name="bing-search" onsubmit="var f=this;if(f['q'].value){var searchUrl =  'https://www.bing.com/search?q=' +  encodeURIComponent(f['q'].value + ' site:' + f['sitesearch'].value) ;window.open(searchUrl, 'blank') };return false;" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="検索"><button type="submit" id="nav-search-btn" class="search-form-submit"></button><input type="hidden" name="sitesearch" value="https://jpwinsup.github.io/blog"></form>
+      </div>
+    </div>
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/blog/" id="logo">Microsoft Japan Windows Technology Support Blog</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/blog/" id="subtitle">日本マイクロソフト Windows Support チームによる、サポート情報 Blog です。</a>
+        </h2>
+      
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-RemoteDesktopService/AVD/AVD-ARM-Japanese-image-windows11" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    
+    
+      <header class="article-header-single">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      AVD ARM 日本語化イメージ作成手順について - Windows 11
+    </h1>
+  
+
+      </header>
+      <div class="article-share">
+        Last Update: 
+        <a href="/blog/2024/08/30/RemoteDesktopService/AVD/AVD-ARM-Japanese-image-windows11/" class="article-date-single">
+  <time datetime="2024-08-30T01:00:00.000Z" itemprop="datePublished">2024-08-30</time>
+</a>
+        
+  <div class="article-category">
+    <a class="article-category-link" href="/blog/categories/Remote-Desktop/">Remote Desktop</a>►<a class="article-category-link" href="/blog/categories/Remote-Desktop/Azure-Virtual-Desktop-AVD/">Azure Virtual Desktop (AVD)</a>
+  </div>
+
+        
+        <a href="https://github.com/jpwinsup/blog/issues/new?title=&body=%EF%BB%BF%0A%0A---%0A%0A%23%23%23%23+Document+Details%0A%0A*+Article+ID%3A+1afc45b0-e8e0-5c7b-af21-d81fb8a7c3a1%0A*+TITLE%3A+AVD+ARM+%E6%97%A5%E6%9C%AC%E8%AA%9E%E5%8C%96%E3%82%A4%E3%83%A1%E3%83%BC%E3%82%B8%E4%BD%9C%E6%88%90%E6%89%8B%E9%A0%86%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6+-+Windows+11%0A*+URL+https%3A%2F%2Fjpwinsup.github.io%2Fblog%2F2024%2F08%2F30%2FRemoteDesktopService%2FAVD%2FAVD-ARM-Japanese-image-windows11%2F%0A*+SourceFileName%3A+source%2F_posts%2FRemoteDesktopService%2FAVD%2FAVD-ARM-Japanese-image-windows11.md%0A" class="article-github-issue-link" target="_blank" rel="noopener noreferrer">feedback</a>
+        
+        <a data-url="https://jpwinsup.github.io/blog/2024/08/30/RemoteDesktopService/AVD/AVD-ARM-Japanese-image-windows11/" data-id="cmlsvjde400fmru3y5bwefn23" class="article-share-link">共有</a>
+      </div>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>本記事はマイクロソフト社員によって公開されております。<br>こんにちは、Windows Commercial Support User Experience チームの矢野です。</p>
+<p>今回は、AVD (Azure Virtual Desktop) を展開する際に必要となるイメージをギャラリーからではなく、日本語化した Managed Image から展開する方法についてご案内いたします。</p>
+<p>AVD をギャラリーから作成する場合、英語版のイメージしか用意されていません。そのため本投稿では、日本語版イメージを作成する手順についてご案内いたします。</p>
+<p>本記事では、マルチセッション対応で Pooled (共有型) の環境で利用される Windows 11 Enterprise for Virtual Desktop (略称 EVD) の日本語版イメージ作成方法についてご案内いたします。</p>
+<p>※ Windows 11 Enterprise for Virtual Desktop (略称 EVD) は、別名 Windows 11 Enterprise Multisession (略称 EMS) とも呼ばれます。<br>※ Personal (占有型) の AVD 構築の際は、Windows 11 (シングルセッション) のイメージを使用してください。</p>
+<hr>
+<h2 id="手順について"><a href="#手順について" class="headerlink" title="手順について"></a>手順について</h2><h3 id="事前準備"><a href="#事前準備" class="headerlink" title="事前準備"></a>事前準備</h3><ol>
+<li><p>Azure Portal から Marketplace を開きます。検索窓に「Windows multi-session + Microsoft 365 Apps」と入力し、オートコンプリートで表示されるアイテムを選択します。</p>
+<img src="/blog/2024/08/30/RemoteDesktopService/AVD/AVD-ARM-Japanese-image-windows11/img1.png" class="">
+</li>
+<li><p>プランを選択し、仮想マシンを作成します。「Windows multi-session + Microsoft 365 Apps」を選択します。</p>
+<img src="/blog/2024/08/30/RemoteDesktopService/AVD/AVD-ARM-Japanese-image-windows11/v2image1.png" class="">
+
+</li>
+</ol>
+<h3 id="日本語化手順"><a href="#日本語化手順" class="headerlink" title="日本語化手順"></a>日本語化手順</h3><p>作成した VM に接続し、PowerShell を管理者権限で起動して、以下の手順を実行します。</p>
+<h4 id="1-BitLocker-の無効化"><a href="#1-BitLocker-の無効化" class="headerlink" title="1. BitLocker の無効化"></a>1. BitLocker の無効化</h4><p><strong>※ Trusted Launch VM を使用している場合は必須の手順です。最初に実行することを推奨します。</strong></p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">Disable-BitLocker</span> <span class="literal">-MountPoint</span> <span class="string">&quot;C:&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="2-日本語言語パックのインストール"><a href="#2-日本語言語パックのインストール" class="headerlink" title="2. 日本語言語パックのインストール"></a>2. 日本語言語パックのインストール</h4><p>Windows 10 version 22H2 以降、Windows Server 2025 以降、および Windows 11 では、言語パックの導入に <code>Install-Language</code> コマンドが利用可能です。以下のコマンドを実行して日本語言語パックをインストールします。</p>
+<p><strong>※ この処理には時間がかかります。</strong></p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">Install-Language</span> ja<span class="literal">-jp</span></span><br></pre></td></tr></table></figure>
+
+<p>Windows Server 2022 以前のサーバー OS では、<code>Install-Language</code> コマンドが使用できません。Windows Server 2022 以前のサーバー OS を Azure VM として利用する場合は、下記の記事をご参照ください。</p>
+<p>関連記事: <a href="https://jpwinsup.github.io/blog/2025/12/14/Performance/LangPack/WindowsServerJapanize/">Windows Server 2022 の日本語化</a><br>関連記事: <a href="https://jpwinsup.github.io/blog/2021/01/20/RemoteDesktopService/AVD/AVD-ARM-Japanese-image/">AVD ARM 日本語化イメージ作成手順について</a></p>
+<h4 id="3-日本語環境の設定"><a href="#3-日本語環境の設定" class="headerlink" title="3. 日本語環境の設定"></a>3. 日本語環境の設定</h4><p>以下のコマンドを実行して、各種言語設定を日本語に変更します。</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># UI 言語を日本語に設定</span></span><br><span class="line"><span class="built_in">Set-WinUILanguageOverride</span> ja<span class="literal">-JP</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># カルチャを日本語に設定</span></span><br><span class="line"><span class="built_in">Set-Culture</span> ja<span class="literal">-JP</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 地域を日本に設定 (GeoID 122 = 日本)</span></span><br><span class="line"><span class="built_in">Set-WinHomeLocation</span> <span class="literal">-GeoID</span> <span class="number">122</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># タイムゾーンを東京に設定</span></span><br><span class="line"><span class="built_in">Set-TimeZone</span> <span class="literal">-Id</span> <span class="string">&quot;Tokyo Standard Time&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># ユーザー言語リストを日本語に設定</span></span><br><span class="line"><span class="built_in">Set-WinUserLanguageList</span> (<span class="built_in">New-WinUserLanguageList</span> ja) <span class="literal">-Force</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 既定の入力方式を日本語 Microsoft IME に設定</span></span><br><span class="line"><span class="built_in">Set-WinDefaultInputMethodOverride</span> <span class="string">&quot;0411:&#123;03B5835F-F03C-411B-9CE2-AA23E1171E36&#125;&#123;A76C93D9-5523-4E90-AAFA-4DB112F9AC76&#125;&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># システム ロケールを日本語に設定</span></span><br><span class="line"><span class="built_in">Set-WinSystemLocale</span> ja<span class="literal">-JP</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="4-すべてのユーザーへの設定反映"><a href="#4-すべてのユーザーへの設定反映" class="headerlink" title="4. すべてのユーザーへの設定反映"></a>4. すべてのユーザーへの設定反映</h4><p>以下のコマンドを実行して、ようこそ画面および新規ユーザーに対しても日本語設定を適用します。</p>
+<p><strong>※ このコマンドは Windows 11 および Windows Server 2025 以降でのみ使用可能です。Windows 10 では使用できません。</strong></p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">Copy-UserInternationalSettingsToSystem</span> <span class="literal">-WelcomeScreen</span> <span class="variable">$True</span> <span class="literal">-NewUser</span> <span class="variable">$True</span></span><br></pre></td></tr></table></figure>
+
+<h5 id="Windows-10-Version-22H2-の場合"><a href="#Windows-10-Version-22H2-の場合" class="headerlink" title="Windows 10 Version 22H2 の場合"></a>Windows 10 Version 22H2 の場合</h5><p>Windows 10 Version 22H2 では <code>Copy-UserInternationalSettingsToSystem</code> コマンドレットが使用できないため、代わりに以下の XML ファイルを <code>control.exe intl.cpl</code> コマンドで流し込むことで同様の設定が可能です。</p>
+<ol>
+<li>以下の内容で XML ファイル (例: <code>C:\temp\intl.xml</code>) を作成します。</li>
+</ol>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">gs:GlobalizationServices</span> <span class="attr">xmlns:gs</span>=<span class="string">&quot;urn:longhornGlobalizationUnattend&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">gs:UserList</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">gs:User</span> <span class="attr">UserID</span>=<span class="string">&quot;Current&quot;</span> <span class="attr">CopySettingsToDefaultUserAcct</span>=<span class="string">&quot;true&quot;</span> <span class="attr">CopySettingsToSystemAcct</span>=<span class="string">&quot;true&quot;</span>/&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">gs:UserList</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">gs:LocationPreferences</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">gs:GeoID</span> <span class="attr">Value</span>=<span class="string">&quot;122&quot;</span>/&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">gs:LocationPreferences</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">gs:MUILanguagePreferences</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">gs:MUILanguage</span> <span class="attr">Value</span>=<span class="string">&quot;ja-JP&quot;</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">gs:MUIFallback</span> <span class="attr">Value</span>=<span class="string">&quot;en-US&quot;</span>/&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">gs:MUILanguagePreferences</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">gs:SystemLocale</span> <span class="attr">Name</span>=<span class="string">&quot;ja-JP&quot;</span>/&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">gs:InputPreferences</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">gs:InputLanguageID</span> <span class="attr">Action</span>=<span class="string">&quot;add&quot;</span> <span class="attr">ID</span>=<span class="string">&quot;0411:&#123;03B5835F-F03C-411B-9CE2-AA23E1171E36&#125;&#123;A76C93D9-5523-4E90-AAFA-4DB112F9AC76&#125;&quot;</span> <span class="attr">Default</span>=<span class="string">&quot;true&quot;</span>/&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">gs:InputPreferences</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">gs:UserLocale</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">gs:Locale</span> <span class="attr">Name</span>=<span class="string">&quot;ja-JP&quot;</span> <span class="attr">SetAsCurrent</span>=<span class="string">&quot;true&quot;</span> <span class="attr">ResetAllSettings</span>=<span class="string">&quot;true&quot;</span>/&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">gs:UserLocale</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">gs:GlobalizationServices</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>管理者権限のコマンド プロンプトまたは PowerShell で以下のコマンドを実行します。</li>
+</ol>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">control.exe intl.cpl,,/f:<span class="string">&quot;C:\temp\intl.xml&quot;</span></span><br></pre></td></tr></table></figure>
+
+<hr>
+<h3 id="言語設定の確認"><a href="#言語設定の確認" class="headerlink" title="言語設定の確認"></a>言語設定の確認</h3><p>ここまでの手順を実施したら、以下のコマンドを実行し、[Copy settings…] をクリックして [Welcome screen and new user accounts settings] 画面を開いてください。</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">control.exe intl.cpl,,<span class="number">1</span></span><br></pre></td></tr></table></figure>
+
+<p>以下のように、[Welcome screen] および [New user accounts] の [Input language:] が [日本語 (日本) - Microsoft IME] となっていれば、設定は正常に完了しています。</p>
+<img src="/blog/2024/08/30/RemoteDesktopService/AVD/AVD-ARM-Japanese-image-windows11/intl.png" class="">
+
+<h3 id="Sysprep-の実行"><a href="#Sysprep-の実行" class="headerlink" title="Sysprep の実行"></a>Sysprep の実行</h3><p>上記の日本語化手順が完了したら、Sysprep を実行してイメージを一般化し、シャットダウンします。</p>
+<h4 id="オプション-未使用言語パックの自動削除を無効化"><a href="#オプション-未使用言語パックの自動削除を無効化" class="headerlink" title="(オプション) 未使用言語パックの自動削除を無効化"></a>(オプション) 未使用言語パックの自動削除を無効化</h4><p>複数の言語パックをインストールした状態を維持したい場合は、Sysprep 実行前に以下のレジストリを設定することを推奨します。</p>
+<p>Windows では、システムが「使用されていない」と判断した言語パックを自動的に削除する機能があります。この機能が有効な場合、インストールした言語パックが意図せず削除される可能性があります。</p>
+<p>以下のコマンドで未使用言語パックの自動削除を無効化できます。</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$regPath</span> = <span class="string">&quot;HKLM:\Software\Policies\Microsoft\Control Panel\International&quot;</span></span><br><span class="line"><span class="keyword">if</span> (!(<span class="built_in">Test-Path</span> <span class="variable">$regPath</span>)) &#123;</span><br><span class="line">    <span class="built_in">New-Item</span> <span class="literal">-Path</span> <span class="variable">$regPath</span> <span class="literal">-Force</span> | <span class="built_in">Out-Null</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">New-ItemProperty</span> <span class="literal">-Path</span> <span class="variable">$regPath</span> <span class="literal">-Name</span> <span class="string">&quot;BlockCleanupOfUnusedPreinstalledLangPacks&quot;</span> <span class="literal">-Value</span> <span class="number">1</span> <span class="literal">-PropertyType</span> DWORD <span class="literal">-Force</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>※ 日本語のみを使用する環境では、この手順は省略可能です。</strong></p>
+<h4 id="Sysprep-コマンドの実行"><a href="#Sysprep-コマンドの実行" class="headerlink" title="Sysprep コマンドの実行"></a>Sysprep コマンドの実行</h4><p><strong>※ この処理には時間がかかります。</strong></p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">C:\Windows\System32\Sysprep\sysprep.exe /oobe /generalize /shutdown</span><br></pre></td></tr></table></figure>
+
+<h4 id="オプション-ユーザーにインストールされた-UWP-パッケージを削除"><a href="#オプション-ユーザーにインストールされた-UWP-パッケージを削除" class="headerlink" title="(オプション) ユーザーにインストールされた UWP パッケージを削除"></a>(オプション) ユーザーにインストールされた UWP パッケージを削除</h4><p>本手順の実施により、Sysprep の実行に失敗する場合、Sysprep を実行するユーザーにインストールされた UWP パッケージの削除が必要となる場合がございます。ユーザーの権限で PowerShell プロンプトを開き、以下のコマンドを実行いただくことで、UWP パッケージが削除されますので、本コマンドを実行後、再度 Sysprep を実行いただくことで Sysprep に成功するようになるかどうかをご確認ください。</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">Get-AppxPackage</span> | ? SignatureKind <span class="operator">-eq</span> Store | ? IsFramework <span class="operator">-eq</span> <span class="variable">$false</span> | ? Name <span class="operator">-ne</span> Microsoft.WindowsTerminal | <span class="built_in">Remove-AppxPackage</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>※ 一部のパッケージの削除はエラーとなりますが、パッケージの削除ができなくても Sysprep の実行には影響しませんので、コマンドを実行したら、Sysprep に成功するようになるかどうかをご確認ください。</strong></p>
+<hr>
+<h3 id="イメージの作成と-AVD-への展開"><a href="#イメージの作成と-AVD-への展開" class="headerlink" title="イメージの作成と AVD への展開"></a>イメージの作成と AVD への展開</h3><ol>
+<li><p>Azure Portal へアクセスし、Azure コンピューティング ギャラリーを追加します。リソース作成から「Azure コンピューティング ギャラリー」を検索して作成します。</p>
+<img src="/blog/2024/08/30/RemoteDesktopService/AVD/AVD-ARM-Japanese-image-windows11/img7.png" class="">
+</li>
+<li><p>新しいイメージ定義を追加します。Azure コンピューティング ギャラリーが作成できたら、そのリソースに移動して Image definition を作成します。</p>
+<img src="/blog/2024/08/30/RemoteDesktopService/AVD/AVD-ARM-Japanese-image-windows11/v2image4.png" class="">
+</li>
+<li><p>日本語化した VM へ移動し、Capture (キャプチャ) を選択します。</p>
+<img src="/blog/2024/08/30/RemoteDesktopService/AVD/AVD-ARM-Japanese-image-windows11/img9.png" class="">
+</li>
+<li><p>イメージを作成します。<br>※ 以下の画像はイメージの名前です。この名前は AVD のホストプール作成時にカスタムイメージを選択する際に使用します。</p>
+<img src="/blog/2024/08/30/RemoteDesktopService/AVD/AVD-ARM-Japanese-image-windows11/img10.png" class="">
+</li>
+<li><p>AVD のホストプール作成を行う際、カスタムイメージから VM を作成します。</p>
+<img src="/blog/2024/08/30/RemoteDesktopService/AVD/AVD-ARM-Japanese-image-windows11/img11.png" class="">
+</li>
+<li><p>AVD のホストプール展開時に、Image Source &gt; Managed Image を選択し、上記で作成したイメージをもとに VM を展開してホストプールを作成します。</p>
+<img src="/blog/2024/08/30/RemoteDesktopService/AVD/AVD-ARM-Japanese-image-windows11/img12.png" class="">
+
+</li>
+</ol>
+<p>※ イメージ選択例</p>
+<img src="/blog/2024/08/30/RemoteDesktopService/AVD/AVD-ARM-Japanese-image-windows11/img13.png" class="">
+
+<hr>
+<h2 id="注意事項"><a href="#注意事項" class="headerlink" title="注意事項"></a>注意事項</h2><ul>
+<li><p>AVD では、すでにセッションホストとして使用している仮想マシンを Sysprep (一般化) してイメージを作成することはサポートされていません。</p>
+</li>
+<li><p>イメージを作成する際は、弊社の Marketplace 上にある multi-session のイメージを基に Azure VM を作成し、その VM 上で Sysprep を実行して作成したイメージを基にセッションホストをデプロイしてください。</p>
+</li>
+<li><p>Trusted Launch VM を使用する場合は、必ず BitLocker を無効化してから Sysprep を実行してください。</p>
+</li>
+</ul>
+<hr>
+<p>以上となります。</p>
+<h2 id="更新履歴"><a href="#更新履歴" class="headerlink" title="更新履歴"></a>更新履歴</h2><ul>
+<li>2026-01-05 手順を PowerShell コマンドベースに刷新</li>
+<li>2025-08-01 記事内容を修正</li>
+<li>2024-08-30 本ブログ公開</li>
+</ul>
+
+      
+      
+    </div>
+    <footer class="article-footer">
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/blog/2024/08/30/WindowsUpdate/DO/DeliveryOptimization_QA/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">次の記事</strong>
+      <div class="article-nav-title">
+        
+          配信の最適化 (Delivery Optimization) に関するよくあるお問い合わせ
+        
+      </div>
+    </a>
+  
+  
+    <a href="/blog/2024/08/22/ActiveDirectory/Authentication/retireNTLM/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">前の記事</strong>
+      <div class="article-nav-title">NTLM の廃止に向けた対応について</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">カテゴリ</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Activation/">Activation</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Activation/ESU/">ESU</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Activation/security-SPP/">security-SPP</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/">Active Directory</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Authentication/">Authentication</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/DFSR/">DFSR</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/FunctionalLevel/">FunctionalLevel</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Group-Policy/">Group Policy</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Promotion-and-Demotion/">Promotion and Demotion</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/User-Profile/">User Profile</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Windows-Hello/">Windows Hello</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Windows-Time-Service/">Windows Time Service</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/AppLocker/">AppLocker</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/AppLocker/Active-Directory/">Active Directory</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/AppLocker/Microsoft-Intune/">Microsoft Intune</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Deployment/">Deployment</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Deployment/Feature-on-demand/">Feature on demand</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Deployment/Sysprep/">Sysprep</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Failover-Clustering/">Failover Clustering</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Failover-Clustering/Configuration-and-Management/">Configuration and Management</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/FileServices/">FileServices</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/FileServices/FTP/">FTP</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/FileServices/SMB/">SMB</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Hyper-V/">Hyper-V</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Hyper-V/Configuration-and-Management/">Configuration and Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Hyper-V/Migration/">Migration</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Microsoft-Connected-Cache/">Microsoft Connected Cache</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/">Networking</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/BITS/">BITS</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/Bluetooth/">Bluetooth</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/DHCP/">DHCP</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/DNS/">DNS</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/Firewall/">Firewall</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/LBFO/">LBFO</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/NCSI/">NCSI</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/NetworkInterface/">NetworkInterface</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/Proxy/">Proxy</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/TCPIP/">TCPIP</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/OpenSSH/">OpenSSH</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/">Performance</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/Hang-up-BSoD/">Hang-up/BSoD</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/No-Boot/">No Boot</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/Slow-Response/">Slow Response</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/System-Resource/">System Resource</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/Tools/">Tools</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/">Public Key Infrastructure</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Certificate-Authority/">Certificate Authority</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Certificate-Management/">Certificate Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Code-Signing/">Code Signing</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/SSL-TLS-Communication/">SSL TLS Communication</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/SSL-TLS-Connection/">SSL TLS Connection</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Smart-Card-Logon/">Smart Card Logon</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/">Remote Desktop</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/Azure-Virtual-Desktop-AVD/">Azure Virtual Desktop (AVD)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/Remote-Desktop-Service-RDS/">Remote Desktop Service (RDS)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/Windows-Virtual-Desktop-WVD/">Windows Virtual Desktop (WVD)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/RemoteAccess/">RemoteAccess</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/RemoteAccess/%E3%83%80%E3%82%A4%E3%83%A4%E3%83%AB%E3%82%A2%E3%83%83%E3%83%97%E6%8E%A5%E7%B6%9A/">ダイヤルアップ接続</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Setup/">Setup</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Setup/Feature-Update-FU/">Feature Update (FU)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Shell/">Shell</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Shell/Explorer/">Explorer</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/">Storage</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/Backup/">Backup</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/FSRM/">FSRM</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/Management/">Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/StorageMigrationService/">StorageMigrationService</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/UEFI/">UEFI</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/UEFI/Secure-Boot/">Secure Boot</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/">User Interface and Apps</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Command-Prompt/">Command Prompt</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/EventLog/">EventLog</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Language-Support/">Language Support</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Microsoft-Store/">Microsoft Store</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Performance/">Performance</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/PowerShell/">PowerShell</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Printing-%E5%8D%B0%E5%88%B7/">Printing (印刷)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Server-Management/">Server Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Taskscheduler/">Taskscheduler</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Windows-Management-Instrumentation/">Windows Management Instrumentation</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps-Language-support/">User Interface and Apps - Language support</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-365/">Windows 365</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Admin-Center/">Windows Admin Center</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Search/">Windows Search</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/">Windows Update</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Delivery-Optimization-DO/">Delivery Optimization (DO)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Feature-Update-FU/">Feature Update (FU)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Quality-Update-QU/">Quality Update (QU)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Windows-Update-Agent/">Windows Update Agent</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Windows-Update-Agent-WUA/">Windows Update Agent (WUA)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/">WirelessNetwork</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/NPS/">NPS</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/Wi-Fi/">Wi-Fi</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/%E3%83%A2%E3%83%90%E3%82%A4%E3%83%AB-%E3%83%96%E3%83%AD%E3%83%BC%E3%83%89%E3%83%90%E3%83%B3%E3%83%89%E6%8E%A5%E7%B6%9A-LTE/">モバイル ブロードバンド接続 (LTE)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/%E7%B5%84%E7%B9%94%E7%B4%B9%E4%BB%8B%E3%83%96%E3%83%AD%E3%82%B0%EF%BC%88Windows-Commercial%EF%BC%89/">組織紹介ブログ（Windows Commercial）</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最近の投稿</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/blog/2026/02/16/ActiveDirectory/GroupPolicy/UacPolicyIsEnabled/">「ユーザー アカウント制御：ビルトイン Administrator アカウントのための管理者承認モード」ポリシーが有効になる動作ついて</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/02/15/UserInterfaceAndApps/Printing/printer-queue-app-preview/">印刷キューアプリのプレビュー機能について</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/02/02/ActiveDirectory/Authentication/kerberos-rc4-for-service-account-ticket-issuance-changes-related-to-cve-2026-20833/">CVE‑2026‑20833 への対応とその影響について [KB5073381]</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/01/12/Hyper-V/vmwp-does-not-save-the-RTC-value-of-a-virtual-machine-when-performing-Live-Migration/">ライブ マイグレーション後の再起動でゲスト OS の時刻がずれる場合がある</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/01/07/WindowsUpdate/FU/fublog-txt/">ISO メディア経由かつ動的更新無効な状態で Windows 11 バージョン 24H2 または 25H2 へのアップグレードが失敗 (0x8007042B 0x2000D) する事象と対策について</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">アーカイブ</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2026/02/">2026 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2026/01/">2026 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/12/">2025 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/11/">2025 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/10/">2025 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/09/">2025 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/08/">2025 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/07/">2025 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/06/">2025 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/05/">2025 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/04/">2025 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/03/">2025 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/02/">2025 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/01/">2025 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/12/">2024 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/11/">2024 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/10/">2024 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/09/">2024 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/08/">2024 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/07/">2024 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/06/">2024 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/05/">2024 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/04/">2024 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/03/">2024 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/02/">2024 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/01/">2024 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/12/">2023 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/11/">2023 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/10/">2023 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/09/">2023 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/08/">2023 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/07/">2023 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/06/">2023 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/05/">2023 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/04/">2023 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/03/">2023 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/02/">2023 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/01/">2023 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/12/">2022 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/11/">2022 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/10/">2022 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/09/">2022 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/08/">2022 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/07/">2022 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/06/">2022 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/05/">2022 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/04/">2022 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/03/">2022 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/02/">2022 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/01/">2022 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/12/">2021 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/11/">2021 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/10/">2021 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/09/">2021 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/08/">2021 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/07/">2021 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/06/">2021 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/05/">2021 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/04/">2021 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/03/">2021 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/02/">2021 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/01/">2021 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/12/">2020 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/11/">2020 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/10/">2020 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/07/">2020 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/03/">2020 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2019/03/">2019 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/11/">2018 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/10/">2018 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/09/">2018 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/08/">2018 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/07/">2018 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/06/">2018 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/04/">2018 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/02/">2018 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/12/">2017 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/11/">2017 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/09/">2017 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/05/">2017 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/03/">2017 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/02/">2017 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2016/08/">2016 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2016/05/">2016 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2014/03/">2014 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2012/02/">2012 / 02</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2026 Microsoft Japan Windows Technology Support Team<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/blog/" class="mobile-nav-link">Home</a>
+  
+    <a href="/blog/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+<script src="/blog/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

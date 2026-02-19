@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-180187723-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-180187723-1');
+</script>
+<!-- End Google Analytics -->
+
+  
+  <title>ネットワーク接続状態インジケーター (NCSI) の概要とトラブルシュート | Microsoft Japan Windows Technology Support Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="こんにちは、日本マイクロソフト Windows プラットフォーム サポートです。本 Blog では、NCSI と呼ばれる OS の機能について、動作の概要や問題発生時の対応策などをご案内します。 1. NCSI の概要ネットワーク接続状態インジケーター (NCSI) の目的ネットワーク接続状態インジケーター (NCSI : Network Connectivity Status Indicator">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ネットワーク接続状態インジケーター (NCSI) の概要とトラブルシュート">
+<meta property="og:url" content="https://jpwinsup.github.io/blog/2021/09/30/Networking/NCSI/network-connectivity-status-indicator-overview-and-troubleshooting-guide/index.html">
+<meta property="og:site_name" content="Microsoft Japan Windows Technology Support Blog">
+<meta property="og:description" content="こんにちは、日本マイクロソフト Windows プラットフォーム サポートです。本 Blog では、NCSI と呼ばれる OS の機能について、動作の概要や問題発生時の対応策などをご案内します。 1. NCSI の概要ネットワーク接続状態インジケーター (NCSI) の目的ネットワーク接続状態インジケーター (NCSI : Network Connectivity Status Indicator">
+<meta property="og:locale" content="ja_JP">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2021/09/30/Networking/NCSI/network-connectivity-status-indicator-overview-and-troubleshooting-guide/icon-of-ncsi-indicating-no-internet-on-wireless.jpg">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2021/09/30/Networking/NCSI/network-connectivity-status-indicator-overview-and-troubleshooting-guide/flow-of-active-http-probe.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2021/09/30/Networking/NCSI/network-connectivity-status-indicator-overview-and-troubleshooting-guide/flow-of-active-http-probe-via-proxy.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2021/09/30/Networking/NCSI/network-connectivity-status-indicator-overview-and-troubleshooting-guide/flow-of-active-dns-probe.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2021/09/30/Networking/NCSI/network-connectivity-status-indicator-overview-and-troubleshooting-guide/icon-of-ncsi-indicating-no-internet-on-wireless.jpg">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2021/09/30/Networking/NCSI/network-connectivity-status-indicator-overview-and-troubleshooting-guide/icon-of-ncsi-indicating-no-internet-on-wired.jpg">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2021/09/30/Networking/NCSI/network-connectivity-status-indicator-overview-and-troubleshooting-guide/error-message-of-office-client.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2021/09/30/Networking/NCSI/network-connectivity-status-indicator-overview-and-troubleshooting-guide/error-message-of-outlook-client.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2021/09/30/Networking/NCSI/network-connectivity-status-indicator-overview-and-troubleshooting-guide/example-result-of-get-netconnectionprofile-showing-internet-connectivity-on-ethernet.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2021/09/30/Networking/NCSI/network-connectivity-status-indicator-overview-and-troubleshooting-guide/example-result-of-get-netconnectionprofile-showing-internet-connectivity-on-vpn.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2021/09/30/Networking/NCSI/network-connectivity-status-indicator-overview-and-troubleshooting-guide/example-result-of-getting-the-text-file-from-ncsi-server-via-powershell.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2021/09/30/Networking/NCSI/network-connectivity-status-indicator-overview-and-troubleshooting-guide/example-result-of-resolving-the-name-of-ncsi-dns-probe-via-nslookup.png">
+<meta property="article:published_time" content="2021-09-30T00:00:00.000Z">
+<meta property="article:modified_time" content="2026-02-19T02:53:58.404Z">
+<meta property="article:author" content="Microsoft Japan Windows Technology Support Team">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://jpwinsup.github.io/blog/2021/09/30/Networking/NCSI/network-connectivity-status-indicator-overview-and-troubleshooting-guide/icon-of-ncsi-indicating-no-internet-on-wireless.jpg">
+  
+    <link rel="alternate" href="/blog/atom.xml" title="Microsoft Japan Windows Technology Support Blog" type="application/atom+xml">
+  
+
+  <link rel="icon" href="/blog/favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="/blog/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/blog/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/blog/favicon-16x16.png">
+  <link rel="manifest" href="/blog/site.webmanifest">
+  <link rel="mask-icon" href="/blog/safari-pinned-tab.svg" color="#5bbad5">
+  <meta name="msapplication-TileColor" content="#ffffff">
+  <meta name="theme-color" content="#ffffff">
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/blog/css/style.css">
+
+<meta name="generator" content="Hexo 5.2.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="site-header-logo"></div>
+  <div id="site-header-blog-wrapper"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        <div id="ms-logo"></div>
+        
+          <a class="main-nav-link" href="/blog/">Home</a>
+        
+          <a class="main-nav-link" href="/blog/archives">Archives</a>
+        
+        <a class="main-nav-link" target="_blank" rel="noopener" href="https://cssjpn.github.io/">サポート情報</a>
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/blog/atom.xml" title="RSSフィード"></a>
+        
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//www.bing.com/search" method="get" accept-charset="UTF-8" name="bing-search" onsubmit="var f=this;if(f['q'].value){var searchUrl =  'https://www.bing.com/search?q=' +  encodeURIComponent(f['q'].value + ' site:' + f['sitesearch'].value) ;window.open(searchUrl, 'blank') };return false;" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="検索"><button type="submit" id="nav-search-btn" class="search-form-submit"></button><input type="hidden" name="sitesearch" value="https://jpwinsup.github.io/blog"></form>
+      </div>
+    </div>
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/blog/" id="logo">Microsoft Japan Windows Technology Support Blog</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/blog/" id="subtitle">日本マイクロソフト Windows Support チームによる、サポート情報 Blog です。</a>
+        </h2>
+      
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-Networking/NCSI/network-connectivity-status-indicator-overview-and-troubleshooting-guide" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    
+    
+      <header class="article-header-single">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      ネットワーク接続状態インジケーター (NCSI) の概要とトラブルシュート
+    </h1>
+  
+
+      </header>
+      <div class="article-share">
+        Last Update: 
+        <a href="/blog/2021/09/30/Networking/NCSI/network-connectivity-status-indicator-overview-and-troubleshooting-guide/" class="article-date-single">
+  <time datetime="2021-09-30T00:00:00.000Z" itemprop="datePublished">2021-09-30</time>
+</a>
+        
+  <div class="article-category">
+    <a class="article-category-link" href="/blog/categories/Networking/">Networking</a>►<a class="article-category-link" href="/blog/categories/Networking/NCSI/">NCSI</a>
+  </div>
+
+        
+        <a href="https://github.com/jpwinsup/blog/issues/new?title=&body=%EF%BB%BF%0A%0A---%0A%0A%23%23%23%23+Document+Details%0A%0A*+Article+ID%3A+527adc17-9ae0-5122-8a8c-ba6fc0629fa4%0A*+TITLE%3A+%E3%83%8D%E3%83%83%E3%83%88%E3%83%AF%E3%83%BC%E3%82%AF%E6%8E%A5%E7%B6%9A%E7%8A%B6%E6%85%8B%E3%82%A4%E3%83%B3%E3%82%B8%E3%82%B1%E3%83%BC%E3%82%BF%E3%83%BC+%28NCSI%29+%E3%81%AE%E6%A6%82%E8%A6%81%E3%81%A8%E3%83%88%E3%83%A9%E3%83%96%E3%83%AB%E3%82%B7%E3%83%A5%E3%83%BC%E3%83%88%0A*+URL+https%3A%2F%2Fjpwinsup.github.io%2Fblog%2F2021%2F09%2F30%2FNetworking%2FNCSI%2Fnetwork-connectivity-status-indicator-overview-and-troubleshooting-guide%2F%0A*+SourceFileName%3A+source%2F_posts%2FNetworking%2FNCSI%2Fnetwork-connectivity-status-indicator-overview-and-troubleshooting-guide.md%0A" class="article-github-issue-link" target="_blank" rel="noopener noreferrer">feedback</a>
+        
+        <a data-url="https://jpwinsup.github.io/blog/2021/09/30/Networking/NCSI/network-connectivity-status-indicator-overview-and-troubleshooting-guide/" data-id="cmlsvjdce00bkru3y8sohardd" class="article-share-link">共有</a>
+      </div>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>こんにちは、日本マイクロソフト Windows プラットフォーム サポートです。<br>本 Blog では、NCSI と呼ばれる OS の機能について、動作の概要や問題発生時の対応策などをご案内します。</p>
+<h2 id="1-NCSI-の概要"><a href="#1-NCSI-の概要" class="headerlink" title="1. NCSI の概要"></a>1. NCSI の概要</h2><h3 id="ネットワーク接続状態インジケーター-NCSI-の目的"><a href="#ネットワーク接続状態インジケーター-NCSI-の目的" class="headerlink" title="ネットワーク接続状態インジケーター (NCSI) の目的"></a>ネットワーク接続状態インジケーター (NCSI) の目的</h3><p>ネットワーク接続状態インジケーター (NCSI : Network Connectivity Status Indicator) は、インターネットへのアクセス可否などを判定する OS の機能です。<br>アプリケーションから OS の NCSI が判定した結果を利用することで、アプリケーションごとにインターネット アクセス可否を判定する処理を実装することなく、コンピューターのネットワークへの接続状態をチェックすることができます。</p>
+<p>タスク トレイのネットワーク アイコンで、ネットワークの接続状態を示すことも NCSI の機能の一部です。</p>
+<p><img src="icon-of-ncsi-indicating-no-internet-on-wireless.jpg"></p>
+<h3 id="NCSI-の動作"><a href="#NCSI-の動作" class="headerlink" title="NCSI の動作"></a>NCSI の動作</h3><p>NCSI は “アクティブ プローブ” と “パッシブ プローブ” と呼ばれる 2 種類の動作で、ネットワークへの接続時などにインターネットへのアクセス可否を判定します。</p>
+<h4 id="アクティブ-プローブの動作"><a href="#アクティブ-プローブの動作" class="headerlink" title="アクティブ プローブの動作"></a>アクティブ プローブの動作</h4><p>アクティブ プローブでは、”HTTP プローブ”、”DNS プローブ” の 2 種類のテストによってインターネット アクセス可否を判定します。</p>
+<h5 id="a-HTTP-プローブの判定内容"><a href="#a-HTTP-プローブの判定内容" class="headerlink" title="a. HTTP プローブの判定内容"></a>a. HTTP プローブの判定内容</h5><p>“HTTP プローブ” では、HTTP でテキストファイルをダウンロードして期待する文字列を得られるかどうかチェックして、インターネット アクセス可否を判定します。</p>
+<p>Windows 10 Version 1607 以降 :<br>以下の URL のテキストファイルをダウンロードして、”Microsoft Connect Test” という文字列が得られるかチェックします。</p>
+<ul>
+<li>IPv4 の場合 : <a target="_blank" rel="noopener" href="http://www.msftconnecttest.com/connecttest.txt">http://www.msftconnecttest.com/connecttest.txt</a></li>
+<li>IPv6 の場合 : <a target="_blank" rel="noopener" href="http://ipv6.msftconnecttest.com/connecttest.txt">http://ipv6.msftconnecttest.com/connecttest.txt</a></li>
+</ul>
+<p>Windows 10 Version 1511 以前 :<br>以下の URL のテキストファイルをダウンロードして、”Microsoft NCSI” という文字列が得られるかチェックします。</p>
+<ul>
+<li>IPv4 の場合 : <a target="_blank" rel="noopener" href="http://www.msftncsi.com/ncsi.txt">http://www.msftncsi.com/ncsi.txt</a></li>
+<li>IPv6 の場合 : <a target="_blank" rel="noopener" href="http://ipv6.msftncsi.com/ncsi.txt">http://ipv6.msftncsi.com/ncsi.txt</a></li>
+</ul>
+<h5 id="プロキシを経由しない-HTTP-プローブの動作フロー-Windows-10-Version-1607-以降、IPv4-の場合"><a href="#プロキシを経由しない-HTTP-プローブの動作フロー-Windows-10-Version-1607-以降、IPv4-の場合" class="headerlink" title="プロキシを経由しない HTTP プローブの動作フロー (Windows 10 Version 1607 以降、IPv4 の場合)"></a>プロキシを経由しない HTTP プローブの動作フロー (Windows 10 Version 1607 以降、IPv4 の場合)</h5><p><img src="flow-of-active-http-probe.png"></p>
+<h5 id="プロキシを経由する-HTTP-プローブの動作フロー-Windows-10-Version-1607-以降、IPv4-の場合"><a href="#プロキシを経由する-HTTP-プローブの動作フロー-Windows-10-Version-1607-以降、IPv4-の場合" class="headerlink" title="プロキシを経由する HTTP プローブの動作フロー (Windows 10 Version 1607 以降、IPv4 の場合)"></a>プロキシを経由する HTTP プローブの動作フロー (Windows 10 Version 1607 以降、IPv4 の場合)</h5><p><img src="flow-of-active-http-probe-via-proxy.png"></p>
+<h5 id="b-DNS-プローブの判定内容"><a href="#b-DNS-プローブの判定内容" class="headerlink" title="b. DNS プローブの判定内容"></a>b. DNS プローブの判定内容</h5><p>“DNS プローブ” では、”dns.msftncsi.com” の DNS 名前解決を行い、以下の解決結果を得られるかどうかによって、インターネット アクセス可否を判定します。</p>
+<ul>
+<li>IPv4 の場合 : 131.107.255.255</li>
+<li>IPv6 の場合 : fd3e:4f5a:5b81::1</li>
+</ul>
+<h5 id="DNS-プローブの動作フロー"><a href="#DNS-プローブの動作フロー" class="headerlink" title="DNS プローブの動作フロー"></a>DNS プローブの動作フロー</h5><p><img src="flow-of-active-dns-probe.png"></p>
+<h4 id="パッシブ-プローブの動作"><a href="#パッシブ-プローブの動作" class="headerlink" title="パッシブ プローブの動作"></a>パッシブ プローブの動作</h4><p>パッシブ プローブは既定で 15 秒間隔で動作し、ネットワークの通信状況をモニタリングしてインターネットアクセス可否を判定します。</p>
+<h2 id="2-事象の例"><a href="#2-事象の例" class="headerlink" title="2. 事象の例"></a>2. 事象の例</h2><p>NCSI で「インターネットアクセスなし」と判定された場合、Edge や Internet Explorer などのブラウザでインターネットアクセスが可能であっても、以下のような事象が発生します。</p>
+<h3 id="事象-1-タスク-トレイのネットワーク-アイコンが「インターネット-アクセスなし」-地球儀マーク-となる。"><a href="#事象-1-タスク-トレイのネットワーク-アイコンが「インターネット-アクセスなし」-地球儀マーク-となる。" class="headerlink" title="事象 1. タスク トレイのネットワーク アイコンが「インターネット アクセスなし」(地球儀マーク) となる。"></a>事象 1. タスク トレイのネットワーク アイコンが「インターネット アクセスなし」(地球儀マーク) となる。</h3><p>タスクトレイのネットワーク アイコンの状態が以下の画像のように 「インターネット アクセスなし」 の状態となります。</p>
+<p><img src="icon-of-ncsi-indicating-no-internet-on-wireless.jpg"></p>
+<p>または</p>
+<p><img src="icon-of-ncsi-indicating-no-internet-on-wired.jpg"></p>
+<h3 id="事象-2-Office-のサインインでネットワーク接続がない旨のメッセージが表示される。"><a href="#事象-2-Office-のサインインでネットワーク接続がない旨のメッセージが表示される。" class="headerlink" title="事象 2. Office のサインインでネットワーク接続がない旨のメッセージが表示される。"></a>事象 2. Office のサインインでネットワーク接続がない旨のメッセージが表示される。</h3><p>Office のサインインを行うときに、以下のようにネットワーク接続がない旨のメッセージが表示されます。</p>
+<p>メッセージ内容：「現在接続できません。ネットワークを確認して、後でもう一度お試しください」</p>
+<p><img src="error-message-of-office-client.png"></p>
+<p>参考 : <a target="_blank" rel="noopener" href="https://social.msdn.microsoft.com/Forums/ja-JP/40ba1467-0b54-48d5-9db0-4d3aedca2b0a/office?forum=officesupportteamja">Office のサインインでネットワーク接続がない旨のメッセージが表示される事象について</a></p>
+<h3 id="事象-3-Outlook-にて接続不可となり、先進認証ができない場合がある。"><a href="#事象-3-Outlook-にて接続不可となり、先進認証ができない場合がある。" class="headerlink" title="事象 3. Outlook にて接続不可となり、先進認証ができない場合がある。"></a>事象 3. Outlook にて接続不可となり、先進認証ができない場合がある。</h3><p>Outlook による先進認証が失敗し、以下のようにネットワーク接続がない旨のメッセージが表示されます。</p>
+<p>メッセージ内容：「現在接続できません。ネットワークを確認して、後でもう一度お試しください。」</p>
+<p><img src="error-message-of-outlook-client.png"></p>
+<p>参考 : <a target="_blank" rel="noopener" href="https://jpmessaging.github.io/blog/%E3%82%A4%E3%83%B3%E3%82%BF%E3%83%BC%E3%83%8D%E3%83%83%E3%83%88%E6%8E%A5%E7%B6%9A%E6%80%A7%E3%83%81%E3%82%A7%E3%83%83%E3%82%AF%E3%81%8C%E5%A4%B1%E6%95%97%E3%81%99%E3%82%8B%E7%92%B0%E5%A2%83%E3%81%A7%20Outlook%20%E3%81%AB%E3%82%88%E3%82%8B%E5%85%88%E9%80%B2%E8%AA%8D%E8%A8%BC%E3%81%8C%E5%A4%B1%E6%95%97%E3%81%99%E3%82%8B/">インターネット接続性チェックが失敗する環境で Outlook による先進認証が失敗する</a></p>
+<h2 id="3-切り分け方法"><a href="#3-切り分け方法" class="headerlink" title="3. 切り分け方法"></a>3. 切り分け方法</h2><p>NCSI に起因する問題が疑われる場合、以下のように状態を確認します。</p>
+<h3 id="1-NCSI-が判定した-Connectivity-状態の確認"><a href="#1-NCSI-が判定した-Connectivity-状態の確認" class="headerlink" title="(1) NCSI が判定した Connectivity 状態の確認"></a>(1) NCSI が判定した Connectivity 状態の確認</h3><p>NCSI が「インターネットアクセスなし」と判定することに起因して事象が発生しているか確認するため、事象発生時に PowerShell で以下のコマンド実行結果を確認します。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&gt; Get-NetConnectionProfile</span><br></pre></td></tr></table></figure>
+
+<p>NCSI ではネットワークアダプターごとに IPv4Connectivity/IPv6Connectivity の状態を保持します。<br>使用しているネットワークアダプターで “Internet” (インターネットアクセスあり) と判定されているか確認します。”NoTraffic” や “LocalNetwork” となっている場合、「インターネットアクセスなし」と判定されています。</p>
+<p>イントラネット接続時の例 :<br>イーサネット アダプターで “Internet” (インターネットアクセスあり) となっています。</p>
+<p><img src="example-result-of-get-netconnectionprofile-showing-internet-connectivity-on-ethernet.png"></p>
+<p>VPN 接続時の例 :<br>VPN  アダプターで “Internet” (インターネットアクセスあり) となっています。</p>
+<p><img src="example-result-of-get-netconnectionprofile-showing-internet-connectivity-on-vpn.png"></p>
+<h3 id="2-HTTP-プローブ先へのアクセス可否の確認"><a href="#2-HTTP-プローブ先へのアクセス可否の確認" class="headerlink" title="(2) HTTP プローブ先へのアクセス可否の確認"></a>(2) HTTP プローブ先へのアクセス可否の確認</h3><p>PowerShell の Invoke-WebRequest で以下の URL にリクエストを送信して、期待される文字列が表示される確認します。</p>
+<p>Windows 10 Version 1607 以降 :<br>以下の URL にアクセスして、”Microsoft Connect Test” という文字列が得られるかチェックします。<br>  IPv4 の場合 : <a target="_blank" rel="noopener" href="http://www.msftconnecttest.com/connecttest.txt">http://www.msftconnecttest.com/connecttest.txt</a><br>  IPv6 の場合 : <a target="_blank" rel="noopener" href="http://ipv6.msftconnecttest.com/connecttest.txt">http://ipv6.msftconnecttest.com/connecttest.txt</a></p>
+<p>Windows 10 Version 1511 以前 :<br>以下の URL にアクセスして、”Microsoft NCSI” という文字列が得られるかチェックします。<br>  IPv4 の場合 : <a target="_blank" rel="noopener" href="http://www.msftncsi.com/ncsi.txt">http://www.msftncsi.com/ncsi.txt</a><br>  IPv6 の場合 : <a target="_blank" rel="noopener" href="http://ipv6.msftncsi.com/ncsi.txt">http://ipv6.msftncsi.com/ncsi.txt</a></p>
+<p>Invoke-WebRequest <a target="_blank" rel="noopener" href="http://www.msftconnecttest.com/connecttest.txt">http://www.msftconnecttest.com/connecttest.txt</a> を実行した場合の例 :</p>
+<p><img src="example-result-of-getting-the-text-file-from-ncsi-server-via-powershell.png"></p>
+<h3 id="3-DNS-プローブ先の解決可否の確認"><a href="#3-DNS-プローブ先の解決可否の確認" class="headerlink" title="(3) DNS プローブ先の解決可否の確認"></a>(3) DNS プローブ先の解決可否の確認</h3><p>プロキシを使用していない環境では、以下の nslookup コマンドを実行して期待されるアドレスが解決されるか確認します。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&gt; nslookup dns.msftncsi.com.</span><br></pre></td></tr></table></figure>
+
+<p>nslookup dns.msftncsi.com. の実行例 :</p>
+<p><img src="example-result-of-resolving-the-name-of-ncsi-dns-probe-via-nslookup.png"></p>
+<h2 id="4-対応策"><a href="#4-対応策" class="headerlink" title="4. 対応策"></a>4. 対応策</h2><p>インターネットアクセス可能な環境にも関わらず、NCSI で「インターネットアクセスなし」と判定される場合、以下のような対策が有効です。</p>
+<h3 id="1-2021-年-8-月-10-日以降の更新プログラムを適用"><a href="#1-2021-年-8-月-10-日以降の更新プログラムを適用" class="headerlink" title="(1) 2021 年 8 月 10 日以降の更新プログラムを適用"></a>(1) 2021 年 8 月 10 日以降の更新プログラムを適用</h3><p>Windows 10 Version 1809 以降を対象に 2021 年 8 月 10 日以降 (2021 年 7 月の Preview 以降) の更新プログラムで NCSI の動作改善が含まれています。</p>
+<p>2021 年 8 月 10 日の更新プログラムは以下です。これ以降の更新プログラムを適用して、改善が見られるか確認ください。</p>
+<ul>
+<li>Windows 10 Version 2004, 20H2, 21H1 : <a target="_blank" rel="noopener" href="https://support.microsoft.com/en-us/topic/august-10-2021-kb5005033-os-builds-19041-1165-19042-1165-and-19043-1165-b4c77d08-435a-4833-b9f7-e092372079a4">August 10, 2021—KB5005033 (OS Builds 19041.1165, 19042.1165, and 19043.1165)</a></li>
+<li>Windows 10 Version 1909 : <a target="_blank" rel="noopener" href="https://support.microsoft.com/en-us/topic/august-10-2021-kb5005031-os-build-18363-1734-8af726da-a39b-417d-a5fb-670c42d69e78">August 10, 2021—KB5005031 (OS Build 18363.1734)</a></li>
+<li>Windows 10 Version 1809 : <a target="_blank" rel="noopener" href="https://support.microsoft.com/en-us/topic/august-10-2021-kb5005030-os-build-17763-2114-cec503ed-cc09-4641-bdc1-988153e0bd9a">August 10, 2021—KB5005030 (OS Build 17763.2114)</a></li>
+</ul>
+<h3 id="2-グローバル-DNS-を設定"><a href="#2-グローバル-DNS-を設定" class="headerlink" title="(2) グローバル DNS を設定"></a>(2) グローバル DNS を設定</h3><p>Windows 10 Version 1903, 1909, 2004, 20H2, 21H1 (*) で、プロキシ経由での HTTP プローブを行うためには、グローバル DNS (UseGlobalDns) の有効化が必要となることがあります。<br>以下の Blog を参照して設定ください。</p>
+<p>参考 : <a href="https://jpwinsup.github.io/blog/2021/04/13/Networking/NCSI/NoInternetAccessforWindows10/">Windows 10 でネットワーク アイコンが “インターネット アクセスなし” となる事象について</a></p>
+<p>(*) Windows 10 Version 2004, 20H2, 21H1 で 2021 年 8 月 10 日以降 (2021 年 7 月の Preview 以降) の更新プログラムを適用済みの場合は、グローバル DNS の有効化は必要ありません。</p>
+<h3 id="3-パッシブ-プローブの判定基準の変更"><a href="#3-パッシブ-プローブの判定基準の変更" class="headerlink" title="(3) パッシブ プローブの判定基準の変更"></a>(3) パッシブ プローブの判定基準の変更</h3><p>パッシブ プローブでは、ネットワーク通信パケットのホップ数をインターネット アクセスの判定条件として利用します。<br>既定では 8 ホップ以上をインターネット アクセスと判定しますが、以下のレジストリを追加することで判定条件を変更することができます。</p>
+<p>レジストリ設定 :<br>  キー : HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\NlaSvc\Parameters\Internet<br>  名前 : MinimumInternetHopCount<br>  設定値 : 1 (デフォルト値 : 8)<br>  種類 : DWORD<br>  (*) 設定を追加後、OS 再起動が必要です。</p>
+<h3 id="4-プロキシの認証対象から除外"><a href="#4-プロキシの認証対象から除外" class="headerlink" title="(4) プロキシの認証対象から除外"></a>(4) プロキシの認証対象から除外</h3><p>プロキシが認証要求を行う環境では、NCSI の HTTP プローブが影響を受ける場合があります。<br>以下の HTTP プローブの宛先サイトはプロキシで認証を要求しないように構成する必要があります。</p>
+<p>Windows 10 Version 1607 以降 :<br>  IPv4 の場合 : <a target="_blank" rel="noopener" href="http://www.msftconnecttest.com/connecttest.txt">http://www.msftconnecttest.com/connecttest.txt</a><br>  IPv6 の場合 : <a target="_blank" rel="noopener" href="http://ipv6.msftconnecttest.com/connecttest.txt">http://ipv6.msftconnecttest.com/connecttest.txt</a></p>
+<p>Windows 10 Version 1511 以前 :<br>  IPv4 の場合 : <a target="_blank" rel="noopener" href="http://www.msftncsi.com/ncsi.txt">http://www.msftncsi.com/ncsi.txt</a><br>  IPv6 の場合 : <a target="_blank" rel="noopener" href="http://ipv6.msftncsi.com/ncsi.txt">http://ipv6.msftncsi.com/ncsi.txt</a></p>
+<h2 id="5-情報採取手順"><a href="#5-情報採取手順" class="headerlink" title="5. 情報採取手順"></a>5. 情報採取手順</h2><p>上記の対応策を実施しても効果が見られない場合などは、以下の情報を採取して弊社サポートにお問い合わせください。</p>
+<p><a href="https://jpwinsup.github.io/mslog/networking/ncsi/ncsi-no-internet.html">タスク バーのネットワーク アイコンに黄色の警告マークまたは地球儀アイコンが表示される事象の調査に必要な資料について</a></p>
+<hr>
+<p>更新履歴<br>2021/09/30 : 本 Blog の公開<br>2023/03/30 : 「3. 切り分け方法」の「(2) HTTP プローブ先へのアクセス可否の確認」の内容を更新</p>
+<p>[特記事項]<br>本情報の内容 (添付文書、リンク先などを含む) は、作成日時点でのものであり、予告なく変更される場合があります。</p>
+
+      
+      
+    </div>
+    <footer class="article-footer">
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/blog/2021/10/03/UserInterfaceAndApps/LanguageSupport_IME/previous_ime/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">次の記事</strong>
+      <div class="article-nav-title">
+        
+          以前のバージョンの Microsoft IME のご使用について
+        
+      </div>
+    </a>
+  
+  
+    <a href="/blog/2021/09/29/UserInterfaceAndApps/SrvMngWithEdge/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">前の記事</strong>
+      <div class="article-nav-title">Windows Server 2022 において、サーバー マネージャー上に edgeupdate サービスに関する警告が表示される</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">カテゴリ</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Activation/">Activation</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Activation/ESU/">ESU</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Activation/security-SPP/">security-SPP</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/">Active Directory</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Authentication/">Authentication</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/DFSR/">DFSR</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/FunctionalLevel/">FunctionalLevel</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Group-Policy/">Group Policy</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Promotion-and-Demotion/">Promotion and Demotion</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/User-Profile/">User Profile</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Windows-Hello/">Windows Hello</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Windows-Time-Service/">Windows Time Service</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/AppLocker/">AppLocker</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/AppLocker/Active-Directory/">Active Directory</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/AppLocker/Microsoft-Intune/">Microsoft Intune</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Deployment/">Deployment</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Deployment/Feature-on-demand/">Feature on demand</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Deployment/Sysprep/">Sysprep</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Failover-Clustering/">Failover Clustering</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Failover-Clustering/Configuration-and-Management/">Configuration and Management</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/FileServices/">FileServices</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/FileServices/FTP/">FTP</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/FileServices/SMB/">SMB</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Hyper-V/">Hyper-V</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Hyper-V/Configuration-and-Management/">Configuration and Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Hyper-V/Migration/">Migration</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Microsoft-Connected-Cache/">Microsoft Connected Cache</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/">Networking</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/BITS/">BITS</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/Bluetooth/">Bluetooth</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/DHCP/">DHCP</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/DNS/">DNS</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/Firewall/">Firewall</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/LBFO/">LBFO</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/NCSI/">NCSI</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/NetworkInterface/">NetworkInterface</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/Proxy/">Proxy</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/TCPIP/">TCPIP</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/OpenSSH/">OpenSSH</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/">Performance</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/Hang-up-BSoD/">Hang-up/BSoD</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/No-Boot/">No Boot</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/Slow-Response/">Slow Response</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/System-Resource/">System Resource</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/Tools/">Tools</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/">Public Key Infrastructure</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Certificate-Authority/">Certificate Authority</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Certificate-Management/">Certificate Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Code-Signing/">Code Signing</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/SSL-TLS-Communication/">SSL TLS Communication</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/SSL-TLS-Connection/">SSL TLS Connection</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Smart-Card-Logon/">Smart Card Logon</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/">Remote Desktop</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/Azure-Virtual-Desktop-AVD/">Azure Virtual Desktop (AVD)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/Remote-Desktop-Service-RDS/">Remote Desktop Service (RDS)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/Windows-Virtual-Desktop-WVD/">Windows Virtual Desktop (WVD)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/RemoteAccess/">RemoteAccess</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/RemoteAccess/%E3%83%80%E3%82%A4%E3%83%A4%E3%83%AB%E3%82%A2%E3%83%83%E3%83%97%E6%8E%A5%E7%B6%9A/">ダイヤルアップ接続</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Setup/">Setup</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Setup/Feature-Update-FU/">Feature Update (FU)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Shell/">Shell</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Shell/Explorer/">Explorer</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/">Storage</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/Backup/">Backup</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/FSRM/">FSRM</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/Management/">Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/StorageMigrationService/">StorageMigrationService</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/UEFI/">UEFI</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/UEFI/Secure-Boot/">Secure Boot</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/">User Interface and Apps</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Command-Prompt/">Command Prompt</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/EventLog/">EventLog</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Language-Support/">Language Support</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Microsoft-Store/">Microsoft Store</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Performance/">Performance</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/PowerShell/">PowerShell</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Printing-%E5%8D%B0%E5%88%B7/">Printing (印刷)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Server-Management/">Server Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Taskscheduler/">Taskscheduler</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Windows-Management-Instrumentation/">Windows Management Instrumentation</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps-Language-support/">User Interface and Apps - Language support</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-365/">Windows 365</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Admin-Center/">Windows Admin Center</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Search/">Windows Search</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/">Windows Update</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Delivery-Optimization-DO/">Delivery Optimization (DO)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Feature-Update-FU/">Feature Update (FU)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Quality-Update-QU/">Quality Update (QU)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Windows-Update-Agent/">Windows Update Agent</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Windows-Update-Agent-WUA/">Windows Update Agent (WUA)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/">WirelessNetwork</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/NPS/">NPS</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/Wi-Fi/">Wi-Fi</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/%E3%83%A2%E3%83%90%E3%82%A4%E3%83%AB-%E3%83%96%E3%83%AD%E3%83%BC%E3%83%89%E3%83%90%E3%83%B3%E3%83%89%E6%8E%A5%E7%B6%9A-LTE/">モバイル ブロードバンド接続 (LTE)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/%E7%B5%84%E7%B9%94%E7%B4%B9%E4%BB%8B%E3%83%96%E3%83%AD%E3%82%B0%EF%BC%88Windows-Commercial%EF%BC%89/">組織紹介ブログ（Windows Commercial）</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最近の投稿</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/blog/2026/02/16/ActiveDirectory/GroupPolicy/UacPolicyIsEnabled/">「ユーザー アカウント制御：ビルトイン Administrator アカウントのための管理者承認モード」ポリシーが有効になる動作ついて</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/02/15/UserInterfaceAndApps/Printing/printer-queue-app-preview/">印刷キューアプリのプレビュー機能について</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/02/02/ActiveDirectory/Authentication/kerberos-rc4-for-service-account-ticket-issuance-changes-related-to-cve-2026-20833/">CVE‑2026‑20833 への対応とその影響について [KB5073381]</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/01/12/Hyper-V/vmwp-does-not-save-the-RTC-value-of-a-virtual-machine-when-performing-Live-Migration/">ライブ マイグレーション後の再起動でゲスト OS の時刻がずれる場合がある</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/01/07/WindowsUpdate/FU/fublog-txt/">ISO メディア経由かつ動的更新無効な状態で Windows 11 バージョン 24H2 または 25H2 へのアップグレードが失敗 (0x8007042B 0x2000D) する事象と対策について</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">アーカイブ</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2026/02/">2026 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2026/01/">2026 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/12/">2025 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/11/">2025 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/10/">2025 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/09/">2025 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/08/">2025 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/07/">2025 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/06/">2025 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/05/">2025 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/04/">2025 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/03/">2025 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/02/">2025 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/01/">2025 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/12/">2024 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/11/">2024 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/10/">2024 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/09/">2024 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/08/">2024 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/07/">2024 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/06/">2024 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/05/">2024 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/04/">2024 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/03/">2024 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/02/">2024 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/01/">2024 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/12/">2023 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/11/">2023 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/10/">2023 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/09/">2023 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/08/">2023 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/07/">2023 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/06/">2023 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/05/">2023 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/04/">2023 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/03/">2023 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/02/">2023 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/01/">2023 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/12/">2022 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/11/">2022 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/10/">2022 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/09/">2022 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/08/">2022 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/07/">2022 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/06/">2022 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/05/">2022 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/04/">2022 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/03/">2022 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/02/">2022 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/01/">2022 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/12/">2021 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/11/">2021 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/10/">2021 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/09/">2021 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/08/">2021 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/07/">2021 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/06/">2021 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/05/">2021 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/04/">2021 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/03/">2021 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/02/">2021 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/01/">2021 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/12/">2020 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/11/">2020 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/10/">2020 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/07/">2020 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/03/">2020 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2019/03/">2019 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/11/">2018 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/10/">2018 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/09/">2018 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/08/">2018 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/07/">2018 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/06/">2018 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/04/">2018 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/02/">2018 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/12/">2017 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/11/">2017 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/09/">2017 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/05/">2017 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/03/">2017 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/02/">2017 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2016/08/">2016 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2016/05/">2016 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2014/03/">2014 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2012/02/">2012 / 02</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2026 Microsoft Japan Windows Technology Support Team<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/blog/" class="mobile-nav-link">Home</a>
+  
+    <a href="/blog/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+<script src="/blog/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

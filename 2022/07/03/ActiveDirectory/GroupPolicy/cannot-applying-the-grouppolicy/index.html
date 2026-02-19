@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-180187723-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-180187723-1');
+</script>
+<!-- End Google Analytics -->
+
+  
+  <title>GPO が適用されないときのトラブルシューティング手法と対処例 | Microsoft Japan Windows Technology Support Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="本記事はマイクロソフト社員によって公開されております。 こんにちは。Windows Commercial Support Directory Services チームです。 最近、「ドメイン コントローラーで GPO を設定したが、クライアントに適用されない」というお問合せをよくいただいております。本ブログでは、GPO が適用されないときの、トラブルシューティングの手法と対処例をいくつかご紹介いた">
+<meta property="og:type" content="article">
+<meta property="og:title" content="GPO が適用されないときのトラブルシューティング手法と対処例">
+<meta property="og:url" content="https://jpwinsup.github.io/blog/2022/07/03/ActiveDirectory/GroupPolicy/cannot-applying-the-grouppolicy/index.html">
+<meta property="og:site_name" content="Microsoft Japan Windows Technology Support Blog">
+<meta property="og:description" content="本記事はマイクロソフト社員によって公開されております。 こんにちは。Windows Commercial Support Directory Services チームです。 最近、「ドメイン コントローラーで GPO を設定したが、クライアントに適用されない」というお問合せをよくいただいております。本ブログでは、GPO が適用されないときの、トラブルシューティングの手法と対処例をいくつかご紹介いた">
+<meta property="og:locale" content="ja_JP">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2022/07/03/ActiveDirectory/GroupPolicy/cannot-applying-the-grouppolicy/image-e.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2022/07/03/ActiveDirectory/GroupPolicy/cannot-applying-the-grouppolicy/image-a.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2022/07/03/ActiveDirectory/GroupPolicy/cannot-applying-the-grouppolicy/image-b.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2022/07/03/ActiveDirectory/GroupPolicy/cannot-applying-the-grouppolicy/image-c.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2022/07/03/ActiveDirectory/GroupPolicy/cannot-applying-the-grouppolicy/image-d.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2022/07/03/ActiveDirectory/GroupPolicy/cannot-applying-the-grouppolicy/image1.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2022/07/03/ActiveDirectory/GroupPolicy/cannot-applying-the-grouppolicy/image2.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2022/07/03/ActiveDirectory/GroupPolicy/cannot-applying-the-grouppolicy/image3.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2022/07/03/ActiveDirectory/GroupPolicy/cannot-applying-the-grouppolicy/image4.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2022/07/03/ActiveDirectory/GroupPolicy/cannot-applying-the-grouppolicy/image5.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2022/07/03/ActiveDirectory/GroupPolicy/cannot-applying-the-grouppolicy/image-f.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2022/07/03/ActiveDirectory/GroupPolicy/cannot-applying-the-grouppolicy/image6.png">
+<meta property="article:published_time" content="2022-07-03T02:59:07.000Z">
+<meta property="article:modified_time" content="2026-02-19T02:53:58.331Z">
+<meta property="article:author" content="Microsoft Japan Windows Technology Support Team">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://jpwinsup.github.io/blog/2022/07/03/ActiveDirectory/GroupPolicy/cannot-applying-the-grouppolicy/image-e.png">
+  
+    <link rel="alternate" href="/blog/atom.xml" title="Microsoft Japan Windows Technology Support Blog" type="application/atom+xml">
+  
+
+  <link rel="icon" href="/blog/favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="/blog/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/blog/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/blog/favicon-16x16.png">
+  <link rel="manifest" href="/blog/site.webmanifest">
+  <link rel="mask-icon" href="/blog/safari-pinned-tab.svg" color="#5bbad5">
+  <meta name="msapplication-TileColor" content="#ffffff">
+  <meta name="theme-color" content="#ffffff">
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/blog/css/style.css">
+
+<meta name="generator" content="Hexo 5.2.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="site-header-logo"></div>
+  <div id="site-header-blog-wrapper"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        <div id="ms-logo"></div>
+        
+          <a class="main-nav-link" href="/blog/">Home</a>
+        
+          <a class="main-nav-link" href="/blog/archives">Archives</a>
+        
+        <a class="main-nav-link" target="_blank" rel="noopener" href="https://cssjpn.github.io/">サポート情報</a>
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/blog/atom.xml" title="RSSフィード"></a>
+        
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//www.bing.com/search" method="get" accept-charset="UTF-8" name="bing-search" onsubmit="var f=this;if(f['q'].value){var searchUrl =  'https://www.bing.com/search?q=' +  encodeURIComponent(f['q'].value + ' site:' + f['sitesearch'].value) ;window.open(searchUrl, 'blank') };return false;" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="検索"><button type="submit" id="nav-search-btn" class="search-form-submit"></button><input type="hidden" name="sitesearch" value="https://jpwinsup.github.io/blog"></form>
+      </div>
+    </div>
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/blog/" id="logo">Microsoft Japan Windows Technology Support Blog</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/blog/" id="subtitle">日本マイクロソフト Windows Support チームによる、サポート情報 Blog です。</a>
+        </h2>
+      
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-ActiveDirectory/GroupPolicy/cannot-applying-the-grouppolicy" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    
+    
+      <header class="article-header-single">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      GPO が適用されないときのトラブルシューティング手法と対処例
+    </h1>
+  
+
+      </header>
+      <div class="article-share">
+        Last Update: 
+        <a href="/blog/2022/07/03/ActiveDirectory/GroupPolicy/cannot-applying-the-grouppolicy/" class="article-date-single">
+  <time datetime="2022-07-03T02:59:07.000Z" itemprop="datePublished">2022-07-03</time>
+</a>
+        
+  <div class="article-category">
+    <a class="article-category-link" href="/blog/categories/Active-Directory/">Active Directory</a>►<a class="article-category-link" href="/blog/categories/Active-Directory/Group-Policy/">Group Policy</a>
+  </div>
+
+        
+        <a href="https://github.com/jpwinsup/blog/issues/new?title=&body=%EF%BB%BF%0A%0A---%0A%0A%23%23%23%23+Document+Details%0A%0A*+Article+ID%3A+f46379b4-e06c-562a-8a59-87928e1236e2%0A*+TITLE%3A+GPO+%E3%81%8C%E9%81%A9%E7%94%A8%E3%81%95%E3%82%8C%E3%81%AA%E3%81%84%E3%81%A8%E3%81%8D%E3%81%AE%E3%83%88%E3%83%A9%E3%83%96%E3%83%AB%E3%82%B7%E3%83%A5%E3%83%BC%E3%83%86%E3%82%A3%E3%83%B3%E3%82%B0%E6%89%8B%E6%B3%95%E3%81%A8%E5%AF%BE%E5%87%A6%E4%BE%8B%0A*+URL+https%3A%2F%2Fjpwinsup.github.io%2Fblog%2F2022%2F07%2F03%2FActiveDirectory%2FGroupPolicy%2Fcannot-applying-the-grouppolicy%2F%0A*+SourceFileName%3A+source%2F_posts%2FActiveDirectory%2FGroupPolicy%2Fcannot-applying-the-grouppolicy.md%0A" class="article-github-issue-link" target="_blank" rel="noopener noreferrer">feedback</a>
+        
+        <a data-url="https://jpwinsup.github.io/blog/2022/07/03/ActiveDirectory/GroupPolicy/cannot-applying-the-grouppolicy/" data-id="cmlsvjdb1006tru3y4hb13jpm" class="article-share-link">共有</a>
+      </div>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>本記事はマイクロソフト社員によって公開されております。</p>
+<p>こんにちは。Windows Commercial Support Directory Services チームです。</p>
+<p>最近、「ドメイン コントローラーで GPO を設定したが、クライアントに適用されない」というお問合せをよくいただいております。本ブログでは、GPO が適用されないときの、トラブルシューティングの手法と対処例をいくつかご紹介いたします。<br><br></p>
+<h2 id="gpresult-レポートからエラーの状況を確認する"><a href="#gpresult-レポートからエラーの状況を確認する" class="headerlink" title="gpresult レポートからエラーの状況を確認する"></a>gpresult レポートからエラーの状況を確認する</h2><p>GPO が適用されない場合、クライアントの gpresult をご確認いただくことで原因に素早く辿りつける場合がございます。適用先がコンピューターかユーザーかによって、gpresult の取得手順がやや異なります。</p>
+<p>・ コンピューター ポリシーの場合<br>GPO が適用されないコンピューターに管理者権限を持つアカウントでログオンします。<br>コマンド プロンプト (管理者) で、以下のコマンドを実行します。</p>
+<p>gpresult /H &lt;保存先&gt;</p>
+<p>例) デスクトップに gpresult を保存する場合<br>gpresult /H %USERPROFILE%\desktop\compolicy.html</p>
+<p>・ ユーザー ポリシーの場合<br>GPO が適用されないユーザー アカウントでコンピューターへログオンします。<br>コマンド プロンプトをユーザー権限で起動し、以下のコマンドを実行します。</p>
+<p>gpresult /H &lt;保存先&gt;</p>
+<p>例) デスクトップに gpresult を保存する場合<br>gpresult /H %USERPROFILE%\desktop\userpolicy.html<br><br></p>
+<p>gpresult レポートが作成できたら、[適用された GPO] と [拒否された GPO] を確認し、対象の GPO が含まれているか確認します。</p>
+<p>■ [適用された GPO] と [拒否された GPO] のどちらにも、対象の GPO が含まれていない場合</p>
+<img src="/blog/2022/07/03/ActiveDirectory/GroupPolicy/cannot-applying-the-grouppolicy/image-e.png" class="">
+
+<p>対処例 :<br>・後述の「1. GPO が正しくリンクされているか」をご確認ください。<br>・後述の「2. GPO の適用先は正しいか」をご確認ください。<br>・ クライアント と ドメイン コントローラー間でネットワーク接続が行えない場合にも、GPO が適用されないため、以下の参考情報に記載のあるポートで通信が行える環境であるかご確認ください。</p>
+<p><a target="_blank" rel="noopener" href="https://social.technet.microsoft.com/Forums/ja-JP/f6126a91-6d96-41d2-ab2a-0b75bf03fdd8/12489125131245212531298722265912391203512999212373124281242712"> ドメイン環境で使用されるポートについて </a><br>参考箇所) 1. ドメイン メンバーが利用するポート<br><br></p>
+<p>■ [拒否された GPO] に対象 GPO が含まれており、拒否された理由が “アクセス拒否” となっている場合</p>
+<img src="/blog/2022/07/03/ActiveDirectory/GroupPolicy/cannot-applying-the-grouppolicy/image-a.png" class="">
+
+<p>対処例 :<br>後述の「3. セキュリティ フィルターで適用が拒否されていないか」をご確認ください。<br><br></p>
+<p>■ [拒否された GPO] に対象 GPO が含まれており、拒否された理由が “アクセスできません。空であるか、無効になっています” となっている場合</p>
+<img src="/blog/2022/07/03/ActiveDirectory/GroupPolicy/cannot-applying-the-grouppolicy/image-b.png" class="">
+
+<p>対処例 :<br>後述の「4. GPO の読み取り権限が付与されているか」をご確認ください。<br><br></p>
+<p>■ [拒否された GPO] に対象 GPO が含まれており、拒否された理由が “False である WMI フィルター” となっている場合</p>
+<img src="/blog/2022/07/03/ActiveDirectory/GroupPolicy/cannot-applying-the-grouppolicy/image-c.png" class="">
+
+<p>対処例 :<br>後述の「5. WMI フィルターで適用が拒否されていないか」をご確認ください。<br><br></p>
+<p>■ [拒否された GPO] に対象 GPO が含まれており、拒否された理由が “無効なリンク” となっている場合</p>
+<img src="/blog/2022/07/03/ActiveDirectory/GroupPolicy/cannot-applying-the-grouppolicy/image-d.png" class="">
+
+<p>対処例 :<br>後述の「6. リンクが無効になっていないか」をご確認ください。<br><br></p>
+<h2 id="1-GPO-が正しくリンクされているか"><a href="#1-GPO-が正しくリンクされているか" class="headerlink" title="1. GPO が正しくリンクされているか"></a>1. GPO が正しくリンクされているか</h2><p>GPO はドメインにリンク ( 紐づけ ) することはあまり無く、特定の OU にリンクすることが多いと思います。適用対象のユーザーまたはコンピューターが所属する OU に、GPO が正しくリンクされているかご確認ください。</p>
+<p>GPO が正しくリンクされているかは、ドメイン コントローラーの [グループ ポリシーの管理] エディターから確認できます。</p>
+<img src="/blog/2022/07/03/ActiveDirectory/GroupPolicy/cannot-applying-the-grouppolicy/image1.png" class="">
+
+<p>適用対象のユーザーまたはコンピューターが所属する OU に、GPO が正しくリンクされていることをご確認ください。上の画像では、「testOU」に “testgpo” がリンクされています。</p>
+<br>
+
+
+<h2 id="2-GPO-の適用先は正しいか"><a href="#2-GPO-の適用先は正しいか" class="headerlink" title="2. GPO の適用先は正しいか"></a>2. GPO の適用先は正しいか</h2><p>グループ ポリシーには、大きく分けて 2 つのポリシーがあります。</p>
+<p>ユーザーの構成 : ユーザーを対象に適用する、ユーザー向けのポリシー<br>コンピューターの構成 : コンピューターを対象に適用する、コンピューター向けのポリシー</p>
+<img src="/blog/2022/07/03/ActiveDirectory/GroupPolicy/cannot-applying-the-grouppolicy/image2.png" class="">
+
+<p>原則として、ユーザーに対して [コンピューターの構成] を適用したり、コンピューターに対して [ユーザーの構成] を適用することはできません。そのような構成になっていないかご確認ください。（ ループバックと呼ばれる例外がありますが、ここでは割愛します ）<br><br></p>
+<h2 id="3-セキュリティ-フィルターで適用が拒否されていないか"><a href="#3-セキュリティ-フィルターで適用が拒否されていないか" class="headerlink" title="3. セキュリティ フィルターで適用が拒否されていないか"></a>3. セキュリティ フィルターで適用が拒否されていないか</h2><p>OU に正しく GPO がリンクされていたとしても、OU 内に存在するユーザーやコンピューターに、GPO が適用されない場合があります。その一般的な例として、セキュリティ フィルターがあります。セキュリティ フィルターとは、特定のグループ等に所属しているユーザーやコンピューターのみ、GPO を適用するというオプション設定になります。　</p>
+<p>既定では、”Authenticated Users” が設定されており、すべてのユーザーやコンピューターが適用されるようになっていますが、”Authenticated Users” の代わりに特定のグループを指定することで、OU 内に所属している場合でも、特定グループのユーザーまたはコンピューターのみに GPO が適用されるようになります。</p>
+<img src="/blog/2022/07/03/ActiveDirectory/GroupPolicy/cannot-applying-the-grouppolicy/image3.png" class="">
+
+<p>セキュリティ フィルターの観点では、以下の 2 つをご確認ください。</p>
+<p>・ セキュリティ フィルターに、適用したいユーザーまたはコンピューターが所属するグループが指定されていること。上の画像では testgroup に所属しているプリンシパルのみに GPO を適用するよう、セキュリティ フィルターが構成されています。<br>・ 適用したいユーザーまたはコンピューターが指定したグループに所属していること。<br><br></p>
+<h2 id="4-GPO-の読み取り権限が付与されているか"><a href="#4-GPO-の読み取り権限が付与されているか" class="headerlink" title="4. GPO の読み取り権限が付与されているか"></a>4. GPO の読み取り権限が付与されているか</h2><p>OU に正しく GPO がリンクされていたとしても、OU 内に存在するユーザーやコンピューターが、 GPO の読み取り権限を保持していない場合、GPO の適用に失敗します。既定で “Authenticated Users” が含まれておりますが、セキュリティ フィルターを使用している GPO の場合は、既定の “Authenticated Users” が削除されるため、読み取り権限を手動で付与する必要があります。</p>
+<p>GPO の権限については、ドメイン コントローラーの [グループ ポリシーの管理] エディターから確認できます。</p>
+<img src="/blog/2022/07/03/ActiveDirectory/GroupPolicy/cannot-applying-the-grouppolicy/image4.png" class="">
+
+<p>適用したいポリシーが、[ユーザーの構成] か [コンピューターの構成] かによって、GPO の読み取り権限が必要な対象が異なります。</p>
+<p>・ コンピューターの構成 : 「GPO 適用したいコンピューター ( またはグループ ) 」が読み取り権限を保持していること<br>・ ユーザーの構成 : 「GPO 適用したいユーザー ( またはグループ ) 」と「ユーザーがログオンしているコンピューター ( またはグループ )」が読み取り権限を保持していること　<br>※　ユーザーだけでなく、ユーザーがログオンしているコンピューターも GPO を読み取れる必要があります<br><br></p>
+<h2 id="5-WMI-フィルターで適用が拒否されていないか"><a href="#5-WMI-フィルターで適用が拒否されていないか" class="headerlink" title="5. WMI フィルターで適用が拒否されていないか"></a>5. WMI フィルターで適用が拒否されていないか</h2><p>OU に正しく GPO がリンクされていたとしても、OU 内に存在するユーザーやコンピューターに、GPO が適用されない場合があります。その一般的な例として、WMI フィルターがあります。WMI フィルターとは、GPO にあらかじめセットした WMI クエリを GPO 適用処理時にクライアントに実行させ、その実行結果によって、GPO を適用するかどうか判定するオプションとなります。例えば、「特定の OS バージョン」のみ応答を返す WMI フィルターを GPO にセットしておき、特定バージョンのコンピューターのみに適用させるといった WMI フィルターなどがございます。</p>
+<p>WMI フィルターは、ドメイン コントローラーの [グループ ポリシーの管理] エディターから確認できます。</p>
+<img src="/blog/2022/07/03/ActiveDirectory/GroupPolicy/cannot-applying-the-grouppolicy/image5.png" class="">
+
+<p>上の画像は、testwmifilter という WMI フィルターをセットしている例となります。</p>
+<p>WMI フィルターの観点では、主に以下のような内容をご確認ください。</p>
+<p>・ WMI フィルターを使用する想定はないが、意図せず WMI フィルターがセットされていないか<br>・ 誤った WMI フィルターをセットしていないこと<br><br></p>
+<h4 id="補足情報"><a href="#補足情報" class="headerlink" title="補足情報"></a>補足情報</h4><p>意図した WMI フィルターがセットされているが、そのフィルターで GPO が適用されない場合、WMI フィルターのクエリがクライアントで True として判定されていない可能性がございます。設定した WMI クエリがクライアントで True として判定されるかを確認したい場合は、グループ ポリシーの WMI フィルターに設定して GPO の適用結果を見る、という方法でも問題はございませんが、手間がかかってしまいます。</p>
+<p>wbemtest というツールを使用することで、比較的簡単に WMI クエリの結果を知ることができますのでご紹介いたします。</p>
+<p>a) WMI クエリを実行するクライアントにログオンします。<br>b) [ファイル名を指定して実行] に “wbemtest” と入力し、Enter キーを押下します。<br>c) [接続] をクリックし、名前空間が適切であることを確認の上、[接続]をクリックします。<br>d) [クエリ] をクリックします。<br>e) クエリの入力欄に、実行したい WMI クエリ構文を記述し、[適用] をクリックします。<br>f) 以下の図のように何らかの応答が返ってくれば “True” となります。 何も応答が無ければ、”False” となります。</p>
+<img src="/blog/2022/07/03/ActiveDirectory/GroupPolicy/cannot-applying-the-grouppolicy/image-f.png" class="">
+<br>
+
+
+<h2 id="6-リンクが無効になっていないか"><a href="#6-リンクが無効になっていないか" class="headerlink" title="6. リンクが無効になっていないか"></a>6. リンクが無効になっていないか</h2><p>適用対象の OU にリンクされているものの、リンクが無効状態になっていると、GPO が適用されません。</p>
+<p>リンクの状態は、ドメイン コントローラーの [グループ ポリシーの管理] エディターから確認できます。</p>
+<img src="/blog/2022/07/03/ActiveDirectory/GroupPolicy/cannot-applying-the-grouppolicy/image6.png" class="">
+
+<p>リンクが有効になっていることをご確認ください。右ペインでリンクの有効化が “はい” になっていれば、リンクは有効です。<br><br></p>
+<h2 id="留意事項"><a href="#留意事項" class="headerlink" title="留意事項"></a>留意事項</h2><p>ご案内の対処例 はあくまで一例でございます。必ずしも問題の解消をお約束するものでは無いこと、予めご理解をいただきますようお願い申し上げます。</p>
+<h2 id="更新履歴"><a href="#更新履歴" class="headerlink" title="更新履歴"></a>更新履歴</h2><p>2022/7/3 : 本ブログの公開</p>
+
+      
+      
+    </div>
+    <footer class="article-footer">
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/blog/2022/07/04/Storage/Management/DiskFullError-by-USNJournal/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">次の記事</strong>
+      <div class="article-nav-title">
+        
+          空き容量があるにもかかわらず容量不足のエラーによりファイル作成が失敗する事象について
+        
+      </div>
+    </a>
+  
+  
+    <a href="/blog/2022/06/24/Hyper-V/ConfigurationAndManagement/VmSwitch-Event-119/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">前の記事</strong>
+      <div class="article-nav-title">SR-IOV を有効にした仮想スイッチを仮想マシンに割り当てた際に Microsoft-Windows-Hyper-V-VmSwitch 警告イベント ID 119 が記録される</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">カテゴリ</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Activation/">Activation</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Activation/ESU/">ESU</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Activation/security-SPP/">security-SPP</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/">Active Directory</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Authentication/">Authentication</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/DFSR/">DFSR</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/FunctionalLevel/">FunctionalLevel</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Group-Policy/">Group Policy</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Promotion-and-Demotion/">Promotion and Demotion</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/User-Profile/">User Profile</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Windows-Hello/">Windows Hello</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Windows-Time-Service/">Windows Time Service</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/AppLocker/">AppLocker</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/AppLocker/Active-Directory/">Active Directory</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/AppLocker/Microsoft-Intune/">Microsoft Intune</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Deployment/">Deployment</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Deployment/Feature-on-demand/">Feature on demand</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Deployment/Sysprep/">Sysprep</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Failover-Clustering/">Failover Clustering</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Failover-Clustering/Configuration-and-Management/">Configuration and Management</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/FileServices/">FileServices</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/FileServices/FTP/">FTP</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/FileServices/SMB/">SMB</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Hyper-V/">Hyper-V</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Hyper-V/Configuration-and-Management/">Configuration and Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Hyper-V/Migration/">Migration</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Microsoft-Connected-Cache/">Microsoft Connected Cache</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/">Networking</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/BITS/">BITS</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/Bluetooth/">Bluetooth</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/DHCP/">DHCP</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/DNS/">DNS</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/Firewall/">Firewall</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/LBFO/">LBFO</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/NCSI/">NCSI</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/NetworkInterface/">NetworkInterface</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/Proxy/">Proxy</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/TCPIP/">TCPIP</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/OpenSSH/">OpenSSH</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/">Performance</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/Hang-up-BSoD/">Hang-up/BSoD</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/No-Boot/">No Boot</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/Slow-Response/">Slow Response</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/System-Resource/">System Resource</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/Tools/">Tools</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/">Public Key Infrastructure</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Certificate-Authority/">Certificate Authority</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Certificate-Management/">Certificate Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Code-Signing/">Code Signing</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/SSL-TLS-Communication/">SSL TLS Communication</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/SSL-TLS-Connection/">SSL TLS Connection</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Smart-Card-Logon/">Smart Card Logon</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/">Remote Desktop</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/Azure-Virtual-Desktop-AVD/">Azure Virtual Desktop (AVD)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/Remote-Desktop-Service-RDS/">Remote Desktop Service (RDS)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/Windows-Virtual-Desktop-WVD/">Windows Virtual Desktop (WVD)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/RemoteAccess/">RemoteAccess</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/RemoteAccess/%E3%83%80%E3%82%A4%E3%83%A4%E3%83%AB%E3%82%A2%E3%83%83%E3%83%97%E6%8E%A5%E7%B6%9A/">ダイヤルアップ接続</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Setup/">Setup</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Setup/Feature-Update-FU/">Feature Update (FU)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Shell/">Shell</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Shell/Explorer/">Explorer</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/">Storage</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/Backup/">Backup</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/FSRM/">FSRM</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/Management/">Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/StorageMigrationService/">StorageMigrationService</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/UEFI/">UEFI</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/UEFI/Secure-Boot/">Secure Boot</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/">User Interface and Apps</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Command-Prompt/">Command Prompt</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/EventLog/">EventLog</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Language-Support/">Language Support</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Microsoft-Store/">Microsoft Store</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Performance/">Performance</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/PowerShell/">PowerShell</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Printing-%E5%8D%B0%E5%88%B7/">Printing (印刷)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Server-Management/">Server Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Taskscheduler/">Taskscheduler</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Windows-Management-Instrumentation/">Windows Management Instrumentation</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps-Language-support/">User Interface and Apps - Language support</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-365/">Windows 365</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Admin-Center/">Windows Admin Center</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Search/">Windows Search</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/">Windows Update</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Delivery-Optimization-DO/">Delivery Optimization (DO)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Feature-Update-FU/">Feature Update (FU)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Quality-Update-QU/">Quality Update (QU)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Windows-Update-Agent/">Windows Update Agent</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Windows-Update-Agent-WUA/">Windows Update Agent (WUA)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/">WirelessNetwork</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/NPS/">NPS</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/Wi-Fi/">Wi-Fi</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/%E3%83%A2%E3%83%90%E3%82%A4%E3%83%AB-%E3%83%96%E3%83%AD%E3%83%BC%E3%83%89%E3%83%90%E3%83%B3%E3%83%89%E6%8E%A5%E7%B6%9A-LTE/">モバイル ブロードバンド接続 (LTE)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/%E7%B5%84%E7%B9%94%E7%B4%B9%E4%BB%8B%E3%83%96%E3%83%AD%E3%82%B0%EF%BC%88Windows-Commercial%EF%BC%89/">組織紹介ブログ（Windows Commercial）</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最近の投稿</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/blog/2026/02/16/ActiveDirectory/GroupPolicy/UacPolicyIsEnabled/">「ユーザー アカウント制御：ビルトイン Administrator アカウントのための管理者承認モード」ポリシーが有効になる動作ついて</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/02/15/UserInterfaceAndApps/Printing/printer-queue-app-preview/">印刷キューアプリのプレビュー機能について</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/02/02/ActiveDirectory/Authentication/kerberos-rc4-for-service-account-ticket-issuance-changes-related-to-cve-2026-20833/">CVE‑2026‑20833 への対応とその影響について [KB5073381]</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/01/12/Hyper-V/vmwp-does-not-save-the-RTC-value-of-a-virtual-machine-when-performing-Live-Migration/">ライブ マイグレーション後の再起動でゲスト OS の時刻がずれる場合がある</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/01/07/WindowsUpdate/FU/fublog-txt/">ISO メディア経由かつ動的更新無効な状態で Windows 11 バージョン 24H2 または 25H2 へのアップグレードが失敗 (0x8007042B 0x2000D) する事象と対策について</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">アーカイブ</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2026/02/">2026 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2026/01/">2026 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/12/">2025 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/11/">2025 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/10/">2025 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/09/">2025 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/08/">2025 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/07/">2025 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/06/">2025 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/05/">2025 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/04/">2025 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/03/">2025 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/02/">2025 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/01/">2025 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/12/">2024 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/11/">2024 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/10/">2024 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/09/">2024 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/08/">2024 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/07/">2024 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/06/">2024 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/05/">2024 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/04/">2024 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/03/">2024 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/02/">2024 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/01/">2024 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/12/">2023 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/11/">2023 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/10/">2023 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/09/">2023 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/08/">2023 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/07/">2023 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/06/">2023 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/05/">2023 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/04/">2023 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/03/">2023 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/02/">2023 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/01/">2023 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/12/">2022 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/11/">2022 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/10/">2022 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/09/">2022 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/08/">2022 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/07/">2022 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/06/">2022 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/05/">2022 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/04/">2022 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/03/">2022 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/02/">2022 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/01/">2022 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/12/">2021 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/11/">2021 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/10/">2021 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/09/">2021 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/08/">2021 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/07/">2021 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/06/">2021 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/05/">2021 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/04/">2021 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/03/">2021 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/02/">2021 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/01/">2021 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/12/">2020 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/11/">2020 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/10/">2020 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/07/">2020 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/03/">2020 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2019/03/">2019 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/11/">2018 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/10/">2018 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/09/">2018 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/08/">2018 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/07/">2018 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/06/">2018 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/04/">2018 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/02/">2018 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/12/">2017 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/11/">2017 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/09/">2017 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/05/">2017 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/03/">2017 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/02/">2017 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2016/08/">2016 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2016/05/">2016 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2014/03/">2014 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2012/02/">2012 / 02</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2026 Microsoft Japan Windows Technology Support Team<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/blog/" class="mobile-nav-link">Home</a>
+  
+    <a href="/blog/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+<script src="/blog/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-180187723-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-180187723-1');
+</script>
+<!-- End Google Analytics -->
+
+  
+  <title>画面キャプチャー機能 (スクリーンショット) を行う機能の一覧と、動作を抑止する方法について | Microsoft Japan Windows Technology Support Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="本記事はマイクロソフト社員によって公開されております。    こんにちは。Windows サポートチームの木村です。   Windows にはデフォルトで様々な方法で画面キャプチャー (スクリーンショット) を保存することができます。これらの機能は便利な一方で、ユーザー様の業務のなかでは 「画面キャプチャーを取らせたくない」 という場合もあるかと存じます。本記事では、そのようなお客様に向けて、OS">
+<meta property="og:type" content="article">
+<meta property="og:title" content="画面キャプチャー機能 (スクリーンショット) を行う機能の一覧と、動作を抑止する方法について">
+<meta property="og:url" content="https://jpwinsup.github.io/blog/2021/08/30/UserInterfaceAndApps/DisableScreenCapture/index.html">
+<meta property="og:site_name" content="Microsoft Japan Windows Technology Support Blog">
+<meta property="og:description" content="本記事はマイクロソフト社員によって公開されております。    こんにちは。Windows サポートチームの木村です。   Windows にはデフォルトで様々な方法で画面キャプチャー (スクリーンショット) を保存することができます。これらの機能は便利な一方で、ユーザー様の業務のなかでは 「画面キャプチャーを取らせたくない」 という場合もあるかと存じます。本記事では、そのようなお客様に向けて、OS">
+<meta property="og:locale" content="ja_JP">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2021/08/30/UserInterfaceAndApps/DisableScreenCapture/ScreenSketch.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2021/08/30/UserInterfaceAndApps/DisableScreenCapture/xbox.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2021/08/30/UserInterfaceAndApps/DisableScreenCapture/SnippingPSR.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2021/08/30/UserInterfaceAndApps/DisableScreenCapture/AreaCapture.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2021/08/30/UserInterfaceAndApps/DisableScreenCapture/AddFunction.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2021/08/30/UserInterfaceAndApps/DisableScreenCapture/RegEdit.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2021/08/30/UserInterfaceAndApps/DisableScreenCapture/AppLockerPackage.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2021/08/30/UserInterfaceAndApps/DisableScreenCapture/AppLockerEXE.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2021/08/30/UserInterfaceAndApps/DisableScreenCapture/Restrict.png">
+<meta property="article:published_time" content="2021-08-30T00:00:00.000Z">
+<meta property="article:modified_time" content="2026-02-19T02:53:58.817Z">
+<meta property="article:author" content="Microsoft Japan Windows Technology Support Team">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://jpwinsup.github.io/blog/2021/08/30/UserInterfaceAndApps/DisableScreenCapture/ScreenSketch.png">
+  
+    <link rel="alternate" href="/blog/atom.xml" title="Microsoft Japan Windows Technology Support Blog" type="application/atom+xml">
+  
+
+  <link rel="icon" href="/blog/favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="/blog/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/blog/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/blog/favicon-16x16.png">
+  <link rel="manifest" href="/blog/site.webmanifest">
+  <link rel="mask-icon" href="/blog/safari-pinned-tab.svg" color="#5bbad5">
+  <meta name="msapplication-TileColor" content="#ffffff">
+  <meta name="theme-color" content="#ffffff">
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/blog/css/style.css">
+
+<meta name="generator" content="Hexo 5.2.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="site-header-logo"></div>
+  <div id="site-header-blog-wrapper"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        <div id="ms-logo"></div>
+        
+          <a class="main-nav-link" href="/blog/">Home</a>
+        
+          <a class="main-nav-link" href="/blog/archives">Archives</a>
+        
+        <a class="main-nav-link" target="_blank" rel="noopener" href="https://cssjpn.github.io/">サポート情報</a>
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/blog/atom.xml" title="RSSフィード"></a>
+        
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//www.bing.com/search" method="get" accept-charset="UTF-8" name="bing-search" onsubmit="var f=this;if(f['q'].value){var searchUrl =  'https://www.bing.com/search?q=' +  encodeURIComponent(f['q'].value + ' site:' + f['sitesearch'].value) ;window.open(searchUrl, 'blank') };return false;" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="検索"><button type="submit" id="nav-search-btn" class="search-form-submit"></button><input type="hidden" name="sitesearch" value="https://jpwinsup.github.io/blog"></form>
+      </div>
+    </div>
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/blog/" id="logo">Microsoft Japan Windows Technology Support Blog</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/blog/" id="subtitle">日本マイクロソフト Windows Support チームによる、サポート情報 Blog です。</a>
+        </h2>
+      
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-UserInterfaceAndApps/DisableScreenCapture" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    
+    
+      <header class="article-header-single">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      画面キャプチャー機能 (スクリーンショット) を行う機能の一覧と、動作を抑止する方法について
+    </h1>
+  
+
+      </header>
+      <div class="article-share">
+        Last Update: 
+        <a href="/blog/2021/08/30/UserInterfaceAndApps/DisableScreenCapture/" class="article-date-single">
+  <time datetime="2021-08-30T00:00:00.000Z" itemprop="datePublished">2021-08-30</time>
+</a>
+        
+  <div class="article-category">
+    <a class="article-category-link" href="/blog/categories/User-Interface-and-Apps/">User Interface and Apps</a>
+  </div>
+
+        
+        <a href="https://github.com/jpwinsup/blog/issues/new?title=&body=%EF%BB%BF%0A%0A---%0A%0A%23%23%23%23+Document+Details%0A%0A*+Article+ID%3A+e489d598-ef93-5023-bc1d-5a7244ceee53%0A*+TITLE%3A+%E7%94%BB%E9%9D%A2%E3%82%AD%E3%83%A3%E3%83%97%E3%83%81%E3%83%A3%E3%83%BC%E6%A9%9F%E8%83%BD+%28%E3%82%B9%E3%82%AF%E3%83%AA%E3%83%BC%E3%83%B3%E3%82%B7%E3%83%A7%E3%83%83%E3%83%88%29+%E3%82%92%E8%A1%8C%E3%81%86%E6%A9%9F%E8%83%BD%E3%81%AE%E4%B8%80%E8%A6%A7%E3%81%A8%E3%80%81%E5%8B%95%E4%BD%9C%E3%82%92%E6%8A%91%E6%AD%A2%E3%81%99%E3%82%8B%E6%96%B9%E6%B3%95%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6%0A*+URL+https%3A%2F%2Fjpwinsup.github.io%2Fblog%2F2021%2F08%2F30%2FUserInterfaceAndApps%2FDisableScreenCapture%2F%0A*+SourceFileName%3A+source%2F_posts%2FUserInterfaceAndApps%2FDisableScreenCapture.md%0A" class="article-github-issue-link" target="_blank" rel="noopener noreferrer">feedback</a>
+        
+        <a data-url="https://jpwinsup.github.io/blog/2021/08/30/UserInterfaceAndApps/DisableScreenCapture/" data-id="cmlsvjdo001hjru3ygnmafhpp" class="article-share-link">共有</a>
+      </div>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>本記事はマイクロソフト社員によって公開されております。   </p>
+<p>こんにちは。Windows サポートチームの木村です。  </p>
+<p>Windows にはデフォルトで様々な方法で画面キャプチャー (スクリーンショット) を保存することができます。<br>これらの機能は便利な一方で、ユーザー様の業務のなかでは 「画面キャプチャーを取らせたくない」 という場合もあるかと存じます。<br>本記事では、そのようなお客様に向けて、OS 標準で画面キャプチャーを保存することができる機能と、それらを制御する方法をご紹介致します。   </p>
+<p>※ 本記事では OS に標準機能として搭載されている機能のみをご案内しております。<br>　サード パーティー製のツールや Office 等、OS に標準で搭載されていない機能については言及致しません。</p>
+<h3 id="目次"><a href="#目次" class="headerlink" title="目次"></a>目次</h3><ul>
+<li><a href="#AboutCapture">画面キャプチャーの種類について</a><br>  <a href="#ShrortcutKey">1. ショートカット キー</a><br>  <a href="#UWPapps">2. UWP アプリ</a><br>  <a href="#exe">3. 実行ファイル (exe ファイル)</a><br>  <a href="#other">4. その他</a></li>
+<li><a href="#HowToBlock">画面キャプチャーを抑止する方法 </a>   <ul>
+<li><a href="#BlockShortcut">1. ショートカット キーによるキャプチャーを抑止する</a><br><a href="#KeyFilter1">1-1. キーボード フィルターを利用する(Enterprise / Education Edition 限定)</a></li>
+<li><a href="#BlockUWP">2. UWP アプリによるキャプチャーを抑止する</a><br><a href="#AppLocker1">2-1. AppLocker を利用する (Enterprise / Education Edition 限定)</a><br><a href="#Uninstall">2-2. アプリのアンインストールを行う</a>   </li>
+<li><a href="#BlockExe">3. 実行ファイル (exe ファイル) によるキャプチャーを抑止する</a><br><a href="#AppLocker2">3-1. AppLocker を利用する</a><br><a href="#RestrictionPolicy">3-2. ソフトウェアの制限のポリシーを利用する</a></li>
+</ul>
+</li>
+<li><a href="#FAQ">よくある質問</a><br>  <a href="#Q1">Q1. AppLocker で 「切り取り &amp; スケッチ」 を抑止しても [Windows キー] + [Shift] + [S] で画面キャプチャーが保存できてしまいます。なぜでしょうか。</a><br>  <a href="#Q2">Q2. Windows 10 Pro ではショートカット キーを用いた画面キャプチャーを抑止できないのでしょうか。</a><br>  <a href="#Q3">Q3. アクション センター下部の [画面領域切り取り] だけを無効化する方法はありますか。</a>    </li>
+<li><a href="#Link">関連情報</a></li>
+</ul>
+<h2 id="画面キャプチャーの種類について"><a href="#画面キャプチャーの種類について" class="headerlink" title="画面キャプチャーの種類について"></a>画面キャプチャーの種類について<a id = "AboutCapture"></a></h2><p>Windows で画面キャプチャーを行う機能としてはショートカット キーを使用する方法と、OS 標準のアプリを利用する方法があります。<br>更に、アプリは UWP アプリと、exe 形式の実行ファイルのパターンが存在します。<br>本項では、OS 標準で画面キャプチャーを保存することができる機能をご案内致します。   </p>
+<h3 id="1-ショートカット-キー"><a href="#1-ショートカット-キー" class="headerlink" title="1. ショートカット キー"></a>1. ショートカット キー</h3><ul>
+<li>[Windows キー] + [Shift] + [S]   </li>
+<li>[PrtScr]   </li>
+<li>[Alt] + [PrtScr]   </li>
+<li>[Shift] + [PrtScr]   </li>
+<li>[Windows キー] + [PrtScr] </li>
+<li>[Windows キー] + [F]<br>フィードバック Hub を開くためのショートカット キーです。<br>フィードバック Hub を起動する直前の画面キャプチャーを取得します。<br>※ 本機能で取得されるキャプチャーは弊社へのフィードバックの送信前に詳細情報として添付され、利用されるものです。   <br>
+### 2. UWP アプリ</li>
+<li>「切り取り &amp; スケッチ」 のアプリ<br>OS に標準でインストールされている UWP アプリです。</li>
+</ul>
+<p><img src="./ScreenSketch.png">  </p>
+<ul>
+<li>Xbox Game Bar<br>本機能は画面キャプチャーではなく、画面の操作を動画として録画することができる UWP アプリです。</li>
+</ul>
+<p><img src="./xbox.png"><br><br></p>
+<h3 id="3-実行ファイル-exe-ファイル"><a href="#3-実行ファイル-exe-ファイル" class="headerlink" title="3. 実行ファイル (exe ファイル)"></a>3. 実行ファイル (exe ファイル)</h3><ul>
+<li><p>「Snipping Tool」 のアプリ<br>スタート メニューから [Windows アクセサリ] &gt; [Snipping Tool] をクリックすることで起動することができます。<br>パス：C:\Windows\System32\SnippingTool.exe   </p>
+</li>
+<li><p>ステップ記録ツール<br>スタート メニューから [Windows アクセサリ] &gt; [ステップ記録ツール] をクリックすることで起動することができます。<br>本機能はマウスを クリックするごとに画面キャプチャーを取得するツールでございます。<br>Windows サポート チーム等でも本機能を利用しており、ご支援の際に本機能で情報の収集を依頼する場合がございます。<br>パス：C:\Windows\system32\psr.exe   </p>
+</li>
+</ul>
+<p><img src="./SnippingPSR.png"><br><br></p>
+<h3 id="4-その他"><a href="#4-その他" class="headerlink" title="4. その他"></a>4. その他</h3><ul>
+<li>アクションセンター下部にあるクイック アクセスの [画面領域切り取り] をクリックする<br><img src="./AreaCapture.png">  </li>
+</ul>
+<br>
+<br>
+## 画面キャプチャーを抑止する方法<a id= "HowToBlock"></a>      
+本項からは、上述しました画面キャプチャーを行う方法を抑止する方法をご案内致します。  
+ご案内致します方法は、キーボードのショートカット キーを制御する方法や、アプリの動作を制御する方法を UWP アプリ、exe 形式の実行ファイルなどのかたちにあわせたものになります。   
+ご利用者様の用途にあわせた項目を参照ください。   
+
+
+<h3 id="1-ショートカット-キーによるキャプチャーを抑止する"><a href="#1-ショートカット-キーによるキャプチャーを抑止する" class="headerlink" title="1. ショートカット キーによるキャプチャーを抑止する"></a>1. ショートカット キーによるキャプチャーを抑止する</h3><p>Windows 10 Enterprise 版または Education 版にはキーボード フィルターという機能がございます。この機能は任意のキーまたはキーの組み合わせを押下する操作を行ったときに、そのキー入力を無効にすることができます。<br>この機能によってキーボード入力により画面キャプチャーを抑止することができます。   </p>
+<p>(参考) キーボード フィルター<br><a target="_blank" rel="noopener" href="https://docs.microsoft.com/ja-jp/windows-hardware/customize/enterprise/keyboardfilter">https://docs.microsoft.com/ja-jp/windows-hardware/customize/enterprise/keyboardfilter</a><br><br></p>
+<h3 id="1-1-キーボード-フィルターを利用する-Enterprise-Education-Edition-限定"><a href="#1-1-キーボード-フィルターを利用する-Enterprise-Education-Edition-限定" class="headerlink" title="1-1. キーボード フィルターを利用する (Enterprise / Education Edition 限定)"></a>1-1. キーボード フィルターを利用する (Enterprise / Education Edition 限定)<a id= "KeyFilter1"></a></h3><p>キーボード フィルターを利用するためには以下の手順にて機能を有効にする必要がございます。   </p>
+<ol>
+<li><p>コントロール パネルから [プログラム] &gt; [Windows の機能の有効化または無効化] をクリックします。   </p>
+</li>
+<li><p>「Windows の機能」 というウィンドウが開いたら [デバイスのロックダウン] をクリックして、[キーボード フィルター] にチェックをいれて [OK] をクリックします。PC の再起動後にキーボード フィルターの機能が利用できるようになります。<br><img src="./AddFunction.png">   </p>
+</li>
+<li><p>再起動後、管理者権限で実行したコマンド プロンプトから以下の 2 つのコマンドを実行します。   </p>
+</li>
+</ol>
+<blockquote>
+<p>sc config MsKeyboardfilter start=auto</p>
+</blockquote>
+<blockquote>
+<p>sc start MsKeyboardFilter</p>
+</blockquote>
+<p>キーボード フィルターを有効後、以下のハイブの中に存在するレジストリを編集します。</p>
+<p>　ハイブ : HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows Embedded\KeyboardFilter<br>　値の名前 : &lt;それぞれのキーや、組み合わせが名前になります&gt;<br>　値の種類 : REG_SZ<br>　値 : Allowed (有効にする) / blocked (無効にする)   </p>
+<p><img src="./RegEdit.png">   </p>
+<p>たとえば Windows キーを無効化したい場合は [Windows] という名前のレジストリを blocked に変更します。<br>無効にしたキーの組み合わせが存在しない場合は上記のレジストリのフォーマットに従って作成することも可能です。<br>キーボードの組み合わせについては以下の公開情報を参考いただけますと幸いです。   </p>
+<p>(参考情報) あらかじめ定義されたキーの組み合わせ<br><a target="_blank" rel="noopener" href="https://docs.microsoft.com/ja-jp/windows-hardware/customize/enterprise/predefined-key-combinations">https://docs.microsoft.com/ja-jp/windows-hardware/customize/enterprise/predefined-key-combinations</a></p>
+<br>
+
+<h3 id="2-UWP-アプリによるキャプチャーを抑止する"><a href="#2-UWP-アプリによるキャプチャーを抑止する" class="headerlink" title="2. UWP アプリによるキャプチャーを抑止する"></a>2. UWP アプリによるキャプチャーを抑止する<a id = "BlockUWP"></a></h3><p>UWP アプリを抑止する方法としては、パッケージ単位で抑止をする方法がございます。<br>パッケージ単位でのアプリのブロック機能を提供する AppLocker は Enterprise もしくは Education Edition でしか利用できません。<br>その場合は、利用したくないアプリをアンインストールすることで機能を利用できなくするという方法を提案致します。<br><br></p>
+<h3 id="2-1-AppLocker-を利用する-Enterprise-Education-Edition-限定"><a href="#2-1-AppLocker-を利用する-Enterprise-Education-Edition-限定" class="headerlink" title="2-1. AppLocker を利用する (Enterprise / Education Edition 限定)"></a>2-1. AppLocker を利用する (Enterprise / Education Edition 限定)<a id = "AppLocker1"></a></h3><p>Windows 10 Enterprise 版または Education 版では AppLocker という機能を利用することができます。<br>この機能は UWP アプリをパッケージ単位で起動を抑止することが可能でございます。</p>
+<ol>
+<li>グループ ポリシー エディターを開きます。   </li>
+<li>[コンピューターの構成] &gt; [Windows の設定] &gt; [セキュリティの設定] &gt; [アプリケーション制御ポリシー] &gt; [AppLocker] の順にクリックします。</li>
+<li>[パッケージ アプリの規則] を右クリックして [新しい規則の作成] をクリックします。   </li>
+<li>[アクセス許可] の項目で [操作] を拒否に、[ユーザーまたはグループ] で、対象のアプリを利用させたくないユーザーまたはグループを選択します。 </li>
+<li>[発行元] の項目で [インストール済みのパッケージ化されたアプリを参照として使用する] を選択して [選択] をクリックします。   </li>
+<li>「アプリケーションの選択」 のウィンドウで [切り取り &amp; スケッチ] や [Xbox Game Bar] などの、利用させたくないアプリを選択して [OK] をクリックします。   </li>
+<li>[作成] をクリックします。   </li>
+<li>[パッケージ アプリの規則] を右クリックして [規則の規則の作成] をクリックします。 </li>
+</ol>
+<p><img src="./AppLockerPackage.png"><br><br></p>
+<h3 id="2-2-アプリのアンインストールを行う"><a href="#2-2-アプリのアンインストールを行う" class="headerlink" title="2-2. アプリのアンインストールを行う"></a>2-2. アプリのアンインストールを行う<a id = "Uninstall"></a></h3><p>切り取り &amp; スケッチと Xbox Game Bar の 2 つの UWP アプリは OS 標準でインストールされています。<br>管理者権限で実行した PowerShell から以下にご案内するコマンドを実行することで、利用している環境の全てのユーザーからアプリをアンインストールできます。<br>あわせて Windows のアップグレードを行った際などに、削除したアプリが再インストールされてしまうことを防ぐことができます。   </p>
+<ul>
+<li>切り取り &amp; スケッチをアンインストールするためのコマンド   </li>
+</ul>
+<blockquote>
+<p>Get-AppxProvisionedPackage -online | where displayname -like <em>Microsoft.ScreenSketch</em> | Remove-AppxProvisionedPackage -Online   </p>
+</blockquote>
+<blockquote>
+<p>Get-AppxPackage Microsoft.ScreenSketch | Remove-AppxPackage -AllUsers   </p>
+</blockquote>
+<ul>
+<li>Xbox Game Bar をアンインストールするためのコマンド   </li>
+</ul>
+<blockquote>
+<p>Get-AppxProvisionedPackage -online | where displayname -like <em>Microsoft.XboxGamingOverlay</em> | Remove-AppxProvisionedPackage -Online   </p>
+</blockquote>
+<blockquote>
+<p>Get-AppxPackage Microsoft.XboxGamingOverlay | Remove-AppxPackage -AllUsers   </p>
+</blockquote>
+<p>※ これらのコマンドを実行したあとは、新規に作成されたユーザーと既存のユーザーの両方でアプリがアンインストールされ、利用できない状態となります。   </p>
+<br>
+
+<h3 id="3-実行ファイル-exe-ファイル-によるキャプチャーを抑止する"><a href="#3-実行ファイル-exe-ファイル-によるキャプチャーを抑止する" class="headerlink" title="3. 実行ファイル (exe ファイル) によるキャプチャーを抑止する"></a>3. 実行ファイル (exe ファイル) によるキャプチャーを抑止する<a id = "BlockExe"></a></h3><p><a href="#BlockUWP">UWP アプリの項</a> でご案内致しましたAppLocker は実行ファイル単位でもアプリの起動を制限することができます。<br>前述のように、AppLocker は Enterprise もしくは Education Edition でしか利用することができないため、<br>Home や Pro Edition を利用されている場合は、「ソフトウェアの制限のポリシー」 という機能を利用します。<br><br></p>
+<h3 id="3-1-AppLocker-を利用する"><a href="#3-1-AppLocker-を利用する" class="headerlink" title="3-1. AppLocker を利用する"></a>3-1. AppLocker を利用する<a id = "AppLocker2"></a></h3><p>AppLocker で実行ファイル単位でアプリの起動を制限する場合は、本手順に従って設定を実施します。   </p>
+<ol>
+<li>グループ ポリシー エディターを開きます。   </li>
+<li>[コンピューターの構成] &gt; [Windows の設定] &gt; [セキュリティの設定] &gt; [アプリケーション制御ポリシー]  &gt; [AppLocker] の順にクリックします。</li>
+<li>[実行可能ファイルの規則] を右クリックして [新しい規則の作成] をクリックします。   </li>
+<li>[アクセス許可] の項目で [操作] を拒否に、[ユーザーまたはグループ] で「切り取り &amp; スケッチ」 を利用させたくないユーザーまたはグループを選択します。   </li>
+<li>[パス] を選択して [次へ] をクリックします。   </li>
+<li>[パス] の項目に制御したい実行ファイルのフルパスを入力して [次へ] をクリックします。</li>
+<li>[作成] をクリックします。   </li>
+<li>[既定の規則] が作成されることがありますが、削除する必要はありません。   </li>
+</ol>
+<p><img src="./AppLockerEXE.png"><br><br></p>
+<h3 id="3-2-ソフトウェアの制限のポリシーを利用する"><a href="#3-2-ソフトウェアの制限のポリシーを利用する" class="headerlink" title="3-2. ソフトウェアの制限のポリシーを利用する"></a>3-2. ソフトウェアの制限のポリシーを利用する<a id = "RestrictionPolicy"></a></h3><p>Home や Pro Edition を利用されているユーザーの場合は AppLocker を利用いただくことができません。<br>そのため本項にてご案内致します [ソフトウェアの制限のポリシー] を利用してアプリの起動を制限します。   </p>
+<ol>
+<li>グループ ポリシー エディターを開きます。</li>
+<li>[コンピューターの構成] &gt; [Windowsの設定] &gt; [セキュリティの設定] &gt; [ソフトウェアの制限のポリシー] の順にクリックします。</li>
+<li>[ソフトウェアの制限のポリシー] を右クリックし、 [新しいソフトウェアの制限のポリシー] をクリックします。</li>
+<li>「追加の規則」 を右クリックし [新しいパスの規則] をクリックします。</li>
+<li>以下の設定を行い、 [OK] ボタンをクリックすることで、対象のアプリケーション起動を制限することが可能となります。</li>
+</ol>
+<p>パス：抑止したいソフトウェアのフォルダー、または、実行ファイルを指定します。<br>セキュリティ レベル： “許可しない”<br>説明 : 任意の文字※空白でも問題ありません。   </p>
+<p>(例 : Snipping Tool を抑止するときの設定例)<br><img src="./Restrict.png"> </p>
+<br>
+
+<h2 id="よくある質問"><a href="#よくある質問" class="headerlink" title="よくある質問"></a>よくある質問</h2><h3 id="Q1-AppLocker-で-「切り取り-amp-スケッチ」-を抑止しても-Windows-キー-Shift-S-で画面キャプチャーが保存できてしまいます。なぜでしょうか。"><a href="#Q1-AppLocker-で-「切り取り-amp-スケッチ」-を抑止しても-Windows-キー-Shift-S-で画面キャプチャーが保存できてしまいます。なぜでしょうか。" class="headerlink" title="Q1. AppLocker で 「切り取り &amp; スケッチ」 を抑止しても [Windows キー] + [Shift] + [S] で画面キャプチャーが保存できてしまいます。なぜでしょうか。"></a>Q1. AppLocker で 「切り取り &amp; スケッチ」 を抑止しても [Windows キー] + [Shift] + [S] で画面キャプチャーが保存できてしまいます。なぜでしょうか。<a id = "Q1"></a></h3><p>キーボードによる画面キャプチャーは 「切り取り &amp; スケッチ」 や 「Snipping Tool」 を起動しているのではなく、OS の機能を用いての画面キャプチャーでございます。<br>そのためアプリの無効や削除を行っても、キーボードによる画面キャプチャーを抑止することはできません。   </p>
+<h3 id="Q2-Windows-10-Pro-ではショートカット-キーを用いた画面キャプチャーを抑止できないのでしょうか。"><a href="#Q2-Windows-10-Pro-ではショートカット-キーを用いた画面キャプチャーを抑止できないのでしょうか。" class="headerlink" title="Q2. Windows 10 Pro ではショートカット キーを用いた画面キャプチャーを抑止できないのでしょうか。"></a>Q2. Windows 10 Pro ではショートカット キーを用いた画面キャプチャーを抑止できないのでしょうか。<a id = "Q2"></a></h3><p>弊社にて推奨する方法では Pro Edition でショートカット キーを用いた画面キャプチャーを抑止する方法はございません。   </p>
+<h3 id="Q3-アクション-センター下部の-画面領域切り取り-だけを無効化する方法はありますか。"><a href="#Q3-アクション-センター下部の-画面領域切り取り-だけを無効化する方法はありますか。" class="headerlink" title="Q3. アクション センター下部の [画面領域切り取り] だけを無効化する方法はありますか。"></a>Q3. アクション センター下部の [画面領域切り取り] だけを無効化する方法はありますか。</h3><p>OS 標準の方法では [画面領域切り取り] だけを無効化する方法はございません。</p>
+<h3 id="参考情報"><a href="#参考情報" class="headerlink" title="参考情報"></a>参考情報<a id = "link"></a></h3><ul>
+<li>AppLocker とは<br><a target="_blank" rel="noopener" href="https://docs.microsoft.com/ja-jp/windows/security/threat-protection/windows-defender-application-control/applocker/what-is-applocker">https://docs.microsoft.com/ja-jp/windows/security/threat-protection/windows-defender-application-control/applocker/what-is-applocker</a>   </li>
+<li>キーボード フィルター<br><a target="_blank" rel="noopener" href="https://docs.microsoft.com/ja-jp/windows-hardware/customize/enterprise/keyboardfilter">https://docs.microsoft.com/ja-jp/windows-hardware/customize/enterprise/keyboardfilter</a>   </li>
+</ul>
+<br>
+本情報が少しでもご利用者様の運用の一助となりますと幸いでございます。    
+
+
+
+
+<br>
+<br>
+<br>
+<br>
+※本記事につきましては予告なく内容が変更される場合がございますことをご了承ください。
+
+      
+      
+    </div>
+    <footer class="article-footer">
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/blog/2021/09/15/FailoverClustering/ConfigurationAndManagement/SharedVhdxEventID11/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">次の記事</strong>
+      <div class="article-nav-title">
+        
+          Shared VHDX 利用時に Event ID:11 が記録される事象について
+        
+      </div>
+    </a>
+  
+  
+    <a href="/blog/2021/08/19/UserInterfaceAndApps/PowerShell/PowerShell-Console-characters-garbled-for-CJK-languages/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">前の記事</strong>
+      <div class="article-nav-title">Windows Server 2022 / Windows 11 で Windows PowerShell の文字化けが発生する事象について</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">カテゴリ</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Activation/">Activation</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Activation/ESU/">ESU</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Activation/security-SPP/">security-SPP</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/">Active Directory</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Authentication/">Authentication</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/DFSR/">DFSR</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/FunctionalLevel/">FunctionalLevel</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Group-Policy/">Group Policy</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Promotion-and-Demotion/">Promotion and Demotion</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/User-Profile/">User Profile</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Windows-Hello/">Windows Hello</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Windows-Time-Service/">Windows Time Service</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/AppLocker/">AppLocker</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/AppLocker/Active-Directory/">Active Directory</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/AppLocker/Microsoft-Intune/">Microsoft Intune</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Deployment/">Deployment</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Deployment/Feature-on-demand/">Feature on demand</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Deployment/Sysprep/">Sysprep</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Failover-Clustering/">Failover Clustering</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Failover-Clustering/Configuration-and-Management/">Configuration and Management</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/FileServices/">FileServices</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/FileServices/FTP/">FTP</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/FileServices/SMB/">SMB</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Hyper-V/">Hyper-V</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Hyper-V/Configuration-and-Management/">Configuration and Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Hyper-V/Migration/">Migration</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Microsoft-Connected-Cache/">Microsoft Connected Cache</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/">Networking</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/BITS/">BITS</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/Bluetooth/">Bluetooth</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/DHCP/">DHCP</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/DNS/">DNS</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/Firewall/">Firewall</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/LBFO/">LBFO</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/NCSI/">NCSI</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/NetworkInterface/">NetworkInterface</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/Proxy/">Proxy</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/TCPIP/">TCPIP</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/OpenSSH/">OpenSSH</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/">Performance</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/Hang-up-BSoD/">Hang-up/BSoD</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/No-Boot/">No Boot</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/Slow-Response/">Slow Response</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/System-Resource/">System Resource</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/Tools/">Tools</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/">Public Key Infrastructure</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Certificate-Authority/">Certificate Authority</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Certificate-Management/">Certificate Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Code-Signing/">Code Signing</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/SSL-TLS-Communication/">SSL TLS Communication</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/SSL-TLS-Connection/">SSL TLS Connection</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Smart-Card-Logon/">Smart Card Logon</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/">Remote Desktop</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/Azure-Virtual-Desktop-AVD/">Azure Virtual Desktop (AVD)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/Remote-Desktop-Service-RDS/">Remote Desktop Service (RDS)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/Windows-Virtual-Desktop-WVD/">Windows Virtual Desktop (WVD)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/RemoteAccess/">RemoteAccess</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/RemoteAccess/%E3%83%80%E3%82%A4%E3%83%A4%E3%83%AB%E3%82%A2%E3%83%83%E3%83%97%E6%8E%A5%E7%B6%9A/">ダイヤルアップ接続</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Setup/">Setup</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Setup/Feature-Update-FU/">Feature Update (FU)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Shell/">Shell</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Shell/Explorer/">Explorer</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/">Storage</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/Backup/">Backup</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/FSRM/">FSRM</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/Management/">Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/StorageMigrationService/">StorageMigrationService</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/UEFI/">UEFI</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/UEFI/Secure-Boot/">Secure Boot</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/">User Interface and Apps</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Command-Prompt/">Command Prompt</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/EventLog/">EventLog</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Language-Support/">Language Support</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Microsoft-Store/">Microsoft Store</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Performance/">Performance</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/PowerShell/">PowerShell</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Printing-%E5%8D%B0%E5%88%B7/">Printing (印刷)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Server-Management/">Server Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Taskscheduler/">Taskscheduler</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Windows-Management-Instrumentation/">Windows Management Instrumentation</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps-Language-support/">User Interface and Apps - Language support</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-365/">Windows 365</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Admin-Center/">Windows Admin Center</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Search/">Windows Search</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/">Windows Update</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Delivery-Optimization-DO/">Delivery Optimization (DO)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Feature-Update-FU/">Feature Update (FU)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Quality-Update-QU/">Quality Update (QU)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Windows-Update-Agent/">Windows Update Agent</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Windows-Update-Agent-WUA/">Windows Update Agent (WUA)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/">WirelessNetwork</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/NPS/">NPS</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/Wi-Fi/">Wi-Fi</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/%E3%83%A2%E3%83%90%E3%82%A4%E3%83%AB-%E3%83%96%E3%83%AD%E3%83%BC%E3%83%89%E3%83%90%E3%83%B3%E3%83%89%E6%8E%A5%E7%B6%9A-LTE/">モバイル ブロードバンド接続 (LTE)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/%E7%B5%84%E7%B9%94%E7%B4%B9%E4%BB%8B%E3%83%96%E3%83%AD%E3%82%B0%EF%BC%88Windows-Commercial%EF%BC%89/">組織紹介ブログ（Windows Commercial）</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最近の投稿</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/blog/2026/02/16/ActiveDirectory/GroupPolicy/UacPolicyIsEnabled/">「ユーザー アカウント制御：ビルトイン Administrator アカウントのための管理者承認モード」ポリシーが有効になる動作ついて</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/02/15/UserInterfaceAndApps/Printing/printer-queue-app-preview/">印刷キューアプリのプレビュー機能について</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/02/02/ActiveDirectory/Authentication/kerberos-rc4-for-service-account-ticket-issuance-changes-related-to-cve-2026-20833/">CVE‑2026‑20833 への対応とその影響について [KB5073381]</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/01/12/Hyper-V/vmwp-does-not-save-the-RTC-value-of-a-virtual-machine-when-performing-Live-Migration/">ライブ マイグレーション後の再起動でゲスト OS の時刻がずれる場合がある</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/01/07/WindowsUpdate/FU/fublog-txt/">ISO メディア経由かつ動的更新無効な状態で Windows 11 バージョン 24H2 または 25H2 へのアップグレードが失敗 (0x8007042B 0x2000D) する事象と対策について</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">アーカイブ</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2026/02/">2026 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2026/01/">2026 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/12/">2025 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/11/">2025 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/10/">2025 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/09/">2025 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/08/">2025 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/07/">2025 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/06/">2025 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/05/">2025 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/04/">2025 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/03/">2025 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/02/">2025 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/01/">2025 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/12/">2024 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/11/">2024 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/10/">2024 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/09/">2024 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/08/">2024 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/07/">2024 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/06/">2024 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/05/">2024 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/04/">2024 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/03/">2024 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/02/">2024 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/01/">2024 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/12/">2023 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/11/">2023 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/10/">2023 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/09/">2023 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/08/">2023 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/07/">2023 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/06/">2023 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/05/">2023 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/04/">2023 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/03/">2023 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/02/">2023 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/01/">2023 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/12/">2022 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/11/">2022 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/10/">2022 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/09/">2022 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/08/">2022 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/07/">2022 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/06/">2022 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/05/">2022 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/04/">2022 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/03/">2022 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/02/">2022 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/01/">2022 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/12/">2021 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/11/">2021 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/10/">2021 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/09/">2021 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/08/">2021 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/07/">2021 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/06/">2021 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/05/">2021 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/04/">2021 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/03/">2021 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/02/">2021 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/01/">2021 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/12/">2020 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/11/">2020 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/10/">2020 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/07/">2020 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/03/">2020 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2019/03/">2019 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/11/">2018 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/10/">2018 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/09/">2018 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/08/">2018 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/07/">2018 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/06/">2018 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/04/">2018 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/02/">2018 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/12/">2017 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/11/">2017 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/09/">2017 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/05/">2017 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/03/">2017 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/02/">2017 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2016/08/">2016 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2016/05/">2016 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2014/03/">2014 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2012/02/">2012 / 02</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2026 Microsoft Japan Windows Technology Support Team<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/blog/" class="mobile-nav-link">Home</a>
+  
+    <a href="/blog/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+<script src="/blog/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

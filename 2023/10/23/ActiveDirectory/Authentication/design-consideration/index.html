@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-180187723-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-180187723-1');
+</script>
+<!-- End Google Analytics -->
+
+  
+  <title>ドメイン コントローラーの構築時に言われないと気付かないこと | Microsoft Japan Windows Technology Support Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="本記事はマイクロソフト社員によって公開されております。 こんにちは。Windows Commercial Support Directory Services チームです。ドメイン コントローラーは多くの組織で利用されておりますので、今までドメイン コントローラーの設計や運用に関わったことがなかったものの、急に担当することになってしまったという方も多いのではないでしょうか。 今回は、そのような方向">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ドメイン コントローラーの構築時に言われないと気付かないこと">
+<meta property="og:url" content="https://jpwinsup.github.io/blog/2023/10/23/ActiveDirectory/Authentication/design-consideration/index.html">
+<meta property="og:site_name" content="Microsoft Japan Windows Technology Support Blog">
+<meta property="og:description" content="本記事はマイクロソフト社員によって公開されております。 こんにちは。Windows Commercial Support Directory Services チームです。ドメイン コントローラーは多くの組織で利用されておりますので、今までドメイン コントローラーの設計や運用に関わったことがなかったものの、急に担当することになってしまったという方も多いのではないでしょうか。 今回は、そのような方向">
+<meta property="og:locale" content="ja_JP">
+<meta property="article:published_time" content="2023-10-23T03:00:00.000Z">
+<meta property="article:modified_time" content="2026-02-19T02:53:58.322Z">
+<meta property="article:author" content="Microsoft Japan Windows Technology Support Team">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/blog/atom.xml" title="Microsoft Japan Windows Technology Support Blog" type="application/atom+xml">
+  
+
+  <link rel="icon" href="/blog/favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="/blog/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/blog/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/blog/favicon-16x16.png">
+  <link rel="manifest" href="/blog/site.webmanifest">
+  <link rel="mask-icon" href="/blog/safari-pinned-tab.svg" color="#5bbad5">
+  <meta name="msapplication-TileColor" content="#ffffff">
+  <meta name="theme-color" content="#ffffff">
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/blog/css/style.css">
+
+<meta name="generator" content="Hexo 5.2.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="site-header-logo"></div>
+  <div id="site-header-blog-wrapper"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        <div id="ms-logo"></div>
+        
+          <a class="main-nav-link" href="/blog/">Home</a>
+        
+          <a class="main-nav-link" href="/blog/archives">Archives</a>
+        
+        <a class="main-nav-link" target="_blank" rel="noopener" href="https://cssjpn.github.io/">サポート情報</a>
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/blog/atom.xml" title="RSSフィード"></a>
+        
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//www.bing.com/search" method="get" accept-charset="UTF-8" name="bing-search" onsubmit="var f=this;if(f['q'].value){var searchUrl =  'https://www.bing.com/search?q=' +  encodeURIComponent(f['q'].value + ' site:' + f['sitesearch'].value) ;window.open(searchUrl, 'blank') };return false;" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="検索"><button type="submit" id="nav-search-btn" class="search-form-submit"></button><input type="hidden" name="sitesearch" value="https://jpwinsup.github.io/blog"></form>
+      </div>
+    </div>
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/blog/" id="logo">Microsoft Japan Windows Technology Support Blog</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/blog/" id="subtitle">日本マイクロソフト Windows Support チームによる、サポート情報 Blog です。</a>
+        </h2>
+      
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-ActiveDirectory/Authentication/design-consideration" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    
+    
+      <header class="article-header-single">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      ドメイン コントローラーの構築時に言われないと気付かないこと
+    </h1>
+  
+
+      </header>
+      <div class="article-share">
+        Last Update: 
+        <a href="/blog/2023/10/23/ActiveDirectory/Authentication/design-consideration/" class="article-date-single">
+  <time datetime="2023-10-23T03:00:00.000Z" itemprop="datePublished">2023-10-23</time>
+</a>
+        
+  <div class="article-category">
+    <a class="article-category-link" href="/blog/categories/Active-Directory/">Active Directory</a>►<a class="article-category-link" href="/blog/categories/Active-Directory/Authentication/">Authentication</a>
+  </div>
+
+        
+        <a href="https://github.com/jpwinsup/blog/issues/new?title=&body=%EF%BB%BF%0A%0A---%0A%0A%23%23%23%23+Document+Details%0A%0A*+Article+ID%3A+6023910c-632f-5eea-b494-0bd14dbe0d58%0A*+TITLE%3A+%E3%83%89%E3%83%A1%E3%82%A4%E3%83%B3+%E3%82%B3%E3%83%B3%E3%83%88%E3%83%AD%E3%83%BC%E3%83%A9%E3%83%BC%E3%81%AE%E6%A7%8B%E7%AF%89%E6%99%82%E3%81%AB%E8%A8%80%E3%82%8F%E3%82%8C%E3%81%AA%E3%81%84%E3%81%A8%E6%B0%97%E4%BB%98%E3%81%8B%E3%81%AA%E3%81%84%E3%81%93%E3%81%A8%0A*+URL+https%3A%2F%2Fjpwinsup.github.io%2Fblog%2F2023%2F10%2F23%2FActiveDirectory%2FAuthentication%2Fdesign-consideration%2F%0A*+SourceFileName%3A+source%2F_posts%2FActiveDirectory%2FAuthentication%2Fdesign-consideration.md%0A" class="article-github-issue-link" target="_blank" rel="noopener noreferrer">feedback</a>
+        
+        <a data-url="https://jpwinsup.github.io/blog/2023/10/23/ActiveDirectory/Authentication/design-consideration/" data-id="cmlsvjdo401hqru3y5ylqhxfd" class="article-share-link">共有</a>
+      </div>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>本記事はマイクロソフト社員によって公開されております。</p>
+<p>こんにちは。Windows Commercial Support Directory Services チームです。<br>ドメイン コントローラーは多くの組織で利用されておりますので、今までドメイン コントローラーの設計や運用に関わったことがなかったものの、急に担当することになってしまったという方も多いのではないでしょうか。</p>
+<p>今回は、そのような方向けに、これからドメイン コントローラーを新規で構築する際に、言われないと中々気付きにくいことについて、紹介させていただきます。<br>後から予期しないトラブルに直面することを避けるためにも、構築時から問題の起きにくい構成を目指していきましょう！</p>
+<h2 id="非推奨の話"><a href="#非推奨の話" class="headerlink" title="非推奨の話"></a>非推奨の話</h2><p>※ 以下の構成は推奨しておりませんが、この構成においてサポートをお断りすることはございません。<br>ただし、最終的に構成変更以外の対処が難しい場合もございますので、後々のトラブルを避けるためにも、特別な理由がない限り、非推奨の構成は予め避けておくのが良いかと存じます。</p>
+<h3 id="NAT-は非推奨！"><a href="#NAT-は非推奨！" class="headerlink" title="NAT は非推奨！"></a>NAT は非推奨！</h3><p>言われないと中々気付かないものの代表として、Active Directory は製品として NAT 環境下で利用されることを想定して設計および検証されていないという点が挙げられます。<br>そのため、NAT が存在する環境で問題が発生した際に、原因が NAT デバイスであった場合には、NAT を使用しない構成への変更以外の対処方法がご案内できない場合がございます。<br>上記の理由から、弊社では NAT 環境で Active Directory ドメインを構成することを、できる限り採用されないことをお勧めさせていただいております。</p>
+<p><a target="_blank" rel="noopener" href="https://learn.microsoft.com/ja-jp/troubleshoot/windows-server/identity/support-for-active-directory-over-nat"> NAT 経由の Active Directory のサポート境界の説明 </a></p>
+<h3 id="ロード-バランサーも非推奨！"><a href="#ロード-バランサーも非推奨！" class="headerlink" title="ロード バランサーも非推奨！"></a>ロード バランサーも非推奨！</h3><p>実はロード バランサーも非推奨です。<br>Active Directory では製品として、クライアント側で負荷分散されることを想定して設計および検証されているため、LDAP や LDAPS、DNS などの通信にロード バランサーを用いることは正式にサポートされておりません。</p>
+<p><a target="_blank" rel="noopener" href="https://social.technet.microsoft.com/wiki/contents/articles/33547.load-balancers-and-active-directory.aspx"> Load balancers and Active Directory </a></p>
+<h3 id="マルチホーム構成も非推奨！"><a href="#マルチホーム構成も非推奨！" class="headerlink" title="マルチホーム構成も非推奨！"></a>マルチホーム構成も非推奨！</h3><p>マルチホーム (複数の NIC もしくは 1 つの NIC に複数の IP アドレス) 構成について、構成そのものについてサポートはしておりますが、弊社としては現在も (特別な要件がない限り) マルチホーム構成は非推奨となります。<br>気付かずにマルチホーム構成のまま運用していて、複製に失敗するというお問い合わせをいただくことがよくあります。</p>
+<p><a href="https://jpwinsup.github.io/blog/2021/06/24/Networking/TCPIP/Multi-homed-configuration-on-Windows%20Server/"> Windows Server におけるマルチホーム構成 </a></p>
+<h3 id="AD-CS-との同居も非推奨！"><a href="#AD-CS-との同居も非推奨！" class="headerlink" title="AD CS との同居も非推奨！"></a>AD CS との同居も非推奨！</h3><p>ドメイン コントローラーと AD CS (証明書サービス) が同一サーバー上に稼働しているご状況は以下の理由から推奨しておりません。  </p>
+<ol>
+<li><p>AD DS の障害でドメイン コントローラーの再昇格が必要な場合において、AD CS のアンインストールが必要となります。<br>ドメイン コントローラーに問題が発生した場合の復旧方法として、降格し再昇格することが必要になる場合がありますが、<br>AD CS が同居していている場合、AD CS をアンインストールしなければドメイン コントローラーとして降格ができない動作になっております。<br>ドメイン コントローラーの復旧のために AD CS の役割を他のサーバーに移行する必要があるなど、ドメイン コントローラーの問題解決に制約がありますので、ドメイン コントローラーに AD CS の役割を同居させることはおすすめしておりません。</p>
+</li>
+<li><p>AD DS を Windows Server バックアップから復元した際に AD CS の情報もバックアップ時点の情報でリストアされます。<br>Windows Server バックアップから復元した場合、 AD CS の情報もバックアップ時点の状態に戻るため、バックアップ時点からリストア時点までの期間に発行していた証明書が、失効できなくなるためご留意いただく必要がございます。</p>
+</li>
+<li><p>何かしら障害が発生した場合などで  AD DS/ AD CS どちらの障害か判断ができない場合に、切り分けが難しいケースが想定されます。<br>切り分けがや調査が難航し、通常より障害復旧にお時間を要する可能性もございます。</p>
+</li>
+</ol>
+<h3 id="DHCP-との同居も非推奨！"><a href="#DHCP-との同居も非推奨！" class="headerlink" title="DHCP との同居も非推奨！"></a>DHCP との同居も非推奨！</h3><p>AD の機能に問題が発生し OS の再インストールが必要になった際、AD の復旧を行うために DHCP の機能まで不必要に巻き込まれてしまう可能性があるため、DHCP との同居もおすすめしておりません。</p>
+<p><a target="_blank" rel="noopener" href="https://learn.microsoft.com/ja-jp/services-hub/unified/health/remediation-steps-ad/disable-or-remove-the-dhcp-server-service-installed-on-any-domain-controllers"> ドメイン コントローラーにインストールされている動的ホスト設定プロトコル (DHCP) サーバーのサービスの無効化と削除 </a></p>
+<h3 id="Exchange-Server-や-SQL-Server-との同居も非推奨！"><a href="#Exchange-Server-や-SQL-Server-との同居も非推奨！" class="headerlink" title="Exchange Server や SQL Server との同居も非推奨！"></a>Exchange Server や SQL Server との同居も非推奨！</h3><p>このような構成をとっているケースは稀ではあると存じますが、Exchange Server や SQL Server 等の他の機能との同居も非推奨です。<br>基本的には、各機能ごとにサーバーを用意して稼働されることをおすすめいたします。</p>
+<p><a target="_blank" rel="noopener" href="https://learn.microsoft.com/ja-jp/exchange/plan-and-deploy/deployment-ref/ms-exch-setupreadiness-warninginstallexchangerolesondomaincontroller?view=exchserver-2019"> ドメイン コントローラーへの Exchange のインストールは推奨されない </a></p>
+<p><a target="_blank" rel="noopener" href="https://learn.microsoft.com/ja-jp/sql/sql-server/install/hardware-and-software-requirements-for-installing-sql-server?view=sql-server-ver16"> SQL Server 2016 および 2017: ハードウェアとソフトウェアの要件 </a></p>
+<h3 id="フェールオーバー-クラスター環境でドメイン-コントローラーをノードとして追加することはできません！"><a href="#フェールオーバー-クラスター環境でドメイン-コントローラーをノードとして追加することはできません！" class="headerlink" title="フェールオーバー クラスター環境でドメイン コントローラーをノードとして追加することはできません！"></a>フェールオーバー クラスター環境でドメイン コントローラーをノードとして追加することはできません！</h3><p>Windows Server 2012 以降では、クラスター ノードとしてドメイン コントローラーを追加することは、非推奨ではなくサポート対象外となりました。<br>実際にドメイン コントローラーをクラスター ノードに追加することもできなくなっております。</p>
+<p><a target="_blank" rel="noopener" href="https://learn.microsoft.com/ja-jp/troubleshoot/windows-server/identity/cannot-add-domain-controller-node-failover-cluster"> フェールオーバー クラスター環境でドメイン コントローラーをノードとして追加することはできません </a></p>
+<h2 id="構成の話"><a href="#構成の話" class="headerlink" title="構成の話"></a>構成の話</h2><h3 id="バックアップを取りましょう！"><a href="#バックアップを取りましょう！" class="headerlink" title="バックアップを取りましょう！"></a>バックアップを取りましょう！</h3><p>バックアップを取得していない構成を見かけることがありますが、バックアップは必ず採取しましょう。<br>何か問題が発生した際、残念なことにバックアップからの復旧以外の方法ではどうしても復旧ができない場合があります。</p>
+<p>なお、ドメイン コントローラーでは、Windows Server バックアップおよび Azure Backup 等が弊社では正式にサポートされているバックアップ方式です。<br>特に Windows Server バックアップはサーバー OS にバンドルされていますので、比較的簡単に利用できます。</p>
+<p><a href="https://jpwinsup.github.io/blog/2023/04/24/ActiveDirectory/PromotionAndDemotion/backup-and-restore/"> ドメイン コントローラーのバックアップとリストアについて </a></p>
+<h3 id="ポートは必ず開放しましょう！"><a href="#ポートは必ず開放しましょう！" class="headerlink" title="ポートは必ず開放しましょう！"></a>ポートは必ず開放しましょう！</h3><p>何か問題が発生した際、調査を進めると実はポートが開放されていないだけだった、ということがよくあります。<br>ドメイン コントローラーおよびクライアントで開放しなければならないポートは以下の公開情報にまとめられておりますので、事前にご確認ください。</p>
+<p><a href="https://jpwinsup.github.io/blog/2023/10/03/ActiveDirectory/Authentication/port/"> ドメイン環境で使用されるポートについて </a></p>
+<p>特に、RPC のポートは一時ポートを開けるため忘れがちですが、RPC の通信の流れは以下のようになっているため、一時ポートを空けないと正常に通信ができない場合があります。</p>
+<p>① RPC クライアントが RPC エンドポイント マッパーに対象アプリケーションのリッスン ポートをリクエスト (tcp/135)<br>② RPC エンドポイント マッパーが対象アプリケーションのリッスン ポートをレスポンス (RPC 動的ポート)<br>③ RPC クライアントが RPC 動的ポートに接続してサブルーチン等を呼び出す</p>
+<h3 id="優先-DNS-サーバーの設定を自分自身-127-0-0-1-に設定していると、起動に時間が掛かる場合があります！"><a href="#優先-DNS-サーバーの設定を自分自身-127-0-0-1-に設定していると、起動に時間が掛かる場合があります！" class="headerlink" title="優先 DNS サーバーの設定を自分自身 (127.0.0.1) に設定していると、起動に時間が掛かる場合があります！"></a>優先 DNS サーバーの設定を自分自身 (127.0.0.1) に設定していると、起動に時間が掛かる場合があります！</h3><p><span style="color: red; "> 2025/06/12 更新: <strong>本事象は Windows Server 2012 R2 以降では発生しません。</strong></span><br>ドメイン コントローラーは OS の起動時、起動までの間に変更された最新のデータベース情報を取得するために初期同期と呼ばれる処理を実施し、これが完了するまでは Active Directory としての機能を提供いたしません。</p>
+<p>この時ドメイン コントローラーは複製パートナーを探索するために、ドメインの SRV レコードを DNS サーバーに問い合わせます。<br>一方、DNS サーバーは Active Directory 統合ゾーンを利用している場合は Active Directory から DNS のゾーン情報を読み込む処理を行い、<br>読み込み処理が完了しサービスが起動することで、初めて DNS サーバーとしての機能が利用できるようになります。</p>
+<p>そのため、Active Directory と DNS がお互いを利用する状態が発生し、サービスのタイムアウトまで待つ間にデッドロックが発生する場合があります。</p>
+<p><a href="https://jpwinsup.github.io/blog/2023/10/13/ActiveDirectory/Authentication/ds1555/"> Active Directory と DNS サーバーのデッドロック </a></p>
+<h3 id="ルート-DC-の-NTP-設定に気を付けましょう！"><a href="#ルート-DC-の-NTP-設定に気を付けましょう！" class="headerlink" title="ルート DC の NTP 設定に気を付けましょう！"></a>ルート DC の NTP 設定に気を付けましょう！</h3><p>Active Directory の NTP の構成として、 FSMO 以外のドメイン コントローラーは FSMO の役割を持つドメイン コントローラーを時刻同期先として参照し、FSMO の役割を持つドメイン コントローラーは外部の信頼できる NTP サーバーを参照することを推奨しています。<br>FSMO の役割を持つドメイン コントローラーでタイムソースを指定しない場合、ドメイン内の時刻は、FSMO の役割を持つドメイン コントローラーのローカル クロックに依存してしまうため、時刻ズレが発生してしまう可能性があるためです。</p>
+<h2 id="仮想環境の話"><a href="#仮想環境の話" class="headerlink" title="仮想環境の話"></a>仮想環境の話</h2><h3 id="VM上に構築する際の注意点"><a href="#VM上に構築する際の注意点" class="headerlink" title="VM上に構築する際の注意点"></a>VM上に構築する際の注意点</h3><p>ドメイン コントローラーを仮想化する上で以下の留意事項がございます。</p>
+<ol>
+<li><p>時刻同期について<br>物理環境と同様に、FSMO (PDC) で外部の NTP サーバーを利用して時刻同期を行い、他のドメイン コントローラー、ドメイン メンバーは PDC と時刻同期を行うように構成することが一般的です。<br>仮想環境ではホスト OS と時刻同期を行う機能がございますが、ドメイン コントローラーが NTP サーバーとホストの双方から時間を同期させた場合、ドメイン コントローラーの時間が頻繁に変化する可能性があります。<br>そのため、ドメイン コントローラーとして構成された仮想マシンでは、ホストとの時間の同期を無効にし、既定の Windows タイム サービス (W32time) ドメイン階層時間の同期を使用してください。<br>また、仮想環境の特性上、システム時刻が遅れやすくなっているため、時刻同期の間隔を短くするなどの対応を行うことも効果的です。<br>なお、ドメイン コントローラーが Azure IaaS 上の VM であれば、5 秒に一度といった頻度で Azure 基盤上のホスト OS との時刻を一致させているため、”Hyper-V Time Synchronization Service” サービスで時刻同期を行っても問題ございません。(オンプレミス環境に FSMO のドメイン コントローラーが存在し、VPN もしくは ExpressRoute でドメイン コントローラー間を繋いでいるケースは除く)</p>
+</li>
+<li><p>バックアップについて<br>Windows Server 2008 R2 における Hyper-V では、スナップショットからの復元を行った場合、USN ロールバックと呼ばれるデータベースの不整合が発生することがございました。<br>Windows Server 2012 以降では、スナップショットからのドメイン コントローラーの復元に対応するようになり、Windows Server 2012 における Hyper-V と Windows Server 2012 の Active Directory の組み合わせでは VM-generation ID とよばれる識別番号を利用し、不整合が発生しないよう実装が変更されております。<br>ただし、上記の機能はあくまで補助的な位置付けとなっており、常用的にドメイン コントローラーのバックアップ、復元にスナップショットをご利用いただくことは推奨いたしておりません。<br>そのため、 Windows Server バックアップまたは他の VSS ライター ベース バックアップ ソリューションを使用することをお勧めします。</p>
+</li>
+<li><p>仮想ハードディスク (VHD) について<br>VHD で差分ディスクを用いることで、パフォーマンスの低下が発生することが報告されております。<br>そのため、ドメイン コントローラーにおいては、仮想ハードディスクに差分ディスクを使用することは推奨されません。<br>容量可変の VHD を使用いただくよりも、容量固定の VHD を使用いただく方がパフォーマンスの向上が見込めます。<br>また、パフォーマンスを最適にするために、他のサービスやアプリケーションが頻繁に使用するディスクやホストの Windows オペレーティング システムがインストールされているディスクに仮想化したドメイン コントローラーの VHD ファイルを格納しないことが推奨されます。</p>
+</li>
+<li><p>ホスト OS のディスクについて<br>停電などの障害が発生した場合でも Active Directory データベースの整合性を維持できるように、Active Directory ディレクトリ サービスでは、バッファに格納することなく書き込みを行っております。<br>仮想ドメイン コントローラーをホストする仮想化ソフトウェアで、FUA が正しく動作し、ホスト OS で FUA をサポートするディスク (SCSI や ファイバ チャネルなど) を使用している場合は、バッファが無く書き込みを行うことができるため問題はございません。<br>仮想ドメイン コントローラーをホストする仮想化ソフトウェアで、FUA をサポートしていない場合や、ホスト OS で IDE ドライブや ATA ドライブを使用する場合は、書き込みキャッシュを無効にすることが推奨されます。</p>
+</li>
+<li><p>長期に渡って一時停止状態にしない<br>Hyper-V には仮想マシンを一時停止させる機能が実装されておりますが、本機能によって長期に渡って複製ができない状態を継続させないようご注意ください。<br>長期に渡り複製ができていない状態が続きますと、廃棄期間 (Tombstone Lifetime) を超過してしまい複製が再開できなくなったり、残留オブジェクトが生成されドメイン コントローラー間で不整合が発生する可能性が高まります。</p>
+</li>
+</ol>
+<p><a target="_blank" rel="noopener" href="https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-server-2008-r2-and-2008/dd363553(v=ws.10)"> Running Domain Controllers in Hyper-V </a></p>
+<h3 id="Azure-DNS-の設定について"><a href="#Azure-DNS-の設定について" class="headerlink" title="Azure DNS の設定について"></a>Azure DNS の設定について</h3><p>Azure では、仮想ネットワーク、または、ネットワーク インターフェース (NIC)にて、仮想マシンが参照する DNS サーバーを設定する必要があります。<br>一方、ドメイン コントローラーでは、通常、OS 上で DNS サーバーを静的に設定します。<br>ただし、動的に DNS サーバーを設定していた場合でも、DC への昇格時に警告は表示されますが、通信自体は正常に行えます。<br>そのため、Azure 上にドメイン コントローラーを構築する際は、仮想マシン内の OS の NIC のプロパティは動的にして、Azure 上の NIC または 仮想ネットワークでカスタム DNS を設定する方法をご案内しています。</p>
+<p>なお、Azure 上の NIC の DNS サーバーの設定は、NIC が関連付けられている仮想ネットワークから継承されます。<br>(仮想ネットワークと NIC のどちらにも DNS サーバーを指定した場合、NIC の設定が適用されます。)<br>手順は以下の通りです。</p>
+<ol>
+<li>Azure ポータル ( <a target="_blank" rel="noopener" href="https://portal.azure.com/">https://portal.azure.com/</a>) にログインし、左ペイン (または画面上部 [すべてのサービス]) より、[仮想ネットワーク] を選択します。</li>
+<li>ドメイン コントローラーが作成されている仮想ネットワークを選択します。</li>
+<li>「設定」ブレードより [DNS サーバー] を選択します。</li>
+<li>“カスタム” を選択し、表示されるテキスト ボックスに DNS サーバーの IP アドレスを入力します。<br>複数の DNS サーバーを指定することが可能です。</li>
+<li>画面上部 [保存] をクリックします。  </li>
+</ol>
+<p>※ 上記手順 5 の実行により、仮想マシン (ドメイン コントローラー) の再起動が発生する場合がございますので、<br>比較的影響の少ないタイミングで作業をご実施くださいますようお願いいたします。</p>
+<h3 id="Azure-上で日本語の言語パックを利用する場合は、構築後に-Windows-Update-を適用してください！"><a href="#Azure-上で日本語の言語パックを利用する場合は、構築後に-Windows-Update-を適用してください！" class="headerlink" title="Azure 上で日本語の言語パックを利用する場合は、構築後に Windows Update を適用してください！"></a>Azure 上で日本語の言語パックを利用する場合は、構築後に Windows Update を適用してください！</h3><p>Azure が展開する OS イメージは予め更新プログラムがほぼ最新の状態で適用されている状態でデプロイされます。<br>この状態において、管理用テンプレートの構成ファイルである ADMX および言語ファイルである英語フォルダー (en-us) の ADML も最新のものが適用されています。  </p>
+<p>英語 OS の環境を日本語化する際に、言語パックのインストールを実施と共に、日本語フォルダー (ja-jp) の ADML ファイルも同時に適用されますが、この ADML が最新の言語ファイルでないために、グループ ポリシー管理エディターを起動した際に以下のメッセージが表示される場合があります。  </p>
+<p>“リソース XXXXXXX が見つかりませんでした。<br>ファイル XXXXXX、行 XX、列 XXX” </p>
+<p>OS の言語切り替え後に Windows Update を実施することで、ADML ファイルが更新され、エラーが解消されますので、上記のエラーが表示された場合は、まずは Windows Update を適用してください。</p>
+<p><a target="_blank" rel="noopener" href="https://learn.microsoft.com/ja-JP/troubleshoot/windows-client/group-policy/admx-errors-when-local-group-policy-editor"> ローカル グループ ポリシー エディター (gpedit.msc) の実行時の .admx エラー </a></p>
+<h2 id="更新履歴"><a href="#更新履歴" class="headerlink" title="更新履歴"></a>更新履歴</h2><p>2023/10/23 : 本ブログの公開</p>
+
+      
+      
+    </div>
+    <footer class="article-footer">
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/blog/2023/11/01/Performance/Hang_BSOD/Bugcheck0x1DBOrHangWhenDMA-RisEnable/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">次の記事</strong>
+      <div class="article-nav-title">
+        
+          Direct Memory Access remapping (DMA-R) が有効化されている環境にて ハング アップ、Bugcheck 0x1DB が発生する問題
+        
+      </div>
+    </a>
+  
+  
+    <a href="/blog/2023/10/13/ActiveDirectory/Authentication/ds1555/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">前の記事</strong>
+      <div class="article-nav-title">Active Directory と DNS サーバーのデッドロック</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">カテゴリ</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Activation/">Activation</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Activation/ESU/">ESU</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Activation/security-SPP/">security-SPP</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/">Active Directory</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Authentication/">Authentication</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/DFSR/">DFSR</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/FunctionalLevel/">FunctionalLevel</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Group-Policy/">Group Policy</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Promotion-and-Demotion/">Promotion and Demotion</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/User-Profile/">User Profile</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Windows-Hello/">Windows Hello</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Windows-Time-Service/">Windows Time Service</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/AppLocker/">AppLocker</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/AppLocker/Active-Directory/">Active Directory</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/AppLocker/Microsoft-Intune/">Microsoft Intune</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Deployment/">Deployment</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Deployment/Feature-on-demand/">Feature on demand</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Deployment/Sysprep/">Sysprep</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Failover-Clustering/">Failover Clustering</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Failover-Clustering/Configuration-and-Management/">Configuration and Management</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/FileServices/">FileServices</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/FileServices/FTP/">FTP</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/FileServices/SMB/">SMB</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Hyper-V/">Hyper-V</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Hyper-V/Configuration-and-Management/">Configuration and Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Hyper-V/Migration/">Migration</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Microsoft-Connected-Cache/">Microsoft Connected Cache</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/">Networking</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/BITS/">BITS</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/Bluetooth/">Bluetooth</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/DHCP/">DHCP</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/DNS/">DNS</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/Firewall/">Firewall</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/LBFO/">LBFO</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/NCSI/">NCSI</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/NetworkInterface/">NetworkInterface</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/Proxy/">Proxy</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/TCPIP/">TCPIP</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/OpenSSH/">OpenSSH</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/">Performance</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/Hang-up-BSoD/">Hang-up/BSoD</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/No-Boot/">No Boot</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/Slow-Response/">Slow Response</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/System-Resource/">System Resource</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/Tools/">Tools</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/">Public Key Infrastructure</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Certificate-Authority/">Certificate Authority</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Certificate-Management/">Certificate Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Code-Signing/">Code Signing</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/SSL-TLS-Communication/">SSL TLS Communication</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/SSL-TLS-Connection/">SSL TLS Connection</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Smart-Card-Logon/">Smart Card Logon</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/">Remote Desktop</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/Azure-Virtual-Desktop-AVD/">Azure Virtual Desktop (AVD)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/Remote-Desktop-Service-RDS/">Remote Desktop Service (RDS)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/Windows-Virtual-Desktop-WVD/">Windows Virtual Desktop (WVD)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/RemoteAccess/">RemoteAccess</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/RemoteAccess/%E3%83%80%E3%82%A4%E3%83%A4%E3%83%AB%E3%82%A2%E3%83%83%E3%83%97%E6%8E%A5%E7%B6%9A/">ダイヤルアップ接続</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Setup/">Setup</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Setup/Feature-Update-FU/">Feature Update (FU)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Shell/">Shell</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Shell/Explorer/">Explorer</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/">Storage</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/Backup/">Backup</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/FSRM/">FSRM</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/Management/">Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/StorageMigrationService/">StorageMigrationService</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/UEFI/">UEFI</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/UEFI/Secure-Boot/">Secure Boot</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/">User Interface and Apps</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Command-Prompt/">Command Prompt</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/EventLog/">EventLog</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Language-Support/">Language Support</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Microsoft-Store/">Microsoft Store</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Performance/">Performance</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/PowerShell/">PowerShell</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Printing-%E5%8D%B0%E5%88%B7/">Printing (印刷)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Server-Management/">Server Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Taskscheduler/">Taskscheduler</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Windows-Management-Instrumentation/">Windows Management Instrumentation</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps-Language-support/">User Interface and Apps - Language support</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-365/">Windows 365</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Admin-Center/">Windows Admin Center</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Search/">Windows Search</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/">Windows Update</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Delivery-Optimization-DO/">Delivery Optimization (DO)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Feature-Update-FU/">Feature Update (FU)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Quality-Update-QU/">Quality Update (QU)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Windows-Update-Agent/">Windows Update Agent</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Windows-Update-Agent-WUA/">Windows Update Agent (WUA)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/">WirelessNetwork</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/NPS/">NPS</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/Wi-Fi/">Wi-Fi</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/%E3%83%A2%E3%83%90%E3%82%A4%E3%83%AB-%E3%83%96%E3%83%AD%E3%83%BC%E3%83%89%E3%83%90%E3%83%B3%E3%83%89%E6%8E%A5%E7%B6%9A-LTE/">モバイル ブロードバンド接続 (LTE)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/%E7%B5%84%E7%B9%94%E7%B4%B9%E4%BB%8B%E3%83%96%E3%83%AD%E3%82%B0%EF%BC%88Windows-Commercial%EF%BC%89/">組織紹介ブログ（Windows Commercial）</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最近の投稿</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/blog/2026/02/16/ActiveDirectory/GroupPolicy/UacPolicyIsEnabled/">「ユーザー アカウント制御：ビルトイン Administrator アカウントのための管理者承認モード」ポリシーが有効になる動作ついて</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/02/15/UserInterfaceAndApps/Printing/printer-queue-app-preview/">印刷キューアプリのプレビュー機能について</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/02/02/ActiveDirectory/Authentication/kerberos-rc4-for-service-account-ticket-issuance-changes-related-to-cve-2026-20833/">CVE‑2026‑20833 への対応とその影響について [KB5073381]</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/01/12/Hyper-V/vmwp-does-not-save-the-RTC-value-of-a-virtual-machine-when-performing-Live-Migration/">ライブ マイグレーション後の再起動でゲスト OS の時刻がずれる場合がある</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/01/07/WindowsUpdate/FU/fublog-txt/">ISO メディア経由かつ動的更新無効な状態で Windows 11 バージョン 24H2 または 25H2 へのアップグレードが失敗 (0x8007042B 0x2000D) する事象と対策について</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">アーカイブ</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2026/02/">2026 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2026/01/">2026 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/12/">2025 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/11/">2025 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/10/">2025 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/09/">2025 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/08/">2025 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/07/">2025 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/06/">2025 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/05/">2025 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/04/">2025 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/03/">2025 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/02/">2025 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/01/">2025 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/12/">2024 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/11/">2024 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/10/">2024 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/09/">2024 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/08/">2024 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/07/">2024 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/06/">2024 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/05/">2024 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/04/">2024 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/03/">2024 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/02/">2024 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/01/">2024 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/12/">2023 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/11/">2023 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/10/">2023 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/09/">2023 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/08/">2023 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/07/">2023 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/06/">2023 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/05/">2023 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/04/">2023 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/03/">2023 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/02/">2023 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/01/">2023 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/12/">2022 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/11/">2022 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/10/">2022 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/09/">2022 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/08/">2022 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/07/">2022 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/06/">2022 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/05/">2022 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/04/">2022 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/03/">2022 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/02/">2022 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/01/">2022 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/12/">2021 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/11/">2021 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/10/">2021 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/09/">2021 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/08/">2021 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/07/">2021 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/06/">2021 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/05/">2021 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/04/">2021 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/03/">2021 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/02/">2021 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/01/">2021 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/12/">2020 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/11/">2020 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/10/">2020 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/07/">2020 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/03/">2020 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2019/03/">2019 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/11/">2018 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/10/">2018 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/09/">2018 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/08/">2018 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/07/">2018 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/06/">2018 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/04/">2018 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/02/">2018 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/12/">2017 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/11/">2017 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/09/">2017 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/05/">2017 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/03/">2017 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/02/">2017 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2016/08/">2016 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2016/05/">2016 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2014/03/">2014 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2012/02/">2012 / 02</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2026 Microsoft Japan Windows Technology Support Team<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/blog/" class="mobile-nav-link">Home</a>
+  
+    <a href="/blog/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+<script src="/blog/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-180187723-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-180187723-1');
+</script>
+<!-- End Google Analytics -->
+
+  
+  <title>RDS CAL の概要と動作について | Microsoft Japan Windows Technology Support Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="本記事は、マイクロソフト社員によって公開されております。    こんにちは、Windows サポートチームの岩永です。今回は、リモート デスクトップ サービスで利用される CAL (Client Access License) の概要および動作についてご説明いたします。 Windows Server に多数のセッションを同時に接続させるためには、リモート デスクトップ サービス環境を構築する必要">
+<meta property="og:type" content="article">
+<meta property="og:title" content="RDS CAL の概要と動作について">
+<meta property="og:url" content="https://jpwinsup.github.io/blog/2025/11/19/RemoteDesktopService/RDS/RDS-CAL-Types/index.html">
+<meta property="og:site_name" content="Microsoft Japan Windows Technology Support Blog">
+<meta property="og:description" content="本記事は、マイクロソフト社員によって公開されております。    こんにちは、Windows サポートチームの岩永です。今回は、リモート デスクトップ サービスで利用される CAL (Client Access License) の概要および動作についてご説明いたします。 Windows Server に多数のセッションを同時に接続させるためには、リモート デスクトップ サービス環境を構築する必要">
+<meta property="og:locale" content="ja_JP">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2025/11/19/RemoteDesktopService/RDS/RDS-CAL-Types/DeviceCALReg.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2025/11/19/RemoteDesktopService/RDS/RDS-CAL-Types/TempCAL.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2025/11/19/RemoteDesktopService/RDS/RDS-CAL-Types/PermCAL.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2025/11/19/RemoteDesktopService/RDS/RDS-CAL-Types/Lapse.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2025/11/19/RemoteDesktopService/RDS/RDS-CAL-Types/DeviceCALReg2.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2025/11/19/RemoteDesktopService/RDS/RDS-CAL-Types/user-cal.png">
+<meta property="article:published_time" content="2025-11-19T03:00:00.000Z">
+<meta property="article:modified_time" content="2026-02-19T02:53:58.580Z">
+<meta property="article:author" content="Microsoft Japan Windows Technology Support Team">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://jpwinsup.github.io/blog/2025/11/19/RemoteDesktopService/RDS/RDS-CAL-Types/DeviceCALReg.png">
+  
+    <link rel="alternate" href="/blog/atom.xml" title="Microsoft Japan Windows Technology Support Blog" type="application/atom+xml">
+  
+
+  <link rel="icon" href="/blog/favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="/blog/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/blog/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/blog/favicon-16x16.png">
+  <link rel="manifest" href="/blog/site.webmanifest">
+  <link rel="mask-icon" href="/blog/safari-pinned-tab.svg" color="#5bbad5">
+  <meta name="msapplication-TileColor" content="#ffffff">
+  <meta name="theme-color" content="#ffffff">
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/blog/css/style.css">
+
+<meta name="generator" content="Hexo 5.2.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="site-header-logo"></div>
+  <div id="site-header-blog-wrapper"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        <div id="ms-logo"></div>
+        
+          <a class="main-nav-link" href="/blog/">Home</a>
+        
+          <a class="main-nav-link" href="/blog/archives">Archives</a>
+        
+        <a class="main-nav-link" target="_blank" rel="noopener" href="https://cssjpn.github.io/">サポート情報</a>
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/blog/atom.xml" title="RSSフィード"></a>
+        
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//www.bing.com/search" method="get" accept-charset="UTF-8" name="bing-search" onsubmit="var f=this;if(f['q'].value){var searchUrl =  'https://www.bing.com/search?q=' +  encodeURIComponent(f['q'].value + ' site:' + f['sitesearch'].value) ;window.open(searchUrl, 'blank') };return false;" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="検索"><button type="submit" id="nav-search-btn" class="search-form-submit"></button><input type="hidden" name="sitesearch" value="https://jpwinsup.github.io/blog"></form>
+      </div>
+    </div>
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/blog/" id="logo">Microsoft Japan Windows Technology Support Blog</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/blog/" id="subtitle">日本マイクロソフト Windows Support チームによる、サポート情報 Blog です。</a>
+        </h2>
+      
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-RemoteDesktopService/RDS/RDS-CAL-Types" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    
+    
+      <header class="article-header-single">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      RDS CAL の概要と動作について
+    </h1>
+  
+
+      </header>
+      <div class="article-share">
+        Last Update: 
+        <a href="/blog/2025/11/19/RemoteDesktopService/RDS/RDS-CAL-Types/" class="article-date-single">
+  <time datetime="2025-11-19T03:00:00.000Z" itemprop="datePublished">2025-11-19</time>
+</a>
+        
+  <div class="article-category">
+    <a class="article-category-link" href="/blog/categories/Remote-Desktop/">Remote Desktop</a>►<a class="article-category-link" href="/blog/categories/Remote-Desktop/Remote-Desktop-Service-RDS/">Remote Desktop Service (RDS)</a>
+  </div>
+
+        
+        <a href="https://github.com/jpwinsup/blog/issues/new?title=&body=%EF%BB%BF%0A%0A---%0A%0A%23%23%23%23+Document+Details%0A%0A*+Article+ID%3A+493ab7c6-3032-51c9-9ba7-258c10c9265b%0A*+TITLE%3A+RDS+CAL+%E3%81%AE%E6%A6%82%E8%A6%81%E3%81%A8%E5%8B%95%E4%BD%9C%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6%0A*+URL+https%3A%2F%2Fjpwinsup.github.io%2Fblog%2F2025%2F11%2F19%2FRemoteDesktopService%2FRDS%2FRDS-CAL-Types%2F%0A*+SourceFileName%3A+source%2F_posts%2FRemoteDesktopService%2FRDS%2FRDS-CAL-Types.md%0A" class="article-github-issue-link" target="_blank" rel="noopener noreferrer">feedback</a>
+        
+        <a data-url="https://jpwinsup.github.io/blog/2025/11/19/RemoteDesktopService/RDS/RDS-CAL-Types/" data-id="cmlsvjdeo00gsru3y2wwu9mbv" class="article-share-link">共有</a>
+      </div>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<p>本記事は、マイクロソフト社員によって公開されております。  </p>
+</blockquote>
+<p>こんにちは、Windows サポートチームの岩永です。<br>今回は、リモート デスクトップ サービスで利用される CAL (Client Access License) の概要および動作についてご説明いたします。</p>
+<p>Windows Server に多数のセッションを同時に接続させるためには、リモート デスクトップ サービス環境を構築する必要がありますが、ご利用いただくためには、各クライアントに対して、リモート デスクトップ サービス クライアント アクセス ライセンス (RDS CAL) を発行します。</p>
+<p>本記事では CAL の動作原理や有効期限について、よくいただくご質問をまとめました。ぜひご参考ください。</p>
+<p>なお、本記事中で CAL と記載しておりますが、すべて RDS CAL についての言及となります。</p>
+<p>公開情報：<br>クライアント アクセス ライセンス (CAL) を使用してリモート デスクトップ サービスをライセンスする | Microsoft Learn<br><a target="_blank" rel="noopener" href="https://learn.microsoft.com/ja-jp/windows-server/remote/remote-desktop-services/rds-client-access-license">https://learn.microsoft.com/ja-jp/windows-server/remote/remote-desktop-services/rds-client-access-license</a></p>
+<h2 id="1-CAL-の概要"><a href="#1-CAL-の概要" class="headerlink" title="1. CAL の概要"></a>1. CAL の概要</h2><p>CAL は大きく以下の 2 種類に分類されます。</p>
+<ul>
+<li>デバイス CAL</li>
+<li>ユーザー CAL</li>
+</ul>
+<p>この 2 種類は、お客様のリモート デスクトップ サービス環境に応じて、使い分けていただく必要があります。</p>
+<p>簡単に説明すると、デバイス CAL は接続元デバイス (クライアント) ごとに発行され、ユーザー CAL は接続ユーザーごとに発行されます。<br>例えば、1 台のデバイスを複数人でご利用いただく環境の場合はデバイス CAL、1 人のユーザーが複数のデバイスをご利用いただく環境の場合はユーザー CAL を選択する事で、購入 (インストール) いただく CAL の数量を効率よく管理できます。</p>
+<p>重要なポイントとして、1 台のセッション ホスト サーバーに対しては、デバイス CAL を使って接続させるか、ユーザー CAL を使って接続させるかに応じて、いずれかのライセンス モードを選択する必要があります。<br>セッション ホスト サーバーが両方の CAL に応じる事はできません。<br>なお、1 台のライセンス サーバーに、デバイス CAL、ユーザー CAL の両方をインストールする事は可能です。</p>
+<p>デバイス CAL、ユーザー CAL はそれぞれ発行動作が異なります。<br>次項でそれぞれの動作概要をご説明します。</p>
+<h2 id="2-デバイス-CAL-について"><a href="#2-デバイス-CAL-について" class="headerlink" title="2. デバイス CAL について"></a>2. デバイス CAL について</h2><p>デバイス CAL は、クライアント コンピューター (デバイス) に対してセッション ホスト サーバーへアクセスする権限を与えます。</p>
+<p>デバイス CAL が一度発行されると、その情報がクライアント コンピューターの以下のレジストリに格納されます。</p>
+<p><code>HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\MSLicensing\Store\LICENSE00x</code></p>
+<p><img src="DeviceCALReg.png" alt="図 1 : デバイス CAL 情報 レジストリ"></p>
+<p>デバイス CAL は、初回接続時に発行される一時 CAL と、2 回目の接続時に発行される恒久 CAL の 2 種類が存在します。</p>
+<h3 id="一時-CAL"><a href="#一時-CAL" class="headerlink" title="一時 CAL"></a>一時 CAL</h3><p>クライアント コンピューターからセッション ホスト サーバーに初めて接続した時に発行されるライセンスです。</p>
+<p>一時 CAL の有効期限は、一律で 90 日間となり、恒久 CAL の余剰数がない場合は、2 回目以降の接続時も一時 CAL のまま接続します。<br>一時 CAL の発行数に制限はありません。</p>
+<p><img src="TempCAL.png" alt="図 2 : 一時 CAL 発行例"></p>
+<h3 id="恒久-CAL"><a href="#恒久-CAL" class="headerlink" title="恒久 CAL"></a>恒久 CAL</h3><p>一時 CAL を持っているクライアント コンピューターが 2 回目に接続した時に発行されるライセンスです。</p>
+<p>恒久 CAL の有効期限は、52 日間から 89 日間のランダムな期間が設定されます。<br>この有効期限を任意の期間にすることはできません。<br>ライセンス サーバーにインストールした数量を上限として発行されます。</p>
+<p><img src="PermCAL.png" alt="図 3 : 恒久 CAL 発行例"></p>
+<hr>
+<p>上記のとおり、デバイス CAL は一時 CAL、恒久 CAL ともに有効期限があります。<br>有効期限を過ぎた場合には、接続ができなくなります。<br>そのため、セッション ホスト サーバーに接続するクライアント コンピューター数を適切に管理する必要があります。</p>
+<h3 id="恒久-CAL-の更新について"><a href="#恒久-CAL-の更新について" class="headerlink" title="恒久 CAL の更新について"></a>恒久 CAL の更新について</h3><p>恒久 CAL の有効期限は、52 日間から 89 日間のランダムな期間が設定されますが、その有効期限日の 1 週間前から CAL の更新期間となります。<br>更新期間中にセッション ホスト サーバーに接続することで、新たに 52 日間から 89 日間のランダムな期間が設定されます。</p>
+<h3 id="ライセンスの失効について"><a href="#ライセンスの失効について" class="headerlink" title="ライセンスの失効について"></a>ライセンスの失効について</h3><p>ライセンス マネージャー上から、失効処理を行うことができます。<br>接続することがなくなったクライアントや、誤って接続して発行させてしまったクライアントに対して、発行された CAL を失効させ、別のクライアントのために発行の余剰を作ることができます。</p>
+<p><img src="Lapse.png" alt="図 4 : 失効"></p>
+<p>失効できる数はインストールしている CAL 総数の 20 % までとなります。<br>また、失効された CAL につきましても、発行先のクライアントが保持する CAL の情報は変わりませんので、有効期限内は接続できます。<br>失効処理は、あくまでライセンス サーバーでの管理上の情報となります。</p>
+<p>極端な例となりますが、100 CAL が存在し、全ての CAL が発行済みであるとします。<br>その状態で上限となる 20 % の CAL を失効させ、さらに新規で 20 台のクライントが接続し、恒久 CAL が発行された場合、一時的には 120 台のクライアントが恒久 CAL を持つ状態となります。</p>
+<h3 id="クライアント-の識別について"><a href="#クライアント-の識別について" class="headerlink" title="クライアント の識別について"></a>クライアント の識別について</h3><p>セッション ホスト サーバーは、接続元のクライアントをコンピューター名ではなく、各クライアントが一意で持つ Hardware ID で識別します。<br>仮に同じコンピューター名を持つクライアントから接続を受け付けた場合においても、別のクライアントとして管理されます。<br>Hardware ID は、クライアント コンピューターの以下のレジストリにあります。</p>
+<p><code>HKLM\Software\Microsoft\MSLicensing\HardwareID\ClientHWID</code></p>
+<p><img src="DeviceCALReg2.png" alt="図 5 : Hardware ID"></p>
+<p>ただし、ライセンス マネージャー上では、コンピューター名のみで表示されますので、同じコンピューター名を持つクライアントが存在する環境や、コンピューター名の変更が発生する場合には注意が必要です。<br>また、ライセンス マネージャー上は、初回 CAL 発行時のコンピューター名で表示されますので、CAL を持つクライアントのコンピューター名を変更した場合においても、旧コンピューター名のまま表示されます。</p>
+<h2 id="3-ユーザー-CAL-について"><a href="#3-ユーザー-CAL-について" class="headerlink" title="3. ユーザー CAL について"></a>3. ユーザー CAL について</h2><p>ユーザー CAL には、デバイス CAL のような、一時 CAL や恒久 CAL といった概念はありません。<br>また、デバイス CAL のように、接続元クライアントのレジストリに情報が記録される動作もありません。</p>
+<p>CAL の発行情報は、ドメイン コントローラー上の各ユーザー コンテナに格納されます。</p>
+<p>ライセンス サーバーがドメイン環境の場合は、ライセンス マネージャー上でユーザー CAL の発行状況を確認できます。</p>
+<p><img src="user-cal.png" alt="図 6 : ユーザー CAL 発行例"></p>
+<p>なお、ユーザー CAL の有効期限は一律で 60 日間となっておりますが、その有効期限は、あくまでその時点で発行されているユーザー CAL の情報管理のために使われるものとなります。有効期限を超過した場合も、超過直後の接続時に新たな有効期限が付与されますので、長期間アクセスが無い場合においても、接続不可となることは発生いたしません。</p>
+<p>ユーザー CAL (ユーザー数ライセンス モード) では、1 人のユーザーに対して、無制限の数のクライアントからセッション ホスト サーバーにアクセスする権限が与えられます。</p>
+<p>ユーザー数ライセンス モードはライセンスによって強制されることはありません。<br>そのため、ライセンス サーバーにインストールされている CAL の数に関係なく、クライアント接続を行うことができます。<br>ただしこれによって、各ユーザーに有効な CAL を持たせなければならないという、マイクロソフト ソフトウェア ライセンス条項の要件から管理者が免除されるわけではありません。<br>ユーザー数ライセンス モードを使用している場合に、各ユーザーに有効な CAL を持たせることができなければ、ライセンス条項違反となります。</p>
+<h2 id="4-必要なライセンス数について"><a href="#4-必要なライセンス数について" class="headerlink" title="4. 必要なライセンス数について"></a>4. 必要なライセンス数について</h2><p>上記のとおり、RDS CAL には有効期限があり、一定の期間にわたって有効です。接続時だけ一時的に付与されるものではありません。<br>そのため、必要なライセンス数は、同時に接続する数ではなく、接続する可能性があるユーザー数やデバイス数に基づいて決まります。</p>
+<p>例えば、ユーザー CAL を使用する際、同じ期間内に RDS 接続するユーザーが 10 人いる場合は、同時接続が 5 人であっても 10 CAL が必要です。</p>
+<h2 id="5-デバイス-CAL-運用において、クライアントが接続できなくなった際の暫定対策について"><a href="#5-デバイス-CAL-運用において、クライアントが接続できなくなった際の暫定対策について" class="headerlink" title="5. デバイス CAL 運用において、クライアントが接続できなくなった際の暫定対策について"></a>5. デバイス CAL 運用において、クライアントが接続できなくなった際の暫定対策について</h2><p>ライセンス マネージャー上で、対象クライアントに対してライセンスが正常に発行されているにも関わらず、クライアントがセッション ホスト サーバーに接続できなくなった場合や、恒久 CAL の余剰数がない状態で有効期限が超過したクライアントをどうしても接続させる必要がある場合の暫定対策を説明いたします。</p>
+<h3 id="暫定対策-クライアントのレジストリ削除"><a href="#暫定対策-クライアントのレジストリ削除" class="headerlink" title="暫定対策 : クライアントのレジストリ削除"></a>暫定対策 : クライアントのレジストリ削除</h3><p>クライアントで保持しているライセンス情報、および HardwareID のレジストリを削除することで、セッション ホスト サーバー側で、新規接続のクライアントと判断され、ライセンス サーバーから一時 CAL が発行されます。<br>そのため、一時 CAL にて、90 日間はリモート デスクトップ接続が可能となります。<br>恒久 CAL に使用可能な数が残っている場合には、2 回目の接続時に一時 CAL から恒久 CAL に変わります。</p>
+<p>削除する必要のあるレジストリは以下となります。</p>
+<ul>
+<li><code>HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\MSLicensing\HardwareID\ClientHWID</code></li>
+<li><code>HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\MSLicensing\Store\LICENSE00x</code></li>
+</ul>
+<p>(LICENSE00x は x に数字が入ります。いくつか存在する場合がありますので、すべて削除します)</p>
+<p>公開情報：<br>リモート デスクトップ プロトコル (RDP) クライアントからターミナル サーバー ライセンスを削除する - Windows Server | Microsoft Learn<br><a target="_blank" rel="noopener" href="https://learn.microsoft.com/ja-jp/troubleshoot/windows-server/remote/remove-terminal-server-licenses-from-rdp">https://learn.microsoft.com/ja-jp/troubleshoot/windows-server/remote/remove-terminal-server-licenses-from-rdp</a></p>
+<p>なお、上記レジストリの削除につきましては、クライアント PC の administrator 権限があるユーザーにて実行する必要があります。<br>また、初回接続時に、新たに HardwareID レジストリが作成されますので、初回接続時につきましても、administrator 権限のあるユーザーにて実施する必要があります。</p>
+<h2 id="補足情報-多段-RDP-接続について"><a href="#補足情報-多段-RDP-接続について" class="headerlink" title="補足情報 : 多段 RDP 接続について"></a>補足情報 : 多段 RDP 接続について</h2><p>条件つきとはなりますが、2 段 RDP 接続はサポートされております。<br>詳細は以下の公開情報を参照ください。</p>
+<p>公開情報：<br>リモート デスクトップ接続セッションを実行する - Windows Server | Microsoft Learn<br><a target="_blank" rel="noopener" href="https://learn.microsoft.com/ja-jp/troubleshoot/windows-server/remote/run-remote-desktop-connection-session">https://learn.microsoft.com/ja-jp/troubleshoot/windows-server/remote/run-remote-desktop-connection-session</a></p>
+<p>例 : Windows 11 — RDP —&gt; Windows Server 2025 (1) — RDP —&gt; Windows Server 2025 (2)</p>
+<p>なお、CAL については、[Windows Server 2025 (1)] に接続するために、[Windows 11] に必要となり、[Windows Server 2025 (2)] に接続するために、中継となる [Windows Server 2025 (1)] に発行される必要がございますので、数量の管理にはご留意願います。</p>
+<h2 id="修正履歴"><a href="#修正履歴" class="headerlink" title="修正履歴"></a>修正履歴</h2><ul>
+<li>2025.11.1X 旧 Blog より移行</li>
+</ul>
+<blockquote>
+<p>本情報の内容 (添付文書、リンク先などを含む) は、作成日時点でのものであり、予告なく変更される場合があります。</p>
+</blockquote>
+
+      
+      
+    </div>
+    <footer class="article-footer">
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/blog/2025/12/05/FileServices/SMB/smbv1-tcp-139-access-by-destination-ip-address-unavailable-on-windows-11-24h2-and-later/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">次の記事</strong>
+      <div class="article-nav-title">
+        
+          Windows 11 version 24H2 以降では宛先 IP アドレスでの SMBv1 (TCP 139 番ポート) アクセスができない
+        
+      </div>
+    </a>
+  
+  
+    <a href="/blog/2025/11/18/Networking/Firewall/firewall-service-parameter-incorrect-error-repeated-termination/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">前の記事</strong>
+      <div class="article-nav-title">Windows Defender Firewall サービスが「パラメーターが間違っています」のエラーで繰り返し終了する</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">カテゴリ</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Activation/">Activation</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Activation/ESU/">ESU</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Activation/security-SPP/">security-SPP</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/">Active Directory</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Authentication/">Authentication</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/DFSR/">DFSR</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/FunctionalLevel/">FunctionalLevel</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Group-Policy/">Group Policy</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Promotion-and-Demotion/">Promotion and Demotion</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/User-Profile/">User Profile</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Windows-Hello/">Windows Hello</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Windows-Time-Service/">Windows Time Service</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/AppLocker/">AppLocker</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/AppLocker/Active-Directory/">Active Directory</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/AppLocker/Microsoft-Intune/">Microsoft Intune</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Deployment/">Deployment</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Deployment/Feature-on-demand/">Feature on demand</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Deployment/Sysprep/">Sysprep</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Failover-Clustering/">Failover Clustering</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Failover-Clustering/Configuration-and-Management/">Configuration and Management</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/FileServices/">FileServices</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/FileServices/FTP/">FTP</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/FileServices/SMB/">SMB</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Hyper-V/">Hyper-V</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Hyper-V/Configuration-and-Management/">Configuration and Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Hyper-V/Migration/">Migration</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Microsoft-Connected-Cache/">Microsoft Connected Cache</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/">Networking</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/BITS/">BITS</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/Bluetooth/">Bluetooth</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/DHCP/">DHCP</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/DNS/">DNS</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/Firewall/">Firewall</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/LBFO/">LBFO</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/NCSI/">NCSI</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/NetworkInterface/">NetworkInterface</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/Proxy/">Proxy</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/TCPIP/">TCPIP</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/OpenSSH/">OpenSSH</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/">Performance</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/Hang-up-BSoD/">Hang-up/BSoD</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/No-Boot/">No Boot</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/Slow-Response/">Slow Response</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/System-Resource/">System Resource</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/Tools/">Tools</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/">Public Key Infrastructure</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Certificate-Authority/">Certificate Authority</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Certificate-Management/">Certificate Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Code-Signing/">Code Signing</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/SSL-TLS-Communication/">SSL TLS Communication</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/SSL-TLS-Connection/">SSL TLS Connection</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Smart-Card-Logon/">Smart Card Logon</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/">Remote Desktop</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/Azure-Virtual-Desktop-AVD/">Azure Virtual Desktop (AVD)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/Remote-Desktop-Service-RDS/">Remote Desktop Service (RDS)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/Windows-Virtual-Desktop-WVD/">Windows Virtual Desktop (WVD)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/RemoteAccess/">RemoteAccess</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/RemoteAccess/%E3%83%80%E3%82%A4%E3%83%A4%E3%83%AB%E3%82%A2%E3%83%83%E3%83%97%E6%8E%A5%E7%B6%9A/">ダイヤルアップ接続</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Setup/">Setup</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Setup/Feature-Update-FU/">Feature Update (FU)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Shell/">Shell</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Shell/Explorer/">Explorer</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/">Storage</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/Backup/">Backup</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/FSRM/">FSRM</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/Management/">Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/StorageMigrationService/">StorageMigrationService</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/UEFI/">UEFI</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/UEFI/Secure-Boot/">Secure Boot</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/">User Interface and Apps</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Command-Prompt/">Command Prompt</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/EventLog/">EventLog</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Language-Support/">Language Support</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Microsoft-Store/">Microsoft Store</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Performance/">Performance</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/PowerShell/">PowerShell</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Printing-%E5%8D%B0%E5%88%B7/">Printing (印刷)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Server-Management/">Server Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Taskscheduler/">Taskscheduler</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Windows-Management-Instrumentation/">Windows Management Instrumentation</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps-Language-support/">User Interface and Apps - Language support</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-365/">Windows 365</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Admin-Center/">Windows Admin Center</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Search/">Windows Search</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/">Windows Update</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Delivery-Optimization-DO/">Delivery Optimization (DO)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Feature-Update-FU/">Feature Update (FU)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Quality-Update-QU/">Quality Update (QU)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Windows-Update-Agent/">Windows Update Agent</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Windows-Update-Agent-WUA/">Windows Update Agent (WUA)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/">WirelessNetwork</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/NPS/">NPS</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/Wi-Fi/">Wi-Fi</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/%E3%83%A2%E3%83%90%E3%82%A4%E3%83%AB-%E3%83%96%E3%83%AD%E3%83%BC%E3%83%89%E3%83%90%E3%83%B3%E3%83%89%E6%8E%A5%E7%B6%9A-LTE/">モバイル ブロードバンド接続 (LTE)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/%E7%B5%84%E7%B9%94%E7%B4%B9%E4%BB%8B%E3%83%96%E3%83%AD%E3%82%B0%EF%BC%88Windows-Commercial%EF%BC%89/">組織紹介ブログ（Windows Commercial）</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最近の投稿</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/blog/2026/02/16/ActiveDirectory/GroupPolicy/UacPolicyIsEnabled/">「ユーザー アカウント制御：ビルトイン Administrator アカウントのための管理者承認モード」ポリシーが有効になる動作ついて</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/02/15/UserInterfaceAndApps/Printing/printer-queue-app-preview/">印刷キューアプリのプレビュー機能について</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/02/02/ActiveDirectory/Authentication/kerberos-rc4-for-service-account-ticket-issuance-changes-related-to-cve-2026-20833/">CVE‑2026‑20833 への対応とその影響について [KB5073381]</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/01/12/Hyper-V/vmwp-does-not-save-the-RTC-value-of-a-virtual-machine-when-performing-Live-Migration/">ライブ マイグレーション後の再起動でゲスト OS の時刻がずれる場合がある</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/01/07/WindowsUpdate/FU/fublog-txt/">ISO メディア経由かつ動的更新無効な状態で Windows 11 バージョン 24H2 または 25H2 へのアップグレードが失敗 (0x8007042B 0x2000D) する事象と対策について</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">アーカイブ</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2026/02/">2026 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2026/01/">2026 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/12/">2025 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/11/">2025 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/10/">2025 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/09/">2025 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/08/">2025 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/07/">2025 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/06/">2025 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/05/">2025 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/04/">2025 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/03/">2025 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/02/">2025 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/01/">2025 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/12/">2024 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/11/">2024 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/10/">2024 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/09/">2024 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/08/">2024 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/07/">2024 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/06/">2024 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/05/">2024 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/04/">2024 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/03/">2024 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/02/">2024 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/01/">2024 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/12/">2023 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/11/">2023 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/10/">2023 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/09/">2023 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/08/">2023 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/07/">2023 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/06/">2023 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/05/">2023 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/04/">2023 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/03/">2023 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/02/">2023 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/01/">2023 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/12/">2022 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/11/">2022 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/10/">2022 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/09/">2022 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/08/">2022 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/07/">2022 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/06/">2022 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/05/">2022 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/04/">2022 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/03/">2022 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/02/">2022 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/01/">2022 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/12/">2021 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/11/">2021 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/10/">2021 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/09/">2021 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/08/">2021 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/07/">2021 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/06/">2021 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/05/">2021 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/04/">2021 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/03/">2021 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/02/">2021 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/01/">2021 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/12/">2020 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/11/">2020 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/10/">2020 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/07/">2020 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/03/">2020 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2019/03/">2019 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/11/">2018 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/10/">2018 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/09/">2018 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/08/">2018 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/07/">2018 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/06/">2018 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/04/">2018 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/02/">2018 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/12/">2017 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/11/">2017 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/09/">2017 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/05/">2017 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/03/">2017 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/02/">2017 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2016/08/">2016 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2016/05/">2016 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2014/03/">2014 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2012/02/">2012 / 02</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2026 Microsoft Japan Windows Technology Support Team<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/blog/" class="mobile-nav-link">Home</a>
+  
+    <a href="/blog/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+<script src="/blog/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-180187723-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-180187723-1');
+</script>
+<!-- End Google Analytics -->
+
+  
+  <title>ドメイン コントローラー（DC）の正常性の確認方法について | Microsoft Japan Windows Technology Support Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="本記事は 2018 年 9 月 5 日に公開された記事を元に本ブログへ移行したものです。元の記事の最新の更新情報については、本内容をご参照ください。  こんにちは。Windows Commercial Support Directory Services チームです。 今回は、「ドメイン コントローラー（以下 DC ）の正常性の確認について」をご紹介していきたいと思います。 例えば、ドメイン コ">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ドメイン コントローラー（DC）の正常性の確認方法について">
+<meta property="og:url" content="https://jpwinsup.github.io/blog/2023/03/30/ActiveDirectory/PromotionAndDemotion/domain-controller-health-check/index.html">
+<meta property="og:site_name" content="Microsoft Japan Windows Technology Support Blog">
+<meta property="og:description" content="本記事は 2018 年 9 月 5 日に公開された記事を元に本ブログへ移行したものです。元の記事の最新の更新情報については、本内容をご参照ください。  こんにちは。Windows Commercial Support Directory Services チームです。 今回は、「ドメイン コントローラー（以下 DC ）の正常性の確認について」をご紹介していきたいと思います。 例えば、ドメイン コ">
+<meta property="og:locale" content="ja_JP">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2023/03/30/ActiveDirectory/PromotionAndDemotion/domain-controller-health-check/domain-controller-health-check_net-share-image.png">
+<meta property="article:published_time" content="2023-03-30T09:27:06.000Z">
+<meta property="article:modified_time" content="2026-02-19T02:53:58.337Z">
+<meta property="article:author" content="Microsoft Japan Windows Technology Support Team">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://jpwinsup.github.io/blog/2023/03/30/ActiveDirectory/PromotionAndDemotion/domain-controller-health-check/domain-controller-health-check_net-share-image.png">
+  
+    <link rel="alternate" href="/blog/atom.xml" title="Microsoft Japan Windows Technology Support Blog" type="application/atom+xml">
+  
+
+  <link rel="icon" href="/blog/favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="/blog/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/blog/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/blog/favicon-16x16.png">
+  <link rel="manifest" href="/blog/site.webmanifest">
+  <link rel="mask-icon" href="/blog/safari-pinned-tab.svg" color="#5bbad5">
+  <meta name="msapplication-TileColor" content="#ffffff">
+  <meta name="theme-color" content="#ffffff">
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/blog/css/style.css">
+
+<meta name="generator" content="Hexo 5.2.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="site-header-logo"></div>
+  <div id="site-header-blog-wrapper"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        <div id="ms-logo"></div>
+        
+          <a class="main-nav-link" href="/blog/">Home</a>
+        
+          <a class="main-nav-link" href="/blog/archives">Archives</a>
+        
+        <a class="main-nav-link" target="_blank" rel="noopener" href="https://cssjpn.github.io/">サポート情報</a>
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/blog/atom.xml" title="RSSフィード"></a>
+        
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//www.bing.com/search" method="get" accept-charset="UTF-8" name="bing-search" onsubmit="var f=this;if(f['q'].value){var searchUrl =  'https://www.bing.com/search?q=' +  encodeURIComponent(f['q'].value + ' site:' + f['sitesearch'].value) ;window.open(searchUrl, 'blank') };return false;" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="検索"><button type="submit" id="nav-search-btn" class="search-form-submit"></button><input type="hidden" name="sitesearch" value="https://jpwinsup.github.io/blog"></form>
+      </div>
+    </div>
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/blog/" id="logo">Microsoft Japan Windows Technology Support Blog</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/blog/" id="subtitle">日本マイクロソフト Windows Support チームによる、サポート情報 Blog です。</a>
+        </h2>
+      
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-ActiveDirectory/PromotionAndDemotion/domain-controller-health-check" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    
+    
+      <header class="article-header-single">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      ドメイン コントローラー（DC）の正常性の確認方法について
+    </h1>
+  
+
+      </header>
+      <div class="article-share">
+        Last Update: 
+        <a href="/blog/2023/03/30/ActiveDirectory/PromotionAndDemotion/domain-controller-health-check/" class="article-date-single">
+  <time datetime="2023-03-30T09:27:06.000Z" itemprop="datePublished">2023-03-30</time>
+</a>
+        
+  <div class="article-category">
+    <a class="article-category-link" href="/blog/categories/Active-Directory/">Active Directory</a>►<a class="article-category-link" href="/blog/categories/Active-Directory/Promotion-and-Demotion/">Promotion and Demotion</a>
+  </div>
+
+        
+        <a href="https://github.com/jpwinsup/blog/issues/new?title=&body=%EF%BB%BF%0A%0A---%0A%0A%23%23%23%23+Document+Details%0A%0A*+Article+ID%3A+483623d8-113c-5af9-bd90-bcb60164b580%0A*+TITLE%3A+%E3%83%89%E3%83%A1%E3%82%A4%E3%83%B3+%E3%82%B3%E3%83%B3%E3%83%88%E3%83%AD%E3%83%BC%E3%83%A9%E3%83%BC%EF%BC%88DC%EF%BC%89%E3%81%AE%E6%AD%A3%E5%B8%B8%E6%80%A7%E3%81%AE%E7%A2%BA%E8%AA%8D%E6%96%B9%E6%B3%95%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6%0A*+URL+https%3A%2F%2Fjpwinsup.github.io%2Fblog%2F2023%2F03%2F30%2FActiveDirectory%2FPromotionAndDemotion%2Fdomain-controller-health-check%2F%0A*+SourceFileName%3A+source%2F_posts%2FActiveDirectory%2FPromotionAndDemotion%2Fdomain-controller-health-check.md%0A" class="article-github-issue-link" target="_blank" rel="noopener noreferrer">feedback</a>
+        
+        <a data-url="https://jpwinsup.github.io/blog/2023/03/30/ActiveDirectory/PromotionAndDemotion/domain-controller-health-check/" data-id="cmlsvjdb40073ru3yf3rqekaz" class="article-share-link">共有</a>
+      </div>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<p>本記事は 2018 年 9 月 5 日に公開された記事を元に本ブログへ移行したものです。元の記事の最新の更新情報については、本内容をご参照ください。</p>
+</blockquote>
+<p>こんにちは。Windows Commercial Support Directory Services チームです。</p>
+<p>今回は、「ドメイン コントローラー（以下 DC ）の正常性の確認について」をご紹介していきたいと思います。</p>
+<p>例えば、ドメイン コントローラーの移行を行われるといった場合、DC を降格させたり、DC に昇格させたりと動作をさせていく上で、<br>作業前に現在 DC が正常に稼働しているのか、 DC が正常に降格されているのか、または DC へ正常に昇格されているのか確認したい場面が出てくるかと思います。</p>
+<p>以下に DC 正常性の確認の手順を下記にお纏めいたしました。<br>なお、正常性の確認する際は、ドメイン内のすべてのドメイン コントローラー ( DC ) で実施していただけますようお願いいたします。</p>
+<hr>
+<h2 id="DC-の正常性を確認する方法"><a href="#DC-の正常性を確認する方法" class="headerlink" title="DC の正常性を確認する方法"></a>DC の正常性を確認する方法</h2><hr>
+<p>作業の流れは以下の通りです。</p>
+<ol>
+<li><a href="#1-AD-%E3%83%87%E3%83%BC%E3%82%BF%E3%83%99%E3%83%BC%E3%82%B9%E3%81%AE%E8%A4%87%E8%A3%BD%E7%8A%B6%E6%B3%81%E3%81%AE%E7%A2%BA%E8%AA%8D"> AD データベースの複製状況の確認 </a></li>
+<li><a href="#2-SYSVOL-%E3%81%8A%E3%82%88%E3%81%B3-NETLOGON-%E3%81%AE%E5%85%B1%E6%9C%89%E3%81%AE%E7%A2%BA%E8%AA%8D"> SYSVOL および NETLOGON の共有の確認 </a></li>
+<li><a href="#3-%E3%83%89%E3%83%A1%E3%82%A4%E3%83%B3-%E3%82%B3%E3%83%B3%E3%83%88%E3%83%AD%E3%83%BC%E3%83%A9%E3%83%BC%E8%A8%BA%E6%96%AD%E3%83%86%E3%82%B9%E3%83%88%E3%81%AE%E7%A2%BA%E8%AA%8D"> ドメイン コントローラー診断テストの確認 </a></li>
+<li><a href="#4-%E5%90%84%E7%A8%AE%E3%82%A4%E3%83%99%E3%83%B3%E3%83%88-%E3%83%AD%E3%82%B0%E3%81%AE%E7%A2%BA%E8%AA%8D"> 各種イベント ログの確認 </a> </li>
+</ol>
+<h3 id="1-AD-データベースの複製状況の確認"><a href="#1-AD-データベースの複製状況の確認" class="headerlink" title="1. AD データベースの複製状況の確認"></a>1. AD データベースの複製状況の確認</h3><p>コマンド プロンプトにて repadmin /showrepl コマンドを実行し、Active Directory データベースの複製にエラーが無いことを確認します。また、グローバル カタログ サーバーの場合は “DSA オプション: IS_GC” という項目があることを確認します。</p>
+<pre><code>repadmin /showrepl</code></pre>
+<p>出力結果例）以下のように「DSA オブジェクト GUID: 326e1109-b33d-4026-aab7-8a5bc2cd960a YYYY-MM-DD HH:MM:SS の最後の試行は成功しました。 」の YYYY-MM-DD HH:MM:SS の部分が、直近の日時で成功している事を確認します。また、以下の例ではグローバル カタログ サーバーとなっており、「DSA オプション: IS_GC」となっていることが確認できます。</p>
+<pre><code>Repadmin: フル DC localhost に対してコマンド /showrepl を実行しています
+
+Default-First-Site-Name\DC02
+
+DSA オプション: IS_GC
+
+サイト オプション: (none)
+
+DSA オブジェクト GUID: b3db08eb-75c6-411d-b56c-5a06d4365995
+
+DSA 起動 ID: 19a5c6a9-96cc-4cce-bcc7-ed759412899f
+
+====入力方向の近隣サーバー==================
+
+DC=TEST,DC=LOCAL
+
+Default-First-Site-Name\DC01 (RPC 経由)
+
+DSA オブジェクト GUID: 326e1109-b33d-4026-aab7-8a5bc2cd960a YYYY-MM-DD HH:MM:SS の最後の試行は成功しました。 </code></pre>
+<blockquote>
+<p>環境によってはコマンドの結果が英語表示になる可能性があります。その場合は、”成功しました” となっていることを確認する代わりに、 “successful” と表示されていることを確認します。</p>
+</blockquote>
+<h3 id="2-SYSVOL-および-NETLOGON-の共有の確認"><a href="#2-SYSVOL-および-NETLOGON-の共有の確認" class="headerlink" title="2. SYSVOL および NETLOGON の共有の確認"></a>2. SYSVOL および NETLOGON の共有の確認</h3><p>コマンド プロンプトにて net share コマンドを実行し、SYSVOL および NETLOGON が共有されているかを確認します。 共有名に NETLOGON および SYSVOL が表示されていることで正常に共有できていると判断できます。</p>
+<pre><code>net share</code></pre>
+<p>出力結果例）下図のように、「共有名」の列の NETLOGON および SYSVOL が共有されていることを確認します。 </p>
+<img src="/blog/2023/03/30/ActiveDirectory/PromotionAndDemotion/domain-controller-health-check/domain-controller-health-check_net-share-image.png" class="">
+
+<p>次に、SysvolReady レジストリが 1 に設定されていることを確認します。</p>
+<pre><code>キー: HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Netlogon\Parameters
+名前: SysvolReady
+種類: REG_DWORD
+値: 1</code></pre>
+<p>最後に、以下の手順に従って SYSVOL の複製動作が正常に行われていることを確認します。</p>
+<pre><code>1. 任意の DC にて、C:\Windows\SYSVOL\domain\Policies フォルダーを開き、テスト用のファイル（例：test.txt）を作成します。
+※ FRS から DFSR に移行された環境では、パスが C:\Windows\SYSVOL_DFSR\domain\Policies となります。
+2. 作成した test.txt が他の DC に複製されていることを確認します。
+※ 同一サイト内の DC には比較的すぐに複製されますが、サイト構成によっては複製に数時間かかる場合があります。
+3. テスト完了後、必要に応じて test.txt を削除します。</code></pre>
+<h3 id="3-ドメイン-コントローラー診断テストの確認"><a href="#3-ドメイン-コントローラー診断テストの確認" class="headerlink" title="3. ドメイン コントローラー診断テストの確認"></a>3. ドメイン コントローラー診断テストの確認</h3><p>コマンド プロンプトにて dcdiag /v コマンドを実行し、各テストにエラーが無く、”合格しました” と表示されることを確認します。 Advertising に合格していることで、ドメイン コントローラー、およびグローバル カタログとして正常に機能していると判断できます。</p>
+<pre><code>dcdiag /v</code></pre>
+<p>出力結果一部例）</p>
+<pre><code>テストを開始しています: Advertising
+
+The DC DC02 is advertising itself as a DC and having a DS.
+
+The DC DC02 is advertising as an LDAP server
+
+The DC DC02 is advertising as having a writeable directory
+
+The DC DC02 is advertising as a Key Distribution Center
+
+The DC DC02 is advertising as a time server
+
+The DS DC02 is advertising as a GC.
+
+......................... DC02 はテスト Advertising に合格しました</code></pre>
+<blockquote>
+<p>環境によってはコマンドの結果が英語表示になる可能性があります。その場合は、”合格しました” となっていることを確認する代わりに、”passed” と表示されていることを確認します。</p>
+</blockquote>
+<blockquote>
+<p>FrsEvent、DFSREvent、KccEvent、SystemLog テストに関しては、24 時間以内の過去ログを表示していますので、降格・昇格に伴う再起動時に発生する警告イベント等で出力されるようなものでも、記録されていればテストを失敗させるという動作となっています。そのため、重要なエラー、警告イベントが記録されているものの、その後復旧している場合においても、これらのテストが失敗してしまうことがあります。したがって、これらのテストが失敗していることにより、確実に異常が発生していることを示しているわけではないことにご留意ください。</p>
+</blockquote>
+<blockquote>
+<p>adprep /rodcprep コマンドを実行していない環境においては、NCSecDesc テストで “NT AUTHORITY\ENTERPRISE DOMAIN CONTROLLERS には Replicating Directory Changes In Filtered Set 名前付けコンテキストへのアクセス権がありません” というエラーが発生することがあります。この場合、当該エラーについては無視して問題ありません。</p>
+</blockquote>
+<h3 id="4-各種イベント-ログの確認"><a href="#4-各種イベント-ログの確認" class="headerlink" title="4. 各種イベント ログの確認"></a>4. 各種イベント ログの確認</h3><p>システム、ディレクトリ サービス、DNS サーバー、DFS Replication の各種イベント ログにおいて、異常を示唆するようなエラーや警告のイベントが記録されていないか確認します。</p>
+<p>以上が DC の正常性の確認方法となります。</p>
+<hr>
+<h2 id="補足-降格させた-DC-の情報が存在しないことの確認手順"><a href="#補足-降格させた-DC-の情報が存在しないことの確認手順" class="headerlink" title="(補足) 降格させた DC の情報が存在しないことの確認手順"></a>(補足) 降格させた DC の情報が存在しないことの確認手順</h2><hr>
+<p>上述の内容は DC の正常性を確認するための一般的な方法となりますが、DC の降格を行った後に正常に降格ができたか、残存している情報がないかを確認したい場合には、<br>上記の内容に加えまして以下の項目をご確認いただき、降格させた DC の情報が残存していないことをご確認下さい。</p>
+<p>作業の流れは以下の通りとなります。</p>
+<ol>
+<li><a href="#1-%E8%A4%87%E8%A3%BD%E3%81%AB%E4%BD%BF%E7%94%A8%E3%81%99%E3%82%8B%E6%8E%A5%E7%B6%9A%E3%82%AA%E3%83%96%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88"> 複製に使用する接続オブジェクトが削除されていることの確認 </a></li>
+<li><a href="#2-DC-%E3%81%AE%E3%82%B3%E3%83%B3%E3%83%94%E3%83%A5%E3%83%BC%E3%82%BF-%E3%82%AA%E3%83%96%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88"> DC のコンピュータ オブジェクトが削除されていることの確認 </a></li>
+<li><a href="#3-FRS-%E3%81%BE%E3%81%9F%E3%81%AF-DFSR-%E3%81%AE%E3%82%AA%E3%83%96%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88"> FRS または DFSR のオブジェクトが削除されていることの確認 </a></li>
+<li><a href="#4-DNS-%E3%83%AC%E3%82%B3%E3%83%BC%E3%83%89"> DNS レコードが削除されていることの確認 </a></li>
+</ol>
+<h3 id="1-複製に使用する接続オブジェクト"><a href="#1-複製に使用する接続オブジェクト" class="headerlink" title="1. 複製に使用する接続オブジェクト"></a>1. 複製に使用する接続オブジェクト</h3><ol>
+<li>[ファイル名を指定して実行] から dssite.msc を実行します。 </li>
+<li>左ペインのツリーを [Sites] - [&lt;任意のサイト&gt;] - [Servers] - [&lt;削除対象の DC 以外の任意の DC&gt;] - [NTDS Settings] を選択します。</li>
+<li>右ペインの [レプリケート元サーバー] 列が削除対象の DC となっているオブジェクトが存在している場合には、左ペインの [NTDS Settings] を右クリックし、[すべてのタスク] - [レプリケーション トポロジの確認] をクリックします。</li>
+<li>[レプリケーション トポロジの確認] のダイアログが表示されたら、[OK] をクリックします。</li>
+<li>左ペインの [NTDS Settings] を右クリックし、[最新の情報に更新] をクリックします。右ペインから削除対象の DC のオブジェクトが削除されていることを確認します。</li>
+<li>上記の手順 2 から 5 までの手順を、削除対象の DC を除く、すべての DC について実施します。</li>
+<li>左ペインのツリーを [Sites] - [&lt;削除対象の DC が所属するサイト&gt;] - [Servers] - [&lt;削除対象 DC&gt;] の順に展開します。</li>
+<li>左ペインの [Servers] 配下の削除対象の DC を右クリックし、[削除] をクリックします。</li>
+<li>“‘&lt;削除対象の DC&gt;’ という名前の サーバー を削除しますか?” と表示されたら、[はい] をクリックします。</li>
+</ol>
+<h3 id="2-DC-のコンピュータ-オブジェクト"><a href="#2-DC-のコンピュータ-オブジェクト" class="headerlink" title="2. DC のコンピュータ オブジェクト"></a>2. DC のコンピュータ オブジェクト</h3><p>DC を降格すると、[ Domain Computers ] 配下にコンピューター オブジェクトが移動します。<br>そのため、[Active Directory ユーザーとコンピュータ] の MMC スナップインを開き、 [ Domain Controllers ] 配下に降格させた DC が削除されているか確認します。</p>
+<h3 id="3-FRS-または-DFSR-のオブジェクト"><a href="#3-FRS-または-DFSR-のオブジェクト" class="headerlink" title="3. FRS または DFSR のオブジェクト"></a>3. FRS または DFSR のオブジェクト</h3><ol>
+<li>[ファイル名を指定して実行] から adsiedit.msc を実行します。</li>
+<li>左ペインの [ADSI エディター] を右クリックし、[接続] をクリックします。</li>
+<li>[既知の名前付けコンテキストを選択する] から [既定の名前付けコンテキスト] が選択されていることを確認し、[OK] をクリックします。</li>
+<li>左ペインのツリーを [既定の名前付けコンテキスト] - [&lt;ドメインの DN&gt;] - [CN=System] - [CN=File Replication Service] - [CN=Domain System Volume (SYSVOL share)] の順に展開します。<br>([CN=File Replication Service] 配下に [CN=Domain System Volume (SYSVOL share)] が存在しない場合には、FRS が使用されていないため、手順 6 に進みます。)</li>
+<li>中央ペインに [CN=&lt;削除対象の DC&gt;] のオブジェクトが存在していれば、そのオブジェクトを右クリックし、[削除] をクリックします。その際に “このオブジェクトを削除しますか?” と表示されたら、[はい] をクリックします。手順 6 以降はスキップします。 </li>
+<li>左ペインのツリーを [既定の名前付けコンテキスト] - [&lt;ドメインの DN&gt;] - [CN=System] - [CN=DFSR-GlobalSettings] - [CN=Domain System Volume] - [CN=Topology] の順に展開します。</li>
+<li>中央ペインに [CN=&lt;削除対象の DC&gt;] のオブジェクトが存在していれば、そのオブジェクトを右クリックし、[削除] をクリックします。その際に “このオブジェクトを削除しますか?” と表示されたら、[はい] をクリックします。</li>
+</ol>
+<h3 id="4-DNS-レコード"><a href="#4-DNS-レコード" class="headerlink" title="4.  DNS レコード"></a>4.  DNS レコード</h3><ol>
+<li>[ファイル名を指定して実行] から dnsmgmt.msc を実行します。</li>
+<li>[前方参照ゾーン] - [_msdcs.&lt;フォレスト ルート ドメインの FQDN&gt;] 配下を展開していき、[データ] 列が削除対象の DC もしくは削除対象の DC の IP アドレスとなっているレコードが存在すれば、そのレコードを削除します。(A レコードや CNAME レコード、SRV レコードは対象のレコードを右クリックし、[削除] をクリックすることによって削除できます。NS レコードに関しては一旦そのレコードのプロパティ画面を開いた上で、対象のレコードを削除する必要があります。)</li>
+<li>同様に、[前方参照ゾーン] - [&lt;ドメインの FQDN&gt;] 配下を展開していき、[データ] 列が削除対象の DC もしくは削除対象の DC の IP アドレスとなっているレコードが存在すれば、そのレコードを削除します。</li>
+</ol>
+<h2 id="更新履歴"><a href="#更新履歴" class="headerlink" title="更新履歴"></a>更新履歴</h2><p>2023/03/30 : 本ブログの公開</p>
+<p>2025/06/30 : 本ブログを更新しました。「SYSVOL および NETLOGON の共有の確認」について、SysvolReady レジストリと SYSVOL 複製動作の確認を追加しました。</p>
+
+      
+      
+    </div>
+    <footer class="article-footer">
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/blog/2023/04/02/ActiveDirectory/PromotionAndDemotion/Demotion/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">次の記事</strong>
+      <div class="article-nav-title">
+        
+          ドメイン コントローラーの降格方法
+        
+      </div>
+    </a>
+  
+  
+    <a href="/blog/2023/03/28/Storage/Backup/WSB-Generation-Management/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">前の記事</strong>
+      <div class="article-nav-title">Windows Server バックアップの世代管理について</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">カテゴリ</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Activation/">Activation</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Activation/ESU/">ESU</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Activation/security-SPP/">security-SPP</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/">Active Directory</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Authentication/">Authentication</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/DFSR/">DFSR</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/FunctionalLevel/">FunctionalLevel</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Group-Policy/">Group Policy</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Promotion-and-Demotion/">Promotion and Demotion</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/User-Profile/">User Profile</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Windows-Hello/">Windows Hello</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Windows-Time-Service/">Windows Time Service</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/AppLocker/">AppLocker</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/AppLocker/Active-Directory/">Active Directory</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/AppLocker/Microsoft-Intune/">Microsoft Intune</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Deployment/">Deployment</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Deployment/Feature-on-demand/">Feature on demand</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Deployment/Sysprep/">Sysprep</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Failover-Clustering/">Failover Clustering</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Failover-Clustering/Configuration-and-Management/">Configuration and Management</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/FileServices/">FileServices</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/FileServices/FTP/">FTP</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/FileServices/SMB/">SMB</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Hyper-V/">Hyper-V</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Hyper-V/Configuration-and-Management/">Configuration and Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Hyper-V/Migration/">Migration</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Microsoft-Connected-Cache/">Microsoft Connected Cache</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/">Networking</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/BITS/">BITS</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/Bluetooth/">Bluetooth</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/DHCP/">DHCP</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/DNS/">DNS</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/Firewall/">Firewall</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/LBFO/">LBFO</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/NCSI/">NCSI</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/NetworkInterface/">NetworkInterface</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/Proxy/">Proxy</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/TCPIP/">TCPIP</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/OpenSSH/">OpenSSH</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/">Performance</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/Hang-up-BSoD/">Hang-up/BSoD</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/No-Boot/">No Boot</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/Slow-Response/">Slow Response</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/System-Resource/">System Resource</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/Tools/">Tools</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/">Public Key Infrastructure</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Certificate-Authority/">Certificate Authority</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Certificate-Management/">Certificate Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Code-Signing/">Code Signing</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/SSL-TLS-Communication/">SSL TLS Communication</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/SSL-TLS-Connection/">SSL TLS Connection</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Smart-Card-Logon/">Smart Card Logon</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/">Remote Desktop</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/Azure-Virtual-Desktop-AVD/">Azure Virtual Desktop (AVD)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/Remote-Desktop-Service-RDS/">Remote Desktop Service (RDS)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/Windows-Virtual-Desktop-WVD/">Windows Virtual Desktop (WVD)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/RemoteAccess/">RemoteAccess</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/RemoteAccess/%E3%83%80%E3%82%A4%E3%83%A4%E3%83%AB%E3%82%A2%E3%83%83%E3%83%97%E6%8E%A5%E7%B6%9A/">ダイヤルアップ接続</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Setup/">Setup</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Setup/Feature-Update-FU/">Feature Update (FU)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Shell/">Shell</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Shell/Explorer/">Explorer</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/">Storage</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/Backup/">Backup</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/FSRM/">FSRM</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/Management/">Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/StorageMigrationService/">StorageMigrationService</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/UEFI/">UEFI</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/UEFI/Secure-Boot/">Secure Boot</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/">User Interface and Apps</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Command-Prompt/">Command Prompt</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/EventLog/">EventLog</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Language-Support/">Language Support</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Microsoft-Store/">Microsoft Store</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Performance/">Performance</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/PowerShell/">PowerShell</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Printing-%E5%8D%B0%E5%88%B7/">Printing (印刷)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Server-Management/">Server Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Taskscheduler/">Taskscheduler</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Windows-Management-Instrumentation/">Windows Management Instrumentation</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps-Language-support/">User Interface and Apps - Language support</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-365/">Windows 365</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Admin-Center/">Windows Admin Center</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Search/">Windows Search</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/">Windows Update</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Delivery-Optimization-DO/">Delivery Optimization (DO)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Feature-Update-FU/">Feature Update (FU)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Quality-Update-QU/">Quality Update (QU)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Windows-Update-Agent/">Windows Update Agent</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Windows-Update-Agent-WUA/">Windows Update Agent (WUA)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/">WirelessNetwork</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/NPS/">NPS</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/Wi-Fi/">Wi-Fi</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/%E3%83%A2%E3%83%90%E3%82%A4%E3%83%AB-%E3%83%96%E3%83%AD%E3%83%BC%E3%83%89%E3%83%90%E3%83%B3%E3%83%89%E6%8E%A5%E7%B6%9A-LTE/">モバイル ブロードバンド接続 (LTE)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/%E7%B5%84%E7%B9%94%E7%B4%B9%E4%BB%8B%E3%83%96%E3%83%AD%E3%82%B0%EF%BC%88Windows-Commercial%EF%BC%89/">組織紹介ブログ（Windows Commercial）</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最近の投稿</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/blog/2026/02/16/ActiveDirectory/GroupPolicy/UacPolicyIsEnabled/">「ユーザー アカウント制御：ビルトイン Administrator アカウントのための管理者承認モード」ポリシーが有効になる動作ついて</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/02/15/UserInterfaceAndApps/Printing/printer-queue-app-preview/">印刷キューアプリのプレビュー機能について</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/02/02/ActiveDirectory/Authentication/kerberos-rc4-for-service-account-ticket-issuance-changes-related-to-cve-2026-20833/">CVE‑2026‑20833 への対応とその影響について [KB5073381]</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/01/12/Hyper-V/vmwp-does-not-save-the-RTC-value-of-a-virtual-machine-when-performing-Live-Migration/">ライブ マイグレーション後の再起動でゲスト OS の時刻がずれる場合がある</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/01/07/WindowsUpdate/FU/fublog-txt/">ISO メディア経由かつ動的更新無効な状態で Windows 11 バージョン 24H2 または 25H2 へのアップグレードが失敗 (0x8007042B 0x2000D) する事象と対策について</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">アーカイブ</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2026/02/">2026 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2026/01/">2026 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/12/">2025 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/11/">2025 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/10/">2025 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/09/">2025 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/08/">2025 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/07/">2025 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/06/">2025 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/05/">2025 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/04/">2025 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/03/">2025 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/02/">2025 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/01/">2025 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/12/">2024 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/11/">2024 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/10/">2024 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/09/">2024 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/08/">2024 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/07/">2024 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/06/">2024 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/05/">2024 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/04/">2024 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/03/">2024 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/02/">2024 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/01/">2024 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/12/">2023 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/11/">2023 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/10/">2023 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/09/">2023 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/08/">2023 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/07/">2023 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/06/">2023 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/05/">2023 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/04/">2023 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/03/">2023 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/02/">2023 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/01/">2023 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/12/">2022 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/11/">2022 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/10/">2022 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/09/">2022 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/08/">2022 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/07/">2022 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/06/">2022 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/05/">2022 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/04/">2022 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/03/">2022 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/02/">2022 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/01/">2022 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/12/">2021 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/11/">2021 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/10/">2021 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/09/">2021 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/08/">2021 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/07/">2021 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/06/">2021 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/05/">2021 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/04/">2021 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/03/">2021 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/02/">2021 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/01/">2021 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/12/">2020 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/11/">2020 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/10/">2020 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/07/">2020 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/03/">2020 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2019/03/">2019 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/11/">2018 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/10/">2018 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/09/">2018 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/08/">2018 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/07/">2018 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/06/">2018 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/04/">2018 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/02/">2018 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/12/">2017 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/11/">2017 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/09/">2017 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/05/">2017 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/03/">2017 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/02/">2017 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2016/08/">2016 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2016/05/">2016 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2014/03/">2014 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2012/02/">2012 / 02</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2026 Microsoft Japan Windows Technology Support Team<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/blog/" class="mobile-nav-link">Home</a>
+  
+    <a href="/blog/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+<script src="/blog/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

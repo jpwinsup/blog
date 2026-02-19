@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-180187723-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-180187723-1');
+</script>
+<!-- End Google Analytics -->
+
+  
+  <title>ルート証明書更新プログラムの仕組みについて | Microsoft Japan Windows Technology Support Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="本記事はマイクロソフト社員によって公開されております。 こんにちは。Windows プラットフォーム サポートです。 ルート証明書更新プログラムとは、Windows OS 端末にルート証明書を自動でインストールする機能です。 証明書の正当性の検証を行うときに、証明書の発行元の証明機関が信頼された証明機関であることを確認します。具体的には、証明書の信頼チェーン上の最上位にあるルート証明書が [信頼さ">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ルート証明書更新プログラムの仕組みについて">
+<meta property="og:url" content="https://jpwinsup.github.io/blog/2021/12/14/PublicKeyInfrastructure/CertificateManagement/about-windows-root-certificate-program/index.html">
+<meta property="og:site_name" content="Microsoft Japan Windows Technology Support Blog">
+<meta property="og:description" content="本記事はマイクロソフト社員によって公開されております。 こんにちは。Windows プラットフォーム サポートです。 ルート証明書更新プログラムとは、Windows OS 端末にルート証明書を自動でインストールする機能です。 証明書の正当性の検証を行うときに、証明書の発行元の証明機関が信頼された証明機関であることを確認します。具体的には、証明書の信頼チェーン上の最上位にあるルート証明書が [信頼さ">
+<meta property="og:locale" content="ja_JP">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2021/12/14/PublicKeyInfrastructure/CertificateManagement/about-windows-root-certificate-program/1.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2021/12/14/PublicKeyInfrastructure/CertificateManagement/about-windows-root-certificate-program/2.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2021/12/14/PublicKeyInfrastructure/CertificateManagement/about-windows-root-certificate-program/3.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2021/12/14/PublicKeyInfrastructure/CertificateManagement/about-windows-root-certificate-program/4.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2021/12/14/PublicKeyInfrastructure/CertificateManagement/about-windows-root-certificate-program/5.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2021/12/14/PublicKeyInfrastructure/CertificateManagement/about-windows-root-certificate-program/6.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2021/12/14/PublicKeyInfrastructure/CertificateManagement/about-windows-root-certificate-program/7.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2021/12/14/PublicKeyInfrastructure/CertificateManagement/about-windows-root-certificate-program/8.png">
+<meta property="article:published_time" content="2021-12-14T11:31:54.000Z">
+<meta property="article:modified_time" content="2026-02-19T02:53:58.491Z">
+<meta property="article:author" content="Microsoft Japan Windows Technology Support Team">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://jpwinsup.github.io/blog/2021/12/14/PublicKeyInfrastructure/CertificateManagement/about-windows-root-certificate-program/1.png">
+  
+    <link rel="alternate" href="/blog/atom.xml" title="Microsoft Japan Windows Technology Support Blog" type="application/atom+xml">
+  
+
+  <link rel="icon" href="/blog/favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="/blog/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/blog/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/blog/favicon-16x16.png">
+  <link rel="manifest" href="/blog/site.webmanifest">
+  <link rel="mask-icon" href="/blog/safari-pinned-tab.svg" color="#5bbad5">
+  <meta name="msapplication-TileColor" content="#ffffff">
+  <meta name="theme-color" content="#ffffff">
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/blog/css/style.css">
+
+<meta name="generator" content="Hexo 5.2.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="site-header-logo"></div>
+  <div id="site-header-blog-wrapper"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        <div id="ms-logo"></div>
+        
+          <a class="main-nav-link" href="/blog/">Home</a>
+        
+          <a class="main-nav-link" href="/blog/archives">Archives</a>
+        
+        <a class="main-nav-link" target="_blank" rel="noopener" href="https://cssjpn.github.io/">サポート情報</a>
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/blog/atom.xml" title="RSSフィード"></a>
+        
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//www.bing.com/search" method="get" accept-charset="UTF-8" name="bing-search" onsubmit="var f=this;if(f['q'].value){var searchUrl =  'https://www.bing.com/search?q=' +  encodeURIComponent(f['q'].value + ' site:' + f['sitesearch'].value) ;window.open(searchUrl, 'blank') };return false;" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="検索"><button type="submit" id="nav-search-btn" class="search-form-submit"></button><input type="hidden" name="sitesearch" value="https://jpwinsup.github.io/blog"></form>
+      </div>
+    </div>
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/blog/" id="logo">Microsoft Japan Windows Technology Support Blog</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/blog/" id="subtitle">日本マイクロソフト Windows Support チームによる、サポート情報 Blog です。</a>
+        </h2>
+      
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-PublicKeyInfrastructure/CertificateManagement/about-windows-root-certificate-program" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    
+    
+      <header class="article-header-single">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      ルート証明書更新プログラムの仕組みについて
+    </h1>
+  
+
+      </header>
+      <div class="article-share">
+        Last Update: 
+        <a href="/blog/2021/12/14/PublicKeyInfrastructure/CertificateManagement/about-windows-root-certificate-program/" class="article-date-single">
+  <time datetime="2021-12-14T11:31:54.000Z" itemprop="datePublished">2021-12-14</time>
+</a>
+        
+  <div class="article-category">
+    <a class="article-category-link" href="/blog/categories/Public-Key-Infrastructure/">Public Key Infrastructure</a>►<a class="article-category-link" href="/blog/categories/Public-Key-Infrastructure/Certificate-Management/">Certificate Management</a>
+  </div>
+
+        
+        <a href="https://github.com/jpwinsup/blog/issues/new?title=&body=%EF%BB%BF%0A%0A---%0A%0A%23%23%23%23+Document+Details%0A%0A*+Article+ID%3A+79371b21-d549-52f3-aa8c-96a27d864139%0A*+TITLE%3A+%E3%83%AB%E3%83%BC%E3%83%88%E8%A8%BC%E6%98%8E%E6%9B%B8%E6%9B%B4%E6%96%B0%E3%83%97%E3%83%AD%E3%82%B0%E3%83%A9%E3%83%A0%E3%81%AE%E4%BB%95%E7%B5%84%E3%81%BF%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6%0A*+URL+https%3A%2F%2Fjpwinsup.github.io%2Fblog%2F2021%2F12%2F14%2FPublicKeyInfrastructure%2FCertificateManagement%2Fabout-windows-root-certificate-program%2F%0A*+SourceFileName%3A+source%2F_posts%2FPublicKeyInfrastructure%2FCertificateManagement%2Fabout-windows-root-certificate-program.md%0A" class="article-github-issue-link" target="_blank" rel="noopener noreferrer">feedback</a>
+        
+        <a data-url="https://jpwinsup.github.io/blog/2021/12/14/PublicKeyInfrastructure/CertificateManagement/about-windows-root-certificate-program/" data-id="cmlsvjddx00f4ru3y859q9fm3" class="article-share-link">共有</a>
+      </div>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>本記事はマイクロソフト社員によって公開されております。</p>
+<p>こんにちは。Windows プラットフォーム サポートです。</p>
+<p>ルート証明書更新プログラムとは、Windows OS 端末にルート証明書を自動でインストールする機能です。</p>
+<p>証明書の正当性の検証を行うときに、証明書の発行元の証明機関が信頼された証明機関であることを確認します。<br>具体的には、証明書の信頼チェーン上の最上位にあるルート証明書が [信頼されたルート証明機関] のストアにインストールされているかを確認しています。</p>
+<p>現在、多くの公的証明機関や商用証明機関が存在しており、証明書の検証を行う度に必要なルート証明書を手動でインストールするのは大変です。<br>Windows OS では、端末にルート証明書を自動できる仕組みとして「ルート証明書更新プログラム」という機能があります。<br>この機能は既定で有効になっており、必要に応じてルート証明書をダウンロードして [信頼されたルート証明機関] のストアに自動でインストールしております。</p>
+<p>今回は、「ルート証明書更新プログラム」の機能の概要について説明します。<br><br/></p>
+<div style="border:solid 1px #D0D0D0;width:500px;padding:5px 0 18px 18px;">
+  <p style="padding:0px;margin:6px;text-align:center;"><b>目次</b></p>
+  <a href="#1-ルート証明書更新プログラムとは？" style="text-decoration:none;color:#484848;padding-bottom:5px;">1. ルート証明書更新プログラムとは？</a><br/>
+  <a href="#2-ルート証明書更新プログラムの動作" style="text-decoration:none;color:#484848;padding-bottom:5px;">2. ルート証明書更新プログラムの動作</a><br/>
+  <a href="#3-ルート証明書更新プログラムの有効-無効の設定" style="text-decoration:none;color:#484848;padding-bottom:5px;">3. ルート証明書更新プログラムの有効/無効の設定</a><br/>
+  <a href="#4-ルート証明書更新プログラム動作時の通信影響" style="text-decoration:none;color:#484848;padding-bottom:5px;">4. ルート証明書更新プログラムの通信影響</a><br/>
+  <a href="#5-ルート証明書更新プログラム無効化による影響" style="text-decoration:none;color:#484848;padding-bottom:5px;">5. ルート証明書更新プログラム無効化の影響</a><br/>
+</div>
+<br/>
+
+<h2 id="1-ルート証明書更新プログラムとは？"><a href="#1-ルート証明書更新プログラムとは？" class="headerlink" title="1. ルート証明書更新プログラムとは？"></a>1. ルート証明書更新プログラムとは？</h2><p>ルート証明書更新プログラムとは Windows OS にルート証明書を配布するプログラムで、現在、約 150 以上の公的証明機関、商用証明機関がプログラムに参加しております。</p>
+<p>これらの証明機関のルート証明書を、あらかじめ信頼されているものとして定義しており、必要になった際に端末に自動でルート証明書をダウンロードして「信頼されたルート証明機関」ストアにインストールします。<br><br/></p>
+<h2 id="2-ルート証明書更新プログラムの動作"><a href="#2-ルート証明書更新プログラムの動作" class="headerlink" title="2. ルート証明書更新プログラムの動作"></a>2. ルート証明書更新プログラムの動作</h2><p>ルート証明書更新プログラムは、バックグラウンドで動作しており、ユーザーによる操作は必要ありません。<br>ルート証明書更新プログラムは、1) ルート証明書をインストールする、2) ルート証明書の信頼性を確認するという機能があります。<br>2 つの機能の動作の仕組みを紹介します。<br><br/></p>
+<h4 id="2-1-ルート証明書の自動インストール"><a href="#2-1-ルート証明書の自動インストール" class="headerlink" title="2-1.  ルート証明書の自動インストール"></a>2-1.  ルート証明書の自動インストール</h4><p><b style="border-bottom:solid 1px black;">(1) 証明書の検証が発生</b><br>証明書がクライアント端末に提示され、クライアント端末にて証明書の検証が開始されます。</p>
+<p>例えば、クライアント端末が Web サーバーの HTTPS サイトに接続した時などに、Web サーバーから身分証明のためにサーバー証明書が提示された時のシナリオを考えます。</p>
+<p>クライアント端末は、この時点ではサーバー証明書を信頼してよいのかわかりません。<br>ここでは、クライアント端末が証明書の検証者となります。</p>
+<img src="1.png" style="margin:auto;border:solid 1px #D0D0D0;">
+<br/>
+<br/>
+
+<p><b style="border-bottom:solid 1px black;">(2) “信頼できるルート証明書のリスト” を入手</b><br>クライアント端末にて ctldl.windowsupdate.com へアクセスし、信頼できるルート証明書のリストをダウンロードします。<br>信頼できるルート証明書のリストは URL からダウンロードします。</p>
+<p>http://ctldl.windowsupdate.com/msdownload/update/v3/static/trustedr/en/authrootstl.cab</p>
+<p>※ authrootstl.cab が “信頼できるルート証明書のリスト” のファイルとなります。<br>※ URL のドメインは ctldl.windowsupdate.com となっておりますが、Windows Update の機能とは関係ございません。<br>  「ルート証明書更新プログラム」と「Windows Update」は別の機能であり、ルート証明書更新プログラムの動作において更新プログラムが適用されることはありません。</p>
+<img src="2.png" style="margin:auto;border:solid 1px #D0D0D0;">
+<br/>
+<br/>
+
+<p><b style="border-bottom:solid 1px black;">(3) サーバー証明書の発行元のルート証明書を入手</b><br>クライアント端末はサーバー証明書の証明書チェーンを確認し、”信頼できるルート証明書のリスト” に発行元のルート証明書が含まれているか確認します。</p>
+<p>“信頼できるルート証明書のリスト” は、ルート証明書の基本情報の一覧のみで、ルート証明書自体は含まれていません。<br>“信頼できるルート証明書のリスト” に発行元のルート証明書が含まれていれば、ctldl.windowsupdate.com へアクセスしてルート証明書をダウンロードします。</p>
+<p>ルート証明書のリストは以下の URL からダウンロードして、[信頼されたルート証明機関] のストアにインストールします。<br>[信頼されたルート証明機関] のストアにインストールすることで、ルート証明書を信頼したことになります。</p>
+<p>http://ctldl.windowsupdate.com/msdownload/update/v3/static/trustedr/en/&lt;証明書の拇印&gt;.crt</p>
+<p>“信頼できるルート証明書のリスト” に発行元のルート証明書が含まれていなければ、検証中の証明書は信頼できる証明機関から発行されていないと判断されます。</p>
+<img src="3.png" style="margin:auto;border:solid 1px #D0D0D0;">
+<br/>
+<br/>
+
+
+<p><b style="border-bottom:solid 1px black;">(4) サーバー証明書を信頼</b><br>クライアント端末の [信頼されたルート証明機関] ストアにルート証明書が登録されていると、そのルート証明機関は信頼されます。<br>また、そのルート証明機関の配下にある中間証明機関も信頼されます。<br>証明機関を信頼すれば、その証明機関で発行している証明書も信頼できることになります。<br>そのため、Web サーバーから提示されたサーバー証明書は信頼できる証明書と判断されるようになります。</p>
+<img src="4.png" style="margin:auto;border:solid 1px #D0D0D0;">
+<br/>
+
+<br/>
+
+
+<h3 id="2-2-ルート証明書の信頼性を確認"><a href="#2-2-ルート証明書の信頼性を確認" class="headerlink" title="2-2. ルート証明書の信頼性を確認"></a>2-2. ルート証明書の信頼性を確認</h3><p>ルート証明書更新プログラムでは、信頼されないルート証明機関の確認を行う機能もございます。<br>証明書の署名には証明機関の秘密キーが利用されますが、万一、第三者に秘密キーが漏洩してしまった場合、<br>秘密キーを入手した者が自由に証明書を発行して悪用することができるようになります。<br>そのため、秘密キーが漏洩したルート証明機関のルート証明書は、信頼してはいけないルート証明書として扱う必要がでてきます。</p>
+<p>ルート証明書更新プログラムでは、セキュリティ リスクがあるルート証明書の一覧も管理しております。<br>証明書の信頼性の検証を行う際、ルート証明書が “信頼されていないルート証明書のリスト” に含まれていないかを確認します。</p>
+<p>ルート証明書が [信頼されたルート証明機関] の証明書ストアに登録されており、信頼される構成となっている場合でも、<br>“信頼されていないルート証明書のリスト” を確認して、対象のルート証明書が含まれていないかを確認しております。</p>
+<p><b style="border-bottom:solid 1px black;">(1) 証明書の検証が発生</b><br>証明書がクライアント端末に提示され、クライアント端末にて証明書の検証が開始されます。</p>
+<p>例えば、クライアント端末が Web サーバーの HTTPS サイトに接続した時などに、Web サーバーから身分証明のためにサーバー証明書が提示された時のシナリオを考えます。<br>サーバー証明書の証明書チェーン上のルート証明書が [信頼されたルート証明機関] のストアに入っていたとします。<br>しかし、ルート証明書が信頼できない状態になっている可能性もあります。</p>
+<img src="5.png" style="margin:auto;border:solid 1px #D0D0D0;">
+<br/>
+<br/>
+
+<p><b style="border-bottom:solid 1px black;">(2) “信頼できないルート証明書のリスト” をダウンロード</b><br>ルート証明書が信頼できないものになっていないかを確認するために、ctldl.windowsupdate.com へアクセスして “信頼できないルート証明書のリスト” をダウンロードします。<br>信頼できないルート証明書のリストは URL からダウンロードします。</p>
+<p>http://ctldl.windowsupdate.com/msdownload/update/v3/static/trustedr/en/disallowedcertstl.cab</p>
+<p>※ disallowedcertstl.cab が “信頼できないルート証明書のリスト” のファイルとなります。</p>
+<img src="6.png" style="margin:auto;border:solid 1px #D0D0D0;">
+<br/>
+<br/>
+
+<p><b style="border-bottom:solid 1px black;">(3) “信頼できないルート証明書のリスト” を確認</b><br>“信頼できないルート証明書のリスト” に対象のルート証明書が含まれていないか確認します。<br>リストに含まれていなければ、そのままルート証明書を信頼できます。<br>そのため、Web サーバーから提示されたサーバー証明書は信頼できる証明書と判断できます。</p>
+<img src="7.png" width="85%" height="85%" style="margin:auto;border:solid 1px #D0D0D0;">
+<br/>
+<br/>
+
+<h2 id="3-ルート証明書更新プログラムの有効-無効の設定"><a href="#3-ルート証明書更新プログラムの有効-無効の設定" class="headerlink" title="3. ルート証明書更新プログラムの有効/無効の設定"></a>3. ルート証明書更新プログラムの有効/無効の設定</h2><p>Windows OS では「ルート証明書更新プログラム」は既定で有効となっております。<br>そのため、特に追加の設定を行わなくても、ルート証明書は自動で登録される動作となります。</p>
+<p>ルート証明書更新プログラムを無効化したい場合は、以下のポリシーにて設定変更を行うことができます。</p>
+<p>ポリシー パス:<br>[コンピュータの構成] - [ポリシー] - [Windowsの設定] - [セキュリティの設定] - [公開キーのポリシー] - [証明書パス検証の設定]</p>
+<img src="/blog/2021/12/14/PublicKeyInfrastructure/CertificateManagement/about-windows-root-certificate-program/8.png" class="">
+
+<p><b style="border-bottom:solid 1px black;">ポリシー設定</b><br>/// 無効の設定：<br>[ネットワークの取得] タブで [これらのポリシーの設定を定義する] にチェックを入れた上で<br>[Microsoft ルート証明書プログラムで証明書を自動更新する] のチェックをはずします。</p>
+<p>/// 有効の設定：<br>[ネットワークの取得] タブで [これらのポリシーの設定を定義する] にチェックを入れた上で<br>[Microsoft ルート証明書プログラムで証明書を自動更新する] のチェックを入れます。<br>もしくは、上記のポリシーが未構成の場合は、既定の設定である “有効” が反映されます。</p>
+<p>上記のポリシーを設定している時、以下のレジストリが設定されます。</p>
+<p>キー： HKEY_LOCAL_MACHINE\Software\policies\Microsoft\SystemCertificates\AuthRoot<br>型：REG_DWORD<br>値：DisableRootAutoUpdate<br>設定値： 0 または 1<br>※ ルート証明書更新プログラムが有効の場合は設定値は 0、無効の場合は設定値は 1 となります。<br>   上記のポリシーを設定していない場合は、上記のレジストリは存在しません。<br><br/><br><br/></p>
+<h2 id="4-ルート証明書更新プログラム動作時の通信影響"><a href="#4-ルート証明書更新プログラム動作時の通信影響" class="headerlink" title="4. ルート証明書更新プログラム動作時の通信影響"></a>4. ルート証明書更新プログラム動作時の通信影響</h2><p>ルート証明書更新プログラムでの、ルート証明書を自動登録において発生する通信において、ネットワークへの通信量へ影響を与えることは想定されません。</p>
+<p>authrootstl.cab のファイルサイズは、60 KB 程度で、disallowedcertstl.cab のファイルサイズは、5 KB 程度となります。<br>ルート証明書更新プログラムが動作する度に、毎回、authrootstl.cab や disallowedcertstl.cab をダウンロードするわけではありません。<br>authrootstl.cab のキャッシュは、7 日間有効となり、disallowedcertstl.cab のキャッシュの有効期間は 16 時間です。<br>有効期間内の cab キャッシュを保持している場合は、ルート証明書更新プログラムが動作しても URL から cab ファイルは取得しません。</p>
+<p>また、ルート証明書のファイルサイズ自体も 1 ～ 3 KB と軽微なものであり、一度、ルート証明書をインストールすると [信頼されたルート証明機関] に残り続けます。<br>そのため、ルート証明書更新プログラムにより、ルート証明書を自動取得してインストールするという動作も頻繁に発生するものではございません。<br><br/><br><br/></p>
+<h2 id="5-ルート証明書更新プログラム無効化による影響"><a href="#5-ルート証明書更新プログラム無効化による影響" class="headerlink" title="5. ルート証明書更新プログラム無効化による影響"></a>5. ルート証明書更新プログラム無効化による影響</h2><p>ルート証明書更新プログラムが利用できないと、ルート証明書を自動でインストールすることができません。</p>
+<p>その場合、検証する対象の証明書の信頼チェーン上のルート証明書が信頼されていない場合、<br>ルート証明書を自動でインストールされないため、ルート証明書の信頼性が確認できず、証明書の検証に失敗いたします。</p>
+<p>証明書の検証に失敗すると、証明書を利用するアプリケーションによっては問題が発生する可能性があります。<br>正常に HTTPS 通信が行えなかったり、コード署名の検証に失敗してドライバーやアプリのインストール等に<br>失敗する等の問題が発生する可能性が考えられます。<br><br/><br><br/></p>
+
+      
+      
+    </div>
+    <footer class="article-footer">
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/blog/2021/12/14/ActiveDirectory/GroupPolicy/D2-D4/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">次の記事</strong>
+      <div class="article-nav-title">
+        
+          MaxOfflineTimeInDays (既定値 60 日) を超過したために、SYSVOL の複製が停止してしまった場合の対処策
+        
+      </div>
+    </a>
+  
+  
+    <a href="/blog/2021/12/10/FailoverClustering/ConfigurationAndManagement/remove-clusternameaccount-fail/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">前の記事</strong>
+      <div class="article-nav-title">PowerShell を使用したクラスターのドメイン間マイグレーションが失敗する不具合について</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">カテゴリ</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Activation/">Activation</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Activation/ESU/">ESU</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Activation/security-SPP/">security-SPP</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/">Active Directory</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Authentication/">Authentication</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/DFSR/">DFSR</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/FunctionalLevel/">FunctionalLevel</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Group-Policy/">Group Policy</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Promotion-and-Demotion/">Promotion and Demotion</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/User-Profile/">User Profile</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Windows-Hello/">Windows Hello</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Windows-Time-Service/">Windows Time Service</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/AppLocker/">AppLocker</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/AppLocker/Active-Directory/">Active Directory</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/AppLocker/Microsoft-Intune/">Microsoft Intune</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Deployment/">Deployment</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Deployment/Feature-on-demand/">Feature on demand</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Deployment/Sysprep/">Sysprep</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Failover-Clustering/">Failover Clustering</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Failover-Clustering/Configuration-and-Management/">Configuration and Management</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/FileServices/">FileServices</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/FileServices/FTP/">FTP</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/FileServices/SMB/">SMB</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Hyper-V/">Hyper-V</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Hyper-V/Configuration-and-Management/">Configuration and Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Hyper-V/Migration/">Migration</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Microsoft-Connected-Cache/">Microsoft Connected Cache</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/">Networking</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/BITS/">BITS</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/Bluetooth/">Bluetooth</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/DHCP/">DHCP</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/DNS/">DNS</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/Firewall/">Firewall</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/LBFO/">LBFO</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/NCSI/">NCSI</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/NetworkInterface/">NetworkInterface</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/Proxy/">Proxy</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/TCPIP/">TCPIP</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/OpenSSH/">OpenSSH</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/">Performance</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/Hang-up-BSoD/">Hang-up/BSoD</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/No-Boot/">No Boot</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/Slow-Response/">Slow Response</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/System-Resource/">System Resource</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/Tools/">Tools</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/">Public Key Infrastructure</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Certificate-Authority/">Certificate Authority</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Certificate-Management/">Certificate Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Code-Signing/">Code Signing</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/SSL-TLS-Communication/">SSL TLS Communication</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/SSL-TLS-Connection/">SSL TLS Connection</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Smart-Card-Logon/">Smart Card Logon</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/">Remote Desktop</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/Azure-Virtual-Desktop-AVD/">Azure Virtual Desktop (AVD)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/Remote-Desktop-Service-RDS/">Remote Desktop Service (RDS)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/Windows-Virtual-Desktop-WVD/">Windows Virtual Desktop (WVD)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/RemoteAccess/">RemoteAccess</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/RemoteAccess/%E3%83%80%E3%82%A4%E3%83%A4%E3%83%AB%E3%82%A2%E3%83%83%E3%83%97%E6%8E%A5%E7%B6%9A/">ダイヤルアップ接続</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Setup/">Setup</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Setup/Feature-Update-FU/">Feature Update (FU)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Shell/">Shell</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Shell/Explorer/">Explorer</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/">Storage</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/Backup/">Backup</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/FSRM/">FSRM</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/Management/">Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/StorageMigrationService/">StorageMigrationService</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/UEFI/">UEFI</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/UEFI/Secure-Boot/">Secure Boot</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/">User Interface and Apps</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Command-Prompt/">Command Prompt</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/EventLog/">EventLog</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Language-Support/">Language Support</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Microsoft-Store/">Microsoft Store</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Performance/">Performance</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/PowerShell/">PowerShell</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Printing-%E5%8D%B0%E5%88%B7/">Printing (印刷)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Server-Management/">Server Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Taskscheduler/">Taskscheduler</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Windows-Management-Instrumentation/">Windows Management Instrumentation</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps-Language-support/">User Interface and Apps - Language support</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-365/">Windows 365</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Admin-Center/">Windows Admin Center</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Search/">Windows Search</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/">Windows Update</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Delivery-Optimization-DO/">Delivery Optimization (DO)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Feature-Update-FU/">Feature Update (FU)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Quality-Update-QU/">Quality Update (QU)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Windows-Update-Agent/">Windows Update Agent</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Windows-Update-Agent-WUA/">Windows Update Agent (WUA)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/">WirelessNetwork</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/NPS/">NPS</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/Wi-Fi/">Wi-Fi</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/%E3%83%A2%E3%83%90%E3%82%A4%E3%83%AB-%E3%83%96%E3%83%AD%E3%83%BC%E3%83%89%E3%83%90%E3%83%B3%E3%83%89%E6%8E%A5%E7%B6%9A-LTE/">モバイル ブロードバンド接続 (LTE)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/%E7%B5%84%E7%B9%94%E7%B4%B9%E4%BB%8B%E3%83%96%E3%83%AD%E3%82%B0%EF%BC%88Windows-Commercial%EF%BC%89/">組織紹介ブログ（Windows Commercial）</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最近の投稿</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/blog/2026/02/16/ActiveDirectory/GroupPolicy/UacPolicyIsEnabled/">「ユーザー アカウント制御：ビルトイン Administrator アカウントのための管理者承認モード」ポリシーが有効になる動作ついて</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/02/15/UserInterfaceAndApps/Printing/printer-queue-app-preview/">印刷キューアプリのプレビュー機能について</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/02/02/ActiveDirectory/Authentication/kerberos-rc4-for-service-account-ticket-issuance-changes-related-to-cve-2026-20833/">CVE‑2026‑20833 への対応とその影響について [KB5073381]</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/01/12/Hyper-V/vmwp-does-not-save-the-RTC-value-of-a-virtual-machine-when-performing-Live-Migration/">ライブ マイグレーション後の再起動でゲスト OS の時刻がずれる場合がある</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/01/07/WindowsUpdate/FU/fublog-txt/">ISO メディア経由かつ動的更新無効な状態で Windows 11 バージョン 24H2 または 25H2 へのアップグレードが失敗 (0x8007042B 0x2000D) する事象と対策について</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">アーカイブ</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2026/02/">2026 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2026/01/">2026 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/12/">2025 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/11/">2025 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/10/">2025 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/09/">2025 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/08/">2025 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/07/">2025 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/06/">2025 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/05/">2025 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/04/">2025 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/03/">2025 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/02/">2025 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/01/">2025 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/12/">2024 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/11/">2024 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/10/">2024 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/09/">2024 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/08/">2024 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/07/">2024 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/06/">2024 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/05/">2024 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/04/">2024 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/03/">2024 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/02/">2024 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/01/">2024 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/12/">2023 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/11/">2023 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/10/">2023 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/09/">2023 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/08/">2023 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/07/">2023 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/06/">2023 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/05/">2023 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/04/">2023 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/03/">2023 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/02/">2023 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/01/">2023 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/12/">2022 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/11/">2022 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/10/">2022 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/09/">2022 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/08/">2022 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/07/">2022 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/06/">2022 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/05/">2022 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/04/">2022 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/03/">2022 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/02/">2022 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/01/">2022 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/12/">2021 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/11/">2021 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/10/">2021 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/09/">2021 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/08/">2021 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/07/">2021 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/06/">2021 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/05/">2021 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/04/">2021 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/03/">2021 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/02/">2021 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/01/">2021 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/12/">2020 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/11/">2020 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/10/">2020 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/07/">2020 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/03/">2020 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2019/03/">2019 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/11/">2018 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/10/">2018 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/09/">2018 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/08/">2018 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/07/">2018 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/06/">2018 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/04/">2018 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/02/">2018 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/12/">2017 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/11/">2017 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/09/">2017 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/05/">2017 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/03/">2017 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/02/">2017 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2016/08/">2016 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2016/05/">2016 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2014/03/">2014 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2012/02/">2012 / 02</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2026 Microsoft Japan Windows Technology Support Team<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/blog/" class="mobile-nav-link">Home</a>
+  
+    <a href="/blog/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+<script src="/blog/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

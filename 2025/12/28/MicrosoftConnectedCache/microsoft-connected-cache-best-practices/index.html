@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-180187723-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-180187723-1');
+</script>
+<!-- End Google Analytics -->
+
+  
+  <title>Microsoft Connected Cache の展開時における注意点とベストプラクティス | Microsoft Japan Windows Technology Support Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="※本記事はマイクロソフト社員によって公開されております。  みなさま、こんにちは。Windows Commercial Support: Performance チームの鈴木です。最近、Microsoft Connected Cache for Enterprise and Education (以下 MCC) に関するお問い合わせを頂戴する機会が増えてきております。 MCC は、更新プログラムの">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Microsoft Connected Cache の展開時における注意点とベストプラクティス">
+<meta property="og:url" content="https://jpwinsup.github.io/blog/2025/12/28/MicrosoftConnectedCache/microsoft-connected-cache-best-practices/index.html">
+<meta property="og:site_name" content="Microsoft Japan Windows Technology Support Blog">
+<meta property="og:description" content="※本記事はマイクロソフト社員によって公開されております。  みなさま、こんにちは。Windows Commercial Support: Performance チームの鈴木です。最近、Microsoft Connected Cache for Enterprise and Education (以下 MCC) に関するお問い合わせを頂戴する機会が増えてきております。 MCC は、更新プログラムの">
+<meta property="og:locale" content="ja_JP">
+<meta property="article:published_time" content="2025-12-28T15:00:00.000Z">
+<meta property="article:modified_time" content="2026-02-19T02:53:58.391Z">
+<meta property="article:author" content="Microsoft Japan Windows Technology Support Team">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/blog/atom.xml" title="Microsoft Japan Windows Technology Support Blog" type="application/atom+xml">
+  
+
+  <link rel="icon" href="/blog/favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="/blog/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/blog/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/blog/favicon-16x16.png">
+  <link rel="manifest" href="/blog/site.webmanifest">
+  <link rel="mask-icon" href="/blog/safari-pinned-tab.svg" color="#5bbad5">
+  <meta name="msapplication-TileColor" content="#ffffff">
+  <meta name="theme-color" content="#ffffff">
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/blog/css/style.css">
+
+<meta name="generator" content="Hexo 5.2.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="site-header-logo"></div>
+  <div id="site-header-blog-wrapper"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        <div id="ms-logo"></div>
+        
+          <a class="main-nav-link" href="/blog/">Home</a>
+        
+          <a class="main-nav-link" href="/blog/archives">Archives</a>
+        
+        <a class="main-nav-link" target="_blank" rel="noopener" href="https://cssjpn.github.io/">サポート情報</a>
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/blog/atom.xml" title="RSSフィード"></a>
+        
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//www.bing.com/search" method="get" accept-charset="UTF-8" name="bing-search" onsubmit="var f=this;if(f['q'].value){var searchUrl =  'https://www.bing.com/search?q=' +  encodeURIComponent(f['q'].value + ' site:' + f['sitesearch'].value) ;window.open(searchUrl, 'blank') };return false;" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="検索"><button type="submit" id="nav-search-btn" class="search-form-submit"></button><input type="hidden" name="sitesearch" value="https://jpwinsup.github.io/blog"></form>
+      </div>
+    </div>
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/blog/" id="logo">Microsoft Japan Windows Technology Support Blog</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/blog/" id="subtitle">日本マイクロソフト Windows Support チームによる、サポート情報 Blog です。</a>
+        </h2>
+      
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-MicrosoftConnectedCache/microsoft-connected-cache-best-practices" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    
+    
+      <header class="article-header-single">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Microsoft Connected Cache の展開時における注意点とベストプラクティス
+    </h1>
+  
+
+      </header>
+      <div class="article-share">
+        Last Update: 
+        <a href="/blog/2025/12/28/MicrosoftConnectedCache/microsoft-connected-cache-best-practices/" class="article-date-single">
+  <time datetime="2025-12-28T15:00:00.000Z" itemprop="datePublished">2025-12-29</time>
+</a>
+        
+  <div class="article-category">
+    <a class="article-category-link" href="/blog/categories/Microsoft-Connected-Cache/">Microsoft Connected Cache</a>
+  </div>
+
+        
+        <a href="https://github.com/jpwinsup/blog/issues/new?title=&body=%EF%BB%BF%0A%0A---%0A%0A%23%23%23%23+Document+Details%0A%0A*+Article+ID%3A+48a66d83-cd43-52d1-916f-2555523eafa9%0A*+TITLE%3A+Microsoft+Connected+Cache+%E3%81%AE%E5%B1%95%E9%96%8B%E6%99%82%E3%81%AB%E3%81%8A%E3%81%91%E3%82%8B%E6%B3%A8%E6%84%8F%E7%82%B9%E3%81%A8%E3%83%99%E3%82%B9%E3%83%88%E3%83%97%E3%83%A9%E3%82%AF%E3%83%86%E3%82%A3%E3%82%B9%0A*+URL+https%3A%2F%2Fjpwinsup.github.io%2Fblog%2F2025%2F12%2F28%2FMicrosoftConnectedCache%2Fmicrosoft-connected-cache-best-practices%2F%0A*+SourceFileName%3A+source%2F_posts%2FMicrosoftConnectedCache%2Fmicrosoft-connected-cache-best-practices.md%0A" class="article-github-issue-link" target="_blank" rel="noopener noreferrer">feedback</a>
+        
+        <a data-url="https://jpwinsup.github.io/blog/2025/12/28/MicrosoftConnectedCache/microsoft-connected-cache-best-practices/" data-id="cmlsvjd8j001dru3yeh8s5av9" class="article-share-link">共有</a>
+      </div>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>※本記事はマイクロソフト社員によって公開されております。 </p>
+<p>みなさま、こんにちは。Windows Commercial Support: Performance チームの鈴木です。最近、Microsoft Connected Cache for Enterprise and Education (以下 MCC) に関するお問い合わせを頂戴する機会が増えてきております。</p>
+<p>MCC は、更新プログラムの取得に要する WAN 帯域をローカル キャッシュにより軽減するソリューションです。「キャッシュ ノード」と呼ばれるサーバーをネットワーク内に構築いただくことにより、クライアントが取得した更新プログラムのパッケージを保持し組織内でのダウンロードに再利用することが可能です。</p>
+<p>Microsoft Store アプリを業務利用されるユースケースの増加や、WSUS の開発が終了したことなどを背景として MCC をご検討いただいておりますが、2025 年夏に一般提供を迎えた比較的新しいサービスという点もあり情報が少ないとお感じのお客様も多いかと存じます。これまでのお問い合わせ事例等より “勘所” をご紹介いたしますので、お役立ていただけましたら幸いです。</p>
+<h2 id="クライアントとキャッシュ-ノードそれぞれにインターネット接続が必要です"><a href="#クライアントとキャッシュ-ノードそれぞれにインターネット接続が必要です" class="headerlink" title="クライアントとキャッシュ ノードそれぞれにインターネット接続が必要です"></a>クライアントとキャッシュ ノードそれぞれにインターネット接続が必要です</h2><p>最も誤解されやすい点ですが、MCC のキャッシュ ノードおよび MCC から更新プログラムをダウンロードするクライアントには双方インターネット接続が必要です。いわゆる完全な閉域網でご利用いただくことはできません。</p>
+<p>クライアントが更新プログラムを取得する際の最初のアクセス先はキャッシュ ノードではなく、当社クラウド サービス (Delivery Optimization) となります。更新プログラムを構成するパッケージ本体はキャッシュ ノードから取得するため WAN 帯域の大幅な削減が達成されますが、インターネットへの接続を全く行わないよう構成することはできません。</p>
+<p>完全に閉域の環境では、クライアントのみではなく WSUS も多段構成とする手法が取られておりましたが、キャッシュ ノードの多段構成は構築いただけません。直接のインターネット接続が必要である点にご留意ください。</p>
+<h2 id="中央集権的に大規模なキャッシュ-ノードを構築するよりも、拠点やネットワーク-セグメントごとに分散した展開をお勧めします"><a href="#中央集権的に大規模なキャッシュ-ノードを構築するよりも、拠点やネットワーク-セグメントごとに分散した展開をお勧めします" class="headerlink" title="中央集権的に大規模なキャッシュ ノードを構築するよりも、拠点やネットワーク セグメントごとに分散した展開をお勧めします"></a>中央集権的に大規模なキャッシュ ノードを構築するよりも、拠点やネットワーク セグメントごとに分散した展開をお勧めします</h2><p>可能な限り、キャッシュ ノードはクライアントと同じネットワーク セグメントに配置することを推奨しております。サブネットを超える構成ももちろんサポートされておりますが、ルーター等ネットワーク機器への負荷や、キャッシュのヒット率といった観点からベスト プラクティスではございません。</p>
+<p>大規模な WSUS を問題なく運用されていた環境においても、WSUS ではキャッシュできなかった Microsoft 365 Apps や Microsoft Store アプリの更新が不定期に取得されることで WSUS よりも圧倒的に多くのトラフィックが転送され、ネットワークが過負荷となる事例が報告されております。なお、WSUS では使用可能であった BranchCache によるトラフィック削減手法も MCC ではご利用いただけません。</p>
+<p>Windows Server のライセンスが必要であった WSUS と異なり、MCC のキャッシュ ノードはWindows クライアントや Ubuntu への展開も可能です。キャッシュ ノードの作成にライセンス コストは不要ですので、拠点やネットワーク セグメントごとに分散した配置をご検討ください。</p>
+<p>なお、ネットワーク的に最も近いキャッシュ ノードから更新プログラムをダウンロードするため、キャッシュ ノードを分散配置した際は DHCP オプション 235 を使用してキャッシュ ノードのホスト名 / IP アドレスをクライアントに伝えることをお勧めします。グループ ポリシーによる指定よりも機動的に運用いただくことが可能かと存じます。</p>
+<h2 id="大規模展開の場合は特に、Linux-への展開をご検討ください"><a href="#大規模展開の場合は特に、Linux-への展開をご検討ください" class="headerlink" title="大規模展開の場合は特に、Linux への展開をご検討ください"></a>大規模展開の場合は特に、Linux への展開をご検討ください</h2><p>Windows クライアントおよび Windows Server を MCC のキャッシュ ノードとして構築することは可能ですが、キャッシュ ノードを実現するソフトウェア群は Linux コンテナーとして実装されております。Windows ネイティブのソフトウェア スタックのご用意はございません。</p>
+<p>Windows に構築いただく場合はまず WSL 2 (Windows Subsystem for Linux) 上に Ubuntu がインストールされ、その上で Docker (Azure IoT Edge) コンテナーとしてキャッシュ ノード ソフトウェアが実行されております。 </p>
+<p>このような背景から、主にストレージやネットワークの部分で Windows 版のほうが複雑な構成となっております。</p>
+<p>特に、多数のクライアントを収容する大規模展開の場合はキャッシュを保持するストレージも大きな領域を割り当てる必要が生じますが、Linux 版では Linux ファイル システムを直接利用し、複数のパス (ディスク) を指定できる一方、Windows 版は “/var/mcc” としてマウントされる容量固定かつ単一の VHD (仮想ハードディスク) 以外に変更することができません。</p>
+<p>また、若干ではございますが WSL 2 のオーバーヘッドも存在するため、構成の柔軟性やシンプルさ、性能面で Linux への展開にアドバンテージがある一方でデメリットはございません。特に大規模なキャッシュ ノードの構築においては、Linux を強く推奨いたします。</p>
+<h2 id="インストールに用いるアカウントと、キャッシュ-ノード-ソフトウェアの実行に用いるアカウントは必ず別にしていただく必要があります-Windows-のみ"><a href="#インストールに用いるアカウントと、キャッシュ-ノード-ソフトウェアの実行に用いるアカウントは必ず別にしていただく必要があります-Windows-のみ" class="headerlink" title="インストールに用いるアカウントと、キャッシュ ノード ソフトウェアの実行に用いるアカウントは必ず別にしていただく必要があります (Windows のみ)"></a>インストールに用いるアカウントと、キャッシュ ノード ソフトウェアの実行に用いるアカウントは必ず別にしていただく必要があります (Windows のみ)</h2><p>キャッシュ ノードを Windows 上に展開される場合、セットアップに使用するアカウントと、キャッシュ ノードとしての機能を実行するアカウント (ランタイム アカウント) は必ず別なアカウントを指定する必要がございます。</p>
+<p>同一のアカウントを指定した場合、一連のセットアップ プロセスの最後で WSL 2 上に作成されたキャッシュ ノードのコンテナーが削除されてしまい、以降正しく動作しなくなることを確認しております。公開技術情報に記載の手順にも別のアカウントを指定するよう注記がございますので、ご確認ください。</p>
+<p>Microsoft Connected Cache ソフトウェアを Windows ホスト コンピューターに展開する | Microsoft Learn<br><a target="_blank" rel="noopener" href="https://learn.microsoft.com/ja-jp/windows/deployment/do/mcc-ent-deploy-to-windows?tabs=portal#steps-to-deploy-connected-cache-node-to-windows">https://learn.microsoft.com/ja-jp/windows/deployment/do/mcc-ent-deploy-to-windows?tabs=portal#steps-to-deploy-connected-cache-node-to-windows</a></p>
+<p>なお、デプロイ スクリプトを実行してセットアップを行うアカウントは管理者権限を有している必要がありますが、ランタイム アカウントには管理者権限は不要です。セキュリティの観点から、必要最小限の権限を持たせることをお勧めしております。可能であれば、gMSA (グループ管理サービス アカウント) をランタイム アカウントとして使用することをお勧めいたします。</p>
+<h2 id="MCC-からキャッシュの提供を受けるクライアントには、Windows-Enterprise-サブスクリプション-ライセンスが必要です"><a href="#MCC-からキャッシュの提供を受けるクライアントには、Windows-Enterprise-サブスクリプション-ライセンスが必要です" class="headerlink" title="MCC からキャッシュの提供を受けるクライアントには、Windows Enterprise サブスクリプション ライセンスが必要です"></a>MCC からキャッシュの提供を受けるクライアントには、Windows Enterprise サブスクリプション ライセンスが必要です</h2><p>前述の通り、キャッシュ ノードの構築は Windows クライアントや Ubuntu に対しても可能であり、WSUS と異なり Windows Server をご用意いただく必要はありません。サーバー側にライセンスは不要ですが、MCC を利用するクライアント側には下記ライセンスの要件が存在します。</p>
+<ul>
+<li>Windows Enterprise E3</li>
+<li>Windows Enterprise E5</li>
+<li>Windows Education E3</li>
+<li>Windows Education E5</li>
+</ul>
+<p>また、Windows Server 2019 以降も MCC のキャッシュ ノード経由で品質更新プログラムを受け取ることが可能です。上記のサブスクリプション ライセンスは Microsoft Entra ID に対し付与する必要があり Windows Server ではご使用いただくことができませんが、正しくライセンスされたクライアントをお持ちであれば Windows Server をキャッシュ ノードに接続いただいて問題ございません。 </p>
+<p>ライセンスを含む各種要件について記載されている公開技術情報も下記にご用意がございますので併せてご参照ください。</p>
+<p>Microsoft Connected Cache for Enterprise and Education の前提条件 | Microsoft Learn<br><a target="_blank" rel="noopener" href="https://learn.microsoft.com/ja-jp/windows/deployment/do/mcc-ent-prerequisites#licensing-requirements">https://learn.microsoft.com/ja-jp/windows/deployment/do/mcc-ent-prerequisites#licensing-requirements</a></p>
+<p>なお、キャッシュ ノードの展開には Azure のサブスクリプションが必要ですが、MCC に関連するリソースでの課金は発生いたしませんのでご安心ください。</p>
+<h2 id="Teams-の更新を-MCC-経由にするには、クライアントとキャッシュ-ノード間の接続を-TLS-にする必要があります"><a href="#Teams-の更新を-MCC-経由にするには、クライアントとキャッシュ-ノード間の接続を-TLS-にする必要があります" class="headerlink" title="Teams の更新を MCC 経由にするには、クライアントとキャッシュ ノード間の接続を TLS にする必要があります"></a>Teams の更新を MCC 経由にするには、クライアントとキャッシュ ノード間の接続を TLS にする必要があります</h2><p>MCC は、Microsoft Teams の更新に係るトラフィックにお悩みのお客様にも積極的にご検討いただいております。Teams は Windows 等と比較しても更新間隔が短い一方、WSUS 等を用いた帯域削減の手段が提供されてこなかった経緯があります。MCC であれば Teams の更新をキャッシュすることが可能であり、各クライアントからのトラフィックを削減することが可能です。MCC がキャッシュできる更新プログラムの種類は、下記の公開技術情報もご確認ください。</p>
+<p>配信の最適化とは | Microsoft Learn<br><a target="_blank" rel="noopener" href="https://learn.microsoft.com/ja-jp/windows/deployment/do/waas-delivery-optimization#types-of-download-content-supported-by-delivery-optimization">https://learn.microsoft.com/ja-jp/windows/deployment/do/waas-delivery-optimization#types-of-download-content-supported-by-delivery-optimization</a></p>
+<p>ただし、Teams の更新を MCC 経由で取得する要件として、クライアントとキャッシュ ノード間の接続を TLS (HTTPS) に対応させる必要があります。Windows や Microsoft 365 Apps の更新をキャッシュする場合は TLS 対応は必要ありませんが、Teams の更新コンテンツの配信においては TLS 接続が必須です。証明書の用意など、通常の MCC の構築に加え追加の手順が存在いたします点にご留意ください。</p>
+<p>Microsoft 接続キャッシュの HTTPS サポートの概要 | Microsoft Learn<br><a target="_blank" rel="noopener" href="https://learn.microsoft.com/ja-jp/windows/deployment/do/mcc-ent-https-overview?tabs=portal">https://learn.microsoft.com/ja-jp/windows/deployment/do/mcc-ent-https-overview?tabs=portal</a></p>
+<p>また、今後 Intune の Win32 アプリ (.intunewin パッケージ) のキャッシュにおいても TLS が必須化される予定となっております。Windows Autopilot でサイズの大きなアプリを展開する場合の高速化等を目的として MCC をご使用のお客様におかれましては、お持ちのキャッシュ ノードの段階的な TLS 対応をご検討ください。 </p>
+<h2 id="キャッシュ-ノードは静的プロキシのみをサポートしており、PAC-や-WPAD、クラウド-プロキシのような動的構成はご利用いただけません"><a href="#キャッシュ-ノードは静的プロキシのみをサポートしており、PAC-や-WPAD、クラウド-プロキシのような動的構成はご利用いただけません" class="headerlink" title="キャッシュ ノードは静的プロキシのみをサポートしており、PAC や WPAD、クラウド プロキシのような動的構成はご利用いただけません"></a>キャッシュ ノードは静的プロキシのみをサポートしており、PAC や WPAD、クラウド プロキシのような動的構成はご利用いただけません</h2><p>キャッシュ ノードはなるべくサブネットを超えない範囲に配置することをお勧めしており、またライセンス要件も WSUS や Configuration Manager と比較し緩和されていることから、通常の業務用クライアントを利用してキャッシュ ノードを構築されるお客様のお話も多く伺っております。このような場合に問題となりがちなのが、キャッシュ ノードから Windows Update サイトおよび Delivery Optimization クラウド サービスへの接続経路です。</p>
+<p>下記公開技術情報にも記載の通り、キャッシュ ノードから当社 Windows Update  関連のエンドポイントまでは直接接続をご用意いただく必要がございます。</p>
+<p>Microsoft Connected Cache ソフトウェアを Windows ホスト コンピューターに展開する | Microsoft Learn<br><a target="_blank" rel="noopener" href="https://learn.microsoft.com/ja-jp/windows/deployment/do/mcc-ent-deploy-to-windows">https://learn.microsoft.com/ja-jp/windows/deployment/do/mcc-ent-deploy-to-windows</a></p>
+<p>接続キャッシュのデプロイを成功させるには、接続キャッシュ ホスト マシンからの配信最適化サービスへの直接呼び出しを許可する必要があります。</p>
+<p>プロキシの使用自体はサポートされておりますが、実績としてあまり成功例は多くありません。キャッシュ ノードの正常な動作においては、オリジナルの URL や HTTP ヘッダが維持される必要があり、プロキシを介すことでこれらが書き換えられてしまうことが主な失敗の要因です。</p>
+<p>また、前述の通り、キャッシュ ノード自体はホストから独立した Linux コンテナー内で動作しております。そのため、ホスト OS に設定されているプロキシ設定を利用することができません。やむを得ずプロキシを使用する際は、キャッシュ ノードのセットアップ時に実行するスクリプトにて “-proxyurl” を指定します。ここではプロキシ サーバーの URL を静的に指定することのみがサポートされており、PAC や WPAD を経由してキャッシュ ノードがインターネットにアクセスする構成はサポートされておりません。</p>
+<p>同様に、クライアント ソフトウェアを使用するクラウド プロキシ等もコンテナー内に当該ソフトウェアをインストールすることができないため、ご利用いただけません。</p>
+<p>お手数をおかけいたしますが、キャッシュ ノードを構成するコンピューターに対してはプロキシのバイパス等をご検討ください。キャッシュ ノードに接続するクライアントも Windows Update および Delivery Optimization 関連のエンドポイントへの接続が必要ですので、これまで WSUS をご利用であった環境等で URL のフィルタリングを行っている場合などはクライアント側のインターネット接続についても見直しが必要です。</p>
+<p>本情報が少しでも皆様のお役に立てば幸いです。</p>
+<p>※本情報の内容 (添付文書、リンク先などを含む) は、作成日時点でのものであり、予告なく変更される場合があります。</p>
+<h2 id="更新履歴"><a href="#更新履歴" class="headerlink" title="更新履歴"></a>更新履歴</h2><ul>
+<li>2025-12-29 初版公開</li>
+</ul>
+
+      
+      
+    </div>
+    <footer class="article-footer">
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/blog/2026/01/05/Shell/Explorer/unexpexted-early-screen-lock/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">次の記事</strong>
+      <div class="article-nav-title">
+        
+          予定よりも早い時間で画面がロックされてしまう事象について
+        
+      </div>
+    </a>
+  
+  
+    <a href="/blog/2025/12/18/UserInterfaceAndApps/motw-on-network-share/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">前の記事</strong>
+      <div class="article-nav-title">ファイルサーバーの共有フォルダーからファイルをコピーすると MOTW のタグが付与される</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">カテゴリ</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Activation/">Activation</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Activation/ESU/">ESU</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Activation/security-SPP/">security-SPP</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/">Active Directory</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Authentication/">Authentication</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/DFSR/">DFSR</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/FunctionalLevel/">FunctionalLevel</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Group-Policy/">Group Policy</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Promotion-and-Demotion/">Promotion and Demotion</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/User-Profile/">User Profile</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Windows-Hello/">Windows Hello</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Windows-Time-Service/">Windows Time Service</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/AppLocker/">AppLocker</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/AppLocker/Active-Directory/">Active Directory</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/AppLocker/Microsoft-Intune/">Microsoft Intune</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Deployment/">Deployment</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Deployment/Feature-on-demand/">Feature on demand</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Deployment/Sysprep/">Sysprep</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Failover-Clustering/">Failover Clustering</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Failover-Clustering/Configuration-and-Management/">Configuration and Management</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/FileServices/">FileServices</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/FileServices/FTP/">FTP</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/FileServices/SMB/">SMB</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Hyper-V/">Hyper-V</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Hyper-V/Configuration-and-Management/">Configuration and Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Hyper-V/Migration/">Migration</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Microsoft-Connected-Cache/">Microsoft Connected Cache</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/">Networking</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/BITS/">BITS</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/Bluetooth/">Bluetooth</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/DHCP/">DHCP</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/DNS/">DNS</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/Firewall/">Firewall</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/LBFO/">LBFO</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/NCSI/">NCSI</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/NetworkInterface/">NetworkInterface</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/Proxy/">Proxy</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/TCPIP/">TCPIP</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/OpenSSH/">OpenSSH</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/">Performance</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/Hang-up-BSoD/">Hang-up/BSoD</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/No-Boot/">No Boot</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/Slow-Response/">Slow Response</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/System-Resource/">System Resource</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/Tools/">Tools</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/">Public Key Infrastructure</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Certificate-Authority/">Certificate Authority</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Certificate-Management/">Certificate Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Code-Signing/">Code Signing</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/SSL-TLS-Communication/">SSL TLS Communication</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/SSL-TLS-Connection/">SSL TLS Connection</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Smart-Card-Logon/">Smart Card Logon</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/">Remote Desktop</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/Azure-Virtual-Desktop-AVD/">Azure Virtual Desktop (AVD)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/Remote-Desktop-Service-RDS/">Remote Desktop Service (RDS)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/Windows-Virtual-Desktop-WVD/">Windows Virtual Desktop (WVD)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/RemoteAccess/">RemoteAccess</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/RemoteAccess/%E3%83%80%E3%82%A4%E3%83%A4%E3%83%AB%E3%82%A2%E3%83%83%E3%83%97%E6%8E%A5%E7%B6%9A/">ダイヤルアップ接続</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Setup/">Setup</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Setup/Feature-Update-FU/">Feature Update (FU)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Shell/">Shell</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Shell/Explorer/">Explorer</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/">Storage</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/Backup/">Backup</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/FSRM/">FSRM</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/Management/">Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/StorageMigrationService/">StorageMigrationService</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/UEFI/">UEFI</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/UEFI/Secure-Boot/">Secure Boot</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/">User Interface and Apps</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Command-Prompt/">Command Prompt</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/EventLog/">EventLog</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Language-Support/">Language Support</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Microsoft-Store/">Microsoft Store</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Performance/">Performance</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/PowerShell/">PowerShell</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Printing-%E5%8D%B0%E5%88%B7/">Printing (印刷)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Server-Management/">Server Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Taskscheduler/">Taskscheduler</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Windows-Management-Instrumentation/">Windows Management Instrumentation</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps-Language-support/">User Interface and Apps - Language support</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-365/">Windows 365</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Admin-Center/">Windows Admin Center</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Search/">Windows Search</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/">Windows Update</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Delivery-Optimization-DO/">Delivery Optimization (DO)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Feature-Update-FU/">Feature Update (FU)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Quality-Update-QU/">Quality Update (QU)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Windows-Update-Agent/">Windows Update Agent</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Windows-Update-Agent-WUA/">Windows Update Agent (WUA)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/">WirelessNetwork</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/NPS/">NPS</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/Wi-Fi/">Wi-Fi</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/%E3%83%A2%E3%83%90%E3%82%A4%E3%83%AB-%E3%83%96%E3%83%AD%E3%83%BC%E3%83%89%E3%83%90%E3%83%B3%E3%83%89%E6%8E%A5%E7%B6%9A-LTE/">モバイル ブロードバンド接続 (LTE)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/%E7%B5%84%E7%B9%94%E7%B4%B9%E4%BB%8B%E3%83%96%E3%83%AD%E3%82%B0%EF%BC%88Windows-Commercial%EF%BC%89/">組織紹介ブログ（Windows Commercial）</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最近の投稿</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/blog/2026/02/16/ActiveDirectory/GroupPolicy/UacPolicyIsEnabled/">「ユーザー アカウント制御：ビルトイン Administrator アカウントのための管理者承認モード」ポリシーが有効になる動作ついて</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/02/15/UserInterfaceAndApps/Printing/printer-queue-app-preview/">印刷キューアプリのプレビュー機能について</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/02/02/ActiveDirectory/Authentication/kerberos-rc4-for-service-account-ticket-issuance-changes-related-to-cve-2026-20833/">CVE‑2026‑20833 への対応とその影響について [KB5073381]</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/01/12/Hyper-V/vmwp-does-not-save-the-RTC-value-of-a-virtual-machine-when-performing-Live-Migration/">ライブ マイグレーション後の再起動でゲスト OS の時刻がずれる場合がある</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/01/07/WindowsUpdate/FU/fublog-txt/">ISO メディア経由かつ動的更新無効な状態で Windows 11 バージョン 24H2 または 25H2 へのアップグレードが失敗 (0x8007042B 0x2000D) する事象と対策について</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">アーカイブ</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2026/02/">2026 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2026/01/">2026 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/12/">2025 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/11/">2025 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/10/">2025 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/09/">2025 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/08/">2025 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/07/">2025 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/06/">2025 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/05/">2025 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/04/">2025 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/03/">2025 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/02/">2025 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/01/">2025 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/12/">2024 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/11/">2024 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/10/">2024 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/09/">2024 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/08/">2024 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/07/">2024 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/06/">2024 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/05/">2024 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/04/">2024 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/03/">2024 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/02/">2024 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/01/">2024 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/12/">2023 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/11/">2023 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/10/">2023 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/09/">2023 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/08/">2023 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/07/">2023 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/06/">2023 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/05/">2023 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/04/">2023 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/03/">2023 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/02/">2023 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/01/">2023 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/12/">2022 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/11/">2022 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/10/">2022 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/09/">2022 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/08/">2022 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/07/">2022 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/06/">2022 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/05/">2022 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/04/">2022 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/03/">2022 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/02/">2022 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/01/">2022 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/12/">2021 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/11/">2021 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/10/">2021 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/09/">2021 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/08/">2021 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/07/">2021 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/06/">2021 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/05/">2021 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/04/">2021 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/03/">2021 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/02/">2021 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/01/">2021 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/12/">2020 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/11/">2020 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/10/">2020 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/07/">2020 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/03/">2020 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2019/03/">2019 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/11/">2018 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/10/">2018 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/09/">2018 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/08/">2018 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/07/">2018 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/06/">2018 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/04/">2018 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/02/">2018 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/12/">2017 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/11/">2017 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/09/">2017 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/05/">2017 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/03/">2017 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/02/">2017 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2016/08/">2016 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2016/05/">2016 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2014/03/">2014 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2012/02/">2012 / 02</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2026 Microsoft Japan Windows Technology Support Team<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/blog/" class="mobile-nav-link">Home</a>
+  
+    <a href="/blog/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+<script src="/blog/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

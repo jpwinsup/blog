@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-180187723-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-180187723-1');
+</script>
+<!-- End Google Analytics -->
+
+  
+  <title>Azure 環境におけるフェールオーバー クラスター環境の構築について | Microsoft Japan Windows Technology Support Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="本記事は、マイクロソフト社員によって公開されております。    いつも弊社製品をご利用いただきまして誠にありがとうございます。日本マイクロソフトの Windows サポートチームの平塚です。 本記事では Azure 環境におけるフェールオーバー クラスター (以下、WSFC) の構築ポイントや展開手順例についてご紹介します。 &lt;目次&gt;1. 仮想 IP アドレスを使用するアプリケーショ">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Azure 環境におけるフェールオーバー クラスター環境の構築について">
+<meta property="og:url" content="https://jpwinsup.github.io/blog/2023/11/06/FailoverClustering/ConfigurationAndManagement/ClusterOnAzure/index.html">
+<meta property="og:site_name" content="Microsoft Japan Windows Technology Support Blog">
+<meta property="og:description" content="本記事は、マイクロソフト社員によって公開されております。    いつも弊社製品をご利用いただきまして誠にありがとうございます。日本マイクロソフトの Windows サポートチームの平塚です。 本記事では Azure 環境におけるフェールオーバー クラスター (以下、WSFC) の構築ポイントや展開手順例についてご紹介します。 &lt;目次&gt;1. 仮想 IP アドレスを使用するアプリケーショ">
+<meta property="og:locale" content="ja_JP">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2023/11/06/FailoverClustering/ConfigurationAndManagement/ClusterOnAzure/ClusterOnAzure-0.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2023/11/06/FailoverClustering/ConfigurationAndManagement/ClusterOnAzure/ClusterOnAzure-1.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2023/11/06/FailoverClustering/ConfigurationAndManagement/ClusterOnAzure/ClusterOnAzure-2.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2023/11/06/FailoverClustering/ConfigurationAndManagement/ClusterOnAzure/ClusterOnAzure-3.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2023/11/06/FailoverClustering/ConfigurationAndManagement/ClusterOnAzure/ClusterOnAzure-4.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2023/11/06/FailoverClustering/ConfigurationAndManagement/ClusterOnAzure/ClusterOnAzure-5.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2023/11/06/FailoverClustering/ConfigurationAndManagement/ClusterOnAzure/ClusterOnAzure-6.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2023/11/06/FailoverClustering/ConfigurationAndManagement/ClusterOnAzure/ClusterOnAzure-7.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2023/11/06/FailoverClustering/ConfigurationAndManagement/ClusterOnAzure/ClusterOnAzure-8.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2023/11/06/FailoverClustering/ConfigurationAndManagement/ClusterOnAzure/ClusterOnAzure-9.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2023/11/06/FailoverClustering/ConfigurationAndManagement/ClusterOnAzure/ClusterOnAzure-10.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2023/11/06/FailoverClustering/ConfigurationAndManagement/ClusterOnAzure/ClusterOnAzure-11.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2023/11/06/FailoverClustering/ConfigurationAndManagement/ClusterOnAzure/ClusterOnAzure-12.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2023/11/06/FailoverClustering/ConfigurationAndManagement/ClusterOnAzure/ClusterOnAzure-29.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2023/11/06/FailoverClustering/ConfigurationAndManagement/ClusterOnAzure/ClusterOnAzure-13.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2023/11/06/FailoverClustering/ConfigurationAndManagement/ClusterOnAzure/ClusterOnAzure-14.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2023/11/06/FailoverClustering/ConfigurationAndManagement/ClusterOnAzure/ClusterOnAzure-16.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2023/11/06/FailoverClustering/ConfigurationAndManagement/ClusterOnAzure/ClusterOnAzure-17.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2023/11/06/FailoverClustering/ConfigurationAndManagement/ClusterOnAzure/ClusterOnAzure-18.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2023/11/06/FailoverClustering/ConfigurationAndManagement/ClusterOnAzure/ClusterOnAzure-19.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2023/11/06/FailoverClustering/ConfigurationAndManagement/ClusterOnAzure/ClusterOnAzure-20.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2023/11/06/FailoverClustering/ConfigurationAndManagement/ClusterOnAzure/ClusterOnAzure-21.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2023/11/06/FailoverClustering/ConfigurationAndManagement/ClusterOnAzure/ClusterOnAzure-22.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2023/11/06/FailoverClustering/ConfigurationAndManagement/ClusterOnAzure/ClusterOnAzure-23.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2023/11/06/FailoverClustering/ConfigurationAndManagement/ClusterOnAzure/ClusterOnAzure-24.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2023/11/06/FailoverClustering/ConfigurationAndManagement/ClusterOnAzure/ClusterOnAzure-25.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2023/11/06/FailoverClustering/ConfigurationAndManagement/ClusterOnAzure/ClusterOnAzure-26.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2023/11/06/FailoverClustering/ConfigurationAndManagement/ClusterOnAzure/ClusterOnAzure-27.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2023/11/06/FailoverClustering/ConfigurationAndManagement/ClusterOnAzure/ClusterOnAzure-28.png">
+<meta property="article:published_time" content="2023-11-06T03:00:00.000Z">
+<meta property="article:modified_time" content="2026-02-19T02:53:58.347Z">
+<meta property="article:author" content="Microsoft Japan Windows Technology Support Team">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://jpwinsup.github.io/blog/2023/11/06/FailoverClustering/ConfigurationAndManagement/ClusterOnAzure/ClusterOnAzure-0.png">
+  
+    <link rel="alternate" href="/blog/atom.xml" title="Microsoft Japan Windows Technology Support Blog" type="application/atom+xml">
+  
+
+  <link rel="icon" href="/blog/favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="/blog/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/blog/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/blog/favicon-16x16.png">
+  <link rel="manifest" href="/blog/site.webmanifest">
+  <link rel="mask-icon" href="/blog/safari-pinned-tab.svg" color="#5bbad5">
+  <meta name="msapplication-TileColor" content="#ffffff">
+  <meta name="theme-color" content="#ffffff">
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/blog/css/style.css">
+
+<meta name="generator" content="Hexo 5.2.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="site-header-logo"></div>
+  <div id="site-header-blog-wrapper"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        <div id="ms-logo"></div>
+        
+          <a class="main-nav-link" href="/blog/">Home</a>
+        
+          <a class="main-nav-link" href="/blog/archives">Archives</a>
+        
+        <a class="main-nav-link" target="_blank" rel="noopener" href="https://cssjpn.github.io/">サポート情報</a>
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/blog/atom.xml" title="RSSフィード"></a>
+        
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//www.bing.com/search" method="get" accept-charset="UTF-8" name="bing-search" onsubmit="var f=this;if(f['q'].value){var searchUrl =  'https://www.bing.com/search?q=' +  encodeURIComponent(f['q'].value + ' site:' + f['sitesearch'].value) ;window.open(searchUrl, 'blank') };return false;" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="検索"><button type="submit" id="nav-search-btn" class="search-form-submit"></button><input type="hidden" name="sitesearch" value="https://jpwinsup.github.io/blog"></form>
+      </div>
+    </div>
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/blog/" id="logo">Microsoft Japan Windows Technology Support Blog</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/blog/" id="subtitle">日本マイクロソフト Windows Support チームによる、サポート情報 Blog です。</a>
+        </h2>
+      
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-FailoverClustering/ConfigurationAndManagement/ClusterOnAzure" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    
+    
+      <header class="article-header-single">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Azure 環境におけるフェールオーバー クラスター環境の構築について
+    </h1>
+  
+
+      </header>
+      <div class="article-share">
+        Last Update: 
+        <a href="/blog/2023/11/06/FailoverClustering/ConfigurationAndManagement/ClusterOnAzure/" class="article-date-single">
+  <time datetime="2023-11-06T03:00:00.000Z" itemprop="datePublished">2023-11-06</time>
+</a>
+        
+  <div class="article-category">
+    <a class="article-category-link" href="/blog/categories/Failover-Clustering/">Failover Clustering</a>►<a class="article-category-link" href="/blog/categories/Failover-Clustering/Configuration-and-Management/">Configuration and Management</a>
+  </div>
+
+        
+        <a href="https://github.com/jpwinsup/blog/issues/new?title=&body=%EF%BB%BF%0A%0A---%0A%0A%23%23%23%23+Document+Details%0A%0A*+Article+ID%3A+776c8e00-1a32-5b4f-8630-f0d66e494f8c%0A*+TITLE%3A+Azure+%E7%92%B0%E5%A2%83%E3%81%AB%E3%81%8A%E3%81%91%E3%82%8B%E3%83%95%E3%82%A7%E3%83%BC%E3%83%AB%E3%82%AA%E3%83%BC%E3%83%90%E3%83%BC+%E3%82%AF%E3%83%A9%E3%82%B9%E3%82%BF%E3%83%BC%E7%92%B0%E5%A2%83%E3%81%AE%E6%A7%8B%E7%AF%89%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6%0A*+URL+https%3A%2F%2Fjpwinsup.github.io%2Fblog%2F2023%2F11%2F06%2FFailoverClustering%2FConfigurationAndManagement%2FClusterOnAzure%2F%0A*+SourceFileName%3A+source%2F_posts%2FFailoverClustering%2FConfigurationAndManagement%2FClusterOnAzure.md%0A" class="article-github-issue-link" target="_blank" rel="noopener noreferrer">feedback</a>
+        
+        <a data-url="https://jpwinsup.github.io/blog/2023/11/06/FailoverClustering/ConfigurationAndManagement/ClusterOnAzure/" data-id="cmlsvjdo801i0ru3y1jy4d0hl" class="article-share-link">共有</a>
+      </div>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<p>本記事は、マイクロソフト社員によって公開されております。  </p>
+</blockquote>
+<p>いつも弊社製品をご利用いただきまして誠にありがとうございます。日本マイクロソフトの Windows サポートチームの平塚です。</p>
+<p>本記事では Azure 環境におけるフェールオーバー クラスター (以下、WSFC) の構築ポイントや展開手順例についてご紹介します。</p>
+<p>&lt;目次&gt;<br><a href="#1-%E4%BB%AE%E6%83%B3-IP-%E3%82%A2%E3%83%89%E3%83%AC%E3%82%B9%E3%82%92%E4%BD%BF%E7%94%A8%E3%81%99%E3%82%8B%E3%82%A2%E3%83%97%E3%83%AA%E3%82%B1%E3%83%BC%E3%82%B7%E3%83%A7%E3%83%B3%E3%81%A8-Azure-%E3%83%AD%E3%83%BC%E3%83%89%E3%83%90%E3%83%A9%E3%83%B3%E3%82%B5%E3%83%BC%E3%81%AE%E8%A8%AD%E7%BD%AE%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6">1. 仮想 IP アドレスを使用するアプリケーションと Azure ロードバランサーの設置について</a><br><a href="#2-%E7%AE%A1%E7%90%86%E7%94%A8%E3%81%AE%E3%82%AF%E3%83%A9%E3%82%B9%E3%82%BF%E3%83%BC%E3%81%B8%E3%81%AE%E3%83%AD%E3%83%BC%E3%83%89%E3%83%90%E3%83%A9%E3%83%B3%E3%82%B5%E3%83%BC%E3%81%AE%E5%BF%85%E8%A6%81%E6%80%A7%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6">2. 管理用のクラスターへのロードバランサーの必要性について</a><br><a href="#3-%E3%83%8F%E3%83%BC%E3%83%88%E3%83%93%E3%83%BC%E3%83%88%E9%80%9A%E4%BF%A1%E3%81%AE%E9%96%BE%E5%80%A4%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6">3. ハートビート通信の閾値について</a><br><a href="#4-Azure-%E7%92%B0%E5%A2%83%E3%81%A7%E3%81%AE-WSFC-%E3%81%AE%E6%A7%8B%E7%AF%89%E4%BE%8B">4. Azure 環境での WSFC の構築例</a>  </p>
+<h2 id="1-仮想-IP-アドレスを使用するアプリケーションと-Azure-ロードバランサーの設置について"><a href="#1-仮想-IP-アドレスを使用するアプリケーションと-Azure-ロードバランサーの設置について" class="headerlink" title="1. 仮想 IP アドレスを使用するアプリケーションと Azure ロードバランサーの設置について"></a>1. 仮想 IP アドレスを使用するアプリケーションと Azure ロードバランサーの設置について</h2><p>Azure の VM では Azure 仮想ネットワークから割り当てられた IP アドレスのみを使用できます。WSFC の仮想 IP アドレス等、Azure VM の OS 内で設定した IP アドレスは Azure 仮想ネットワークで正しく機能せず通信ができません。</p>
+<p>そのため、WSFC により高可用性化したアプリケーションで仮想 IP アドレスを使用する場合は Azure ロードバランサーを展開し、かつ、ロードバランサーのフロントエンド IP  を WSFC のアプリケーションで使用する仮想 IP アドレスと同一に設定する必要があります。</p>
+<p>なお、WSFC の仮想 IP アドレスはクラスターを構成するいずれかのノード1 台のみが保持する実装となっています。ロードバランサーのトラフィック送信先 (バックエンドプール) には、クラスターを構成する VM それぞれの NIC または IP アドレスを指定しますが、この設定のみでは仮想 IP アドレスを保持していないVM にもトラフィックが振り分けられてしまいます。</p>
+<p>WSFC の仮想 IP アドレスの設定には、任意のポート番号を LISTEN する ProbePort パラメーターが用意されており、ロードバランサーの正常性プローブと組み合わせて設定することで、仮想 IP アドレスの所有者ノード (VM)、つまり、高可用性化したアプリケーションが稼働している VM にのみにトラフィックを送信することが可能です。</p>
+<p>また、ロードバランサーからの送信トラフィックの宛先 IP アドレスをフロントエンド IP (仮想 IP アドレス) にするため、ロードバランサーの送信負荷分散規則の設定でフローティング IP を有効化します。バックエンドのアプリケーションが仮想 IP アドレスを使用せず VM の IP アドレスを使用するような場合は、フローティング IP を有効化する必要はありません。例えば、<a target="_blank" rel="noopener" href="https://learn.microsoft.com/ja-jp/windows-server/failover-clustering/sofs-overview">スケールアウト ファイル サーバー(SOFS)</a> にロードバランサー経由で通信するような要件がある場合が該当します。</p>
+<p>(参考情報)<br><a target="_blank" rel="noopener" href="https://learn.microsoft.com/ja-jp/azure/load-balancer/load-balancer-floating-ip">Azure Load Balancer のフローティング IP の構成| Microsoft Learn</a></p>
+<p>以下、参考アーキテクチャ図です。</p>
+<p><img src="ClusterOnAzure-0.png" alt="アーキテクチャ図"></p>
+<h2 id="2-管理用のクラスターへのロードバランサーの必要性について"><a href="#2-管理用のクラスターへのロードバランサーの必要性について" class="headerlink" title="2. 管理用のクラスターへのロードバランサーの必要性について"></a>2. 管理用のクラスターへのロードバランサーの必要性について</h2><p>Windows Server 2019 以降の OS バージョンでは、クラスター展開時に Azure 上の VM かどうかを検出する機能が実装されており、Azure 上に適した構成や設定が自動的に適用されます。</p>
+<p>(参考情報)<br><a target="_blank" rel="noopener" href="https://techcommunity.microsoft.com/t5/failover-clustering/failover-clustering-in-azure/ba-p/2554341">Failover Clustering in Azure - Microsoft Community Hub</a></p>
+<p>Azure 上に展開した Windows Server 2019 以降の OS でフェールオーバークラスターマネージャーによりクラスターを作成した場合、DNN (Distributed Network Name: 分散サーバー名) と呼ばれる仮想クラスター名のリソースが作成され、管理用のクラスターのリソース (コアリソース) に仮想 IP アドレスリソースは存在しません。</p>
+<p><img src="ClusterOnAzure-1.png" alt="DNN 設定例"></p>
+<p>DNN ではクラスターノード (VM) の IP アドレスに名前解決されるように DNS サーバーにレコードが登録されるため、管理用のクラスターへの接続のために Azure ロードバランサーを構成する必要はありません。なお、DNN を使ったアクセスは DNS ラウンドロビンで行われます。</p>
+<p><img src="ClusterOnAzure-2.png" alt="DNS マネージャー"></p>
+<p>Windows Server 2016 以前の OS で Azure 上にクラスターを展開する場合、従来どおり管理用のクラスターのリソース (コアリソース) に仮想 IP アドレスが作成されます。</p>
+<p><img src="ClusterOnAzure-3.png" alt="仮想 IP アドレス設定例"></p>
+<p>仮想ネットワーク名や仮想 IP アドレスを使って管理用のクラスターに接続する必要がある場合はロードバランサーが必要となりますが、管理用のクラスターへの接続がアプリケーションで必要となることは通常ありません。</p>
+<p>フェールオーバークラスターマネージャーに接続する場合は、クラスターを構成するノード (VM) にRDP 接続し、クラスターへ接続する際のクラスター名として 「このサーバー上のクラスター (Cluster on this server…)」 を選択します。</p>
+<p><img src="ClusterOnAzure-4.png" alt="クラスターへの接続画面"></p>
+<p>したがって、Windows Server 2016 以前の OS でクラスターを作成した場合でも、アプリケーション側で特別な要件がない限り、管理用のクラスターの接続のためのロードバランサーの展開は不要となります。</p>
+<p>なお、Windows Server 2019 以降の New-Cluster コマンドレットには  -ManagementPointNetworkType オプションが実装されており、クラスター作成時に管理用のクラスター名を DNN にするか (Distributed)、従来のネットワーク名と仮想 IP アドレスの組み合わせにするか (Singleton)、選択することができます。</p>
+<p>(参考情報)<br><a target="_blank" rel="noopener" href="https://learn.microsoft.com/en-us/powershell/module/failoverclusters/new-cluster?view=windowsserver2022-ps">New-Cluster (FailoverClusters) | Microsoft Learn</a><br><a target="_blank" rel="noopener" href="https://techcommunity.microsoft.com/t5/failover-clustering/failover-clustering-in-azure/ba-p/2554341">Failover Clustering in Azure - Microsoft Community Hub</a></p>
+<h2 id="3-ハートビート通信の閾値について"><a href="#3-ハートビート通信の閾値について" class="headerlink" title="3. ハートビート通信の閾値について"></a>3. ハートビート通信の閾値について</h2><p>WSFC では、クラスターを構成するノード間の正常性確認処理であるハートビート通信という機能が備わっており、ハートビート通信が一定時間できない場合、相手ノードがダウンしていると判断され、停止したノードがアプリケーションのオーナーノードであった場合には、そのアプリケーションは他のノードへフェールオーバーされます。</p>
+<p>Azure 環境では、計画的なメンテナンス時に 30 秒 ほど仮想マシンが一時停止する場合があり、ハートビート通信失敗までの閾値は既定で 30 秒未満であることから、メンテナンスの度に上記の事象が発生してしまうため、環境に合わせてこれらの閾値を延長いただくことを推奨しています。</p>
+<p>Windows Server 2019 以降の OS では、前述のとおり Azure 環境であることを自動で検知する機能が追加されたことから、これらの閾値も自動で調整 (30 秒) される機能が備わっていますが、Window Server 2016 以前の OS をお使いの場合は、別途閾値の調整も併せてご検討ください。</p>
+<p>(参考情報)<br><a target="_blank" rel="noopener" href="https://techcommunity.microsoft.com/t5/failover-clustering/failover-clustering-in-azure/ba-p/2554341">Failover Clustering in Azure - Microsoft Community Hub</a></p>
+<p>なお、具体的な設定値につきましては、クラスター上のアプリケーションの停止時間がどの程度まで許容できるかによって異なります。詳細や設定の変更方法につきましては、以下の公開情報でも詳細をおまとめしておりますので、ご確認をいただけますと幸いです。</p>
+<p>(参考情報)<br><a target="_blank" rel="noopener" href="https://learn.microsoft.com/ja-jp/archive/blogs/askcorejp/azure-2">Azure 上でフェールオーバー クラスターを構築する際の留意事項について| Microsoft Learn</a></p>
+<h2 id="4-Azure-環境での-WSFC-の構築例"><a href="#4-Azure-環境での-WSFC-の構築例" class="headerlink" title="4. Azure 環境での WSFC の構築例"></a>4. Azure 環境での WSFC の構築例</h2><p>Azure 上に WSFC で高可用性化したファイルサーバーの役割を展開する例についてご紹介します。<br>今回例として、次のような構成で展開を進めます。</p>
+<table>
+<thead>
+<tr>
+<th align="left"></th>
+<th align="left"></th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">OS</td>
+<td align="left">Windows Server 2022</td>
+</tr>
+<tr>
+<td align="left">ノード</td>
+<td align="left">2ノード（Node1: 10.10.10.21 / Node2: 10.10.10.22）</td>
+</tr>
+<tr>
+<td align="left">ファイルサーバーの役割の仮想 IP アドレス</td>
+<td align="left">10.10.10.30</td>
+</tr>
+<tr>
+<td align="left">クラスター共有ディスク</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://learn.microsoft.com/ja-jp/azure/virtual-machines/disks-shared">Azure 共有ディスク</a></td>
+</tr>
+</tbody></table>
+<p>&lt;展開の流れ&gt;<br><a href="#1-%E3%82%AF%E3%83%A9%E3%82%B9%E3%82%BF%E3%83%BC%E3%80%81%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB%E3%82%B5%E3%83%BC%E3%83%90%E3%83%BC%E3%81%AE%E5%BD%B9%E5%89%B2%E3%81%AE%E4%BD%9C%E6%88%90">(1) クラスター、ファイルサーバーの役割の作成</a><br><a href="#2-Health-%E3%83%97%E3%83%AD%E3%83%BC%E3%83%96%E3%82%92%E5%BE%85%E3%81%A1%E5%8F%97%E3%81%91%E3%82%8B%E3%83%9D%E3%83%BC%E3%83%88%E3%81%AE%E4%BD%9C%E6%88%90">(2) Health プローブを待ち受けるポートの作成</a><br><a href="#3-Azure-%E3%83%AD%E3%83%BC%E3%83%89%E3%83%90%E3%83%A9%E3%83%B3%E3%82%B5%E3%83%BC%E3%81%AE%E4%BD%9C%E6%88%90">(3) Azure ロードバランサーの作成</a>  </p>
+<h3 id="1-クラスター、ファイルサーバーの役割の作成"><a href="#1-クラスター、ファイルサーバーの役割の作成" class="headerlink" title="(1) クラスター、ファイルサーバーの役割の作成"></a>(1) クラスター、ファイルサーバーの役割の作成</h3><p>次の公開情報を参考に、管理用のクラスターおよびファイルサーバーの役割を構成します。 ※展開の詳細は割愛させていただきます</p>
+<p>(参考情報)<br><a target="_blank" rel="noopener" href="https://learn.microsoft.com/ja-jp/windows-server/failover-clustering/create-failover-cluster">フェールオーバー クラスターを作成する| Microsoft Learn</a><br><a target="_blank" rel="noopener" href="https://learn.microsoft.com/ja-jp/windows-server/failover-clustering/deploy-two-node-clustered-file-server?tabs=server-manager">クラスター化された2 ノード ファイル サーバーの展開| Microsoft Learn</a></p>
+<p>以下、クラスターならびにファイルサーバーの役割構成後のフェールオーバークラスターマネージャー上の表示例です。</p>
+<p><img src="ClusterOnAzure-5.png" alt="ファイルサーバーの役割構成後の表示例"></p>
+<h3 id="2-Health-プローブを待ち受けるポートの作成"><a href="#2-Health-プローブを待ち受けるポートの作成" class="headerlink" title="(2) Health プローブを待ち受けるポートの作成"></a>(2) Health プローブを待ち受けるポートの作成</h3><p>WSFC で作成した高可用性化ファイルサーバーの IP アドレスリソースに、Azure ロードバランサーからの Health プローブを待ち受けるポートを作成します。ロードバランサーは Health プローブから応答がある VM にのみトラフィックを送信するため、この設定によりファイルサーバーの所有者ノードにのみクライアントからの通信が振り分けられます。</p>
+<ol>
+<li><p>任意のクラスターノードに RDP 接続し、管理者として Powershell を起動します。</p>
+</li>
+<li><p>次のコマンドを実行して、高可用性化ファイルサーバーの役割の IP アドレスリソース名を確認します。</p>
+</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Get-ClusterResource</span><br></pre></td></tr></table></figure>
+
+<p>以下の例の場合、「IP Address 10.10.10.30」 が対象の IP アドレスリソース名です。</p>
+<p><img src="ClusterOnAzure-6.png" alt="コマンド実行結果例"></p>
+<ol start="3">
+<li>次のコマンドを実行して、現在の ProbePort パラメーターの値が 0 であることを確認します。</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$IPResourceName &#x3D; &quot;&lt;ファイルサーバーの IP アドレス リソース名&gt;&quot;  </span><br><span class="line">Get-ClusterResource $IPResourceName | Get-ClusterParameter</span><br></pre></td></tr></table></figure>
+
+<p>以下、コマンド実行例です。</p>
+<p><img src="ClusterOnAzure-7.png" alt="コマンド実行結果例"></p>
+<ol start="4">
+<li>次のコマンドを実行し、ファイルサーバーの仮想 IP アドレスが属するクラスターネットワーク名を確認します。</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Get-ClusterNetwork | ft Name,State,Address,AddressMask,Role</span><br></pre></td></tr></table></figure>
+
+<p>以下の例の場合、「Cluster Network 1」 が対象のクラスターネットワーク名です (クラスターネットワークは構成により複数存在します)。</p>
+<p><img src="ClusterOnAzure-8.png" alt="コマンド実行結果例"></p>
+<ol start="5">
+<li>次のコマンドを実行して、クラスターコアリソースのネットワーク名に Probe 設定を行います。Probe ポート番号は、クラスターノード上で利用されていない任意のポート番号を指定します。</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ClusterNetworkName &#x3D; &quot;&lt;ファイルサーバーの仮想 IP アドレスが属するクラスターネットワーク名&gt;&quot;  </span><br><span class="line">$IPResourceName &#x3D; &quot;&lt;ファイルサーバーの IP アドレス リソース名&gt;&quot;  </span><br><span class="line">$ILBIP &#x3D; &quot;&lt;ファイルサーバーの仮想 IP アドレス&gt;&quot;  </span><br><span class="line">[int]$ProbePort &#x3D; &lt;Probe ポート番号&gt;  </span><br><span class="line">Get-ClusterResource $IPResourceName | Set-ClusterParameter -Multiple @&#123;&quot;Address&quot;&#x3D;&quot;$ILBIP&quot;;&quot;ProbePort&quot;&#x3D;$ProbePort;&quot;SubnetMask&quot;&#x3D;&quot;255.255.255.255&quot;;&quot;Network&quot;&#x3D;&quot;$ClusterNetworkName&quot;;&quot;ProbeFailureThreshold&quot;&#x3D;5;&quot;EnableDhcp&quot;&#x3D;0&#125;</span><br></pre></td></tr></table></figure>
+
+<p>以下、コマンド実行結果例です。</p>
+<p><img src="ClusterOnAzure-9.png" alt="コマンド実行結果例"></p>
+<ol start="6">
+<li>設定を反映させるために、次のコマンドで対象アプリケーションの役割 (グループ) を再起動します。</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Stop-ClusterGroup -Name &quot;&lt;ファイルサーバーの役割(グループ) 名&gt;&quot;  </span><br><span class="line">Start-ClusterGroup -Name &quot;&lt;ファイルサーバーの役割(グループ) 名&gt;&quot;</span><br></pre></td></tr></table></figure>
+
+<p>以下、コマンド実行結果例です。</p>
+<p><img src="ClusterOnAzure-10.png" alt="コマンド実行結果例"></p>
+<ol start="7">
+<li>手順 3. と同様の以下のコマンドを実行して、ProbePort に指定したポート番号が設定されていることを確認します。</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Get-ClusterResource $IPResourceName | Get-ClusterParameter</span><br></pre></td></tr></table></figure>
+
+<p>以下、コマンド実行結果例です。</p>
+<p><img src="ClusterOnAzure-11.png" alt="コマンド実行結果例"></p>
+<ol start="8">
+<li>Windows Defender ファイアウォールで、ロードバランサーからの Health プローブを受信できるように許可規則を作成します。</li>
+</ol>
+<p>次のコマンドをクラスターを構成するすべてのノードで実行します。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ProbePort &#x3D; &lt;Probe ポート番号&gt;  </span><br><span class="line">New-NetFirewallRule -Name AzureProbePort -DisplayName &quot;Rule for Azure Probe Port&quot; -Direction Inbound -Action Allow -Protocol TCP -LocalPort $ProbePort</span><br></pre></td></tr></table></figure>
+
+<p>以下、コマンド実行結果例です。</p>
+<p><img src="ClusterOnAzure-12.png" alt="コマンド実行結果例"></p>
+<ol start="9">
+<li>ProbePort に指定したポート番号が動的ポートの範囲 (既定では 49152 ~ 65535) である場合には、他のプロセスに利用されないようにするために除外の設定をします。</li>
+</ol>
+<p>次のコマンドをクラスターを構成するすべてのノードで実行します。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">netsh int ipv4 add excludedportrange protocol&#x3D;tcp startport&#x3D;&lt;ポート番号&gt; numberofports&#x3D;&lt;ポート数&gt;</span><br><span class="line">netsh int ip show excludedportrange protocol&#x3D;tcp</span><br></pre></td></tr></table></figure>
+
+<p>以下、コマンド実行結果例です。</p>
+<p><img src="ClusterOnAzure-29.png" alt="コマンド実行結果例"></p>
+<h3 id="3-Azure-ロードバランサーの作成"><a href="#3-Azure-ロードバランサーの作成" class="headerlink" title="(3) Azure ロードバランサーの作成"></a>(3) Azure ロードバランサーの作成</h3><p>アプリケーション (今回の例ではファイルサーバー) の仮想 IP アドレスと同じフロントエンド IP を持つ Azure ロードバランサーを作成します。</p>
+<ol>
+<li>Azure ポータルのロードバランサーのサービスメニューから、作成をクリックします。</li>
+</ol>
+<p><img src="ClusterOnAzure-13.png" alt="Azure ポータル"></p>
+<ol start="2">
+<li>次のように入力して、最後に [次: フロントエンド IP 構成] をクリックします。</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th align="left">項目名</th>
+<th align="left">値 (備考)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">サブスクリプション</td>
+<td align="left">利用するサブスクリプション</td>
+</tr>
+<tr>
+<td align="left">リソースグループ</td>
+<td align="left">任意</td>
+</tr>
+<tr>
+<td align="left">名前</td>
+<td align="left">任意</td>
+</tr>
+<tr>
+<td align="left">地域</td>
+<td align="left">任意</td>
+</tr>
+<tr>
+<td align="left">SKU</td>
+<td align="left">Standard</td>
+</tr>
+<tr>
+<td align="left">種類</td>
+<td align="left">内部</td>
+</tr>
+<tr>
+<td align="left">レベル</td>
+<td align="left">地域</td>
+</tr>
+</tbody></table>
+<p><img src="ClusterOnAzure-14.png" alt="ロードバランサーの作成"></p>
+<ol start="3">
+<li>次の画面で [フロントエンド IP 構成の追加] をクリックします (①)。表示されたブレードから次のように入力して [追加] をクリックし (②)、最後に [次: バックエンド プール] をクリックします(③)。</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th align="left">項目名</th>
+<th align="left">値 (備考)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">名前</td>
+<td align="left">任意</td>
+</tr>
+<tr>
+<td align="left">サブネット</td>
+<td align="left">ファイルサーバーの役割で利用するサブネット</td>
+</tr>
+<tr>
+<td align="left">割り当て</td>
+<td align="left">静的</td>
+</tr>
+<tr>
+<td align="left">IP アドレス</td>
+<td align="left">10.10.10.30  (ファイルサーバーの役割の仮想 IP アドレスを指定します)</td>
+</tr>
+<tr>
+<td align="left">可用性ゾーン</td>
+<td align="left">任意</td>
+</tr>
+</tbody></table>
+<p><img src="ClusterOnAzure-16.png" alt="フロントエンド IP 構成の追加"></p>
+<ol start="4">
+<li>次の画面で [バックエンド プールの追加] をクリックします。</li>
+</ol>
+<p><img src="ClusterOnAzure-17.png" alt="バックエンド プールの追加(1)"></p>
+<ol start="5">
+<li>次のように入力し、IP 構成の [追加] をクリックします (③)。</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th align="left">項目名</th>
+<th align="left">値 (備考)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">名前</td>
+<td align="left">任意 (①)</td>
+</tr>
+<tr>
+<td align="left">バックエンドプールの構成</td>
+<td align="left">NIC (②)</td>
+</tr>
+</tbody></table>
+<p><img src="ClusterOnAzure-18.png" alt="バックエンド プールの追加(2)"></p>
+<ol start="6">
+<li>次のような [バックエンド プールへの IP 構成の追加] のメニューが表示されます。WSFC を構成するノードをすべて選択し (①)、最後に [追加] をクリックします (②)。</li>
+</ol>
+<p><img src="ClusterOnAzure-19.png" alt="バックエンド プールへの IP 構成の追加"></p>
+<ol start="7">
+<li>次のような画面になっていることを確認して [保存] をクリックします。</li>
+</ol>
+<p><img src="ClusterOnAzure-20.png" alt="バックエンド プールの追加(3)"></p>
+<ol start="8">
+<li>以下の画面で [次: インバウンド規則] をクリックします。</li>
+</ol>
+<p><img src="ClusterOnAzure-21.png" alt="インバウンド規則"></p>
+<ol start="9">
+<li>[負荷分散規則の追加] をクリックします。</li>
+</ol>
+<p><img src="ClusterOnAzure-22.png" alt="負荷分散規則の追加(1)"></p>
+<ol start="10">
+<li>以下を入力して [保存] をクリックします。  </li>
+</ol>
+<table>
+<thead>
+<tr>
+<th align="left">項目名</th>
+<th align="left">値 (備考)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">IP バージョン</td>
+<td align="left">IPv4</td>
+</tr>
+<tr>
+<td align="left">フロントエンド IP アドレス</td>
+<td align="left">(本手順で作成したフロントエンド IP を選択します。)</td>
+</tr>
+<tr>
+<td align="left">バックエンドプール</td>
+<td align="left">(本手順で作成したバックエンドプールを選択します。)</td>
+</tr>
+<tr>
+<td align="left">プロトコル</td>
+<td align="left">TCP</td>
+</tr>
+<tr>
+<td align="left">ポート</td>
+<td align="left">445 (フロントエンド IP で待ち受けするポートです。ファイルサーバーで使用するポート 445 を指定します。)</td>
+</tr>
+<tr>
+<td align="left">バックエンドポート</td>
+<td align="left">445 (バックエンドにトラフィックを送信する際のポートです。ファイルサーバーで使用するポート 445 を指定します。)</td>
+</tr>
+<tr>
+<td align="left">正常性プローブ</td>
+<td align="left">新規作成 ※</td>
+</tr>
+<tr>
+<td align="left">セッション永続化</td>
+<td align="left">任意</td>
+</tr>
+<tr>
+<td align="left">アイドルタイムアウト（分）</td>
+<td align="left">任意</td>
+</tr>
+<tr>
+<td align="left">フローティング IP を有効にする</td>
+<td align="left">チェック</td>
+</tr>
+</tbody></table>
+<p><img src="ClusterOnAzure-23.png" alt="負荷分散規則の追加(2)">  </p>
+<p>※ 正常性プローブの箇所で [新規作成] をクリックし、以下を入力して [保存] をクリックします。</p>
+<table>
+<thead>
+<tr>
+<th align="left">項目名</th>
+<th align="left">値 (備考)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">名前</td>
+<td align="left">任意</td>
+</tr>
+<tr>
+<td align="left">プロトコル</td>
+<td align="left">TCP</td>
+</tr>
+<tr>
+<td align="left">ポート</td>
+<td align="left">59999  (“(2) Health プローブを待ち受けるポートの作成” で指定したポート)</td>
+</tr>
+<tr>
+<td align="left">間隔</td>
+<td align="left">任意</td>
+</tr>
+</tbody></table>
+<p><img src="ClusterOnAzure-24.png" alt="正常性プローブ"></p>
+<ol start="11">
+<li>[確認および作成] をクリックします。</li>
+</ol>
+<p><img src="ClusterOnAzure-25.png" alt="確認および作成"></p>
+<ol start="12">
+<li>内容を確認して [作成] をクリックします。</li>
+</ol>
+<p><img src="ClusterOnAzure-26.png" alt="作成画面"></p>
+<ol start="13">
+<li>正常にロードバランサーが展開されたことを確認します。</li>
+</ol>
+<p><img src="ClusterOnAzure-27.png" alt="展開完了画面"></p>
+<ol start="14">
+<li>ロードバランサーのリソースの監視セクションにある [メトリック] から、メトリックとして Health Probe Status を選択、Backend IP Address で分割し、ファイルサーバーの所有者ノードのみ Health プローブの応答が得られていることを確認します。フェールオーバークラスターマネージャー等からファイルサーバーの所有者を移動すると、Health プローブの応答がある VM が入れ替わります。</li>
+</ol>
+<p>　以下の図は、10.10.10.22 の IP アドレスを持つ VM がファイルサーバーの所有者となっている例です。</p>
+<p><img src="ClusterOnAzure-28.png" alt="メトリック"></p>
+<p>いかがでしたでしょうか。本投稿が少しでも皆様のお役に立てば幸いです。</p>
+<p>※ 本情報の内容 (添付文書、リンク先などを含む) は、作成日時点でのものであり、予告なく変更される場合があります。</p>
+
+      
+      
+    </div>
+    <footer class="article-footer">
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/blog/2023/11/06/RemoteDesktopService/RDS/special-folders-are-displayed-in-english-when-using-UPD/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">次の記事</strong>
+      <div class="article-nav-title">
+        
+          UPD 利用時に、特殊フォルダーが英語表示になる
+        
+      </div>
+    </a>
+  
+  
+    <a href="/blog/2023/11/02/ActiveDirectory/Authentication/Windows_Pro_CG_incorrectly_shows/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">前の記事</strong>
+      <div class="article-nav-title">Windows 11 Pro エディションで Credential Guard の機能が有効と表示される問題について</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">カテゴリ</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Activation/">Activation</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Activation/ESU/">ESU</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Activation/security-SPP/">security-SPP</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/">Active Directory</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Authentication/">Authentication</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/DFSR/">DFSR</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/FunctionalLevel/">FunctionalLevel</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Group-Policy/">Group Policy</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Promotion-and-Demotion/">Promotion and Demotion</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/User-Profile/">User Profile</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Windows-Hello/">Windows Hello</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Windows-Time-Service/">Windows Time Service</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/AppLocker/">AppLocker</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/AppLocker/Active-Directory/">Active Directory</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/AppLocker/Microsoft-Intune/">Microsoft Intune</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Deployment/">Deployment</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Deployment/Feature-on-demand/">Feature on demand</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Deployment/Sysprep/">Sysprep</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Failover-Clustering/">Failover Clustering</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Failover-Clustering/Configuration-and-Management/">Configuration and Management</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/FileServices/">FileServices</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/FileServices/FTP/">FTP</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/FileServices/SMB/">SMB</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Hyper-V/">Hyper-V</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Hyper-V/Configuration-and-Management/">Configuration and Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Hyper-V/Migration/">Migration</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Microsoft-Connected-Cache/">Microsoft Connected Cache</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/">Networking</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/BITS/">BITS</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/Bluetooth/">Bluetooth</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/DHCP/">DHCP</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/DNS/">DNS</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/Firewall/">Firewall</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/LBFO/">LBFO</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/NCSI/">NCSI</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/NetworkInterface/">NetworkInterface</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/Proxy/">Proxy</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/TCPIP/">TCPIP</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/OpenSSH/">OpenSSH</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/">Performance</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/Hang-up-BSoD/">Hang-up/BSoD</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/No-Boot/">No Boot</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/Slow-Response/">Slow Response</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/System-Resource/">System Resource</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/Tools/">Tools</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/">Public Key Infrastructure</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Certificate-Authority/">Certificate Authority</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Certificate-Management/">Certificate Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Code-Signing/">Code Signing</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/SSL-TLS-Communication/">SSL TLS Communication</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/SSL-TLS-Connection/">SSL TLS Connection</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Smart-Card-Logon/">Smart Card Logon</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/">Remote Desktop</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/Azure-Virtual-Desktop-AVD/">Azure Virtual Desktop (AVD)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/Remote-Desktop-Service-RDS/">Remote Desktop Service (RDS)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/Windows-Virtual-Desktop-WVD/">Windows Virtual Desktop (WVD)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/RemoteAccess/">RemoteAccess</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/RemoteAccess/%E3%83%80%E3%82%A4%E3%83%A4%E3%83%AB%E3%82%A2%E3%83%83%E3%83%97%E6%8E%A5%E7%B6%9A/">ダイヤルアップ接続</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Setup/">Setup</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Setup/Feature-Update-FU/">Feature Update (FU)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Shell/">Shell</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Shell/Explorer/">Explorer</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/">Storage</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/Backup/">Backup</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/FSRM/">FSRM</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/Management/">Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/StorageMigrationService/">StorageMigrationService</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/UEFI/">UEFI</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/UEFI/Secure-Boot/">Secure Boot</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/">User Interface and Apps</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Command-Prompt/">Command Prompt</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/EventLog/">EventLog</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Language-Support/">Language Support</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Microsoft-Store/">Microsoft Store</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Performance/">Performance</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/PowerShell/">PowerShell</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Printing-%E5%8D%B0%E5%88%B7/">Printing (印刷)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Server-Management/">Server Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Taskscheduler/">Taskscheduler</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Windows-Management-Instrumentation/">Windows Management Instrumentation</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps-Language-support/">User Interface and Apps - Language support</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-365/">Windows 365</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Admin-Center/">Windows Admin Center</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Search/">Windows Search</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/">Windows Update</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Delivery-Optimization-DO/">Delivery Optimization (DO)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Feature-Update-FU/">Feature Update (FU)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Quality-Update-QU/">Quality Update (QU)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Windows-Update-Agent/">Windows Update Agent</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Windows-Update-Agent-WUA/">Windows Update Agent (WUA)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/">WirelessNetwork</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/NPS/">NPS</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/Wi-Fi/">Wi-Fi</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/%E3%83%A2%E3%83%90%E3%82%A4%E3%83%AB-%E3%83%96%E3%83%AD%E3%83%BC%E3%83%89%E3%83%90%E3%83%B3%E3%83%89%E6%8E%A5%E7%B6%9A-LTE/">モバイル ブロードバンド接続 (LTE)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/%E7%B5%84%E7%B9%94%E7%B4%B9%E4%BB%8B%E3%83%96%E3%83%AD%E3%82%B0%EF%BC%88Windows-Commercial%EF%BC%89/">組織紹介ブログ（Windows Commercial）</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最近の投稿</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/blog/2026/02/16/ActiveDirectory/GroupPolicy/UacPolicyIsEnabled/">「ユーザー アカウント制御：ビルトイン Administrator アカウントのための管理者承認モード」ポリシーが有効になる動作ついて</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/02/15/UserInterfaceAndApps/Printing/printer-queue-app-preview/">印刷キューアプリのプレビュー機能について</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/02/02/ActiveDirectory/Authentication/kerberos-rc4-for-service-account-ticket-issuance-changes-related-to-cve-2026-20833/">CVE‑2026‑20833 への対応とその影響について [KB5073381]</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/01/12/Hyper-V/vmwp-does-not-save-the-RTC-value-of-a-virtual-machine-when-performing-Live-Migration/">ライブ マイグレーション後の再起動でゲスト OS の時刻がずれる場合がある</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/01/07/WindowsUpdate/FU/fublog-txt/">ISO メディア経由かつ動的更新無効な状態で Windows 11 バージョン 24H2 または 25H2 へのアップグレードが失敗 (0x8007042B 0x2000D) する事象と対策について</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">アーカイブ</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2026/02/">2026 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2026/01/">2026 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/12/">2025 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/11/">2025 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/10/">2025 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/09/">2025 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/08/">2025 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/07/">2025 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/06/">2025 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/05/">2025 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/04/">2025 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/03/">2025 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/02/">2025 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/01/">2025 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/12/">2024 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/11/">2024 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/10/">2024 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/09/">2024 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/08/">2024 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/07/">2024 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/06/">2024 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/05/">2024 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/04/">2024 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/03/">2024 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/02/">2024 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/01/">2024 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/12/">2023 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/11/">2023 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/10/">2023 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/09/">2023 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/08/">2023 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/07/">2023 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/06/">2023 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/05/">2023 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/04/">2023 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/03/">2023 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/02/">2023 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/01/">2023 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/12/">2022 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/11/">2022 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/10/">2022 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/09/">2022 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/08/">2022 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/07/">2022 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/06/">2022 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/05/">2022 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/04/">2022 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/03/">2022 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/02/">2022 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/01/">2022 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/12/">2021 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/11/">2021 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/10/">2021 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/09/">2021 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/08/">2021 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/07/">2021 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/06/">2021 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/05/">2021 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/04/">2021 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/03/">2021 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/02/">2021 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/01/">2021 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/12/">2020 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/11/">2020 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/10/">2020 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/07/">2020 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/03/">2020 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2019/03/">2019 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/11/">2018 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/10/">2018 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/09/">2018 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/08/">2018 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/07/">2018 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/06/">2018 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/04/">2018 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/02/">2018 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/12/">2017 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/11/">2017 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/09/">2017 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/05/">2017 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/03/">2017 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/02/">2017 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2016/08/">2016 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2016/05/">2016 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2014/03/">2014 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2012/02/">2012 / 02</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2026 Microsoft Japan Windows Technology Support Team<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/blog/" class="mobile-nav-link">Home</a>
+  
+    <a href="/blog/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+<script src="/blog/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-180187723-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-180187723-1');
+</script>
+<!-- End Google Analytics -->
+
+  
+  <title>配信の最適化について #3 効果測定篇 | Microsoft Japan Windows Technology Support Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="※本記事はマイクロソフト社員によって公開されております。※この記事は過去に作成され、公開された記事を再編したものです。  みなさま、こんにちは。WSUS サポート チームです。  今回は「概要篇」、「グループポリシー篇」に引き続き第 3 回は「効果測定篇」として、実際に配信の最適化でどの程度ピアからファイルを取得出来ているか、確認を行う手順について紹介をしていきます。  Windows 10 もバ">
+<meta property="og:type" content="article">
+<meta property="og:title" content="配信の最適化について #3 効果測定篇">
+<meta property="og:url" content="https://jpwinsup.github.io/blog/2022/02/28/WindowsUpdate/DO/AboutDO_3/index.html">
+<meta property="og:site_name" content="Microsoft Japan Windows Technology Support Blog">
+<meta property="og:description" content="※本記事はマイクロソフト社員によって公開されております。※この記事は過去に作成され、公開された記事を再編したものです。  みなさま、こんにちは。WSUS サポート チームです。  今回は「概要篇」、「グループポリシー篇」に引き続き第 3 回は「効果測定篇」として、実際に配信の最適化でどの程度ピアからファイルを取得出来ているか、確認を行う手順について紹介をしていきます。  Windows 10 もバ">
+<meta property="og:locale" content="ja_JP">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2022/02/28/WindowsUpdate/DO/AboutDO_3/ActMon.bmp">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2022/02/28/WindowsUpdate/DO/AboutDO_3/TestEn.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2022/02/28/WindowsUpdate/DO/AboutDO_3/ActMon2.bmp">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2022/02/28/WindowsUpdate/DO/AboutDO_3/ActMon3.bmp">
+<meta property="article:published_time" content="2022-02-28T15:00:00.000Z">
+<meta property="article:modified_time" content="2026-02-19T02:53:58.988Z">
+<meta property="article:author" content="Microsoft Japan Windows Technology Support Team">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://jpwinsup.github.io/blog/2022/02/28/WindowsUpdate/DO/AboutDO_3/ActMon.bmp">
+  
+    <link rel="alternate" href="/blog/atom.xml" title="Microsoft Japan Windows Technology Support Blog" type="application/atom+xml">
+  
+
+  <link rel="icon" href="/blog/favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="/blog/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/blog/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/blog/favicon-16x16.png">
+  <link rel="manifest" href="/blog/site.webmanifest">
+  <link rel="mask-icon" href="/blog/safari-pinned-tab.svg" color="#5bbad5">
+  <meta name="msapplication-TileColor" content="#ffffff">
+  <meta name="theme-color" content="#ffffff">
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/blog/css/style.css">
+
+<meta name="generator" content="Hexo 5.2.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="site-header-logo"></div>
+  <div id="site-header-blog-wrapper"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        <div id="ms-logo"></div>
+        
+          <a class="main-nav-link" href="/blog/">Home</a>
+        
+          <a class="main-nav-link" href="/blog/archives">Archives</a>
+        
+        <a class="main-nav-link" target="_blank" rel="noopener" href="https://cssjpn.github.io/">サポート情報</a>
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/blog/atom.xml" title="RSSフィード"></a>
+        
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//www.bing.com/search" method="get" accept-charset="UTF-8" name="bing-search" onsubmit="var f=this;if(f['q'].value){var searchUrl =  'https://www.bing.com/search?q=' +  encodeURIComponent(f['q'].value + ' site:' + f['sitesearch'].value) ;window.open(searchUrl, 'blank') };return false;" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="検索"><button type="submit" id="nav-search-btn" class="search-form-submit"></button><input type="hidden" name="sitesearch" value="https://jpwinsup.github.io/blog"></form>
+      </div>
+    </div>
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/blog/" id="logo">Microsoft Japan Windows Technology Support Blog</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/blog/" id="subtitle">日本マイクロソフト Windows Support チームによる、サポート情報 Blog です。</a>
+        </h2>
+      
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-WindowsUpdate/DO/AboutDO_3" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    
+    
+      <header class="article-header-single">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      配信の最適化について #3 効果測定篇
+    </h1>
+  
+
+      </header>
+      <div class="article-share">
+        Last Update: 
+        <a href="/blog/2022/02/28/WindowsUpdate/DO/AboutDO_3/" class="article-date-single">
+  <time datetime="2022-02-28T15:00:00.000Z" itemprop="datePublished">2022-03-01</time>
+</a>
+        
+  <div class="article-category">
+    <a class="article-category-link" href="/blog/categories/Windows-Update/">Windows Update</a>►<a class="article-category-link" href="/blog/categories/Windows-Update/Delivery-Optimization-DO/">Delivery Optimization (DO)</a>
+  </div>
+
+        
+        <a href="https://github.com/jpwinsup/blog/issues/new?title=&body=%EF%BB%BF%0A%0A---%0A%0A%23%23%23%23+Document+Details%0A%0A*+Article+ID%3A+35f3183a-cce0-5aa2-ba66-4538a462ea48%0A*+TITLE%3A+%E9%85%8D%E4%BF%A1%E3%81%AE%E6%9C%80%E9%81%A9%E5%8C%96%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6+%233+%E5%8A%B9%E6%9E%9C%E6%B8%AC%E5%AE%9A%E7%AF%87%0A*+URL+https%3A%2F%2Fjpwinsup.github.io%2Fblog%2F2022%2F02%2F28%2FWindowsUpdate%2FDO%2FAboutDO_3%2F%0A*+SourceFileName%3A+source%2F_posts%2FWindowsUpdate%2FDO%2FAboutDO_3.md%0A" class="article-github-issue-link" target="_blank" rel="noopener noreferrer">feedback</a>
+        
+        <a data-url="https://jpwinsup.github.io/blog/2022/02/28/WindowsUpdate/DO/AboutDO_3/" data-id="cmlsvjdhe00mwru3yezcn5j3m" class="article-share-link">共有</a>
+      </div>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>※本記事はマイクロソフト社員によって公開されております。<br>※この記事は過去に作成され、公開された記事を再編したものです。</p>
+<hr>
+<p>みなさま、こんにちは。WSUS サポート チームです。 </p>
+<p>今回は「<a href="/blog/2022/02/28/WindowsUpdate/DO/AboutDO_1/">概要篇</a>」、「<a href="/blog/2022/02/28/WindowsUpdate/DO/AboutDO_2/">グループポリシー篇</a>」に引き続き第 3 回は「効果測定篇」として、実際に配信の最適化でどの程度ピアからファイルを取得出来ているか、確認を行う手順について紹介をしていきます。 </p>
+<p>Windows 10 もバージョン アップが重ねられ、配信の最適化の機能も効果を確認することが出来る、以下の「アクティビティ モニター」の機能がバージョン 1709 から追加されています。 </p>
+<p><strong>[スタート]</strong>  ボタン &gt; <strong>[設定]</strong>  &gt; <strong>[更新とセキュリティ]</strong>   &gt; <strong>[詳細オプション]</strong> &gt; <strong>[配信の最適化]</strong> &gt; <strong>[アクティビティ モニター]</strong></p>
+<p><img src="./ActMon.bmp"></p>
+<p>上記のアクティビティ モニターを利用することで、配信の最適化の効果もかなり簡単に確認が出来るようになったため、その手順について今回の記事では紹介していきます。 </p>
+<p>  </p>
+<h2 id="検証環境の構成および設定"><a href="#検証環境の構成および設定" class="headerlink" title="検証環境の構成および設定"></a>検証環境の構成および設定</h2><p>今回の検証では、以下のシンプルな構成でバージョン 1803 のクライアントを 2 台用意し検証を行います。 </p>
+<p>実際の検証を行う場合には、本番環境に可能な限り近い構成で検証していただくことをオススメします。特にクライアントの台数は多いほど効果が得られ易いので、<strong>可能であれば多くのクライアント (例えば 10 台以上)</strong> を用意して検証をしてください。 </p>
+<p><img src="./TestEn.png"></p>
+<p>また、今回は配信の最適化の機能について、効果を得られやすくするために、以下グループ ポリシーの設定を行います。これらのグループ ポリシーはいずれも「<a href="/blog/2022/02/28/WindowsUpdate/DO/AboutDO_2/">グループポリシー篇</a>」で紹介しておりますので、詳細についてはそちらの記事をご参照ください。 </p>
+<ul>
+<li><strong>ダウンロード モード</strong> : “グループ (2)” </li>
+<li><strong>グループ ID</strong> : 共通したグループ ID </li>
+<li><strong>最小ピア キャッシュ コンテンツ ファイル サイズ (MB)</strong> : 1 MB </li>
+<li><strong>最大キャッシュ時間 (秒)</strong> : 0 秒 (無制限) </li>
+<li><strong>http からのバックグラウンド ダウンロードを延期 (秒)</strong> : 3600 秒 </li>
+<li><strong>http からのフォアグラウンド ダウンロードを延期 (秒)</strong> : 60 秒 </li>
+</ul>
+<h2 id="検証手順"><a href="#検証手順" class="headerlink" title="検証手順"></a>検証手順</h2><p>それでは実際の検証手順について紹介をしていきます。 </p>
+<h3 id="事前準備"><a href="#事前準備" class="headerlink" title="事前準備"></a>事前準備</h3><p>検証のために新しく OS をインストールした場合には、特に問題とはならないのですが、以前より環境を利用していた場合には、アクティビティ モニターのカウンターが一部カウント アップされてしまっていることがあります。 </p>
+<p>この場合には、各端末で以下のコマンドを管理者権限で実行し、Delivery Optimization サービスを一度停止した後に値を保持しているレジストリ キーを削除することで、カウンター値を全てクリアします。 </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">net stop dosvc </span><br><span class="line">reg delete HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\DeliveryOptimization\Usage &#x2F;f </span><br><span class="line">net start dosvc </span><br></pre></td></tr></table></figure>
+
+
+<h2 id="1-台目のクライアントでの-Windows-Update-の実施"><a href="#1-台目のクライアントでの-Windows-Update-の実施" class="headerlink" title="1 台目のクライアントでの Windows Update の実施"></a>1 台目のクライアントでの Windows Update の実施</h2><p>1 台目のクライアントで Windows Update を実施し、配信の最適化のキャッシュが保存されるようにします。 </p>
+<ol>
+<li><p><a target="_blank" rel="noopener" href="https://msrc-blog.microsoft.com/2018/10/18/wumusteps_win10/">このブログ</a> の手順等に沿って、Windows Update を実行し、更新プログラムのダウンロードを完了させます。<br>※ 特にインストールまでしていただく必要はありません。 </p>
+</li>
+<li><p>Powershell で以下のコマンドを実行し、”Status” が “<strong>Caching</strong>“ となっており、キャッシュの準備が完了しているものが存在するか確認を行います。 </p>
+</li>
+</ol>
+<p><strong>&lt;&lt; 実行コマンド &gt;&gt;</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Get-DeliveryOptimizationStatus </span><br></pre></td></tr></table></figure>
+
+<p><strong>&lt;&lt; 実行例 (キャッシュの準備が完了出来ている場合) &gt;&gt;</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">Get-DeliveryOptimizationStatus</span><br><span class="line"></span><br><span class="line">FileId : 8b46fea9c0a4ca53a93248c279b86cbc678b0216 </span><br><span class="line">FileSize : 21734025 </span><br><span class="line">TotalBytesDownloaded : 21734025 </span><br><span class="line">PercentPeerCaching : 0 </span><br><span class="line">BytesFromPeers : 0 </span><br><span class="line">BytesFromHttp : 21734025 </span><br><span class="line">Status : Caching </span><br><span class="line">Priority : Background </span><br><span class="line">BytesFromLanPeers : 0 </span><br><span class="line">BytesFromGroupPeers : 0 </span><br><span class="line">BytesFromInternetPeers : 0 </span><br><span class="line">BytesToLanPeers : 0 </span><br><span class="line">BytesToGroupPeers : 0 </span><br><span class="line">BytesToInternetPeers : 0 </span><br><span class="line">DownloadDuration : 00:00:03.0780000 </span><br><span class="line">HttpConnectionCount : 2 </span><br><span class="line">LanConnectionCount : 0 </span><br><span class="line">GroupConnectionCount : 0 </span><br><span class="line">InternetConnectionCount : 0 </span><br><span class="line">DownloadMode : 2 </span><br><span class="line">SourceURL : https:&#x2F;&#x2F;7.au.download.windowsupdate.com&#x2F;c&#x2F;msdownload&#x2F;update&#x2F;software&#x2F;updt&#x2F;2018&#x2F;10&#x2F;windows10.0- </span><br><span class="line">kb4462930-x64_8b46fea9c0a4ca53a93248c279b86cbc678b0216.cab </span><br><span class="line"> </span><br><span class="line">(以下略) </span><br></pre></td></tr></table></figure>
+
+<p><strong>※ 注意</strong> : キャッシュの準備が 1 つも出来ていない場合には、Delivery Optimization のクラウド サービスへ接続出来ていない可能があります。このブログで紹介しているポート要件が満たされているか、また <a target="_blank" rel="noopener" href="https://docs.microsoft.com/ja-jp/archive/blogs/jpwsus/wu-proxy1">こちら</a> や <a target="_blank" rel="noopener" href="https://docs.microsoft.com/ja-jp/archive/blogs/jpwsus/wu-proxy2">こちら</a> のブログで紹介している通り、プロキシの設定が正しく行われているか改めて確認してください。 </p>
+<ol>
+<li>念のため、アクティビティ モニターを立ち上げて状況を確認します。1 台目のクライアントのために、通常は以下のように、ほとんどキャッシュからは取れていません。 </li>
+</ol>
+<p><img src="./ActMon2.bmp">
+  </p>
+<h2 id="2-台目以降のクライアントでの-Windows-Update-の実行"><a href="#2-台目以降のクライアントでの-Windows-Update-の実行" class="headerlink" title="2 台目以降のクライアントでの Windows Update の実行"></a>2 台目以降のクライアントでの Windows Update の実行</h2><p>続けて 2 台目以降のクライアントで、Windows Update を実行し、実際にキャッシュからどの程度情報を取ってこれるか確認を行います。 </p>
+<ol>
+<li>2 台目以降のクライアントでも Windows Update を実行します。ただし、今回は “<strong>http からのバックグラウンド ダウンロードを延期 (秒)</strong>“ の設定によって、キャッシュが利用される確率を上げるため、以下のコマンドを実行してバックグラウンドでダウンロード処理を開始させます。 </li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">usoclient StartScan </span><br></pre></td></tr></table></figure>
+
+<ol>
+<li>Powershell で以下のコマンドを実行し、状況を確認します。”BytesFromPeers” がカウント アップされていれば、クライアント間での通信が行われているものと考えられます。 </li>
+</ol>
+<p><strong>&lt;&lt; 実行コマンド &gt;&gt;</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Get-DeliveryOptimizationStatus </span><br></pre></td></tr></table></figure>
+
+<p><strong>&lt;&lt; 実行例 (キャッシュからファイルのダウンロードが行われている場合) &gt;&gt;</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">Get-DeliveryOptimizationStatus </span><br><span class="line"></span><br><span class="line">FileId : 1d4edb196dcd01bb090cceaa3e7633ea9e48d475 </span><br><span class="line">FileSize : 132970352 </span><br><span class="line">TotalBytesDownloaded : 132970352 </span><br><span class="line">PercentPeerCaching : 100 </span><br><span class="line">BytesFromPeers : 132970352 </span><br><span class="line">BytesFromHttp : 0 </span><br><span class="line">Status : Caching </span><br><span class="line">Priority : Background </span><br><span class="line">BytesFromLanPeers : 132970352 </span><br><span class="line">BytesFromGroupPeers : 0 </span><br><span class="line">BytesFromInternetPeers : 0 </span><br><span class="line">BytesToLanPeers : 0 </span><br><span class="line">BytesToGroupPeers : 0 </span><br><span class="line">BytesToInternetPeers : 0 </span><br><span class="line">DownloadDuration : 00:00:27.3590000 </span><br><span class="line">HttpConnectionCount : 2 </span><br><span class="line">LanConnectionCount : 1 </span><br><span class="line">GroupConnectionCount : 0 </span><br><span class="line">InternetConnectionCount : 0 </span><br><span class="line">DownloadMode : 2 </span><br><span class="line">SourceURL : https:&#x2F;&#x2F;11.au.download.windowsupdate.com&#x2F;d&#x2F;msdownload&#x2F;update&#x2F;software&#x2F;defu&#x2F;2018&#x2F;10&#x2F;am_base_1d4edb196dcd01bb090cceaa3e </span><br><span class="line">7633ea9e48d475.exe </span><br><span class="line"></span><br><span class="line">(以下略) </span><br></pre></td></tr></table></figure>
+
+<p><strong>※ 注意</strong> : キャッシュよりダウンロードが行われない場合には、公開情報に記載の通りこちらやこちらの点をご確認ください。 </p>
+<ol>
+<li>ダウンロードが完了したら、アクティビティ モニターを立ち上げ、キャシュからどの程度ファイルが取って来れたかを確認します。今回の検証では、かなりキャッシュから取って来易いよう設定したため、73.19 % をキャッシュから取ってこれていることが確認出来ます。<br>※ “<strong>http からのバックグラウンド ダウンロードを延期 (秒)</strong>“ を利用している場合には、ダウンロードが完了するまでに長時間を要する可能性があるご留意ください。 </li>
+</ol>
+<p><img src="./ActMon3.bmp"></p>
+<p>なお、以下の Powershell コマンドで同じ内容を出力することも可能なため、複数のクライアントで統計情報を収集する際にはお役立てください。 </p>
+<p><strong>&lt;&lt; 実行コマンド &gt;&gt;</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Get-DeliveryOptimizationPerfSnapThisMonth </span><br></pre></td></tr></table></figure>
+
+<p><strong>&lt;&lt; 実行例 &gt;&gt;</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">Get-DeliveryOptimizationPerfSnapThisMonth </span><br><span class="line"> </span><br><span class="line">MonthlyUploadLanBytes : 402,519,920 </span><br><span class="line">MonthlyUploadInternetBytes : 0 </span><br><span class="line">MonthlyDownloadHttpBytes : 155,175,324 </span><br><span class="line">MonthlyDownloadLanBytes : 423,621,728 </span><br><span class="line">MonthlyDownloadInternetBytes : 0 </span><br><span class="line">MonthlyDownloadFgRateKbps : 0 </span><br><span class="line">MonthlyDownloadBgRateKbps : 28,757 </span><br><span class="line">MonthlyUploadLimitReached : No </span><br><span class="line">MonthStartDate : 11&#x2F;1&#x2F;2018 </span><br></pre></td></tr></table></figure>
+
+
+<p>さてこれで配信の最適化に関する一連のシリーズは以上です。リリースされた当初は動きが分かりづらかったり、コントロールしにくい点が多かったかと思いますが、バージョンアップの度に機能が改善されていますので、今後の導入検討の参考となれば幸いです！ </p>
+<p>  </p>
+<p>(免責事項) </p>
+<p><strong>本情報の内容  ( 添付文書、リンク先などを含む )  は、作成日時点でのものであり、予告なく変更される場合があります。</strong></p>
+
+      
+      
+    </div>
+    <footer class="article-footer">
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/blog/2022/02/28/WindowsUpdate/DO/AboutDO_1/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">次の記事</strong>
+      <div class="article-nav-title">
+        
+          配信の最適化について #1 概要篇
+        
+      </div>
+    </a>
+  
+  
+    <a href="/blog/2022/02/26/WindowsUpdate/WUA/NoAutomaticRestartAfterApplyingUpdates/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">前の記事</strong>
+      <div class="article-nav-title">Windows 10 バージョン1607 で更新プログラム適用後の自動再起動が実施されない</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">カテゴリ</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Activation/">Activation</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Activation/ESU/">ESU</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Activation/security-SPP/">security-SPP</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/">Active Directory</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Authentication/">Authentication</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/DFSR/">DFSR</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/FunctionalLevel/">FunctionalLevel</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Group-Policy/">Group Policy</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Promotion-and-Demotion/">Promotion and Demotion</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/User-Profile/">User Profile</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Windows-Hello/">Windows Hello</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Windows-Time-Service/">Windows Time Service</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/AppLocker/">AppLocker</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/AppLocker/Active-Directory/">Active Directory</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/AppLocker/Microsoft-Intune/">Microsoft Intune</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Deployment/">Deployment</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Deployment/Feature-on-demand/">Feature on demand</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Deployment/Sysprep/">Sysprep</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Failover-Clustering/">Failover Clustering</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Failover-Clustering/Configuration-and-Management/">Configuration and Management</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/FileServices/">FileServices</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/FileServices/FTP/">FTP</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/FileServices/SMB/">SMB</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Hyper-V/">Hyper-V</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Hyper-V/Configuration-and-Management/">Configuration and Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Hyper-V/Migration/">Migration</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Microsoft-Connected-Cache/">Microsoft Connected Cache</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/">Networking</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/BITS/">BITS</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/Bluetooth/">Bluetooth</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/DHCP/">DHCP</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/DNS/">DNS</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/Firewall/">Firewall</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/LBFO/">LBFO</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/NCSI/">NCSI</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/NetworkInterface/">NetworkInterface</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/Proxy/">Proxy</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/TCPIP/">TCPIP</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/OpenSSH/">OpenSSH</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/">Performance</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/Hang-up-BSoD/">Hang-up/BSoD</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/No-Boot/">No Boot</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/Slow-Response/">Slow Response</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/System-Resource/">System Resource</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/Tools/">Tools</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/">Public Key Infrastructure</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Certificate-Authority/">Certificate Authority</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Certificate-Management/">Certificate Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Code-Signing/">Code Signing</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/SSL-TLS-Communication/">SSL TLS Communication</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/SSL-TLS-Connection/">SSL TLS Connection</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Smart-Card-Logon/">Smart Card Logon</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/">Remote Desktop</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/Azure-Virtual-Desktop-AVD/">Azure Virtual Desktop (AVD)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/Remote-Desktop-Service-RDS/">Remote Desktop Service (RDS)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/Windows-Virtual-Desktop-WVD/">Windows Virtual Desktop (WVD)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/RemoteAccess/">RemoteAccess</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/RemoteAccess/%E3%83%80%E3%82%A4%E3%83%A4%E3%83%AB%E3%82%A2%E3%83%83%E3%83%97%E6%8E%A5%E7%B6%9A/">ダイヤルアップ接続</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Setup/">Setup</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Setup/Feature-Update-FU/">Feature Update (FU)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Shell/">Shell</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Shell/Explorer/">Explorer</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/">Storage</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/Backup/">Backup</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/FSRM/">FSRM</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/Management/">Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/StorageMigrationService/">StorageMigrationService</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/UEFI/">UEFI</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/UEFI/Secure-Boot/">Secure Boot</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/">User Interface and Apps</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Command-Prompt/">Command Prompt</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/EventLog/">EventLog</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Language-Support/">Language Support</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Microsoft-Store/">Microsoft Store</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Performance/">Performance</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/PowerShell/">PowerShell</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Printing-%E5%8D%B0%E5%88%B7/">Printing (印刷)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Server-Management/">Server Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Taskscheduler/">Taskscheduler</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Windows-Management-Instrumentation/">Windows Management Instrumentation</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps-Language-support/">User Interface and Apps - Language support</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-365/">Windows 365</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Admin-Center/">Windows Admin Center</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Search/">Windows Search</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/">Windows Update</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Delivery-Optimization-DO/">Delivery Optimization (DO)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Feature-Update-FU/">Feature Update (FU)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Quality-Update-QU/">Quality Update (QU)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Windows-Update-Agent/">Windows Update Agent</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Windows-Update-Agent-WUA/">Windows Update Agent (WUA)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/">WirelessNetwork</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/NPS/">NPS</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/Wi-Fi/">Wi-Fi</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/%E3%83%A2%E3%83%90%E3%82%A4%E3%83%AB-%E3%83%96%E3%83%AD%E3%83%BC%E3%83%89%E3%83%90%E3%83%B3%E3%83%89%E6%8E%A5%E7%B6%9A-LTE/">モバイル ブロードバンド接続 (LTE)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/%E7%B5%84%E7%B9%94%E7%B4%B9%E4%BB%8B%E3%83%96%E3%83%AD%E3%82%B0%EF%BC%88Windows-Commercial%EF%BC%89/">組織紹介ブログ（Windows Commercial）</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最近の投稿</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/blog/2026/02/16/ActiveDirectory/GroupPolicy/UacPolicyIsEnabled/">「ユーザー アカウント制御：ビルトイン Administrator アカウントのための管理者承認モード」ポリシーが有効になる動作ついて</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/02/15/UserInterfaceAndApps/Printing/printer-queue-app-preview/">印刷キューアプリのプレビュー機能について</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/02/02/ActiveDirectory/Authentication/kerberos-rc4-for-service-account-ticket-issuance-changes-related-to-cve-2026-20833/">CVE‑2026‑20833 への対応とその影響について [KB5073381]</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/01/12/Hyper-V/vmwp-does-not-save-the-RTC-value-of-a-virtual-machine-when-performing-Live-Migration/">ライブ マイグレーション後の再起動でゲスト OS の時刻がずれる場合がある</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/01/07/WindowsUpdate/FU/fublog-txt/">ISO メディア経由かつ動的更新無効な状態で Windows 11 バージョン 24H2 または 25H2 へのアップグレードが失敗 (0x8007042B 0x2000D) する事象と対策について</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">アーカイブ</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2026/02/">2026 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2026/01/">2026 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/12/">2025 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/11/">2025 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/10/">2025 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/09/">2025 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/08/">2025 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/07/">2025 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/06/">2025 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/05/">2025 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/04/">2025 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/03/">2025 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/02/">2025 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/01/">2025 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/12/">2024 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/11/">2024 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/10/">2024 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/09/">2024 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/08/">2024 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/07/">2024 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/06/">2024 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/05/">2024 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/04/">2024 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/03/">2024 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/02/">2024 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/01/">2024 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/12/">2023 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/11/">2023 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/10/">2023 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/09/">2023 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/08/">2023 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/07/">2023 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/06/">2023 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/05/">2023 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/04/">2023 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/03/">2023 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/02/">2023 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/01/">2023 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/12/">2022 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/11/">2022 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/10/">2022 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/09/">2022 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/08/">2022 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/07/">2022 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/06/">2022 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/05/">2022 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/04/">2022 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/03/">2022 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/02/">2022 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/01/">2022 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/12/">2021 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/11/">2021 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/10/">2021 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/09/">2021 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/08/">2021 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/07/">2021 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/06/">2021 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/05/">2021 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/04/">2021 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/03/">2021 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/02/">2021 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/01/">2021 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/12/">2020 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/11/">2020 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/10/">2020 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/07/">2020 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/03/">2020 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2019/03/">2019 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/11/">2018 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/10/">2018 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/09/">2018 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/08/">2018 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/07/">2018 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/06/">2018 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/04/">2018 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/02/">2018 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/12/">2017 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/11/">2017 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/09/">2017 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/05/">2017 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/03/">2017 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/02/">2017 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2016/08/">2016 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2016/05/">2016 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2014/03/">2014 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2012/02/">2012 / 02</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2026 Microsoft Japan Windows Technology Support Team<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/blog/" class="mobile-nav-link">Home</a>
+  
+    <a href="/blog/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+<script src="/blog/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

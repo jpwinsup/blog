@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-180187723-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-180187723-1');
+</script>
+<!-- End Google Analytics -->
+
+  
+  <title>2022 年 5 月 10 日の更新プログラムに含まれるドメイン コントローラーでの証明書ベースの認証の変更と対応の流れについて [KB5014754] | Microsoft Japan Windows Technology Support Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="※※ 2024&#x2F;11&#x2F;14 更新※※ ・StrongCertificateBindingEnforcement のレジストリ設定のうち、互換モードが 2025 年 9 月 10 日までサポートされることに伴い、本記事の内容を更新いたしました。  本記事はマイクロソフト社員によって公開されております。 こんにちは。Windows Commercial Support Directory Servi">
+<meta property="og:type" content="article">
+<meta property="og:title" content="2022 年 5 月 10 日の更新プログラムに含まれるドメイン コントローラーでの証明書ベースの認証の変更と対応の流れについて [KB5014754]">
+<meta property="og:url" content="https://jpwinsup.github.io/blog/2023/04/11/PublicKeyInfrastructure/CertificateManagement/certificate-based-authentication-changes-on-may-2022/index.html">
+<meta property="og:site_name" content="Microsoft Japan Windows Technology Support Blog">
+<meta property="og:description" content="※※ 2024&#x2F;11&#x2F;14 更新※※ ・StrongCertificateBindingEnforcement のレジストリ設定のうち、互換モードが 2025 年 9 月 10 日までサポートされることに伴い、本記事の内容を更新いたしました。  本記事はマイクロソフト社員によって公開されております。 こんにちは。Windows Commercial Support Directory Servi">
+<meta property="og:locale" content="ja_JP">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2023/04/11/PublicKeyInfrastructure/CertificateManagement/certificate-based-authentication-changes-on-may-2022/altSecurityIdentities-editer-5B.22.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2023/04/11/PublicKeyInfrastructure/CertificateManagement/certificate-based-authentication-changes-on-may-2022/certificate-example.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2023/04/11/PublicKeyInfrastructure/CertificateManagement/certificate-based-authentication-changes-on-may-2022/altSecurityIdentities-multi-5B.22.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2023/04/11/PublicKeyInfrastructure/CertificateManagement/certificate-based-authentication-changes-on-may-2022/oid-5B.22.png">
+<meta property="article:published_time" content="2023-04-11T11:10:55.000Z">
+<meta property="article:modified_time" content="2026-02-19T02:53:58.493Z">
+<meta property="article:author" content="Microsoft Japan Windows Technology Support Team">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://jpwinsup.github.io/blog/2023/04/11/PublicKeyInfrastructure/CertificateManagement/certificate-based-authentication-changes-on-may-2022/altSecurityIdentities-editer-5B.22.png">
+  
+    <link rel="alternate" href="/blog/atom.xml" title="Microsoft Japan Windows Technology Support Blog" type="application/atom+xml">
+  
+
+  <link rel="icon" href="/blog/favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="/blog/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/blog/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/blog/favicon-16x16.png">
+  <link rel="manifest" href="/blog/site.webmanifest">
+  <link rel="mask-icon" href="/blog/safari-pinned-tab.svg" color="#5bbad5">
+  <meta name="msapplication-TileColor" content="#ffffff">
+  <meta name="theme-color" content="#ffffff">
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/blog/css/style.css">
+
+<meta name="generator" content="Hexo 5.2.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="site-header-logo"></div>
+  <div id="site-header-blog-wrapper"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        <div id="ms-logo"></div>
+        
+          <a class="main-nav-link" href="/blog/">Home</a>
+        
+          <a class="main-nav-link" href="/blog/archives">Archives</a>
+        
+        <a class="main-nav-link" target="_blank" rel="noopener" href="https://cssjpn.github.io/">サポート情報</a>
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/blog/atom.xml" title="RSSフィード"></a>
+        
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//www.bing.com/search" method="get" accept-charset="UTF-8" name="bing-search" onsubmit="var f=this;if(f['q'].value){var searchUrl =  'https://www.bing.com/search?q=' +  encodeURIComponent(f['q'].value + ' site:' + f['sitesearch'].value) ;window.open(searchUrl, 'blank') };return false;" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="検索"><button type="submit" id="nav-search-btn" class="search-form-submit"></button><input type="hidden" name="sitesearch" value="https://jpwinsup.github.io/blog"></form>
+      </div>
+    </div>
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/blog/" id="logo">Microsoft Japan Windows Technology Support Blog</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/blog/" id="subtitle">日本マイクロソフト Windows Support チームによる、サポート情報 Blog です。</a>
+        </h2>
+      
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-PublicKeyInfrastructure/CertificateManagement/certificate-based-authentication-changes-on-may-2022" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    
+    
+      <header class="article-header-single">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      2022 年 5 月 10 日の更新プログラムに含まれるドメイン コントローラーでの証明書ベースの認証の変更と対応の流れについて [KB5014754]
+    </h1>
+  
+
+      </header>
+      <div class="article-share">
+        Last Update: 
+        <a href="/blog/2023/04/11/PublicKeyInfrastructure/CertificateManagement/certificate-based-authentication-changes-on-may-2022/" class="article-date-single">
+  <time datetime="2023-04-11T11:10:55.000Z" itemprop="datePublished">2023-04-11</time>
+</a>
+        
+  <div class="article-category">
+    <a class="article-category-link" href="/blog/categories/Public-Key-Infrastructure/">Public Key Infrastructure</a>►<a class="article-category-link" href="/blog/categories/Public-Key-Infrastructure/Certificate-Management/">Certificate Management</a>
+  </div>
+
+        
+        <a href="https://github.com/jpwinsup/blog/issues/new?title=&body=%EF%BB%BF%0A%0A---%0A%0A%23%23%23%23+Document+Details%0A%0A*+Article+ID%3A+75283597-9f2e-59a2-8dd7-b12bbb9ee0f6%0A*+TITLE%3A+2022+%E5%B9%B4+5+%E6%9C%88+10+%E6%97%A5%E3%81%AE%E6%9B%B4%E6%96%B0%E3%83%97%E3%83%AD%E3%82%B0%E3%83%A9%E3%83%A0%E3%81%AB%E5%90%AB%E3%81%BE%E3%82%8C%E3%82%8B%E3%83%89%E3%83%A1%E3%82%A4%E3%83%B3+%E3%82%B3%E3%83%B3%E3%83%88%E3%83%AD%E3%83%BC%E3%83%A9%E3%83%BC%E3%81%A7%E3%81%AE%E8%A8%BC%E6%98%8E%E6%9B%B8%E3%83%99%E3%83%BC%E3%82%B9%E3%81%AE%E8%AA%8D%E8%A8%BC%E3%81%AE%E5%A4%89%E6%9B%B4%E3%81%A8%E5%AF%BE%E5%BF%9C%E3%81%AE%E6%B5%81%E3%82%8C%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6+%5BKB5014754%5D%0A*+URL+https%3A%2F%2Fjpwinsup.github.io%2Fblog%2F2023%2F04%2F11%2FPublicKeyInfrastructure%2FCertificateManagement%2Fcertificate-based-authentication-changes-on-may-2022%2F%0A*+SourceFileName%3A+source%2F_posts%2FPublicKeyInfrastructure%2FCertificateManagement%2Fcertificate-based-authentication-changes-on-may-2022.md%0A" class="article-github-issue-link" target="_blank" rel="noopener noreferrer">feedback</a>
+        
+        <a data-url="https://jpwinsup.github.io/blog/2023/04/11/PublicKeyInfrastructure/CertificateManagement/certificate-based-authentication-changes-on-may-2022/" data-id="cmlsvjdob01i6ru3ye3rl1mao" class="article-share-link">共有</a>
+      </div>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<p>※※ 2024/11/14 更新<br>※※ ・StrongCertificateBindingEnforcement のレジストリ設定のうち、互換モードが 2025 年 9 月 10 日までサポートされることに伴い、本記事の内容を更新いたしました。</p>
+</blockquote>
+<p>本記事はマイクロソフト社員によって公開されております。</p>
+<p>こんにちは。Windows Commercial Support Directory Services チームです。</p>
+<p>ドメイン コントローラーにおける証明書ベースの認証について、CVE-2022-34691、 CVE-2022-26931 および CVE-2022-26923 といった特権昇格の脆弱性に対処するため、2022 年 5 月 10 日の更新プログラムには証明書ベースの認証に関するセキュリティ強化が含まれております。</p>
+<p>本記事では、<a target="_blank" rel="noopener" href="https://support.microsoft.com/ja-jp/topic/kb5014754-windows-%E3%83%89%E3%83%A1%E3%82%A4%E3%83%B3-%E3%82%B3%E3%83%B3%E3%83%88%E3%83%AD%E3%83%BC%E3%83%A9%E3%83%BC%E3%81%A7%E3%81%AE%E8%A8%BC%E6%98%8E%E6%9B%B8%E3%83%99%E3%83%BC%E3%82%B9%E3%81%AE%E8%AA%8D%E8%A8%BC%E3%81%AE%E5%A4%89%E6%9B%B4-ad2c23b0-15d8-4340-a468-4d4f3b188f16"> KB5014754: Windows ドメイン コントローラーでの証明書ベースの認証の変更 </a> の内容を元に補足を交えながら、脆弱性対応の流れと追加されるイベントログ、および対処方法についておまとめしておりますので、ご参考としていただけますと幸いです。</p>
+<hr>
+<h2 id="セキュリティ強化のスケジュールについて"><a href="#セキュリティ強化のスケジュールについて" class="headerlink" title="セキュリティ強化のスケジュールについて"></a>セキュリティ強化のスケジュールについて</h2><hr>
+<p>本セキュリティ強化は、全てのドメイン コントローラーに更新プログラムを適用することで段階的に対処が行われます。各段階におけるモードと、その時系列を以下におまとめしております。<br>完全適用（強制）モードまでに <a href="#%E5%AF%BE%E5%87%A6%E6%96%B9%E6%B3%95%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6-%E8%A8%BC%E6%98%8E%E6%9B%B8%E3%81%AE%E3%83%9E%E3%83%83%E3%83%94%E3%83%B3%E3%82%B0"> 対処方法について </a>を実施しなければ、要件を満たしていない証明書は使用できなくなりますので、計画的な対応実施をご検討いただけますと幸いです。<br>説明中の “レジストリ”、”イベント ログ” については後述におまとめしておりますので、そちらをご参照ください。</p>
+<h3 id="1-2022-年-5-月-10-日：互換モード"><a href="#1-2022-年-5-月-10-日：互換モード" class="headerlink" title="1. 2022 年 5 月 10 日：互換モード"></a>1. 2022 年 5 月 10 日：互換モード</h3><blockquote>
+<p>※ 2022 年 5 月の更新プログラムには、本脆弱性への対応に伴って潜在的な不具合が見つかり、後述いたしますような既知の問題が存在しております。後述の <a href="#%E6%97%A2%E7%9F%A5%E3%81%AE%E5%95%8F%E9%A1%8C%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6">既知の問題について</a> をご参照いただき対処ください。</p>
+</blockquote>
+<p>このフェーズでは、既定で StrongCertificateBindingEnforcement レジストリ が “1” と同等の動作となり、互換モードで動作します。StrongCertificateBindingEnforcement レジストリは既定では存在しません。存在しない場合の動作は “1” と同等の動作となります。 </p>
+<p>この更新プログラム適用後から、ドメイン コントローラーは証明書ベースの認証において、認証対象のアカウントとアカウントが認証に使用している証明書の結びつけ ( マッピング ) の強弱をより厳密に検証するようになります。<br>※マッピングの強弱については、<a href="#1-%E3%82%A2%E3%82%AB%E3%82%A6%E3%83%B3%E3%83%88%E3%81%B8%E8%A8%BC%E6%98%8E%E6%9B%B8%E3%82%92%E3%83%9E%E3%83%83%E3%83%94%E3%83%B3%E3%82%B0">アカウントへ証明書をマッピング</a> の表をご参照ください</p>
+<p>互換モードでは、アカウントと証明書のマッピングの強弱に関わらず、証明書を用いた認証が可能です。<br>ただし、証明書のマッピングが弱い場合は、警告イベント ログ ID 39 がドメイン コントローラーのシステム イベント ログに記録されますので、そのような証明書には<a href="#%E5%AF%BE%E5%87%A6%E6%96%B9%E6%B3%95%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6-%E8%A8%BC%E6%98%8E%E6%9B%B8%E3%81%AE%E3%83%9E%E3%83%83%E3%83%94%E3%83%B3%E3%82%B0"> 対処方法について </a>にしたがって対処を行う必要がございます。</p>
+<p>また、証明書のマッピングが弱い場合のうち、使用している証明書の作成日がアカウントの作成日より古い場合は、既定ではエラー イベント ログ ID 40 がドメイン コントローラーのシステム イベント ログに記録され、認証に失敗します。<br>このエラーイベント ログ ID 40 の一時回避策として、 CertificateBackdatingCompensation レジストリが用意されております。CertificateBackdatingCompensation レジストリを使用して認証失敗を回避した場合、対象の証明書を用いて認証が可能ですが、証明書のマッピングが弱い場合と同様、警告イベント ログ ID 39 がドメイン コントローラーに記録されます。</p>
+<p>完全適用（強制）モードでは CertificateBackdatingCompensation レジストリの設定は無効となりますので、エラー イベント ログ ID 40 の対象となる証明書も同様に <a href="#%E5%AF%BE%E5%87%A6%E6%96%B9%E6%B3%95%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6-%E8%A8%BC%E6%98%8E%E6%9B%B8%E3%81%AE%E3%83%9E%E3%83%83%E3%83%94%E3%83%B3%E3%82%B0"> 対処方法について </a>にしたがって対処を行う必要がございます。</p>
+<h3 id="2-2023-年-4-月-11-日：無効モードの削除"><a href="#2-2023-年-4-月-11-日：無効モードの削除" class="headerlink" title="2. 2023 年 4 月 11 日：無効モードの削除"></a>2. 2023 年 4 月 11 日：無効モードの削除</h3><p>StrongCertificateBindingEnforcement で設定できるモードのうち、”無効モード” の設定 ( StrongCertificateBindingEnforcement = 0 ) が削除されます。<br>StrongCertificateBindingEnforcement を 0 に設定しても、 “1” に設定したときと同じ動作となります。<br>明示的に StrongCertificateBindingEnforcement = 0 に設定していない環境では、このフェーズでは特に動作に変更はございません。</p>
+<h3 id="3-2025-年-2-月-11-日：完全適用モード"><a href="#3-2025-年-2-月-11-日：完全適用モード" class="headerlink" title="3. 2025 年 2 月 11 日：完全適用モード"></a>3. 2025 年 2 月 11 日：完全適用モード</h3><p>既定で StrongCertificateBindingEnforcement = 2 の動作となり、完全適用モードとなります。StrongCertificateBindingEnforcement レジストリは既定では存在しません。存在しない場合の動作は “2” と同等の動作となります。<br>完全適用モードでは <a href="#%E5%AF%BE%E5%87%A6%E6%96%B9%E6%B3%95%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6-%E8%A8%BC%E6%98%8E%E6%9B%B8%E3%81%AE%E3%83%9E%E3%83%83%E3%83%94%E3%83%B3%E3%82%B0"> 対処方法について </a> に記載の対処策を実施していない証明書を用いて認証が行われた場合、認証が拒否されます。<br>なお、この段階では明示的に StrongCertificateBindingEnforcement = 1 とすることで、”互換モード” に戻すことができます。</p>
+<h3 id="4-2025-年-9-月-10-日：完全適用（強制）モード"><a href="#4-2025-年-9-月-10-日：完全適用（強制）モード" class="headerlink" title="4. 2025 年 9 月 10 日：完全適用（強制）モード"></a>4. 2025 年 9 月 10 日：完全適用（強制）モード</h3><p>StrongCertificateBindingEnforcement のレジストリが無効化され、強制的に StrongCertificateBindingEnforcement = 2 の動作となり、完全適用（強制）モードとなります。</p>
+<hr>
+<h2 id="対処方法について-証明書のマッピング"><a href="#対処方法について-証明書のマッピング" class="headerlink" title="対処方法について ( 証明書のマッピング )"></a>対処方法について ( 証明書のマッピング )</h2><hr>
+<p>以下の 2 つのうちいずれかの方法で利用ユーザーやコンピューターと証明書の結びつけ ( マッピング ) を行う必要があります。</p>
+<ol>
+<li>アカウントへ証明書をマッピング</li>
+<li>証明書へアカウントをマッピング</li>
+</ol>
+<p>どちらかの方法でマッピングされていれば問題ございません。それぞれマッピング方法の詳細について、以下におまとめしております。<br>対処実施後、対象の証明書に関する <a href="#%E8%BF%BD%E5%8A%A0%E3%81%95%E3%82%8C%E3%81%9F%E3%82%A4%E3%83%99%E3%83%B3%E3%83%88%E3%83%AD%E3%82%B0%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6">追加されたイベントログについて</a> に記載のイベント ログが記録され無くなれば、対処完了となります。</p>
+<h3 id="1-アカウントへ証明書をマッピング"><a href="#1-アカウントへ証明書をマッピング" class="headerlink" title="1. アカウントへ証明書をマッピング"></a>1. アカウントへ証明書をマッピング</h3><p>証明書を使用した認証を行うユーザー アカウントやコンピューター アカウントの altSecurityIdentities 属性に証明書の情報を追加することで、マッピングを行うことになります。</p>
+<p>// altSecurityIdentities 属性</p>
+<img src="/blog/2023/04/11/PublicKeyInfrastructure/CertificateManagement/certificate-based-authentication-changes-on-may-2022/altSecurityIdentities-editer-5B.22.png" class="">
+
+<p>具体的には、アカウントの altSecurityIdentities 属性に、使用している証明書に関する値をマッピング方法に従って登録します。<br>証明書のマッピングは、そのマッピング方法によって 強弱の種類 が分かれており、以下のような種類に分類されます。</p>
+<table>
+<thead>
+<tr>
+<th>マッピング方法</th>
+<th>例</th>
+<th>種類</th>
+<th>補足</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>X509IssuerSubject</td>
+<td>“X509:&lt;I&gt;IssuerName&lt;S&gt;SubjectName”</td>
+<td>弱い</td>
+<td></td>
+</tr>
+<tr>
+<td>X509SubjectOnly</td>
+<td>“X509:&lt;S&gt;SubjectName”</td>
+<td>弱い</td>
+<td></td>
+</tr>
+<tr>
+<td>X509RFC822</td>
+<td>“X509:&lt;RFC822&gt;user@contoso.com”</td>
+<td>弱い</td>
+<td>Email アドレス</td>
+</tr>
+<tr>
+<td>X509IssuerSerialNumber</td>
+<td>“X509:&lt;I&gt;IssuerName&lt;SR&gt;1234567890”</td>
+<td>強い</td>
+<td>推奨</td>
+</tr>
+<tr>
+<td>X509SKI</td>
+<td>“X509:&lt;SKI&gt;123456789abcdef”</td>
+<td>強い</td>
+<td></td>
+</tr>
+<tr>
+<td>X509SHA1PublicKey</td>
+<td>“X509:&lt;SHA1-PUKEY&gt;123456789abcdef”</td>
+<td>強い</td>
+<td></td>
+</tr>
+</tbody></table>
+<p>上記のうち、<strong>完全適用モード対処するためには 種類 が “強い” となっている方法で証明書をマッピングする必要があります。</strong><br>ここでは推奨である、シリアル番号と発行者による X509IssuerSerialNumber の証明書マッピングの方法を説明します。</p>
+<p>マッピング対象の証明書のファイルを開き、「発行者」と「シリアル番号」のフィールドを探します。</p>
+<img src="/blog/2023/04/11/PublicKeyInfrastructure/CertificateManagement/certificate-based-authentication-changes-on-may-2022/certificate-example.png" class="">
+
+<p>上図の証明書の場合、「発行者」と「シリアル番号」は以下の通りです。</p>
+<pre><code>発行者：CN=contoso-DC1-CA-1, DC=contoso, DC=com
+シリアル番号：6b0000000203ac3c5052349f9f000000000002</code></pre>
+<blockquote>
+<p>発行者はプロパティの表示上は改行されておりますが、certutil -store コマンドで確認できるような DN 名となります。<br>//certutil -store コマンドの実行結果の例<br>================ 証明書 1 ================<br>シリアル番号: 6b0000000203ac3c5052349f9f000000000002<br>発行者: CN=contoso-DC1-CA-1, DC=contoso, DC=com<br> この日以降: 2022/12/27 16:26<br> この日以前: 2023/12/27 16:26</p>
+</blockquote>
+<p>X509IssuerSerialNumber の方式で証明書をマッピングするための文字列は、“X509:&lt;I&gt;発行者&lt;SR&gt;シリアル番号”となりますが、確認した内容を元に変換が必要となります。</p>
+<p>X509IssuerSerialNumber の方式では、証明書の発行者の DN 名は [ , ] 区切りで逆順に並べ替え [ , ] の後ろにある半角スペースは削除します。<br>上記を例にしますと、「CN=contoso-DC1-CA-1, DC=contoso, DC=com」の場合、[ , ] 区切りで逆順に並べ替えると、「DC=com, DC=contoso, CN=contoso-DC1-CA-1」となり、さらに [ , ] の後ろにある半角スペースを削除するので、最終的に「DC=com,DC=contoso,CN=contoso-DC1-CA-1」が指定する文字列となります。</p>
+<pre><code>証明書記載の発行者の DN 名 ：CN=contoso-DC1-CA-1, DC=contoso, DC=com
+↓
+マッピング文字列での記載：DC=com,DC=contoso,CN=contoso-DC1-CA-1</code></pre>
+<p>また、シリアル番号はバイトスワップ ( 1 バイトずつ区切り逆順に並べること ) します。例えば「12 34 56」の場合、「56 34 12」というような形です。したがって、上記の例において、「6b0000000203ac3c5052349f9f000000000002」は、マッピングでは「0200000000009f9f3452503cac03020000006b」が指定する文字列となります。</p>
+<p>その結果、X509IssuerSerialNumber のマッピング方式で altSecurityIdentities 属性に設定するマッピングの情報は以下の通りとなります。</p>
+<pre><code>X509:&lt;I&gt;DC=com,DC=contoso,CN=contoso-DC1-CA-1&lt;SR&gt;0200000000009f9f3452503cac03020000006b</code></pre>
+<p>上記の文字列をaltSecurityIdentities 属性に設定することで、証明書のマッピングが完了となります。<br>PowerShell コマンドで altSecurityIdentities 属性を更新する場合は以下のようなコマンドで実行可能です。</p>
+<p>//ユーザーの場合 ( DomainUser の部分は適宜ユーザー名に置き換えます)</p>
+<pre><code>set-aduser ‘DomainUser’ -replace @&#123; altSecurityIdentities=&quot;X509:&lt;I&gt;DC=com,DC=contoso,CN=contoso-DC1-CA-1&lt;SR&gt;0200000000009f9f3452503cac03020000006b&quot;&#125;</code></pre>
+<p>//コンピューターの場合( Computer の部分は適宜コンピューター名に置き換えます)</p>
+<pre><code>set-adcomputer &#39;Computer&#39; -replace @&#123; altSecurityIdentities=&quot;X509:&lt;I&gt;DC=com,DC=contoso,CN=contoso-DC1-CA-1&lt;SR&gt;0200000000009f9f3452503cac03020000006b&quot;&#125;</code></pre>
+<blockquote>
+<p>※ 上記の例では -replace オプションを用いておりますので、既存の値を置き換えるような操作となります。もし altSecurityIdentities 属性にすでに値がある場合は、削除されても問題ない値かどうか確認いただいてから実施したり、-add として追加とする形にするなど、ご留意いただければと存じます。</p>
+</blockquote>
+<blockquote>
+<p>※ altSecurityIdentities 属性は複数のマッピング文字列を設定できる属性となり、altSecurityIdentities 属性に設定されているマッピング文字列の一覧の中に、使用している証明書と一致する情報が含まれていれば問題ございません。</p>
+</blockquote>
+<blockquote>
+<p>　//複数設定した場合の例<br>　<img src="/blog/2023/04/11/PublicKeyInfrastructure/CertificateManagement/certificate-based-authentication-changes-on-may-2022/altSecurityIdentities-multi-5B.22.png" class=""></p>
+</blockquote>
+<h3 id="2-証明書へアカウントをマッピング"><a href="#2-証明書へアカウントをマッピング" class="headerlink" title="2. 証明書へアカウントをマッピング"></a>2. 証明書へアカウントをマッピング</h3><p>証明書の OID (1.3.6.1.4.1.311.25.2) 拡張に SID が含まれる証明書を使用することになります。<br>その証明書を使用して認証を行ったアカウントの SID が、証明書に含まれる SID と一致していると、強いマッピングとしてみなされます。</p>
+<p>// OID (1.3.6.1.4.1.311.25.2) 拡張が含まれる証明書の例。</p>
+<img src="/blog/2023/04/11/PublicKeyInfrastructure/CertificateManagement/certificate-based-authentication-changes-on-may-2022/oid-5B.22.png" class="">
+
+<p>現在使用している証明書に OID (1.3.6.1.4.1.311.25.2) 拡張が含まれていない場合は<br>証明書の “1.3.6.1.4.1.311.25.2” という OID の拡張機能の項目に、アカウントの SID の情報が含まれるように証明書を発行して、使用する証明書を差し替えます。</p>
+<p>OID (1.3.6.1.4.1.311.25.2) 拡張が含まれる証明書の発行方法について、<br>証明書を発行する証明機関が “Active Directory 証明書サービス” で構築したエンタープライズ CA の場合、CA に 2022 年 5 月以降のセキュリティ更新プログラムを適用することで OID (1.3.6.1.4.1.311.25.2) 拡張付きの証明書を発行することが可能です。<br>更新プログラム適用した後、発行に使用する証明書テンプレートの [ サブジェクト ] タブが “Active Directory の情報から構築する” となっていれば、 “1.3.6.1.4.1.311.25.2” という OID の拡張機能に、証明書の発行要求を行ったアカウントの SID が追加されます。</p>
+<p>もし証明書認証にサードパーティの証明機関をご利用の場合は、証明機関のベンダーと協力し OID (1.3.6.1.4.1.311.25.2) 拡張が含まれる証明書の発行を行っていただくか、先述の <a href="#1-%E3%82%A2%E3%82%AB%E3%82%A6%E3%83%B3%E3%83%88%E3%81%B8%E8%A8%BC%E6%98%8E%E6%9B%B8%E3%82%92%E3%83%9E%E3%83%83%E3%83%94%E3%83%B3%E3%82%B0">1. アカウントへ証明書をマッピング</a> の方法にて対処することをご検討ください。</p>
+<hr>
+<h2 id="追加されたイベントログについて"><a href="#追加されたイベントログについて" class="headerlink" title="追加されたイベントログについて"></a>追加されたイベントログについて</h2><hr>
+<p>本セキュリティ強化に伴って、以下のイベントログが追加されております。なお、無効モードの場合は各イベントは記録されません。</p>
+<h3 id="イベント-メッセージ-ID-39-Windows-Server-2008-R2-は-ID-41-について"><a href="#イベント-メッセージ-ID-39-Windows-Server-2008-R2-は-ID-41-について" class="headerlink" title="イベント メッセージ ID 39 (Windows Server 2008 R2 は ID 41) について"></a>イベント メッセージ ID 39 (Windows Server 2008 R2 は ID 41) について</h3><p>以下のイベントは、「User:」に記載のアカウントと「Certificate ～」で示されている証明書の間で 強い マッピングが行われていない証明書にて、認証を行った際に記録されます。<br><strong>互換性モードでは、警告イベントとして出力され、実際の認証動作に影響はありません</strong>が、<strong>完全適用モードではこのイベントはエラーとして出力され、認証をブロックします。</strong></p>
+<h4 id="イベント-ID-39-Windows-Server-2008-R2-は-ID-41"><a href="#イベント-ID-39-Windows-Server-2008-R2-は-ID-41" class="headerlink" title="イベント ID 39 (Windows Server 2008 R2 は ID 41)"></a>イベント ID 39 (Windows Server 2008 R2 は ID 41)</h4><pre><code>ログの名前:         System
+ソース:           Microsoft-Windows-Kerberos-Key-Distribution-Center
+イベント ID:       39
+レベル:           ( 互換モード: 警告), ( 完全適用モード : エラー )
+説明:
+キー配布センター ( KDC ) で、有効なユーザー証明書が見つかりましたが、セキュリティで保護された方法で
+ユーザーにマップできませんでした( 明示的なマッピング、キー信頼マッピング、SID など ) 
+このような証明書は、明示的なマッピングを使用して置き換えるか、ユーザーに直接マップする必要があります。
+詳細については、https://go.microsoft.com/fwlink/?linkid=2189925 を参照してください。
+
+User: &lt;principal name&gt;
+Certificate Subject: &lt;Subject name in Certificate&gt;
+Certificate Issuer: &lt;Issuer Fully Qualified Domain Name (FQDN)&gt;
+Certificate Serial Number: &lt;Serial Number of Certificate&gt;
+Certificate Thumbprint: &lt;Thumbprint of Certificate&gt;</code></pre>
+<h3 id="イベント-メッセージ-ID-40-Windows-Server-2008-R2-は-ID-48-について"><a href="#イベント-メッセージ-ID-40-Windows-Server-2008-R2-は-ID-48-について" class="headerlink" title="イベント メッセージ ID 40 (Windows Server 2008 R2 は ID 48) について"></a>イベント メッセージ ID 40 (Windows Server 2008 R2 は ID 48) について</h3><p>以下のイベントは、<strong>「User:」記載のアカウントの作成よりも前に、「Certificate ～」で示されている証明書を作成</strong>して、その証明書を利用した認証が行われた場合に記録されます。<strong>互換モードでこの認証は既定でブロックされます。</strong> 完全適用モードではこのイベント ログは記録されません。</p>
+<h4 id="イベント-ID-40-Windows-Server-2008-R2-は-ID-48"><a href="#イベント-ID-40-Windows-Server-2008-R2-は-ID-48" class="headerlink" title="イベント ID 40 (Windows Server 2008 R2 は ID 48)"></a>イベント ID 40 (Windows Server 2008 R2 は ID 48)</h4><pre><code>ログの名前:         System
+ソース:           Microsoft-Windows-Kerberos-Key-Distribution-Center
+イベント ID:       40
+レベル:           エラー
+説明:
+キー配布センター (KDC) で、有効なユーザー証明書が見つかりましたが、セキュリティで保護された方法で
+ユーザーにマップできませんでした(明示的なマッピング、キー信頼マッピング、SID など)。
+この証明書は、マップ先のユーザーの前に置かれたため、拒否されました。
+詳細については、https://go.microsoft.com/fwlink/?linkid=2189925 を参照してください。
+
+User: &lt;principal name&gt;
+Certificate Subject: &lt;Subject name in Certificate&gt;
+Certificate Issuer: &lt;Issuer FQDN&gt;
+Certificate Serial Number: &lt;Serial Number of Certificate&gt;
+Certificate Thumbprint: &lt;Thumbprint of Certificate&gt;
+Certificate Issuance Time: &lt;FILETIME of certificate&gt;
+Account Creation Time: &lt;FILETIME of principal object in AD&gt;</code></pre>
+<h3 id="イベント-メッセージ-ID-41-Windows-Server-2008-R2-は-ID-43"><a href="#イベント-メッセージ-ID-41-Windows-Server-2008-R2-は-ID-43" class="headerlink" title="イベント メッセージ ID 41 (Windows Server 2008 R2  は ID 43)"></a>イベント メッセージ ID 41 (Windows Server 2008 R2  は ID 43)</h3><p>以下のイベントは、証明書の拡張フィールドに OID ( 1.3.6.1.4.1.311.25.2 ) 拡張が付与された証明書が使用されているものの、利用アカウントの SID と OID ( 1.3.6.1.4.1.311.25.2 ) 拡張に記載の SID が異なる場合に記録されます。<strong>互換モード、強制モードの両方でこの認証はブロックされます。</strong></p>
+<h4 id="イベント-ID-41-Windows-Server-2008-R2-は-ID-43"><a href="#イベント-ID-41-Windows-Server-2008-R2-は-ID-43" class="headerlink" title="イベント ID 41 (Windows Server 2008 R2  は ID 43)"></a>イベント ID 41 (Windows Server 2008 R2  は ID 43)</h4><pre><code>ログの名前:         System
+ソース:           Microsoft-Windows-Kerberos-Key-Distribution-Center
+イベント ID:       41
+レベル:           エラー
+説明:
+キー配布センター (KDC) は、有効なユーザー証明書を検出しましたが、マップ先のユーザーとは異なる SID を含んでいます。
+その結果、証明書を含む要求が失敗しました。
+詳細については、https://go.microsoft.com/fwlink/?linkid=2189925 を参照してください。
+
+User: &lt;principal name&gt;
+User SID: &lt;SID of the authenticating principal&gt;
+Certificate Subject: &lt;Subject name in Certificate&gt;
+Certificate Issuer: &lt;Issuer FQDN&gt;
+Certificate Serial Number: &lt;Serial Number of Certificate&gt;
+Certificate Thumbprint: &lt;Thumbprint of Certificate&gt;
+Certificate SID: &lt;SID found in the new Certificate Extension&gt;</code></pre>
+<hr>
+<h2 id="追加されたレジストリ-キーについて"><a href="#追加されたレジストリ-キーについて" class="headerlink" title="追加されたレジストリ キーについて"></a>追加されたレジストリ キーについて</h2><hr>
+<p>2022 年 5 月 10 日にリリースされた更新プログラムをドメインコントローラーに適用すると以下のレジストリ キーが設定できるようになります。各レジストリとも、設定後の OS 再起動は不要です。</p>
+<h3 id="StrongCertificateBindingEnforcement-について"><a href="#StrongCertificateBindingEnforcement-について" class="headerlink" title="StrongCertificateBindingEnforcement について"></a>StrongCertificateBindingEnforcement について</h3><p>このレジストリ キーは、無効モード、互換モード、または完全適用モードの設定で利用します。無効モードについては 2023 年 4 月 11 日で利用できなくなります。また、2025 年 9 月 10 日以降はこのレジストリの設定は無効化され、ドメイン コントローラーは完全適用モードで動作するようになります。</p>
+<pre><code>Registry Key: HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Kdc
+Name: StrongCertificateBindingEnforcement
+Type: REG_DWORD
+Data: ※以下の値が利用可能です。
+　0 – 無効モード ( 証明書のマッピングがあるかどうかのチェックを無効にします。
+　　　　　　　　　この設定はセキュリティ強化を無効にしますので、推奨されません。) 
+　1 – 互換モード（2022 年 5 月 10 日から 2025 年 1 月 14 日まで、レジストリが存在しない場合の既定値となります）
+　2 - 完全適用モード (2025 年 2 月 11 日以降、レジストリが存在しない場合の既定値となります)</code></pre>
+<h3 id="CertificateMappingMethods-について"><a href="#CertificateMappingMethods-について" class="headerlink" title="CertificateMappingMethods について"></a>CertificateMappingMethods について</h3><p>ドメイン コントローラーが証明書のマッピング認証をおこなう際に、ドメイン コントローラーの “schannel” が証明書マッピング処理をおこなう場合があります。このときに、ドメイン コントローラー がおこなう証明書マッピングの強度を制御するレジストリが CertificateMappingMethods です。</p>
+<pre><code>Registry Key: HKEY_LOCAL_MACHINE\System\CurrentControlSet\Control\SecurityProviders\Schannel
+Name: CertificateMappingMethods
+Type: REG_DWORD
+Data: ※以下の値が利用可能です。(レジストリが存在しない場合、既定値は 0x18 となります。）
+
+0x0001 - サブジェクト/発行者の証明書マッピング (弱 – 既定では無効)
+0x0002 - 発行者証明書マッピング (弱 – 既定では無効)
+0x0004 - UPN 証明書マッピング (弱 – 既定では無効)
+0x0008 - S4U2Self 証明書マッピング (厳密 - 既定で有効)
+0x0010 - S4U2Self 明示的な証明書マッピング (厳密 - 既定で有効)</code></pre>
+<h3 id="CertificateBackdatingCompensation-について"><a href="#CertificateBackdatingCompensation-について" class="headerlink" title="CertificateBackdatingCompensation について"></a>CertificateBackdatingCompensation について</h3><p>このレジストリを設定すると、アカウント作成日時より、最大 50 年前に作成された証明書でも弱いマッピングの証明書として互換モードでは許可することができるようになります。<br>レジストリが設定されていない ( 既定 ) 場合は、アカウント作成日時より 10 分前までに作成された証明書であれば、互換モードで許可されるようになっています。</p>
+<blockquote>
+<p>※ AD CS で証明書を発行すると、実際に発行した日時より 10 分前の日時で証明書が作られるため、それを考慮しての既定値となっております。</p>
+</blockquote>
+<p>2025 年 9 月 10 日以降はこのレジストリの設定による弱いマッピングの証明書は許可できなくなります。</p>
+<pre><code>Registry Key: HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Kdc
+Name: CertificateBackdatingCompensation
+Type: REG_DWORD
+Data: ※以下の値が利用可能です。(レジストリが存在しない場合、既定値は 10 分となります。）
+
+50 年 - 0x5E0C89C0
+25 年 - 0x2EFE0780
+10 年 - 0x12CC0300
+ 5 年 - 0x9660180
+ 3 年 - 0x5A39A80
+ 1 年 - 0x1E13380</code></pre>
+<hr>
+<h2 id="既知の問題について"><a href="#既知の問題について" class="headerlink" title="既知の問題について"></a>既知の問題について</h2><hr>
+<p>2022 年 5 月 10 日にリリースされた更新プログラムには既知の問題があり、ドメイン コントローラーにインストールした後、ネットワーク ポリシー サーバー (NPS)、ルーティングとリモート アクセス サービス (RRAS)、RADIUS、拡張認証プロトコル (EAP)、保護された拡張認証プロトコル (PEAP) などのサービスで認証エラーが発生する可能性があります。<br>この問題は、ドメイン コントローラーに 2022 年 5 月 10 日の更新プログラムを適用することで事象が発生します。</p>
+<p>本問題を修正する定例外の更新プログラムがリリースされておりますので、適用をご検討ください。<br>修正が含まれる更新プログラムは上記のような認証シナリオにおける不具合に対処するため、ドメインコントローラーだけでなく NPS サーバーなどクライアントのコンピュータ証明書を中継してドメインコントローラーに送る中間のサーバーに対しても修正が加えられています。</p>
+<p>そのため　<strong>NPSサーバーなどクライアントのコンピュータ証明書を中継してドメインコントローラーに送る中間のサーバーとドメイン コントローラーの双方に適用する必要があります。</strong>※ 適用後はサーバーの再起動が必要となります。</p>
+<p>更新プログラムを適用する順番について、ドメイン コントローラーに先に適用してしまうと、本不具合の対象となる構成となってしまいますので、NPS サーバーなどクライアントのコンピュータ証明書を中継してドメインコントローラーに送る中間のサーバーへ先に更新プログラムを適用したうえで、その後ドメイン コントローラーに適用するという順序で、対処いただくことをご検討ください。</p>
+<p>各 OS 毎の更新プログラムは、以下の通りとなります。</p>
+<p>■ Windows Server 2022<br><a target="_blank" rel="noopener" href="https://support.microsoft.com/en-us/topic/may-19-2022-kb5015013-os-build-20348-709-out-of-band-9fae3d6a-4ee5-45f3-9247-3043327c722b">May 19, 2022—KB5015013 (OS Build 20348.709) Out-of-band</a></p>
+<p>■ Windows Server 2019<br><a target="_blank" rel="noopener" href="https://support.microsoft.com/en-gb/topic/may-19-2022-kb5015018-os-build-17763-2931-out-of-band-e4c28a4d-7dbe-4ef5-a539-f0b21cba2ebb">May 19, 2022—KB5015018 (OS Build 17763.2931) Out-of-band</a></p>
+<p>■ Windows Server 2016<br><a target="_blank" rel="noopener" href="https://support.microsoft.com/en-gb/topic/may-19-2022-kb5015019-os-build-14393-5127-out-of-band-8548dfda-38ba-4fb6-a7a3-42b86ac2cc81">May 19, 2022—KB5015019 (OS Build 14393.5127) Out-of-band</a></p>
+<p>■ Windows Server 2012 R2<br><a target="_blank" rel="noopener" href="https://support.microsoft.com/en-us/topic/kb5014986-authentication-failures-occur-after-the-may-10-2022-update-is-installed-on-domain-controllers-running-windows-server-2012-r2-367a686a-f976-4170-9fdb-919a069689bd">KB5014986: Authentication failures occur after the May 10, 2022 update is installed on domain controllers running Windows Server 2012 R2</a></p>
+<p>■ Windows Server 2012<br><a target="_blank" rel="noopener" href="https://support.microsoft.com/en-us/topic/kb5014991-authentication-failures-occur-after-the-may-10-2022-update-is-installed-on-domain-controllers-running-windows-server-2012-6bfb263b-4602-4eef-88af-d27703635e6b">KB5014991: Authentication failures occur after the May 10, 2022 update is installed on domain controllers running Windows Server 2012</a></p>
+<p>■ Windows Server 2008 R2<br><a target="_blank" rel="noopener" href="https://support.microsoft.com/en-us/topic/kb5014987-authentication-failures-occur-after-the-may-10-2022-update-is-installed-on-domain-controllers-running-windows-server-2008-r2-sp1-5b0a255a-e351-42bd-8110-82f4b9cffea5">KB5014987: Authentication failures occur after the May 10, 2022 update is installed on domain controllers running Windows Server 2008 R2 SP1</a></p>
+<p>■ Windows Server 2008<br><a target="_blank" rel="noopener" href="https://support.microsoft.com/en-us/topic/kb5014990-authentication-failures-occur-after-the-may-10-2022-update-is-installed-on-domain-controllers-running-windows-server-2008-sp2-5cfca425-82e2-4a84-a5f3-173a198875fc">KB5014990: Authentication failures occur after the May 10, 2022 update is installed on domain controllers running Windows Server 2008 SP2</a></p>
+<h2 id="参考情報"><a href="#参考情報" class="headerlink" title="参考情報"></a>参考情報</h2><p><a target="_blank" rel="noopener" href="https://support.microsoft.com/en-us/topic/kb5014754-certificate-based-authentication-changes-on-windows-domain-controllers-ad2c23b0-15d8-4340-a468-4d4f3b188f16"> KB5014754—Certificate-based authentication changes on Windows domain controllers </a> </p>
+<p><a target="_blank" rel="noopener" href="https://msrc.microsoft.com/update-guide/ja-JP/vulnerability/CVE-2022-26931">Windows Kerberos の特権の昇格の脆弱性</a></p>
+<p><a target="_blank" rel="noopener" href="https://msrc.microsoft.com/update-guide/ja-JP/vulnerability/CVE-2022-26923">Active Directory Domain Services Elevation of Privilege Vulnerability</a></p>
+<p><a target="_blank" rel="noopener" href="https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-wcce/e563cff8-1af6-4e6f-a655-7571ca482e71">2.2.2.7.7.4 szOID_NTDS_CA_SECURITY_EXT</a></p>
+<h2 id="更新履歴"><a href="#更新履歴" class="headerlink" title="更新履歴"></a>更新履歴</h2><p>2023/04/11 : 本ブログの公開<br>2023/07/03 : 完全適用モードの日付を変更<br>2024/11/14 : StrongCertificateBindingEnforcement のレジストリのサポート期間について更新</p>
+
+      
+      
+    </div>
+    <footer class="article-footer">
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/blog/2023/04/13/Networking/LBFO/About-MsLbfoSysEvtProvider-16945-event/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">次の記事</strong>
+      <div class="article-nav-title">
+        
+          イベント ログ (ソース: MsLbfoSysEvtProvider、ID: 16945) について
+        
+      </div>
+    </a>
+  
+  
+    <a href="/blog/2023/04/11/RemoteDesktopService/AVD/expirationofavd/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">前の記事</strong>
+      <div class="article-nav-title">AVD で留意すべき期限について</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">カテゴリ</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Activation/">Activation</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Activation/ESU/">ESU</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Activation/security-SPP/">security-SPP</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/">Active Directory</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Authentication/">Authentication</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/DFSR/">DFSR</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/FunctionalLevel/">FunctionalLevel</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Group-Policy/">Group Policy</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Promotion-and-Demotion/">Promotion and Demotion</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/User-Profile/">User Profile</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Windows-Hello/">Windows Hello</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Windows-Time-Service/">Windows Time Service</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/AppLocker/">AppLocker</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/AppLocker/Active-Directory/">Active Directory</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/AppLocker/Microsoft-Intune/">Microsoft Intune</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Deployment/">Deployment</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Deployment/Feature-on-demand/">Feature on demand</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Deployment/Sysprep/">Sysprep</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Failover-Clustering/">Failover Clustering</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Failover-Clustering/Configuration-and-Management/">Configuration and Management</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/FileServices/">FileServices</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/FileServices/FTP/">FTP</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/FileServices/SMB/">SMB</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Hyper-V/">Hyper-V</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Hyper-V/Configuration-and-Management/">Configuration and Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Hyper-V/Migration/">Migration</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Microsoft-Connected-Cache/">Microsoft Connected Cache</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/">Networking</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/BITS/">BITS</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/Bluetooth/">Bluetooth</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/DHCP/">DHCP</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/DNS/">DNS</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/Firewall/">Firewall</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/LBFO/">LBFO</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/NCSI/">NCSI</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/NetworkInterface/">NetworkInterface</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/Proxy/">Proxy</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/TCPIP/">TCPIP</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/OpenSSH/">OpenSSH</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/">Performance</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/Hang-up-BSoD/">Hang-up/BSoD</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/No-Boot/">No Boot</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/Slow-Response/">Slow Response</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/System-Resource/">System Resource</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/Tools/">Tools</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/">Public Key Infrastructure</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Certificate-Authority/">Certificate Authority</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Certificate-Management/">Certificate Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Code-Signing/">Code Signing</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/SSL-TLS-Communication/">SSL TLS Communication</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/SSL-TLS-Connection/">SSL TLS Connection</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Smart-Card-Logon/">Smart Card Logon</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/">Remote Desktop</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/Azure-Virtual-Desktop-AVD/">Azure Virtual Desktop (AVD)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/Remote-Desktop-Service-RDS/">Remote Desktop Service (RDS)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/Windows-Virtual-Desktop-WVD/">Windows Virtual Desktop (WVD)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/RemoteAccess/">RemoteAccess</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/RemoteAccess/%E3%83%80%E3%82%A4%E3%83%A4%E3%83%AB%E3%82%A2%E3%83%83%E3%83%97%E6%8E%A5%E7%B6%9A/">ダイヤルアップ接続</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Setup/">Setup</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Setup/Feature-Update-FU/">Feature Update (FU)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Shell/">Shell</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Shell/Explorer/">Explorer</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/">Storage</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/Backup/">Backup</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/FSRM/">FSRM</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/Management/">Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/StorageMigrationService/">StorageMigrationService</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/UEFI/">UEFI</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/UEFI/Secure-Boot/">Secure Boot</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/">User Interface and Apps</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Command-Prompt/">Command Prompt</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/EventLog/">EventLog</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Language-Support/">Language Support</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Microsoft-Store/">Microsoft Store</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Performance/">Performance</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/PowerShell/">PowerShell</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Printing-%E5%8D%B0%E5%88%B7/">Printing (印刷)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Server-Management/">Server Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Taskscheduler/">Taskscheduler</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Windows-Management-Instrumentation/">Windows Management Instrumentation</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps-Language-support/">User Interface and Apps - Language support</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-365/">Windows 365</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Admin-Center/">Windows Admin Center</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Search/">Windows Search</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/">Windows Update</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Delivery-Optimization-DO/">Delivery Optimization (DO)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Feature-Update-FU/">Feature Update (FU)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Quality-Update-QU/">Quality Update (QU)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Windows-Update-Agent/">Windows Update Agent</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Windows-Update-Agent-WUA/">Windows Update Agent (WUA)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/">WirelessNetwork</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/NPS/">NPS</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/Wi-Fi/">Wi-Fi</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/%E3%83%A2%E3%83%90%E3%82%A4%E3%83%AB-%E3%83%96%E3%83%AD%E3%83%BC%E3%83%89%E3%83%90%E3%83%B3%E3%83%89%E6%8E%A5%E7%B6%9A-LTE/">モバイル ブロードバンド接続 (LTE)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/%E7%B5%84%E7%B9%94%E7%B4%B9%E4%BB%8B%E3%83%96%E3%83%AD%E3%82%B0%EF%BC%88Windows-Commercial%EF%BC%89/">組織紹介ブログ（Windows Commercial）</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最近の投稿</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/blog/2026/02/16/ActiveDirectory/GroupPolicy/UacPolicyIsEnabled/">「ユーザー アカウント制御：ビルトイン Administrator アカウントのための管理者承認モード」ポリシーが有効になる動作ついて</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/02/15/UserInterfaceAndApps/Printing/printer-queue-app-preview/">印刷キューアプリのプレビュー機能について</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/02/02/ActiveDirectory/Authentication/kerberos-rc4-for-service-account-ticket-issuance-changes-related-to-cve-2026-20833/">CVE‑2026‑20833 への対応とその影響について [KB5073381]</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/01/12/Hyper-V/vmwp-does-not-save-the-RTC-value-of-a-virtual-machine-when-performing-Live-Migration/">ライブ マイグレーション後の再起動でゲスト OS の時刻がずれる場合がある</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/01/07/WindowsUpdate/FU/fublog-txt/">ISO メディア経由かつ動的更新無効な状態で Windows 11 バージョン 24H2 または 25H2 へのアップグレードが失敗 (0x8007042B 0x2000D) する事象と対策について</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">アーカイブ</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2026/02/">2026 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2026/01/">2026 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/12/">2025 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/11/">2025 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/10/">2025 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/09/">2025 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/08/">2025 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/07/">2025 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/06/">2025 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/05/">2025 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/04/">2025 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/03/">2025 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/02/">2025 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/01/">2025 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/12/">2024 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/11/">2024 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/10/">2024 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/09/">2024 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/08/">2024 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/07/">2024 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/06/">2024 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/05/">2024 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/04/">2024 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/03/">2024 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/02/">2024 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/01/">2024 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/12/">2023 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/11/">2023 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/10/">2023 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/09/">2023 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/08/">2023 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/07/">2023 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/06/">2023 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/05/">2023 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/04/">2023 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/03/">2023 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/02/">2023 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/01/">2023 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/12/">2022 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/11/">2022 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/10/">2022 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/09/">2022 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/08/">2022 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/07/">2022 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/06/">2022 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/05/">2022 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/04/">2022 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/03/">2022 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/02/">2022 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/01/">2022 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/12/">2021 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/11/">2021 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/10/">2021 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/09/">2021 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/08/">2021 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/07/">2021 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/06/">2021 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/05/">2021 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/04/">2021 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/03/">2021 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/02/">2021 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/01/">2021 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/12/">2020 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/11/">2020 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/10/">2020 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/07/">2020 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/03/">2020 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2019/03/">2019 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/11/">2018 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/10/">2018 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/09/">2018 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/08/">2018 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/07/">2018 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/06/">2018 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/04/">2018 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/02/">2018 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/12/">2017 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/11/">2017 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/09/">2017 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/05/">2017 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/03/">2017 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/02/">2017 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2016/08/">2016 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2016/05/">2016 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2014/03/">2014 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2012/02/">2012 / 02</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2026 Microsoft Japan Windows Technology Support Team<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/blog/" class="mobile-nav-link">Home</a>
+  
+    <a href="/blog/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+<script src="/blog/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

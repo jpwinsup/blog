@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-180187723-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-180187723-1');
+</script>
+<!-- End Google Analytics -->
+
+  
+  <title>OpenSSH for Windows の 2024 年 10 月の更新について | Microsoft Japan Windows Technology Support Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="本記事はマイクロソフト社員によって公開されております。   こんにちは、Windows サポートの丸山です。 Windows 10 以降のクライアント OS、および Windows Server 2019 以降のサーバー OS では、OpenSSH for Windows が標準で搭載されておりますが、2024 年 10 月の更新プログラムを適用いただくことで、OS 標準搭載の OpenSSH">
+<meta property="og:type" content="article">
+<meta property="og:title" content="OpenSSH for Windows の 2024 年 10 月の更新について">
+<meta property="og:url" content="https://jpwinsup.github.io/blog/2024/11/12/OpenSSH/OpenSSH_update_oct_2024/index.html">
+<meta property="og:site_name" content="Microsoft Japan Windows Technology Support Blog">
+<meta property="og:description" content="本記事はマイクロソフト社員によって公開されております。   こんにちは、Windows サポートの丸山です。 Windows 10 以降のクライアント OS、および Windows Server 2019 以降のサーバー OS では、OpenSSH for Windows が標準で搭載されておりますが、2024 年 10 月の更新プログラムを適用いただくことで、OS 標準搭載の OpenSSH">
+<meta property="og:locale" content="ja_JP">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2024/11/12/OpenSSH/OpenSSH_update_oct_2024/1.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2024/11/12/OpenSSH/OpenSSH_update_oct_2024/2.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2024/11/12/OpenSSH/OpenSSH_update_oct_2024/3.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2024/11/12/OpenSSH/OpenSSH_update_oct_2024/4.png">
+<meta property="article:published_time" content="2024-11-12T02:00:00.000Z">
+<meta property="article:modified_time" content="2026-02-19T02:53:58.438Z">
+<meta property="article:author" content="Microsoft Japan Windows Technology Support Team">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://jpwinsup.github.io/blog/2024/11/12/OpenSSH/OpenSSH_update_oct_2024/1.png">
+  
+    <link rel="alternate" href="/blog/atom.xml" title="Microsoft Japan Windows Technology Support Blog" type="application/atom+xml">
+  
+
+  <link rel="icon" href="/blog/favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="/blog/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/blog/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/blog/favicon-16x16.png">
+  <link rel="manifest" href="/blog/site.webmanifest">
+  <link rel="mask-icon" href="/blog/safari-pinned-tab.svg" color="#5bbad5">
+  <meta name="msapplication-TileColor" content="#ffffff">
+  <meta name="theme-color" content="#ffffff">
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/blog/css/style.css">
+
+<meta name="generator" content="Hexo 5.2.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="site-header-logo"></div>
+  <div id="site-header-blog-wrapper"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        <div id="ms-logo"></div>
+        
+          <a class="main-nav-link" href="/blog/">Home</a>
+        
+          <a class="main-nav-link" href="/blog/archives">Archives</a>
+        
+        <a class="main-nav-link" target="_blank" rel="noopener" href="https://cssjpn.github.io/">サポート情報</a>
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/blog/atom.xml" title="RSSフィード"></a>
+        
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//www.bing.com/search" method="get" accept-charset="UTF-8" name="bing-search" onsubmit="var f=this;if(f['q'].value){var searchUrl =  'https://www.bing.com/search?q=' +  encodeURIComponent(f['q'].value + ' site:' + f['sitesearch'].value) ;window.open(searchUrl, 'blank') };return false;" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="検索"><button type="submit" id="nav-search-btn" class="search-form-submit"></button><input type="hidden" name="sitesearch" value="https://jpwinsup.github.io/blog"></form>
+      </div>
+    </div>
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/blog/" id="logo">Microsoft Japan Windows Technology Support Blog</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/blog/" id="subtitle">日本マイクロソフト Windows Support チームによる、サポート情報 Blog です。</a>
+        </h2>
+      
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-OpenSSH/OpenSSH_update_oct_2024" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    
+    
+      <header class="article-header-single">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      OpenSSH for Windows の 2024 年 10 月の更新について
+    </h1>
+  
+
+      </header>
+      <div class="article-share">
+        Last Update: 
+        <a href="/blog/2024/11/12/OpenSSH/OpenSSH_update_oct_2024/" class="article-date-single">
+  <time datetime="2024-11-12T02:00:00.000Z" itemprop="datePublished">2024-11-12</time>
+</a>
+        
+  <div class="article-category">
+    <a class="article-category-link" href="/blog/categories/OpenSSH/">OpenSSH</a>
+  </div>
+
+        
+        <a href="https://github.com/jpwinsup/blog/issues/new?title=&body=%EF%BB%BF%0A%0A---%0A%0A%23%23%23%23+Document+Details%0A%0A*+Article+ID%3A+3448d7e5-1316-5dda-b28d-9351c2b9bb78%0A*+TITLE%3A+OpenSSH+for+Windows+%E3%81%AE+2024+%E5%B9%B4+10+%E6%9C%88%E3%81%AE%E6%9B%B4%E6%96%B0%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6%0A*+URL+https%3A%2F%2Fjpwinsup.github.io%2Fblog%2F2024%2F11%2F12%2FOpenSSH%2FOpenSSH_update_oct_2024%2F%0A*+SourceFileName%3A+source%2F_posts%2FOpenSSH%2FOpenSSH_update_oct_2024.md%0A" class="article-github-issue-link" target="_blank" rel="noopener noreferrer">feedback</a>
+        
+        <a data-url="https://jpwinsup.github.io/blog/2024/11/12/OpenSSH/OpenSSH_update_oct_2024/" data-id="cmlsvjd8l001iru3y4g2zgs7i" class="article-share-link">共有</a>
+      </div>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<p>本記事はマイクロソフト社員によって公開されております。</p>
+</blockquote>
+<hr>
+<p>こんにちは、Windows サポートの丸山です。</p>
+<p>Windows 10 以降のクライアント OS、および Windows Server 2019 以降のサーバー OS では、OpenSSH for Windows が標準で搭載されておりますが、2024 年 10 月の更新プログラムを適用いただくことで、OS 標準搭載の OpenSSH のバージョンが v9.5 に更新されます。</p>
+<p>バージョンが更新されることで、最新の機能が使用できるようになるなどのメリットがございますが、以前のバージョンからの非互換により、OpenSSH Server サービスが起動しなくなってしまう、あるいはネットワーク上の OpenSSH クライアントから接続が出来なくなった、等の事例が報告されております。</p>
+<p>本記事では、2024 年 10 月の更新プログラム適用後に発生する OpenSSH for Windows の問題について、事例や対処策をご紹介させていただきます。</p>
+<blockquote>
+<p>※ 弊社提供の OpenSSH for Windows は、提供形態の違いにより、下記の 2 種類ご用意がございます。</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://learn.microsoft.com/ja-jp/windows-server/administration/OpenSSH/openssh-overview">Windows に同梱される OpenSSH for Windows (Features on Demand 方式)</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/PowerShell/Win32-OpenSSH/wiki">GitHub から提供される OpenSSH for Windows</a></li>
+</ul>
+<p>2024 年 10 月の更新プログラムの適用にあたりましては、上記のうち、<strong>Windows に同梱される OpenSSH for Windows</strong> が更新されます。<strong>GitHub から提供される OpenSSH for Windows</strong> につきましては 2024 年 10 月の更新プログラムによる更新は行われません。</p>
+</blockquote>
+<h2 id="1-programdata-ssh-フォルダーあるいは-programdata-ssh-logs-フォルダーのアクセス権チェックの影響を受けて-OpenSSH-Server-サービスの起動がエラーになる"><a href="#1-programdata-ssh-フォルダーあるいは-programdata-ssh-logs-フォルダーのアクセス権チェックの影響を受けて-OpenSSH-Server-サービスの起動がエラーになる" class="headerlink" title="(1) %programdata%\ssh フォルダーあるいは %programdata%\ssh\logs フォルダーのアクセス権チェックの影響を受けて OpenSSH Server サービスの起動がエラーになる"></a>(1) %programdata%\ssh フォルダーあるいは %programdata%\ssh\logs フォルダーのアクセス権チェックの影響を受けて OpenSSH Server サービスの起動がエラーになる</h2><p>バージョン 9.4 以降の OpenSSH for Windows では、OpenSSH Server の起動時に %programdata%\ssh (※既定では C:\ProgramData\ssh) フォルダーおよび %programdata%\ssh\logs (※既定では C:\ProgramData\ssh\logs) フォルダーのアクセス権チェックを行い、ビルトイン Administrators グループ、および SYSTEM アカウント以外のユーザーが書き込み権限を持っていると判断された場合、起動がエラーになるよう、動作が変更されました。</p>
+<p>※該当の Pull Request はこちらになります。<br><a target="_blank" rel="noopener" href="https://github.com/PowerShell/openssh-portable/pull/686/files">https://github.com/PowerShell/openssh-portable/pull/686/files</a></p>
+<p>この動作変更の影響を受け、2024 年 10 月の更新プログラムが適用された環境では、フォルダーのアクセス権に意図しないアクセス権が付与されていると検知された場合、OpenSSH Server の開始が、エラー 1607 で失敗するようになりました。</p>
+<p><img src="1.png" alt="ローカル コンピューターの OpenSSH SSH Server サービスを開始できません。 エラー 1607: プロセスを途中で強制終了しました。"></p>
+<p>特に %programdata%\ssh\logs フォルダーには、既定の構成においてビルトイン Administrators グループ、および SYSTEM アカウント以外アカウントにはアクセス権が付与されておりませんので、管理者権限を持つアカウントがフォルダーを開こうとしたタイミングでエクスプローラーによるアクセス権の取得を行うかどうかの確認ダイアログが表示され、”続行” を押下することで、意図せずして管理者アカウントにフルコントロール権限が付与されていることがございます。</p>
+<p><img src="2.png" alt="このフォルダーにアクセスする許可がありません。 [続行] をクリックすると、このフォルダーへの永続的なアクセスを取得します。"></p>
+<p>2024 年 10 月の更新プログラムの適用後に OpenSSH Server サービスが起動しなくなってしまった場合には、まずは %programdata%\ssh (※既定では C:\ProgramData\ssh) フォルダーおよび %programdata%\ssh\logs フォルダーのアクセス権を確認してください。</p>
+<p>また、多くの場合、%programdata%\ssh\logs フォルダーの削除、あるいはリネームを行うことで状況が改善されますので、お試しいただけますと幸いです。</p>
+<h2 id="2-sshd-config-のパーサーが変更された影響を受けて-OpenSSH-Server-サービスの開始がエラーになる"><a href="#2-sshd-config-のパーサーが変更された影響を受けて-OpenSSH-Server-サービスの開始がエラーになる" class="headerlink" title="(2) sshd_config のパーサーが変更された影響を受けて OpenSSH Server サービスの開始がエラーになる"></a>(2) sshd_config のパーサーが変更された影響を受けて OpenSSH Server サービスの開始がエラーになる</h2><p>2024 年 10 月の更新プログラムが適用された OpenSSH では、sshd_config のパーサーに変更があり、この影響により、エスケープ シーケンスを含む sshd_config の読み取りに失敗し、OpenSSH Server サービスの起動に失敗する事例が報告されております。</p>
+<p>一例として、sshd_config に以下のような記述があった場合、2024 年 10 月の更新プログラムが適用された環境では OpenSSH Server の起動がエラーになります。</p>
+<blockquote>
+<blockquote>
+<blockquote>
+</blockquote>
+<p>ChrootDirectory “F:\“</p>
+<blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
+<p>2024 年 10 月の更新プログラムが適用された環境では、下記のように記述することで、OpenSSH Server サービスが起動できるようになります。</p>
+<blockquote>
+<blockquote>
+<blockquote>
+</blockquote>
+<p>ChrootDirectory “F:\\“</p>
+<blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
+<p>sshd_config の記述の影響により OpenSSH Server サービスの開始に失敗する場合、以下のように sshd.exe をコマンド プロンプトからフルパスで実行することで、エラーが検出された行番号を確認できます。</p>
+<blockquote>
+<blockquote>
+<blockquote>
+</blockquote>
+<p>C:\Windows\System32\OpenSSH\sshd.exe</p>
+<blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
+<p><img src="3.png" alt="__PROGRAMDATA__\\ssh/sshd_config line 75: invalid quotes __PROGRAMDATA__\\ssh/sshd_config: terminating, 1 bad configuration options"></p>
+<p>上記のように、sshd_config の読み取りがエラーとなっている場合、該当箇所の記述の見直しをお願いします。</p>
+<h2 id="3-ssh-rsa-を要求するクライアントからの接続が失敗する"><a href="#3-ssh-rsa-を要求するクライアントからの接続が失敗する" class="headerlink" title="(3) ssh-rsa を要求するクライアントからの接続が失敗する"></a>(3) ssh-rsa を要求するクライアントからの接続が失敗する</h2><p>バージョン 8.8 以降の OpenSSH では、ssh-rsa アルゴリズムによる鍵交換が既定で無効になりました。</p>
+<p>この問題の影響を受けている場合、OpenSSH Server の起動はエラーにはなりませんが、ssh-rsa アルゴリズムを使用するクライアントからの接続がエラーになります。</p>
+<p>以下は、HostKeyAlgorithms に ssh-rsa のみを使用可能としたクライアントから、2024 年 10 月の更新プログラムが適用された OpenSSH Server に接続しようとしたときのクライアント側でのエラーの例です。使用可能な鍵交換アルゴリズムに ssh-rsa が含まれていないため、ネゴシエーションに失敗していることがわかります。</p>
+<p><img src="4.png" alt="Unable to negotiate with 172.30.17.79 port 22: no matching host key type fond. Their offer: rsa-sha2-512,rsa-sha2-256,ecdsa-sha2-nistp256,ssh-ed25519"></p>
+<p>こちらは、クライアント側でより新しい鍵交換アルゴリズムに対応するよう、バージョンアップなどの対応をいただくことが望ましい状況ではございますが、運用面の都合などによりクライアントの更新が難しい場合には、以下のような記述を sshd_config に追加して、古いバージョンのクライアントを持つホストからの接続時には ssh-rsa のアルゴリズムを一時的に許可いただくことでも対応可能です。</p>
+<blockquote>
+<blockquote>
+<blockquote>
+</blockquote>
+<p>HostkeyAlgorithms +ssh-rsa<br>PubkeyAcceptedAlgorithms +ssh-rsa</p>
+<blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
+<h2 id="4-scp-コマンドの実行時に非互換が発生する"><a href="#4-scp-コマンドの実行時に非互換が発生する" class="headerlink" title="(4) scp コマンドの実行時に非互換が発生する"></a>(4) scp コマンドの実行時に非互換が発生する</h2><p>バージョン 9.0 以降の OpenSSH では、scp コマンド実行時に既定で使用される内部プロトコルが scp から sftp に変更されました。</p>
+<p>弊社提供の Microsoft 版 OpenSSH サーバーを対象とした scp コマンドによるファイルのコピーにおきましては、問題の報告はございませんが、他社提供の OpenSSH サーバー利用時には、プロトコルの変更による非互換が発生する可能性がございます。</p>
+<p><a target="_blank" rel="noopener" href="https://www.openssh.com/txt/release-9.0">https://www.openssh.com/txt/release-9.0</a></p>
+<blockquote>
+<blockquote>
+<p>Potentially-incompatible changes<br>-——————————-<br>This release switches scp(1) from using the legacy scp/rcp protocol to using the SFTP protocol by default.</p>
+</blockquote>
+</blockquote>
+<p>上記ドキュメントにも記載がございますように、v9.0 以降の scp コマンドには互換性の問題に対応するため、従来の scp プロトコルを使用するための -O オプションが用意されております。</p>
+<p>もし、scp コマンドのご利用時に、非互換と思われるような動作の違いが確認されました場合には、scp コマンドの実行時に -O オプションを付与いただく対処について、ご検討いただけますと幸いです。</p>
+<h2 id="2-種類の-OpenSSH-for-Windows-について"><a href="#2-種類の-OpenSSH-for-Windows-について" class="headerlink" title="2 種類の OpenSSH for Windows について"></a>2 種類の OpenSSH for Windows について</h2><p>最後に、あらためての補足になりますが、本 BLOG では 2024 年 10 月の更新プログラムの適用にあたり、Windows に同梱される OpenSSH for Windows が更新されることで発生する事象についてご紹介しております。</p>
+<p>Windows に同梱される OpenSSH for Windows につきましては、今後も OS の更新プログラムとともに必要に応じてバージョンの切り替えが行われますが、GitHub から提供される OpenSSH for Windows につきましては、OS の更新プログラムの適用によりバージョンが切り替わることはございませんので、バージョンの切り替えが必要な場合には、管理者様自身にて差し替えていただく必要がございます。</p>
+<p>弊社では、他にも 2024 年 10 月の更新プログラムの影響により OpenSSH for Windows の動作に影響が及ぶ例外ございました場合、本 BLOG の更新にてご紹介していきます。</p>
+<h2 id="参考-URL"><a href="#参考-URL" class="headerlink" title="参考 URL"></a>参考 URL</h2><ul>
+<li><a href="https://jpwinsup.github.io/blog/2023/02/13/OpenSSH/HowtoSupport-OpenSSH/">OpenSSH for Windows のサポートについて</a></li>
+</ul>
+<h2 id="変更履歴"><a href="#変更履歴" class="headerlink" title="変更履歴"></a>変更履歴</h2><ul>
+<li>2024/11/12 : 本 Blog の公開</li>
+<li>2025/01/06 : アクセス権のチェックに関する記述を修正しました</li>
+<li>2025/04/02 : (4) scp コマンドの実行時に非互換が発生する の項目を追記しました</li>
+</ul>
+
+      
+      
+    </div>
+    <footer class="article-footer">
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/blog/2024/11/13/FailoverClustering/cno_password_update_fails/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">次の記事</strong>
+      <div class="article-nav-title">
+        
+          クラスター環境で FailoverClustering 1207 イベントが記録されパスワード更新に失敗する事象について
+        
+      </div>
+    </a>
+  
+  
+    <a href="/blog/2024/11/10/Storage/Backup/Backup-fails-with-more-than-2TB-of-removable-drive/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">前の記事</strong>
+      <div class="article-nav-title">Windows Server バックアップで 2 TB を超えるドライブをリムーバブルドライブにバックアップするとエラーが発生する</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">カテゴリ</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Activation/">Activation</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Activation/ESU/">ESU</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Activation/security-SPP/">security-SPP</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/">Active Directory</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Authentication/">Authentication</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/DFSR/">DFSR</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/FunctionalLevel/">FunctionalLevel</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Group-Policy/">Group Policy</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Promotion-and-Demotion/">Promotion and Demotion</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/User-Profile/">User Profile</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Windows-Hello/">Windows Hello</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Windows-Time-Service/">Windows Time Service</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/AppLocker/">AppLocker</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/AppLocker/Active-Directory/">Active Directory</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/AppLocker/Microsoft-Intune/">Microsoft Intune</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Deployment/">Deployment</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Deployment/Feature-on-demand/">Feature on demand</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Deployment/Sysprep/">Sysprep</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Failover-Clustering/">Failover Clustering</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Failover-Clustering/Configuration-and-Management/">Configuration and Management</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/FileServices/">FileServices</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/FileServices/FTP/">FTP</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/FileServices/SMB/">SMB</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Hyper-V/">Hyper-V</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Hyper-V/Configuration-and-Management/">Configuration and Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Hyper-V/Migration/">Migration</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Microsoft-Connected-Cache/">Microsoft Connected Cache</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/">Networking</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/BITS/">BITS</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/Bluetooth/">Bluetooth</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/DHCP/">DHCP</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/DNS/">DNS</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/Firewall/">Firewall</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/LBFO/">LBFO</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/NCSI/">NCSI</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/NetworkInterface/">NetworkInterface</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/Proxy/">Proxy</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/TCPIP/">TCPIP</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/OpenSSH/">OpenSSH</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/">Performance</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/Hang-up-BSoD/">Hang-up/BSoD</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/No-Boot/">No Boot</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/Slow-Response/">Slow Response</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/System-Resource/">System Resource</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/Tools/">Tools</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/">Public Key Infrastructure</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Certificate-Authority/">Certificate Authority</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Certificate-Management/">Certificate Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Code-Signing/">Code Signing</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/SSL-TLS-Communication/">SSL TLS Communication</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/SSL-TLS-Connection/">SSL TLS Connection</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Smart-Card-Logon/">Smart Card Logon</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/">Remote Desktop</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/Azure-Virtual-Desktop-AVD/">Azure Virtual Desktop (AVD)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/Remote-Desktop-Service-RDS/">Remote Desktop Service (RDS)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/Windows-Virtual-Desktop-WVD/">Windows Virtual Desktop (WVD)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/RemoteAccess/">RemoteAccess</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/RemoteAccess/%E3%83%80%E3%82%A4%E3%83%A4%E3%83%AB%E3%82%A2%E3%83%83%E3%83%97%E6%8E%A5%E7%B6%9A/">ダイヤルアップ接続</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Setup/">Setup</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Setup/Feature-Update-FU/">Feature Update (FU)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Shell/">Shell</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Shell/Explorer/">Explorer</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/">Storage</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/Backup/">Backup</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/FSRM/">FSRM</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/Management/">Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/StorageMigrationService/">StorageMigrationService</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/UEFI/">UEFI</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/UEFI/Secure-Boot/">Secure Boot</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/">User Interface and Apps</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Command-Prompt/">Command Prompt</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/EventLog/">EventLog</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Language-Support/">Language Support</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Microsoft-Store/">Microsoft Store</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Performance/">Performance</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/PowerShell/">PowerShell</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Printing-%E5%8D%B0%E5%88%B7/">Printing (印刷)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Server-Management/">Server Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Taskscheduler/">Taskscheduler</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Windows-Management-Instrumentation/">Windows Management Instrumentation</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps-Language-support/">User Interface and Apps - Language support</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-365/">Windows 365</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Admin-Center/">Windows Admin Center</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Search/">Windows Search</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/">Windows Update</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Delivery-Optimization-DO/">Delivery Optimization (DO)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Feature-Update-FU/">Feature Update (FU)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Quality-Update-QU/">Quality Update (QU)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Windows-Update-Agent/">Windows Update Agent</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Windows-Update-Agent-WUA/">Windows Update Agent (WUA)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/">WirelessNetwork</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/NPS/">NPS</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/Wi-Fi/">Wi-Fi</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/%E3%83%A2%E3%83%90%E3%82%A4%E3%83%AB-%E3%83%96%E3%83%AD%E3%83%BC%E3%83%89%E3%83%90%E3%83%B3%E3%83%89%E6%8E%A5%E7%B6%9A-LTE/">モバイル ブロードバンド接続 (LTE)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/%E7%B5%84%E7%B9%94%E7%B4%B9%E4%BB%8B%E3%83%96%E3%83%AD%E3%82%B0%EF%BC%88Windows-Commercial%EF%BC%89/">組織紹介ブログ（Windows Commercial）</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最近の投稿</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/blog/2026/02/16/ActiveDirectory/GroupPolicy/UacPolicyIsEnabled/">「ユーザー アカウント制御：ビルトイン Administrator アカウントのための管理者承認モード」ポリシーが有効になる動作ついて</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/02/15/UserInterfaceAndApps/Printing/printer-queue-app-preview/">印刷キューアプリのプレビュー機能について</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/02/02/ActiveDirectory/Authentication/kerberos-rc4-for-service-account-ticket-issuance-changes-related-to-cve-2026-20833/">CVE‑2026‑20833 への対応とその影響について [KB5073381]</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/01/12/Hyper-V/vmwp-does-not-save-the-RTC-value-of-a-virtual-machine-when-performing-Live-Migration/">ライブ マイグレーション後の再起動でゲスト OS の時刻がずれる場合がある</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/01/07/WindowsUpdate/FU/fublog-txt/">ISO メディア経由かつ動的更新無効な状態で Windows 11 バージョン 24H2 または 25H2 へのアップグレードが失敗 (0x8007042B 0x2000D) する事象と対策について</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">アーカイブ</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2026/02/">2026 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2026/01/">2026 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/12/">2025 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/11/">2025 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/10/">2025 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/09/">2025 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/08/">2025 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/07/">2025 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/06/">2025 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/05/">2025 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/04/">2025 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/03/">2025 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/02/">2025 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/01/">2025 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/12/">2024 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/11/">2024 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/10/">2024 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/09/">2024 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/08/">2024 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/07/">2024 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/06/">2024 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/05/">2024 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/04/">2024 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/03/">2024 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/02/">2024 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/01/">2024 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/12/">2023 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/11/">2023 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/10/">2023 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/09/">2023 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/08/">2023 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/07/">2023 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/06/">2023 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/05/">2023 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/04/">2023 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/03/">2023 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/02/">2023 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/01/">2023 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/12/">2022 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/11/">2022 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/10/">2022 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/09/">2022 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/08/">2022 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/07/">2022 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/06/">2022 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/05/">2022 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/04/">2022 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/03/">2022 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/02/">2022 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/01/">2022 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/12/">2021 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/11/">2021 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/10/">2021 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/09/">2021 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/08/">2021 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/07/">2021 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/06/">2021 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/05/">2021 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/04/">2021 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/03/">2021 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/02/">2021 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/01/">2021 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/12/">2020 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/11/">2020 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/10/">2020 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/07/">2020 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/03/">2020 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2019/03/">2019 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/11/">2018 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/10/">2018 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/09/">2018 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/08/">2018 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/07/">2018 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/06/">2018 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/04/">2018 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/02/">2018 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/12/">2017 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/11/">2017 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/09/">2017 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/05/">2017 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/03/">2017 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/02/">2017 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2016/08/">2016 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2016/05/">2016 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2014/03/">2014 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2012/02/">2012 / 02</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2026 Microsoft Japan Windows Technology Support Team<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/blog/" class="mobile-nav-link">Home</a>
+  
+    <a href="/blog/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+<script src="/blog/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-180187723-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-180187723-1');
+</script>
+<!-- End Google Analytics -->
+
+  
+  <title>ボリュームの空き領域が減少したため対策をとる方法について | Microsoft Japan Windows Technology Support Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="※ 本記事は弊社の Technet から移行した記事です。   &amp;nbsp;こんにちは。Windows プラットフォーム サポートの小池です。 長く運用しているサーバーでは 「ボリュームの空き領域が減少したため、空き領域を増やしたい」 というお問い合わせをいただくことがあります。空き領域を増やすためには、一般的には以下の 2 つの方法があります。 方法 (1) ボリューム サイズを拡張する方法 (">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ボリュームの空き領域が減少したため対策をとる方法について">
+<meta property="og:url" content="https://jpwinsup.github.io/blog/2018/10/16/Storage/Management/Measures-against-volume-exhaustion/index.html">
+<meta property="og:site_name" content="Microsoft Japan Windows Technology Support Blog">
+<meta property="og:description" content="※ 本記事は弊社の Technet から移行した記事です。   &amp;nbsp;こんにちは。Windows プラットフォーム サポートの小池です。 長く運用しているサーバーでは 「ボリュームの空き領域が減少したため、空き領域を増やしたい」 というお問い合わせをいただくことがあります。空き領域を増やすためには、一般的には以下の 2 つの方法があります。 方法 (1) ボリューム サイズを拡張する方法 (">
+<meta property="og:locale" content="ja_JP">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2018/10/16/Storage/Management/Measures-against-volume-exhaustion/1.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2018/10/16/Storage/Management/Measures-against-volume-exhaustion/2.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2018/10/16/Storage/Management/Measures-against-volume-exhaustion/3.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2018/10/16/Storage/Management/Measures-against-volume-exhaustion/4.png">
+<meta property="article:published_time" content="2018-10-16T03:00:00.000Z">
+<meta property="article:modified_time" content="2026-02-19T02:53:58.657Z">
+<meta property="article:author" content="Microsoft Japan Windows Technology Support Team">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://jpwinsup.github.io/blog/2018/10/16/Storage/Management/Measures-against-volume-exhaustion/1.png">
+  
+    <link rel="alternate" href="/blog/atom.xml" title="Microsoft Japan Windows Technology Support Blog" type="application/atom+xml">
+  
+
+  <link rel="icon" href="/blog/favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="/blog/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/blog/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/blog/favicon-16x16.png">
+  <link rel="manifest" href="/blog/site.webmanifest">
+  <link rel="mask-icon" href="/blog/safari-pinned-tab.svg" color="#5bbad5">
+  <meta name="msapplication-TileColor" content="#ffffff">
+  <meta name="theme-color" content="#ffffff">
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/blog/css/style.css">
+
+<meta name="generator" content="Hexo 5.2.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="site-header-logo"></div>
+  <div id="site-header-blog-wrapper"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        <div id="ms-logo"></div>
+        
+          <a class="main-nav-link" href="/blog/">Home</a>
+        
+          <a class="main-nav-link" href="/blog/archives">Archives</a>
+        
+        <a class="main-nav-link" target="_blank" rel="noopener" href="https://cssjpn.github.io/">サポート情報</a>
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/blog/atom.xml" title="RSSフィード"></a>
+        
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//www.bing.com/search" method="get" accept-charset="UTF-8" name="bing-search" onsubmit="var f=this;if(f['q'].value){var searchUrl =  'https://www.bing.com/search?q=' +  encodeURIComponent(f['q'].value + ' site:' + f['sitesearch'].value) ;window.open(searchUrl, 'blank') };return false;" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="検索"><button type="submit" id="nav-search-btn" class="search-form-submit"></button><input type="hidden" name="sitesearch" value="https://jpwinsup.github.io/blog"></form>
+      </div>
+    </div>
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/blog/" id="logo">Microsoft Japan Windows Technology Support Blog</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/blog/" id="subtitle">日本マイクロソフト Windows Support チームによる、サポート情報 Blog です。</a>
+        </h2>
+      
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-Storage/Management/Measures-against-volume-exhaustion" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    
+    
+      <header class="article-header-single">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      ボリュームの空き領域が減少したため対策をとる方法について
+    </h1>
+  
+
+      </header>
+      <div class="article-share">
+        Last Update: 
+        <a href="/blog/2018/10/16/Storage/Management/Measures-against-volume-exhaustion/" class="article-date-single">
+  <time datetime="2018-10-16T03:00:00.000Z" itemprop="datePublished">2018-10-16</time>
+</a>
+        
+  <div class="article-category">
+    <a class="article-category-link" href="/blog/categories/Storage/">Storage</a>►<a class="article-category-link" href="/blog/categories/Storage/Management/">Management</a>
+  </div>
+
+        
+        <a href="https://github.com/jpwinsup/blog/issues/new?title=&body=%EF%BB%BF%0A%0A---%0A%0A%23%23%23%23+Document+Details%0A%0A*+Article+ID%3A+076588a3-4ac9-50eb-a120-1a4583035ff3%0A*+TITLE%3A+%E3%83%9C%E3%83%AA%E3%83%A5%E3%83%BC%E3%83%A0%E3%81%AE%E7%A9%BA%E3%81%8D%E9%A0%98%E5%9F%9F%E3%81%8C%E6%B8%9B%E5%B0%91%E3%81%97%E3%81%9F%E3%81%9F%E3%82%81%E5%AF%BE%E7%AD%96%E3%82%92%E3%81%A8%E3%82%8B%E6%96%B9%E6%B3%95%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6%0A*+URL+https%3A%2F%2Fjpwinsup.github.io%2Fblog%2F2018%2F10%2F16%2FStorage%2FManagement%2FMeasures-against-volume-exhaustion%2F%0A*+SourceFileName%3A+source%2F_posts%2FStorage%2FManagement%2FMeasures-against-volume-exhaustion.md%0A" class="article-github-issue-link" target="_blank" rel="noopener noreferrer">feedback</a>
+        
+        <a data-url="https://jpwinsup.github.io/blog/2018/10/16/Storage/Management/Measures-against-volume-exhaustion/" data-id="cmlsvjdfx00jzru3y8q8y3qk7" class="article-share-link">共有</a>
+      </div>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>※ 本記事は弊社の Technet から移行した記事です。  </p>
+<p>&nbsp;こんにちは。Windows プラットフォーム サポートの小池です。</p>
+<p>長く運用しているサーバーでは 「ボリュームの空き領域が減少したため、空き領域を増やしたい」 というお問い合わせをいただくことがあります。<br>空き領域を増やすためには、一般的には以下の 2 つの方法があります。</p>
+<p>方法 (1) ボリューム サイズを拡張する<br>方法 (2) ボリューム内の不要ファイルを削除して、空き領域を作り出す</p>
+<p>今回は 方法 (1) について、Windows Server 2008 以降の OS を対象としてボリュームを拡張する方法をご案内いたします。<br>なお、方法 (2) については、ディスク クリーンアップ ツールを用いて不要ファイルを削除する方法が安全で有効です。こちらは別途公開情報がございますので、こちらをご確認ください。</p>
+<p>– 公開情報<br>“ディスク クリーンアップ ツールについて”<br>URL : <a target="_blank" rel="noopener" href="https://learn.microsoft.com/ja-jp/archive/blogs/askcorejp/diskcleanup">https://learn.microsoft.com/ja-jp/archive/blogs/askcorejp/diskcleanup</a><br><br></p>
+<h3 id="■-ボリューム拡張が可能な場合とそうでない場合について"><a href="#■-ボリューム拡張が可能な場合とそうでない場合について" class="headerlink" title="■ ボリューム拡張が可能な場合とそうでない場合について"></a>■ ボリューム拡張が可能な場合とそうでない場合について</h3><p>拡張が可能なボリュームは、ディスク上に未割り当ての領域が連続 (隣接) している必要があります。</p>
+<p>図1<br><img src="1.png"></p>
+<p>例えば上の図1. の場合では、ボリューム E: に連続する未割り当て領域があるため拡張が可能です。<br>しかしながら、ボリューム C: はディスク上に未割り当ての領域があるものの、連続していないため拡張することができません。</p>
+<p>図2.<br><img src="2.png"></p>
+<p>上の図2. の場合では、ボリューム E: や F: を拡張しようとした場合でも、当然ながら空き領域がないため拡張することができません。<br><br></p>
+<h3 id="■-ボリュームの拡張手順-例"><a href="#■-ボリュームの拡張手順-例" class="headerlink" title="■ ボリュームの拡張手順 例"></a>■ ボリュームの拡張手順 例</h3><p>図1. のようにボリュームが拡張可能である場合、以下の手順で拡張を行うことが一般的です。</p>
+<p><strong>// ボリュームの拡張手順</strong></p>
+<ol>
+<li>“ディスクの管理” 画面を起動します。</li>
+<li>拡張したいボリュームを右クリックし、[ボリュームの拡張] をクリックします。</li>
+<li>ボリュームの拡張ウィザードが起動します。ウィザードに沿って拡張を行います。</li>
+<li>[完了] をクリックするとボリュームが拡張されます。</li>
+</ol>
+<p>– 公開情報<br>“Extend a Volume”<br>URL : <a target="_blank" rel="noopener" href="https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-server-2008-R2-and-2008/cc771939(v=ws.11)">https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-server-2008-R2-and-2008/cc771939(v=ws.11)</a></p>
+<p>では図2. の状況でボリューム E: を拡張したい場合はどうすればよいでしょうか。<br>この場合は、ボリューム F: を削除して未割り当て領域を強引に作成しなければ、ボリューム E: を拡張することができません。<br>図2. を例に、以下に手順をご説明いたします。</p>
+<p><strong>// 未割り当て領域の作成とボリュームの拡張手順</strong></p>
+<ol>
+<li>“ディスクの管理” 画面を起動します。</li>
+<li>ボリューム E: とは別のディスク上に十分な空きがあるボリューム Z: があります。<br>….まずはボリューム F: の必要なデータを Z: に移動します。</li>
+<li>ボリューム F: を右クリックし、メニューから [ボリュームの削除] をクリックします。<br>….全てのデータが削除されるメッセージが表示されます。問題なければ [はい] をクリックして先に進みます。</li>
+<li>ボリュームの削除が完了すると、以下のようにボリューム E: の連続する領域に未割り当て領域が表示されます。</li>
+</ol>
+<p><img src="3.png"></p>
+<ol start="5">
+<li>ボリューム E: を右クリックし、[ボリュームの拡張] をクリックします。</li>
+<li>ボリュームの拡張ウィザードが起動します。ウィザードに沿って拡張を行います。</li>
+<li>[完了] をクリックするとボリュームが拡張されます。</li>
+</ol>
+<p>以上でボリュームの拡張の対応は完了です。</p>
+<h3 id="■-よくあるお問い合わせ-“ディスクの管理上のボリュームサイズとエクスプローラー上でのボリュームサイズが一致しない”-について"><a href="#■-よくあるお問い合わせ-“ディスクの管理上のボリュームサイズとエクスプローラー上でのボリュームサイズが一致しない”-について" class="headerlink" title="■ よくあるお問い合わせ “ディスクの管理上のボリュームサイズとエクスプローラー上でのボリュームサイズが一致しない” について"></a>■ よくあるお問い合わせ “ディスクの管理上のボリュームサイズとエクスプローラー上でのボリュームサイズが一致しない” について</h3><p>通常、ボリュームの拡張を行うと、パーティションの拡張、および、ファイル システムの拡張が同時に行われますが、まれにファイル システムの拡張に失敗し、パーティション サイズとファイル システムが別の値になることがあります。この場合、ディスクの管理の画面上はサイズが拡張されているのに対して、エクスプローラーから参照するとボリュームの容量が増えていない状況となり、使用可能な領域は増えておりません。<br>このような場合には、ファイル システムをパーティションのサイズまで手動で拡張する必要があります。ファイル システムの拡張は diskpart ユーティリティから実施します。</p>
+<p><strong>// ファイル システムの拡張方法</strong></p>
+<ol>
+<li><p>管理者権限でコマンド プロンプトを起動します。</p>
+</li>
+<li><p>diskpart を起動します。</p>
+</li>
+<li><p>ボリュームをリストします。</p>
+<blockquote>
+<p>DISKPART&gt; list volume</p>
+</blockquote>
+</li>
+<li><p>ボリュームを選択します。<br>(X には 3. で確認したボリューム番号を指定します。)</p>
+<blockquote>
+<p>DISKPART&gt; select volume X</p>
+</blockquote>
+</li>
+<li><p>ファイル システムを拡張します。</p>
+<blockquote>
+<p>DISKPART&gt; extend filesystem</p>
+</blockquote>
+</li>
+<li><p>diskpart を終了します。</p>
+<blockquote>
+<p>DISKPART&gt; exit</p>
+</blockquote>
+</li>
+</ol>
+<p>補足) システムへの影響について<br>ボリューム拡張作業、およびファイル システム拡張作業は、システムの再起動、サービスの再起動を伴いません。負荷も少ないため、システムへの影響はほとんどなく、実績の多い作業です。</p>
+<p>– 公開情報<br>“Extend”<br>URL : <a target="_blank" rel="noopener" href="https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-server-2008-R2-and-2008/cc770938(v=ws.10)?redirectedfrom=MSDN">https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-server-2008-R2-and-2008/cc770938(v=ws.10)?redirectedfrom=MSDN</a><br><br></p>
+<h3 id="■-ボリュームの最大サイズについて"><a href="#■-ボリュームの最大サイズについて" class="headerlink" title="■ ボリュームの最大サイズについて"></a>■ ボリュームの最大サイズについて</h3><p>ボリュームの拡張にも限界があります。<br>はじめにそのボリュームを作成した際に、”アロケーション ユニット サイズ” を選択しているかと思います。このサイズによって、拡張できる最大のボリューム サイズが決定されます。</p>
+<p><img src="4.png"></p>
+<blockquote>
+<table>
+<thead>
+<tr>
+<th>クラスター サイズ</th>
+<th>最大ボリュームおよびファイル</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>4 KB (既定のサイズ)</td>
+<td>16 TB</td>
+</tr>
+<tr>
+<td>8 KB</td>
+<td>32 TB</td>
+</tr>
+<tr>
+<td>16 KB</td>
+<td>64 TB</td>
+</tr>
+<tr>
+<td>32 KB</td>
+<td>128 TB</td>
+</tr>
+<tr>
+<td>64 KB (以前の最大値)</td>
+<td>256 TB</td>
+</tr>
+<tr>
+<td>128 KB</td>
+<td>512 TB</td>
+</tr>
+<tr>
+<td>256 KB</td>
+<td>1 PB</td>
+</tr>
+<tr>
+<td>512 KB</td>
+<td>2 PB</td>
+</tr>
+<tr>
+<td>1024 KB</td>
+<td>4 PB</td>
+</tr>
+<tr>
+<td>2048 KB (最大サイズ)</td>
+<td>8 PB</td>
+</tr>
+</tbody></table>
+<ul>
+<li>公開情報<br>“大量ボリュームのサポート”<br>URL : <a target="_blank" rel="noopener" href="https://learn.microsoft.com/ja-jp/windows-server/storage/file-server/ntfs-overview#support-for-large-volumes">https://learn.microsoft.com/ja-jp/windows-server/storage/file-server/ntfs-overview#support-for-large-volumes</a></li>
+</ul>
+</blockquote>
+<p>つまり、アロケーション ユニット サイズが 4 KB のボリュームの場合は、ボリュームは拡張できても 16 TB が最大ということになります。現在のアロケーション ユニット サイズは、以下のコマンドを実行することで確認が可能です。</p>
+<blockquote>
+<p>fsutil fsinfo ntfsinfo &lt;ドライブ レター&gt;<br>コマンド実行の例)<br>——————————————————————<br>C:\Users\Administrator&gt;fsutil fsinfo ntfsinfo E:<br>&lt;&lt;中略&gt;&gt;<br>クラスターあたりのバイト数 : 4096<br>——————————————————————<br>※ “クラスター当たりのバイト数” の項目がアロケーション ユニットサイズです。この例では 4 KB です。</p>
+</blockquote>
+<blockquote>
+<p>補足) アロケーション ユニット サイズに関する注意点<br>一度決定したアロケーション ユニット サイズは、後から変更することはできません。変更したい場合は、ボリュームをフォーマットして再作成いただくことになります。<br>将来的に 100 TB などの大容量のボリュームの運用を行う予定がある場合は、ボリュームの作成時に最適なアロケーション ユニット サイズをあらかじめご選択ください。<br>逆に、16 TB よりも大きいサイズへ拡張する予定のないボリュームについては、ディスク領域の有効利用のため、アロケーション ユニット サイズは “既定値” もしくは “4 KB” をご選択いただくことを推奨します。<br><br></p>
+</blockquote>
+<h3 id="■-参考-ボリュームの縮小について"><a href="#■-参考-ボリュームの縮小について" class="headerlink" title="■ 参考) ボリュームの縮小について"></a>■ 参考) ボリュームの縮小について</h3><p>ボリュームは拡張が可能な一方で、縮小も可能です。<br>// ボリュームの縮小手順</p>
+<ol>
+<li>“ディスクの管理” 画面を起動します。</li>
+<li>縮小したいボリュームを右クリックし、[ボリュームの縮小] をクリックします。</li>
+<li>ボリュームの縮小画面が起動します。縮小可能なサイズが計算・表示されます。</li>
+<li>[縮小] をクリックするとボリュームが縮小されます。</li>
+</ol>
+<p>– 公開情報<br>“Shrink a basic volume”<br>URL : <a target="_blank" rel="noopener" href="https://learn.microsoft.com/en-us/windows-server/storage/disk-management/shrink-a-basic-volume">https://learn.microsoft.com/en-us/windows-server/storage/disk-management/shrink-a-basic-volume</a><br><br></p>
+<p>今回はボリュームの拡張についてご紹介させていただきましたが、いかがでしたでしょうか。<br>本ブログが少しでも皆様のお役に立てますと幸いです。</p>
+
+      
+      
+    </div>
+    <footer class="article-footer">
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/blog/2018/11/02/Storage/Management/VSS-Maxshadowcopies/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">次の記事</strong>
+      <div class="article-nav-title">
+        
+          最も古い共有フォルダーのシャドウコピーが削除されてしまう事象について
+        
+      </div>
+    </a>
+  
+  
+    <a href="/blog/2018/09/21/Storage/Management/TakesTimeToOffilineDiskWithManyShadowCopies/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">前の記事</strong>
+      <div class="article-nav-title">ディスク オフラインに時間がかかる事象について</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">カテゴリ</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Activation/">Activation</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Activation/ESU/">ESU</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Activation/security-SPP/">security-SPP</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/">Active Directory</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Authentication/">Authentication</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/DFSR/">DFSR</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/FunctionalLevel/">FunctionalLevel</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Group-Policy/">Group Policy</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Promotion-and-Demotion/">Promotion and Demotion</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/User-Profile/">User Profile</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Windows-Hello/">Windows Hello</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Windows-Time-Service/">Windows Time Service</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/AppLocker/">AppLocker</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/AppLocker/Active-Directory/">Active Directory</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/AppLocker/Microsoft-Intune/">Microsoft Intune</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Deployment/">Deployment</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Deployment/Feature-on-demand/">Feature on demand</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Deployment/Sysprep/">Sysprep</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Failover-Clustering/">Failover Clustering</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Failover-Clustering/Configuration-and-Management/">Configuration and Management</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/FileServices/">FileServices</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/FileServices/FTP/">FTP</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/FileServices/SMB/">SMB</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Hyper-V/">Hyper-V</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Hyper-V/Configuration-and-Management/">Configuration and Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Hyper-V/Migration/">Migration</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Microsoft-Connected-Cache/">Microsoft Connected Cache</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/">Networking</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/BITS/">BITS</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/Bluetooth/">Bluetooth</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/DHCP/">DHCP</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/DNS/">DNS</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/Firewall/">Firewall</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/LBFO/">LBFO</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/NCSI/">NCSI</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/NetworkInterface/">NetworkInterface</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/Proxy/">Proxy</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/TCPIP/">TCPIP</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/OpenSSH/">OpenSSH</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/">Performance</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/Hang-up-BSoD/">Hang-up/BSoD</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/No-Boot/">No Boot</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/Slow-Response/">Slow Response</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/System-Resource/">System Resource</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/Tools/">Tools</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/">Public Key Infrastructure</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Certificate-Authority/">Certificate Authority</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Certificate-Management/">Certificate Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Code-Signing/">Code Signing</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/SSL-TLS-Communication/">SSL TLS Communication</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/SSL-TLS-Connection/">SSL TLS Connection</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Smart-Card-Logon/">Smart Card Logon</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/">Remote Desktop</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/Azure-Virtual-Desktop-AVD/">Azure Virtual Desktop (AVD)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/Remote-Desktop-Service-RDS/">Remote Desktop Service (RDS)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/Windows-Virtual-Desktop-WVD/">Windows Virtual Desktop (WVD)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/RemoteAccess/">RemoteAccess</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/RemoteAccess/%E3%83%80%E3%82%A4%E3%83%A4%E3%83%AB%E3%82%A2%E3%83%83%E3%83%97%E6%8E%A5%E7%B6%9A/">ダイヤルアップ接続</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Setup/">Setup</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Setup/Feature-Update-FU/">Feature Update (FU)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Shell/">Shell</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Shell/Explorer/">Explorer</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/">Storage</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/Backup/">Backup</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/FSRM/">FSRM</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/Management/">Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/StorageMigrationService/">StorageMigrationService</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/UEFI/">UEFI</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/UEFI/Secure-Boot/">Secure Boot</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/">User Interface and Apps</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Command-Prompt/">Command Prompt</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/EventLog/">EventLog</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Language-Support/">Language Support</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Microsoft-Store/">Microsoft Store</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Performance/">Performance</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/PowerShell/">PowerShell</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Printing-%E5%8D%B0%E5%88%B7/">Printing (印刷)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Server-Management/">Server Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Taskscheduler/">Taskscheduler</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Windows-Management-Instrumentation/">Windows Management Instrumentation</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps-Language-support/">User Interface and Apps - Language support</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-365/">Windows 365</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Admin-Center/">Windows Admin Center</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Search/">Windows Search</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/">Windows Update</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Delivery-Optimization-DO/">Delivery Optimization (DO)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Feature-Update-FU/">Feature Update (FU)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Quality-Update-QU/">Quality Update (QU)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Windows-Update-Agent/">Windows Update Agent</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Windows-Update-Agent-WUA/">Windows Update Agent (WUA)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/">WirelessNetwork</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/NPS/">NPS</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/Wi-Fi/">Wi-Fi</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/%E3%83%A2%E3%83%90%E3%82%A4%E3%83%AB-%E3%83%96%E3%83%AD%E3%83%BC%E3%83%89%E3%83%90%E3%83%B3%E3%83%89%E6%8E%A5%E7%B6%9A-LTE/">モバイル ブロードバンド接続 (LTE)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/%E7%B5%84%E7%B9%94%E7%B4%B9%E4%BB%8B%E3%83%96%E3%83%AD%E3%82%B0%EF%BC%88Windows-Commercial%EF%BC%89/">組織紹介ブログ（Windows Commercial）</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最近の投稿</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/blog/2026/02/16/ActiveDirectory/GroupPolicy/UacPolicyIsEnabled/">「ユーザー アカウント制御：ビルトイン Administrator アカウントのための管理者承認モード」ポリシーが有効になる動作ついて</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/02/15/UserInterfaceAndApps/Printing/printer-queue-app-preview/">印刷キューアプリのプレビュー機能について</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/02/02/ActiveDirectory/Authentication/kerberos-rc4-for-service-account-ticket-issuance-changes-related-to-cve-2026-20833/">CVE‑2026‑20833 への対応とその影響について [KB5073381]</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/01/12/Hyper-V/vmwp-does-not-save-the-RTC-value-of-a-virtual-machine-when-performing-Live-Migration/">ライブ マイグレーション後の再起動でゲスト OS の時刻がずれる場合がある</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/01/07/WindowsUpdate/FU/fublog-txt/">ISO メディア経由かつ動的更新無効な状態で Windows 11 バージョン 24H2 または 25H2 へのアップグレードが失敗 (0x8007042B 0x2000D) する事象と対策について</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">アーカイブ</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2026/02/">2026 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2026/01/">2026 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/12/">2025 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/11/">2025 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/10/">2025 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/09/">2025 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/08/">2025 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/07/">2025 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/06/">2025 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/05/">2025 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/04/">2025 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/03/">2025 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/02/">2025 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/01/">2025 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/12/">2024 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/11/">2024 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/10/">2024 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/09/">2024 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/08/">2024 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/07/">2024 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/06/">2024 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/05/">2024 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/04/">2024 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/03/">2024 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/02/">2024 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/01/">2024 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/12/">2023 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/11/">2023 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/10/">2023 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/09/">2023 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/08/">2023 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/07/">2023 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/06/">2023 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/05/">2023 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/04/">2023 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/03/">2023 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/02/">2023 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/01/">2023 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/12/">2022 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/11/">2022 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/10/">2022 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/09/">2022 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/08/">2022 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/07/">2022 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/06/">2022 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/05/">2022 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/04/">2022 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/03/">2022 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/02/">2022 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/01/">2022 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/12/">2021 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/11/">2021 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/10/">2021 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/09/">2021 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/08/">2021 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/07/">2021 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/06/">2021 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/05/">2021 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/04/">2021 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/03/">2021 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/02/">2021 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/01/">2021 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/12/">2020 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/11/">2020 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/10/">2020 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/07/">2020 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/03/">2020 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2019/03/">2019 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/11/">2018 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/10/">2018 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/09/">2018 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/08/">2018 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/07/">2018 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/06/">2018 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/04/">2018 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/02/">2018 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/12/">2017 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/11/">2017 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/09/">2017 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/05/">2017 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/03/">2017 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/02/">2017 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2016/08/">2016 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2016/05/">2016 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2014/03/">2014 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2012/02/">2012 / 02</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2026 Microsoft Japan Windows Technology Support Team<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/blog/" class="mobile-nav-link">Home</a>
+  
+    <a href="/blog/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+<script src="/blog/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

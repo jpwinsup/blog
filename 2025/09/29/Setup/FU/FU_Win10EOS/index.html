@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-180187723-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-180187723-1');
+</script>
+<!-- End Google Analytics -->
+
+  
+  <title>Windows 11 へアップグレードしましょう！ | Microsoft Japan Windows Technology Support Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="こんにちは。Windows Commercial Support Device and Deployment チームの堀之内です。   この記事では・Windows 11 へのアップグレードをスムーズに進めるための準備・よくあるトラブルと、解決方法の紹介についてご紹介いたします。   まずは、今この記事を公開する理由から説明させていただきます。 アップグレードが必要になる背景皆様に長くご利用いただ">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Windows 11 へアップグレードしましょう！">
+<meta property="og:url" content="https://jpwinsup.github.io/blog/2025/09/29/Setup/FU/FU_Win10EOS/index.html">
+<meta property="og:site_name" content="Microsoft Japan Windows Technology Support Blog">
+<meta property="og:description" content="こんにちは。Windows Commercial Support Device and Deployment チームの堀之内です。   この記事では・Windows 11 へのアップグレードをスムーズに進めるための準備・よくあるトラブルと、解決方法の紹介についてご紹介いたします。   まずは、今この記事を公開する理由から説明させていただきます。 アップグレードが必要になる背景皆様に長くご利用いただ">
+<meta property="og:locale" content="ja_JP">
+<meta property="article:published_time" content="2025-09-29T15:00:00.000Z">
+<meta property="article:modified_time" content="2026-02-19T02:53:58.603Z">
+<meta property="article:author" content="Microsoft Japan Windows Technology Support Team">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/blog/atom.xml" title="Microsoft Japan Windows Technology Support Blog" type="application/atom+xml">
+  
+
+  <link rel="icon" href="/blog/favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="/blog/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/blog/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/blog/favicon-16x16.png">
+  <link rel="manifest" href="/blog/site.webmanifest">
+  <link rel="mask-icon" href="/blog/safari-pinned-tab.svg" color="#5bbad5">
+  <meta name="msapplication-TileColor" content="#ffffff">
+  <meta name="theme-color" content="#ffffff">
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/blog/css/style.css">
+
+<meta name="generator" content="Hexo 5.2.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="site-header-logo"></div>
+  <div id="site-header-blog-wrapper"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        <div id="ms-logo"></div>
+        
+          <a class="main-nav-link" href="/blog/">Home</a>
+        
+          <a class="main-nav-link" href="/blog/archives">Archives</a>
+        
+        <a class="main-nav-link" target="_blank" rel="noopener" href="https://cssjpn.github.io/">サポート情報</a>
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/blog/atom.xml" title="RSSフィード"></a>
+        
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//www.bing.com/search" method="get" accept-charset="UTF-8" name="bing-search" onsubmit="var f=this;if(f['q'].value){var searchUrl =  'https://www.bing.com/search?q=' +  encodeURIComponent(f['q'].value + ' site:' + f['sitesearch'].value) ;window.open(searchUrl, 'blank') };return false;" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="検索"><button type="submit" id="nav-search-btn" class="search-form-submit"></button><input type="hidden" name="sitesearch" value="https://jpwinsup.github.io/blog"></form>
+      </div>
+    </div>
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/blog/" id="logo">Microsoft Japan Windows Technology Support Blog</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/blog/" id="subtitle">日本マイクロソフト Windows Support チームによる、サポート情報 Blog です。</a>
+        </h2>
+      
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-Setup/FU/FU_Win10EOS" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    
+    
+      <header class="article-header-single">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Windows 11 へアップグレードしましょう！
+    </h1>
+  
+
+      </header>
+      <div class="article-share">
+        Last Update: 
+        <a href="/blog/2025/09/29/Setup/FU/FU_Win10EOS/" class="article-date-single">
+  <time datetime="2025-09-29T15:00:00.000Z" itemprop="datePublished">2025-09-30</time>
+</a>
+        
+  <div class="article-category">
+    <a class="article-category-link" href="/blog/categories/Windows-Update/">Windows Update</a>►<a class="article-category-link" href="/blog/categories/Windows-Update/Feature-Update-FU/">Feature Update (FU)</a>
+  </div>
+
+        
+        <a href="https://github.com/jpwinsup/blog/issues/new?title=&body=%EF%BB%BF%0A%0A---%0A%0A%23%23%23%23+Document+Details%0A%0A*+Article+ID%3A+66b7a77c-2b4c-59dd-9baa-f08ae58b3697%0A*+TITLE%3A+Windows+11+%E3%81%B8%E3%82%A2%E3%83%83%E3%83%97%E3%82%B0%E3%83%AC%E3%83%BC%E3%83%89%E3%81%97%E3%81%BE%E3%81%97%E3%82%87%E3%81%86%EF%BC%81%0A*+URL+https%3A%2F%2Fjpwinsup.github.io%2Fblog%2F2025%2F09%2F29%2FSetup%2FFU%2FFU_Win10EOS%2F%0A*+SourceFileName%3A+source%2F_posts%2FSetup%2FFU%2FFU_Win10EOS.md%0A" class="article-github-issue-link" target="_blank" rel="noopener noreferrer">feedback</a>
+        
+        <a data-url="https://jpwinsup.github.io/blog/2025/09/29/Setup/FU/FU_Win10EOS/" data-id="cmlsvjdof01igru3ydu6pa5n5" class="article-share-link">共有</a>
+      </div>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>こんにちは。Windows Commercial Support Device and Deployment チームの堀之内です。  </p>
+<p>この記事では<br>・Windows 11 へのアップグレードをスムーズに進めるための準備<br>・よくあるトラブルと、解決方法の紹介<br>についてご紹介いたします。  </p>
+<p>まずは、今この記事を公開する理由から説明させていただきます。</p>
+<h2 id="アップグレードが必要になる背景"><a href="#アップグレードが必要になる背景" class="headerlink" title="アップグレードが必要になる背景"></a>アップグレードが必要になる背景</h2><p>皆様に長くご利用いただいている Windows 10 ですが、実は発売されたのが 2015 年 7 月 29 日でした。<br>つまり、発売からほぼ 10 年経過したことになりますが、10 年目となる今年 (2025 年) の 10 月 14 日をもちまして、いよいよWindows 10 のサポートが終了いたします。  </p>
+<p><a target="_blank" rel="noopener" href="https://support.microsoft.com/ja-jp/windows/2ca8b313-1946-43d3-b55c-2b95b107f281">https://support.microsoft.com/ja-jp/windows/2ca8b313-1946-43d3-b55c-2b95b107f281</a>  </p>
+<p>OS がサポート終了日を迎えると、その OS に対するセキュリティ更新や技術サポートは提供されなくなります。<br>つまり、サポートが切れた OS を利用を続ける = 重大なセキュリティリスクを抱えたままになる、ということになります。<br>安全な環境を維持するためにも、現時点で Windows 10 をご利用になられている方は、Windows 11 への移行を是非ご検討ください。  </p>
+<p>本記事は、ご利用中の Windows 10 を Windows 11 にアップグレードしようとした時に発生しがちなトラブルに対する対処方法を、サポートの観点から対処しやすい順にまとめました。<br>また、全て実施した上でも解決できない場合、弊社有償サポートをご契約いただいているお客様は、文末の情報と合わせてお問い合わせをいただく事で、切り分けや情報取得に時間をかけることなく、迅速にサポートの提供が可能となります。  </p>
+<h1 id="Windows-11-アップグレード：お試しいただきたい手順まとめ"><a href="#Windows-11-アップグレード：お試しいただきたい手順まとめ" class="headerlink" title="Windows 11 アップグレード：お試しいただきたい手順まとめ"></a>Windows 11 アップグレード：お試しいただきたい手順まとめ</h1><h2 id="目次"><a href="#目次" class="headerlink" title="目次"></a>目次</h2><p>-<a href="#0-%E3%81%AF%E3%81%98%E3%82%81%E3%81%AB%EF%BC%88%E6%BA%96%E5%82%99%E3%81%AE%E3%81%8A%E9%A1%98%E3%81%84%EF%BC%89">0- はじめに (準備のお願い)</a><br>-<a href="#1-%E3%82%A2%E3%83%83%E3%83%97%E3%82%B0%E3%83%AC%E3%83%BC%E3%83%89%E8%A6%81%E4%BB%B6%E3%81%AE%E3%83%81%E3%82%A7%E3%83%83%E3%82%AF">1-アップグレード要件のチェック</a><br>-<a href="#2-%E3%82%A2%E3%83%83%E3%83%97%E3%82%B0%E3%83%AC%E3%83%BC%E3%83%89%E3%81%8C%E5%A4%B1%E6%95%97%E3%81%97%E3%81%9F%E3%81%A8%E3%81%8D%E3%80%81%E6%9C%80%E5%88%9D%E3%81%AB%E7%A2%BA%E8%AA%8D%E3%81%97%E3%81%9F%E3%81%84%E7%AE%87%E6%89%80">2-アップグレードが失敗したとき、最初確認したい箇所</a><br>-<a href="#3-%E9%A0%85%E7%95%AA-2-%E3%81%AB%E6%9B%B8%E3%81%8B%E3%82%8C%E3%81%A6%E3%81%84%E3%82%8B%E6%89%8B%E9%A0%86%E3%82%92%E5%AE%9F%E6%96%BD%E3%81%97%E3%81%A6%E3%82%82%E3%82%A2%E3%83%83%E3%83%97%E3%82%B0%E3%83%AC%E3%83%BC%E3%83%89%E3%81%AB%E5%A4%B1%E6%95%97%E3%81%97%E3%81%A6%E3%81%97%E3%81%BE%E3%81%86%E5%A0%B4%E5%90%88">3-項番 2 に書かれている手順を実施してもアップグレードに失敗してしまう場合</a><br>    - <a href="#EFI-%E3%83%91%E3%83%BC%E3%83%86%E3%82%A3%E3%82%B7%E3%83%A7%E3%83%B3%E3%81%AE%E7%A9%BA%E3%81%8D%E4%B8%8D%E8%B6%B3%E3%82%92%E8%A7%A3%E6%B6%88">efi パーティションの空き不足を解消</a><br>    - <a href="#%E3%83%A6%E3%83%BC%E3%82%B6%E3%83%BC%E3%83%97%E3%83%AD%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB%E3%81%AE%E9%87%8D%E8%A4%87%E3%82%92%E8%A7%A3%E6%B6%88">ユーザープロファイルの重複を解消</a><br>    - <a href="#%E3%83%A1%E3%83%87%E3%82%A3%E3%82%A2%E3%81%AE%E8%A8%80%E8%AA%9E%E3%83%BB%E3%82%A8%E3%83%87%E3%82%A3%E3%82%B7%E3%83%A7%E3%83%B3%E3%82%92%E4%B8%80%E8%87%B4%E3%81%95%E3%81%9B%E3%82%8B">メディアの言語エディションを一致させる</a><br>-<a href="#4-%E3%82%88%E3%81%8F%E3%81%82%E3%82%8B%E3%81%94%E8%B3%AA%E5%95%8F%EF%BC%88%E3%82%A2%E3%83%83%E3%83%97%E3%82%B0%E3%83%AC%E3%83%BC%E3%83%89%E6%99%82%EF%BC%89">4-よくあるご質問アップグレード時</a><br>  -<a href="#Windows-old-%E3%82%92%E4%BD%9C%E3%82%89%E3%81%AA%E3%81%84%E6%96%B9%E6%B3%95">windows.old-を作らない方法</a><br>  -<a href="#%E5%85%83%E3%81%AE-OS-%E3%81%AB%E6%88%BB%E3%81%99%E6%96%B9%E6%B3%95%EF%BC%88%E3%83%AD%E3%83%BC%E3%83%AB%E3%83%90%E3%83%83%E3%82%AF%EF%BC%89">元の OS に戻す方法（ロールバック）</a><br>  -<a href="#%E3%82%A2%E3%83%83%E3%83%97%E3%82%B0%E3%83%AC%E3%83%BC%E3%83%89%E3%81%99%E3%82%8B%E9%9A%9B%E3%81%AB%E3%83%87%E3%82%A3%E3%82%B9%E3%82%AF%E5%AE%B9%E9%87%8F%E3%82%92%E5%A2%97%E3%82%84%E3%81%99%E6%96%B9%E6%B3%95">ディスク容量を増やす方法</a><br>-<a href="#%E3%81%8A%E5%95%8F%E3%81%84%E5%90%88%E3%82%8F%E3%81%9B">5-お問い合わせ</a></p>
+<hr>
+<blockquote>
+<p>本セクションでは、Windows 11 へのアップグレードする前に[まずご確認いただきたい操作]をまとめています。<br>詳細な原因の説明は省き、実際に役立つ手順だけを簡単な補足とともにご紹介します。</p>
+</blockquote>
+<h2 id="0-はじめに（準備のお願い）"><a href="#0-はじめに（準備のお願い）" class="headerlink" title="0) はじめに（準備のお願い）"></a>0) はじめに（準備のお願い）</h2><p>アップグレードに失敗するシナリオのうち、いくつかは事前準備の段階で予防が可能です。<br>スムーズにアップグレードを進めるためにも、以下の準備をご実施ください。  </p>
+<ul>
+<li><p><strong>最新のメディアを使用する</strong><br>意図しない互換性の問題の発生を防ぐためにも、アップグレードに最新版のメディアをご利用いただくことを強くお勧めいたします。<br>アップグレードに ISO メディアをご利用の場合は、インターネットに接続可能な環境にて、セットアップ画面の [セットアップでの更新プログラムのダウンロード方法の変更] より [更新プログラム、ドライバー、オプション機能をダウンロードする (推奨)] にチェックのうえ、アップグレードをご実施ください。<br>WSUS や MECM をご利用の場合、毎月リリースされる最新の累積更新プログラムを含む機能更新プログラムのパッケージをご利用ください。</p>
+</li>
+<li><p><strong>バックアップを取る</strong><br>大切なデータを守るため、事前にバックアップをお願いします。  </p>
+</li>
+<li><p><strong>BitLocker を一時停止</strong><br>既定ではアップグレード中に BitLocker の保護の中断を自動的に行う動作ですが、環境固有の何等かの理由により、BitLocker が中断されないことあるため、BitLocker 暗号化を一時的に止めることで、アップグレード中のエラーを防ぎます。<br>[BitLocker の管理] をスタートメニューから開き、[オペレーティング システム ドライブ] の [保護の中断] を実施してください。<br>※[保護の中断] を実施しても、次回再起動時またはアップグレード完了時に自動的に再開するので、ご安心ください。  </p>
+</li>
+<li><p><strong>周辺機器を外す</strong><br>接続されているハードウェアによってアップデートが失敗する場合があります。<br>可能な限り不要なデバイスを一時的に外し、必要最小限（キーボード、マウス、LAN）の構成にしてください。  </p>
+</li>
+<li><p><strong>管理者権限の確認</strong><br>コマンド実行や設定変更に必要です。<br>以降でご紹介する手順にはいくつかコマンドの実行がありますが、いずれも基本的には管理者権限を必要とします。<br>アップグレード時には出来るだけ管理者権限を利用できる状態で臨んでください。  </p>
+</li>
+<li><p><strong>ディスク容量を増やす</strong><br>一般的なガイダンスとして最低で 6GB - 11GB の空き領域が必要となっていますが、10GB 以上が必要となるケースがほとんどです。<br>さらに言えば、一時的に利用される領域等も加味した、弊社サポートとしての推奨値としては 20GB - 30GB の空き領域を確保していただきたいです。<br>以下の公開情報を参考に、十分な空き領域の確保をご実施ください。</p>
+<p>Title : Windows でドライブの空き領域を増やす<br>URL   : <a target="_blank" rel="noopener" href="https://support.microsoft.com/ja-jp/windows/85529ccb-c365-490d-b548-831022bc9b32">https://support.microsoft.com/ja-jp/windows/85529ccb-c365-490d-b548-831022bc9b32</a></p>
+</li>
+</ul>
+<hr>
+<h2 id="1-アップグレード要件のチェック"><a href="#1-アップグレード要件のチェック" class="headerlink" title="1) アップグレード要件のチェック"></a>1) アップグレード要件のチェック</h2><p>Windows 11 をご利用いただくに際しては、いくつかの必須要件があります。<br>アップグレードの実施前に、利用中の環境が条件を満たしているかご確認ください。  </p>
+<ul>
+<li><p><strong>TPM 2.0 の確認</strong><br>ハードウェアで提供されるセキュリティ機能ですが、Windows 11 では本機能の搭載が必須です。<br><code>Win</code> + <code>R</code> → <code>tpm.msc</code> を入力し、**[仕様バージョン: 2.0]** と表示されているか確認してください。<br>また、ここでバージョンが指定されたものではない、あるいは表示されないなどがあれば、UEFI の設定で無効化されているだけの場合もあります。<br>TPM の利用可否も含め、本項目で不明点がある場合は PC の提供元へご相談ください。</p>
+</li>
+<li><p><strong>UEFI とセキュアブート</strong><br>起動方式が UEFI で、セキュアブートが有効になっているか確認します。<br><code>Win</code> + <code>R</code> → <code>msinfo32</code> を入力し、以下を確認してください：  </p>
+<ul>
+<li><strong>BIOS モード: UEFI</strong>  </li>
+<li><strong>セキュアブートの状態: 有効</strong></li>
+</ul>
+</li>
+<li><p><strong>ハードウェア要件</strong><br>CPU 1GHz/2コア以上（対応CPU）、RAM 4GB以上、ストレージ64GB以上、DirectX 12対応GPU/WDDM 2.0。</p>
+</li>
+</ul>
+<p>など、主な項目と確認方法を挙げましたが、詳細については以下の公開情報に纏められていますので、合わせてご確認ください。</p>
+<p>  Title : Windows 11 の仕様、機能、コンピューターの要件を確認する<br>  URL   : <a target="_blank" rel="noopener" href="https://www.microsoft.com/ja-jp/windows/windows-11-specifications">https://www.microsoft.com/ja-jp/windows/windows-11-specifications</a>  </p>
+<p>また、これらの要件を満たしているかどうかは、以下の [PC 正常性チェック] アプリで一括確認することもできます。<br>※ 本ツールは WSUS や MECM に管理されている端末では利用できません。</p>
+<ul>
+<li><p><strong>PC 正常性チェック</strong>  </p>
+<p>Title : PC 正常性チェック アプリの使用方法<br>URL   : <a target="_blank" rel="noopener" href="https://support.microsoft.com/ja-jp/windows/9c8abd9b-03ba-4e67-81ef-36f37caa7844">https://support.microsoft.com/ja-jp/windows/9c8abd9b-03ba-4e67-81ef-36f37caa7844</a>    </p>
+</li>
+</ul>
+<hr>
+<blockquote>
+<p>ここまでが準備編になります。<br>これ以降は、実際にアップグレードに臨んだものの、エラーになってしまった場合などの対処方法になります。</p>
+</blockquote>
+<hr>
+<h2 id="2-アップグレードが失敗したとき、最初に確認したい箇所"><a href="#2-アップグレードが失敗したとき、最初に確認したい箇所" class="headerlink" title="2) アップグレードが失敗したとき、最初に確認したい箇所"></a>2) アップグレードが失敗したとき、最初に確認したい箇所</h2><p>アップグレードが失敗した場合、多くのシナリオで以下の項目を解決する事により改善が確認されております。<br>また、これらの要因でアップグレードが失敗する場合、特定のエラーが返されるわけではないため、エラーの内容等から対処方法を一意に特定することが非常に困難な内容となります。<br>特に優先順位はありませんが、いずれも事例として非常に多いものとなりますので、可能な限り全て同時にお試しください。  </p>
+<ol>
+<li><p><strong>サードパーティ製セキュリティソフトを一時的に停止またはアンインストールする</strong><br>他社製のウイルス対策や暗号化ソフトが原因になることがあります。<br>また、これらのソフトウェアは多くの場合、ドライバーとして機能の一部をインストールしています。<br>その場合、ソフトウェア上から [停止] [無効] などを実行しても、実は稼働したまま、という事が多くあります。<br>停止後もアップグレードが失敗する場合は、併せて [アンインストール] をご検討ください。</p>
+</li>
+<li><p><strong>ドライバーを最新にする</strong><br>特にストレージやネットワーク関連は重要です。<br>Windows Update の [オプションの更新] や、各ベンダーから提供されているツールで更新してください。  </p>
+</li>
+<li><p><strong>BIOS/UEFI を更新</strong><br>古いファームウェアはアップグレードを妨げる場合があります。<br>BIOS/UEFI に関しては更新の方法も様々ですので、PC の提供元へ確認の上でご実施ください。  </p>
+</li>
+<li><p><strong>システム整合性の修復</strong><br>以下のコマンドでシステムを修復します。  </p>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">DISM /Online /Cleanup-Image /RestoreHealth</span><br><span class="line">sfc /scannow</span><br></pre></td></tr></table></figure>
+<p>これにより、Windows コンポーネントに破損が生じている場合も、可能な範囲で修復が行われます。  </p>
+</li>
+</ol>
+<hr>
+<blockquote>
+<p>ここから先は、ファイルの削除を含む手順が含まれますので、必ず重要なファイルはバックアップを取得してから臨んでください。</p>
+</blockquote>
+<hr>
+<h2 id="3-項番-2-に書かれている手順を実施してもアップグレードに失敗してしまう場合"><a href="#3-項番-2-に書かれている手順を実施してもアップグレードに失敗してしまう場合" class="headerlink" title="3) 項番 2 に書かれている手順を実施してもアップグレードに失敗してしまう場合"></a>3) 項番 2 に書かれている手順を実施してもアップグレードに失敗してしまう場合</h2><h3 id="EFI-パーティションの空き不足を解消"><a href="#EFI-パーティションの空き不足を解消" class="headerlink" title="EFI パーティションの空き不足を解消"></a>EFI パーティションの空き不足を解消</h3><p>EFI パーティションに空きがないとアップグレードに失敗します。<br>このシナリオに合致すると、多くの場合 [システム予約パーティションを更新できませんでした] という旨のエラーでアップグレードが失敗します。<br>以下のコマンドで EFI パーティションのフォルダ構成が確認できますので、それ以外のフォルダが存在しないか確認してみてください。  </p>
+<p>Microsoft や Boot 以外のフォルダが存在する場合、サードパーティー製のアプリケーションや端末の提供元などによって作成・利用されている可能性がございます。これらフォルダ・ファイルが削除可能であるか提供元にご確認ください。</p>
+<p>例) EFI フォルダ以下に、Microsoft や Boot 以外のフォルダが存在する　等<br>    この場合、PC やアプリケーションの提供元によって作成されている可能性がありますので、提供元へ相談しましょう。</p>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">C:\&gt;<span class="title">mountvol</span> <span class="title">y</span>: /<span class="title">s</span></span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function"><span class="title">C</span>:\&gt;<span class="title">y</span>:</span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function"><span class="title">Y</span>:\&gt;<span class="title">tree</span></span></span><br><span class="line"><span class="function">フォルダー パスの一覧</span></span><br><span class="line"><span class="function">ボリューム シリアル番号は 36<span class="title">D4</span>-<span class="title">C9BB</span> です</span></span><br><span class="line"><span class="function"><span class="title">Y</span>:.</span></span><br><span class="line"><span class="function">└─<span class="title">EFI</span></span></span><br><span class="line"><span class="function">    ├─<span class="title">Microsoft</span></span></span><br><span class="line"><span class="function">    │  ├─<span class="title">Boot</span></span></span><br><span class="line"><span class="function">    |  | ～ <span class="title">Boot</span> フォルダ以下には多くのファイル/フォルダがあるため、省略しています ～</span></span><br><span class="line"><span class="function">    │  └─<span class="title">Recovery</span></span></span><br><span class="line"><span class="function">    └─<span class="title">Boot</span></span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function"><span class="title">Y</span>:\&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>また、同エラーに関して公開情報もありますので、こちらも確認してみてください。  </p>
+<p>Title : Windows 10のインストール中に “システム予約パーティションを更新できませんでした” というエラーが表示される<br>URL   : <a target="_blank" rel="noopener" href="https://support.microsoft.com/ja-jp/topic/46865f3f-37bb-4c51-c69f-07271b6672ac">https://support.microsoft.com/ja-jp/topic/46865f3f-37bb-4c51-c69f-07271b6672ac</a>  </p>
+<hr>
+<h3 id="ユーザープロファイルの重複を解消"><a href="#ユーザープロファイルの重複を解消" class="headerlink" title="ユーザープロファイルの重複を解消"></a>ユーザープロファイルの重複を解消</h3><p>Windows は複数のユーザーを作成することができ、それらのユーザーを使いわけて利用者ごとにデスクトップやドキュメント類を分けて管理することができます。<br>通常、これらは C:\Users フォルダ以下にユーザー毎のフォルダが作成されて管理されますが、この管理情報に誤りがある場合、アップグレードを妨げる事があります。<br>例) UserA と UserB のいずれも、<strong>C:\Users¥UserA</strong> を利用する事になってしまっている。  </p>
+<p>上の例はわかりやすく書きましたが、こんな極端なシナリオは生じませんのでご安心ください。<br>ただ、[昔一時的に作成したけど削除したユーザーが、今メインで利用しているユーザーと同じフォルダを利用する事になっている。]<br>こういうシナリオは発生する可能性があります。<br>通常の Windows 利用時には全く問題となりませんが、アップグレード時には <strong>現時点で存在している全ユーザー情報</strong>の移行が必要ですので、これが問題になります。</p>
+<p>各ユーザーには、SID と呼ばれる一意の ID が割り振られており、この ID 毎にユーザーのフォルダを管理しています。<br>次のコマンドを実行すると、各 SID (ユーザーに対して一意に割り当てられた ID) に対して設定された、プロファイルのパスを示す ProfileImagePath 値を纏めて表示できます。 </p>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">reg query &quot;HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\ProfileList&quot; /v ProfileImagePath /s</span><br></pre></td></tr></table></figure>
+
+<p>ここで、ProfileImagePath の指すパスが重複している SID がいないか確認してみてください。<br>もし複数の SID でパスが重複している場合、アップグレードの失敗に繋がります。<br>この場合は、次の手順で [利用されていない] SID のレジストリを削除してください。  </p>
+<p>手順</p>
+<ol>
+<li>上のコマンドを実行し、フォルダ名が重複しているユーザーの SID (S- で始まるもの) を全て控えます。  </li>
+<li>そのフォルダを利用しているユーザーで OS にサインインします。  </li>
+<li>コマンド プロンプトから [whoami /user] を実行し、現時点でユーザーに紐づいている SID を確認します。  </li>
+<li>レジストリ エディタを起動し、以下のキーまで移動します。<br>HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\ProfileList</li>
+<li>[手順 3. で確認したほうではない] SID を右クリックし、エクスポート (.reg 形式) します。</li>
+<li>[手順 3. で確認したほうではない] SID を右クリックし、削除します。</li>
+</ol>
+<p>※普段、自分が利用しているユーザーのフォルダがわからない場合、コマンド プロンプトを起動した際に表示される C:\Users のパスを確認してみてください。</p>
+<p>コマンドプロンプト表示例：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Microsoft Windows [Version 10.0.26100.6508]</span><br><span class="line">(c) Microsoft Corporation. All rights reserved.</span><br><span class="line">C:\Users\admin&gt;</span><br></pre></td></tr></table></figure>
+<hr>
+<h3 id="メディアの言語・エディションを一致させる"><a href="#メディアの言語・エディションを一致させる" class="headerlink" title="メディアの言語・エディションを一致させる"></a>メディアの言語・エディションを一致させる</h3><p>以下のコマンドで、今使っている Windows 10 のエディションと言語を確認してください。  </p>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">DISM /Online /Get-CurrentEdition</span><br><span class="line">DISM /Online /Get-TargetEditions</span><br><span class="line">DISM /Online /Get-Intl</span><br></pre></td></tr></table></figure>
+
+<p><strong>現在のエディション</strong> がインストールに利用しているメディアに含まれているか確認してみてください。<br>その後、ここで確認した <strong>既定のシステム UI 言語</strong> と一致するメディアを利用して、OS のアップグレードを実施しましょう。  </p>
+<hr>
+<h2 id="4-よくあるご質問（アップグレード時）"><a href="#4-よくあるご質問（アップグレード時）" class="headerlink" title="4) よくあるご質問（アップグレード時）"></a>4) よくあるご質問（アップグレード時）</h2><h3 id="Windows-old-を作らない方法"><a href="#Windows-old-を作らない方法" class="headerlink" title="Windows.old を作らない方法"></a>Windows.old を作らない方法</h3><p>クリーンインストールのみ対応可能です。インプレースでは必ず作成されます。<br>ただし、Windows 11 へのアップグレード直後に自動削除する設定がありますので、アップグレードする際に、setup.exe に対して下記の /Uninstall Disable というオプションを設定することで利用可能です。</p>
+<hr>
+<h4 id="アップグレード後にすぐ-Windows-old-を自動削除するオプション"><a href="#アップグレード後にすぐ-Windows-old-を自動削除するオプション" class="headerlink" title="アップグレード後にすぐ Windows.old を自動削除するオプション"></a>アップグレード後にすぐ Windows.old を自動削除するオプション</h4><p>タイトル：/Uninstall<br>URL: <a target="_blank" rel="noopener" href="https://learn.microsoft.com/ja-jp/windows-hardware/manufacture/desktop/windows-setup-command-line-options?view=windows-11#uninstall">https://learn.microsoft.com/ja-jp/windows-hardware/manufacture/desktop/windows-setup-command-line-options?view=windows-11#uninstall</a>  </p>
+<blockquote>
+<p>/Uninstall<br>ユーザーが前のオペレーティング システムに戻れるようにするためのコントロールを Windows に含めるかどうかを決定します。<br>構文<br>/Uninstall {Enable | Disable}</p>
+</blockquote>
+<hr>
+<p>なお、Windows Update で機能更新プログラムを配信する場合、通常 Setup.exe コマンドではないため、<br>代わりに以下のサイトで紹介されている setupconfig.ini に該当する記載をすることで、機能更新の際に、<br>当該設定を読み取って、設定項目に従って動作することが可能です。（機能更新前に、あらかじめ所定の場所に<br>SetupConfig.ini を配置しておく必要がございます。）</p>
+<p>タイトル：Windows Update の使用<br>URL: <a target="_blank" rel="noopener" href="https://learn.microsoft.com/ja-jp/windows-hardware/manufacture/desktop/windows-setup-automation-overview?view=windows-11#using-windows-update">https://learn.microsoft.com/ja-jp/windows-hardware/manufacture/desktop/windows-setup-automation-overview?view=windows-11#using-windows-update</a>  </p>
+<blockquote>
+<p>Windows Update によって更新プログラムが配布されると、Windows セットアップは setupconfig ファイルの既定の場所を検索します。<br>setupconfig ファイルを %systemdrive%\Users\Default\AppData\Local\Microsoft\Windows\WSUS\SetupConfig.ini に含めることができます。</p>
+</blockquote>
+<hr>
+<h4 id="アップグレード後に手動で-Windows-old-を削除するオプション"><a href="#アップグレード後に手動で-Windows-old-を削除するオプション" class="headerlink" title="アップグレード後に手動で Windows.old を削除するオプション"></a>アップグレード後に手動で Windows.old を削除するオプション</h4><p>[設定 &gt; システム &gt; 記憶域 &gt; クリーンアップの推奨事項] で [以前の Windows のインストール] を削除してください。</p>
+<hr>
+<h4 id="Windows-old-をすぐに削除するコマンドについて"><a href="#Windows-old-をすぐに削除するコマンドについて" class="headerlink" title="Windows.old をすぐに削除するコマンドについて"></a>Windows.old をすぐに削除するコマンドについて</h4><p>管理者権限にて以下の 2 つのコマンドを実行することで、すぐに Windows.old を削除することが可能です。<br> <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">1. 削除設定</span><br><span class="line">&gt; DISM &#x2F;Online &#x2F;Remove-OSUninstall</span><br><span class="line"> </span><br><span class="line">2. SetupCleanupTask タスクの実行</span><br><span class="line">&gt; schtasks &#x2F;Run &#x2F;TN &quot;\Microsoft\Windows\Setup\SetupCleanupTask&quot; &#x2F;I</span><br></pre></td></tr></table></figure><br>なお、”前の バージョンの Windows に戻せる猶予期間” 以上の日数が経過している場合は、上記の 2 のコマンドのみでも削除可能でございます。</p>
+<hr>
+<h3 id="元の-OS-に戻す方法（ロールバック）"><a href="#元の-OS-に戻す方法（ロールバック）" class="headerlink" title="元の OS に戻す方法（ロールバック）"></a>元の OS に戻す方法（ロールバック）</h3><p>既定では 10 日以内なら [設定 &gt; システム &gt; 回復 &gt; 前のバージョンの Windows に戻す] からアップグレード前の状態に戻せます。<br>コマンドで戻す事も可能です。  </p>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">DISM /Online /Initiate-OSUninstall</span><br></pre></td></tr></table></figure>
+<hr>
+<h3 id="アップグレードする際にディスク容量を増やす方法"><a href="#アップグレードする際にディスク容量を増やす方法" class="headerlink" title="アップグレードする際にディスク容量を増やす方法"></a>アップグレードする際にディスク容量を増やす方法</h3><p>Windows OS における、ドライブの空き容量を増やすための手法に関する技術情報は、以下の公開情報に記載されています。</p>
+<p>[公開情報]<br>タイトル：Windows でドライブの空き領域を増やす<br>URL：<a target="_blank" rel="noopener" href="https://support.microsoft.com/ja-jp/windows/windows-%E3%81%A7%E3%83%89%E3%83%A9%E3%82%A4%E3%83%96%E3%81%AE%E7%A9%BA%E3%81%8D%E9%A0%98%E5%9F%9F%E3%82%92%E5%A2%97%E3%82%84%E3%81%99-85529ccb-c365-490d-b548-831022bc9b32">https://support.microsoft.com/ja-jp/windows/windows-%E3%81%A7%E3%83%89%E3%83%A9%E3%82%A4%E3%83%96%E3%81%AE%E7%A9%BA%E3%81%8D%E9%A0%98%E5%9F%9F%E3%82%92%E5%A2%97%E3%82%84%E3%81%99-85529ccb-c365-490d-b548-831022bc9b32</a>  </p>
+<p>また、OS アップグレードに際して、必要な空き容量確保のために有効と考えられる主な手法として以下があります。</p>
+<p><strong>A. ドライブ全体を圧縮する</strong></p>
+<p>システム領域のみではなく、C ドライブ全体を圧縮 (C ドライブ内のすべてのフォルダーと、ファイルに圧縮属性を付与) することでも、空き領域を確保することができます。</p>
+<p>※本操作にはドライブの大きさなどに依存して数十分を要する場合がございます。ご採用される場合は事前にテスト環境などで圧縮/圧縮解除にかかるお時間を測定ください。</p>
+<ol>
+<li><p>ファイル エクスプローラーより左パネルから [PC] を選択して C ドライブを右クリップしてプロパティを選択します。</p>
+</li>
+<li><p>[このドライブを圧縮してディスク領域を空ける] にチェックを入れます。</p>
+</li>
+<li><p>[ドライブ C:\ のみに変更を適用する] または [変更をドライブ C:\、サブフォルダ及びファイルに適用する] のいずれかを選択し OK を押下します。</p>
+</li>
+</ol>
+<hr>
+<p><strong>B. 休止状態を無効化し hiberfil.sys を削除する</strong></p>
+<p>休止状態を利用している場合は一時的に無効化しhiberfil.sys を削除します。</p>
+<ol>
+<li><p>コマンド プロンプトを “管理者として実行” にて起動します。</p>
+</li>
+<li><p>以下のコマンドを実行します。</p>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">powercfg /h off</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>システムの再起動を実行します。</p>
+</li>
+<li><p>再度休止状態を利用する場合は以下のコマンド実行後に再起動します。</p>
+</li>
+</ol>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">powercfg /h on</span><br></pre></td></tr></table></figure>
+
+
+<hr>
+<p><strong>C. ページング ファイル (pagefile.sys) を別ドライブに移動する</strong></p>
+<p>Pagefile は大きなファイルのサイズとなりますため、可能であれば、別ドライブに移動します。</p>
+<p>以下手順は C ドライブにある pagefile.sys を削除し D ドライブ等の別ドライブに pagefile.sys を移動する場合の手順です。</p>
+<ol>
+<li>ファイル名を指定して実行に “sysdm.cpl” と入力し OK をクリックします。</li>
+<li>[システムのプロパティ] の [詳細設定] タブの [パフォーマンス] にある [設定(S)] をクリックします。</li>
+<li>[詳細設定] タブの [仮想メモリ] の項目にある [変更(C)] ボタンをクリックします。</li>
+<li>[すべてのドライブのページング ファイルのサイズを自動的に管理する(A)] オプションを外します。</li>
+<li>[各ドライブのページング ファイルのサイズ] 欄よりC: を選択し、[ページング ファイルなし] のラジオボタンをクリックし、[設定]ボタンをクリックします。</li>
+<li>[各ドライブのページング ファイルのサイズ] 欄の C: の項目が [なし] と表示されていることを確認します。</li>
+<li>続けて[各ドライブのページング ファイルのサイズ] 欄の D: を選択します。</li>
+<li>[カスタム サイズ] にチェックを入れて、特定のメモリ サイズ を指定するか、[システム管理サイズ] にチェックを入れて、[設定] をクリックします。  </li>
+<li>[各ドライブのページング ファイルのサイズ] 欄の D: の項目が設定した表示に切り替わったことを確認します。</li>
+<li>[OK] ボタンをクリックし画面を閉じます。</li>
+<li>“変更結果はコンピューターを再起動しなければ有効になりません。” というポップアップが表示されますので、[OK] ボタンをクリックします。</li>
+<li>端末を再起動し、設定を反映させます</li>
+</ol>
+<hr>
+<p><strong>D. 外部ストレージの利用</strong></p>
+<p>外部ストレージを挿入することで一時ファイルを別ドライブに移動することが可能です。</p>
+<p>コマンドで実行する場合は /TempDriveオプションをご使用いただけます。</p>
+<p>[参考情報]<br>タイトル: /TempDrive<br>URL: <a target="_blank" rel="noopener" href="https://learn.microsoft.com/ja-jp/windows-hardware/manufacture/desktop/windows-setup-command-line-options?view=windows-11#tempdrive">https://learn.microsoft.com/ja-jp/windows-hardware/manufacture/desktop/windows-setup-command-line-options?view=windows-11#tempdrive</a></p>
+<hr>
+<p><strong>E. 一時ファイルの削除</strong></p>
+<p>端末で保持されている一時ファイルにつきましては、以下公開情報に記載のディスクのクリーンアップにて</p>
+<p>削除が可能となる場合があり、データの削除および空き容量の確保に寄与できる事がございますので、</p>
+<p>併せてご案内させていただきます。</p>
+<p>[公開情報]<br>タイトル：ディスクのクリーンアップ<br>URL：<a target="_blank" rel="noopener" href="https://support.microsoft.com/ja-jp/windows/windows-%E3%81%A7%E3%83%89%E3%83%A9%E3%82%A4%E3%83%96%E3%81%AE%E7%A9%BA%E3%81%8D%E9%A0%98%E5%9F%9F%E3%82%92%E5%A2%97%E3%82%84%E3%81%99-85529ccb-c365-490d-b548-831022bc9b32">https://support.microsoft.com/ja-jp/windows/windows-%E3%81%A7%E3%83%89%E3%83%A9%E3%82%A4%E3%83%96%E3%81%AE%E7%A9%BA%E3%81%8D%E9%A0%98%E5%9F%9F%E3%82%92%E5%A2%97%E3%82%84%E3%81%99-85529ccb-c365-490d-b548-831022bc9b32</a>  </p>
+<hr>
+<h2 id="お問い合わせ"><a href="#お問い合わせ" class="headerlink" title="お問い合わせ"></a>お問い合わせ</h2><p>ここまでの項目を全て試しても解決しない場合や、その他の問題に遭遇した場合など、有償の技術サポートが必要な場合は弊社までお問い合わせください。<br>お問い合わせ時には問題発生時のログが必要となりますが、Windows 10 -&gt; Windows 11 へのアップグレードが失敗する場合は、以下の資料で多くの情報が網羅できます。<br>お問い合わせをいただく際には、失敗直後に以下の情報を収集してください。  </p>
+<p><strong>TSS の収集</strong><br>Title : 初期調査にご取得いただくログ情報<br>URL   : <a href="https://jpwinsup.github.io/mslog/deployment/general/initiallog-deployment/">https://jpwinsup.github.io/mslog/deployment/general/initiallog-deployment/</a>  </p>
+<ol>
+<li>上記ページの手順通りに資料取得を進めます。</li>
+</ol>
+<hr>
+<h2 id="更新履歴"><a href="#更新履歴" class="headerlink" title="更新履歴"></a>更新履歴</h2><p>2025/09/30 本ブログの公開</p>
+
+      
+      
+    </div>
+    <footer class="article-footer">
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/blog/2025/09/29/Activation/Windows10-ESU-QA/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">次の記事</strong>
+      <div class="article-nav-title">
+        
+          Windows 10 ESU に関するよくあるお問い合わせ
+        
+      </div>
+    </a>
+  
+  
+    <a href="/blog/2025/09/04/ActiveDirectory/PromotionAndDemotion/ntds-perflib/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">前の記事</strong>
+      <div class="article-nav-title">ドメイン コントローラーで ソース :Microsoft-Windows-Perflib, ID:1023 のイベントが記録される事象について</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">カテゴリ</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Activation/">Activation</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Activation/ESU/">ESU</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Activation/security-SPP/">security-SPP</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/">Active Directory</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Authentication/">Authentication</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/DFSR/">DFSR</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/FunctionalLevel/">FunctionalLevel</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Group-Policy/">Group Policy</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Promotion-and-Demotion/">Promotion and Demotion</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/User-Profile/">User Profile</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Windows-Hello/">Windows Hello</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Windows-Time-Service/">Windows Time Service</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/AppLocker/">AppLocker</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/AppLocker/Active-Directory/">Active Directory</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/AppLocker/Microsoft-Intune/">Microsoft Intune</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Deployment/">Deployment</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Deployment/Feature-on-demand/">Feature on demand</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Deployment/Sysprep/">Sysprep</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Failover-Clustering/">Failover Clustering</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Failover-Clustering/Configuration-and-Management/">Configuration and Management</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/FileServices/">FileServices</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/FileServices/FTP/">FTP</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/FileServices/SMB/">SMB</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Hyper-V/">Hyper-V</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Hyper-V/Configuration-and-Management/">Configuration and Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Hyper-V/Migration/">Migration</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Microsoft-Connected-Cache/">Microsoft Connected Cache</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/">Networking</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/BITS/">BITS</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/Bluetooth/">Bluetooth</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/DHCP/">DHCP</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/DNS/">DNS</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/Firewall/">Firewall</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/LBFO/">LBFO</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/NCSI/">NCSI</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/NetworkInterface/">NetworkInterface</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/Proxy/">Proxy</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/TCPIP/">TCPIP</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/OpenSSH/">OpenSSH</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/">Performance</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/Hang-up-BSoD/">Hang-up/BSoD</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/No-Boot/">No Boot</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/Slow-Response/">Slow Response</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/System-Resource/">System Resource</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/Tools/">Tools</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/">Public Key Infrastructure</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Certificate-Authority/">Certificate Authority</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Certificate-Management/">Certificate Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Code-Signing/">Code Signing</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/SSL-TLS-Communication/">SSL TLS Communication</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/SSL-TLS-Connection/">SSL TLS Connection</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Smart-Card-Logon/">Smart Card Logon</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/">Remote Desktop</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/Azure-Virtual-Desktop-AVD/">Azure Virtual Desktop (AVD)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/Remote-Desktop-Service-RDS/">Remote Desktop Service (RDS)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/Windows-Virtual-Desktop-WVD/">Windows Virtual Desktop (WVD)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/RemoteAccess/">RemoteAccess</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/RemoteAccess/%E3%83%80%E3%82%A4%E3%83%A4%E3%83%AB%E3%82%A2%E3%83%83%E3%83%97%E6%8E%A5%E7%B6%9A/">ダイヤルアップ接続</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Setup/">Setup</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Setup/Feature-Update-FU/">Feature Update (FU)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Shell/">Shell</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Shell/Explorer/">Explorer</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/">Storage</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/Backup/">Backup</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/FSRM/">FSRM</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/Management/">Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/StorageMigrationService/">StorageMigrationService</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/UEFI/">UEFI</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/UEFI/Secure-Boot/">Secure Boot</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/">User Interface and Apps</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Command-Prompt/">Command Prompt</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/EventLog/">EventLog</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Language-Support/">Language Support</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Microsoft-Store/">Microsoft Store</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Performance/">Performance</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/PowerShell/">PowerShell</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Printing-%E5%8D%B0%E5%88%B7/">Printing (印刷)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Server-Management/">Server Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Taskscheduler/">Taskscheduler</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Windows-Management-Instrumentation/">Windows Management Instrumentation</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps-Language-support/">User Interface and Apps - Language support</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-365/">Windows 365</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Admin-Center/">Windows Admin Center</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Search/">Windows Search</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/">Windows Update</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Delivery-Optimization-DO/">Delivery Optimization (DO)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Feature-Update-FU/">Feature Update (FU)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Quality-Update-QU/">Quality Update (QU)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Windows-Update-Agent/">Windows Update Agent</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Windows-Update-Agent-WUA/">Windows Update Agent (WUA)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/">WirelessNetwork</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/NPS/">NPS</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/Wi-Fi/">Wi-Fi</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/%E3%83%A2%E3%83%90%E3%82%A4%E3%83%AB-%E3%83%96%E3%83%AD%E3%83%BC%E3%83%89%E3%83%90%E3%83%B3%E3%83%89%E6%8E%A5%E7%B6%9A-LTE/">モバイル ブロードバンド接続 (LTE)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/%E7%B5%84%E7%B9%94%E7%B4%B9%E4%BB%8B%E3%83%96%E3%83%AD%E3%82%B0%EF%BC%88Windows-Commercial%EF%BC%89/">組織紹介ブログ（Windows Commercial）</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最近の投稿</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/blog/2026/02/16/ActiveDirectory/GroupPolicy/UacPolicyIsEnabled/">「ユーザー アカウント制御：ビルトイン Administrator アカウントのための管理者承認モード」ポリシーが有効になる動作ついて</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/02/15/UserInterfaceAndApps/Printing/printer-queue-app-preview/">印刷キューアプリのプレビュー機能について</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/02/02/ActiveDirectory/Authentication/kerberos-rc4-for-service-account-ticket-issuance-changes-related-to-cve-2026-20833/">CVE‑2026‑20833 への対応とその影響について [KB5073381]</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/01/12/Hyper-V/vmwp-does-not-save-the-RTC-value-of-a-virtual-machine-when-performing-Live-Migration/">ライブ マイグレーション後の再起動でゲスト OS の時刻がずれる場合がある</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/01/07/WindowsUpdate/FU/fublog-txt/">ISO メディア経由かつ動的更新無効な状態で Windows 11 バージョン 24H2 または 25H2 へのアップグレードが失敗 (0x8007042B 0x2000D) する事象と対策について</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">アーカイブ</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2026/02/">2026 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2026/01/">2026 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/12/">2025 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/11/">2025 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/10/">2025 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/09/">2025 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/08/">2025 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/07/">2025 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/06/">2025 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/05/">2025 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/04/">2025 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/03/">2025 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/02/">2025 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/01/">2025 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/12/">2024 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/11/">2024 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/10/">2024 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/09/">2024 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/08/">2024 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/07/">2024 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/06/">2024 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/05/">2024 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/04/">2024 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/03/">2024 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/02/">2024 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/01/">2024 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/12/">2023 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/11/">2023 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/10/">2023 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/09/">2023 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/08/">2023 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/07/">2023 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/06/">2023 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/05/">2023 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/04/">2023 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/03/">2023 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/02/">2023 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/01/">2023 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/12/">2022 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/11/">2022 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/10/">2022 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/09/">2022 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/08/">2022 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/07/">2022 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/06/">2022 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/05/">2022 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/04/">2022 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/03/">2022 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/02/">2022 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/01/">2022 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/12/">2021 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/11/">2021 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/10/">2021 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/09/">2021 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/08/">2021 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/07/">2021 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/06/">2021 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/05/">2021 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/04/">2021 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/03/">2021 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/02/">2021 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/01/">2021 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/12/">2020 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/11/">2020 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/10/">2020 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/07/">2020 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/03/">2020 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2019/03/">2019 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/11/">2018 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/10/">2018 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/09/">2018 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/08/">2018 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/07/">2018 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/06/">2018 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/04/">2018 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/02/">2018 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/12/">2017 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/11/">2017 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/09/">2017 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/05/">2017 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/03/">2017 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/02/">2017 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2016/08/">2016 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2016/05/">2016 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2014/03/">2014 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2012/02/">2012 / 02</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2026 Microsoft Japan Windows Technology Support Team<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/blog/" class="mobile-nav-link">Home</a>
+  
+    <a href="/blog/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+<script src="/blog/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

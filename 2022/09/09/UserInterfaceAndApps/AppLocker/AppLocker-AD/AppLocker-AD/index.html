@@ -1,0 +1,1198 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-180187723-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-180187723-1');
+</script>
+<!-- End Google Analytics -->
+
+  
+  <title>Active Directory を使用した AppLocker 設定方法 | Microsoft Japan Windows Technology Support Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="みなさん、こんにちは。 Windows サポート チームの亀井です。 AppLocker は、端末を使用している特定のユーザーやグループが、対象のアプリケーションなどを実行できないよう制御する機能です。本記事では Active Directory と AppLocker を使用して、アプリケーションの起動を制限する方法についてご紹介します。 英語版は、こちらからご覧ください。(Please cli">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Active Directory を使用した AppLocker 設定方法">
+<meta property="og:url" content="https://jpwinsup.github.io/blog/2022/09/09/UserInterfaceAndApps/AppLocker/AppLocker-AD/AppLocker-AD/index.html">
+<meta property="og:site_name" content="Microsoft Japan Windows Technology Support Blog">
+<meta property="og:description" content="みなさん、こんにちは。 Windows サポート チームの亀井です。 AppLocker は、端末を使用している特定のユーザーやグループが、対象のアプリケーションなどを実行できないよう制御する機能です。本記事では Active Directory と AppLocker を使用して、アプリケーションの起動を制限する方法についてご紹介します。 英語版は、こちらからご覧ください。(Please cli">
+<meta property="og:locale" content="ja_JP">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2022/09/09/UserInterfaceAndApps/AppLocker/AppLocker-AD/AppLocker-AD/image40.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2022/09/09/UserInterfaceAndApps/AppLocker/AppLocker-AD/AppLocker-AD/image3.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2022/09/09/UserInterfaceAndApps/AppLocker/AppLocker-AD/AppLocker-AD/image4.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2022/09/09/UserInterfaceAndApps/AppLocker/AppLocker-AD/AppLocker-AD/image5.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2022/09/09/UserInterfaceAndApps/AppLocker/AppLocker-AD/AppLocker-AD/image6.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2022/09/09/UserInterfaceAndApps/AppLocker/AppLocker-AD/AppLocker-AD/image7.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2022/09/09/UserInterfaceAndApps/AppLocker/AppLocker-AD/AppLocker-AD/image8.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2022/09/09/UserInterfaceAndApps/AppLocker/AppLocker-AD/AppLocker-AD/image9.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2022/09/09/UserInterfaceAndApps/AppLocker/AppLocker-AD/AppLocker-AD/image10.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2022/09/09/UserInterfaceAndApps/AppLocker/AppLocker-AD/AppLocker-AD/image11.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2022/09/09/UserInterfaceAndApps/AppLocker/AppLocker-AD/AppLocker-AD/image12.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2022/09/09/UserInterfaceAndApps/AppLocker/AppLocker-AD/AppLocker-AD/image13.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2022/09/09/UserInterfaceAndApps/AppLocker/AppLocker-AD/AppLocker-AD/image14.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2022/09/09/UserInterfaceAndApps/AppLocker/AppLocker-AD/AppLocker-AD/image15.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2022/09/09/UserInterfaceAndApps/AppLocker/AppLocker-AD/AppLocker-AD/image16.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2022/09/09/UserInterfaceAndApps/AppLocker/AppLocker-AD/AppLocker-AD/image17.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2022/09/09/UserInterfaceAndApps/AppLocker/AppLocker-AD/AppLocker-AD/image18.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2022/09/09/UserInterfaceAndApps/AppLocker/AppLocker-AD/AppLocker-AD/image19.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2022/09/09/UserInterfaceAndApps/AppLocker/AppLocker-AD/AppLocker-AD/image20.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2022/09/09/UserInterfaceAndApps/AppLocker/AppLocker-AD/AppLocker-AD/image21.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2022/09/09/UserInterfaceAndApps/AppLocker/AppLocker-AD/AppLocker-AD/image22.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2022/09/09/UserInterfaceAndApps/AppLocker/AppLocker-AD/AppLocker-AD/image25.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2022/09/09/UserInterfaceAndApps/AppLocker/AppLocker-AD/AppLocker-AD/image23.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2022/09/09/UserInterfaceAndApps/AppLocker/AppLocker-AD/AppLocker-AD/image24.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2022/09/09/UserInterfaceAndApps/AppLocker/AppLocker-AD/AppLocker-AD/image26.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2022/09/09/UserInterfaceAndApps/AppLocker/AppLocker-AD/AppLocker-AD/image27.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2022/09/09/UserInterfaceAndApps/AppLocker/AppLocker-AD/AppLocker-AD/image28.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2022/09/09/UserInterfaceAndApps/AppLocker/AppLocker-AD/AppLocker-AD/image29.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2022/09/09/UserInterfaceAndApps/AppLocker/AppLocker-AD/AppLocker-AD/image39.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2022/09/09/UserInterfaceAndApps/AppLocker/AppLocker-AD/AppLocker-AD/en_image40.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2022/09/09/UserInterfaceAndApps/AppLocker/AppLocker-AD/AppLocker-AD/en_image3.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2022/09/09/UserInterfaceAndApps/AppLocker/AppLocker-AD/AppLocker-AD/en_image4.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2022/09/09/UserInterfaceAndApps/AppLocker/AppLocker-AD/AppLocker-AD/en_image5.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2022/09/09/UserInterfaceAndApps/AppLocker/AppLocker-AD/AppLocker-AD/en_image6.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2022/09/09/UserInterfaceAndApps/AppLocker/AppLocker-AD/AppLocker-AD/en_image7.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2022/09/09/UserInterfaceAndApps/AppLocker/AppLocker-AD/AppLocker-AD/en_image8.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2022/09/09/UserInterfaceAndApps/AppLocker/AppLocker-AD/AppLocker-AD/en_image9.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2022/09/09/UserInterfaceAndApps/AppLocker/AppLocker-AD/AppLocker-AD/en_image10.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2022/09/09/UserInterfaceAndApps/AppLocker/AppLocker-AD/AppLocker-AD/en_image11.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2022/09/09/UserInterfaceAndApps/AppLocker/AppLocker-AD/AppLocker-AD/en_image12.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2022/09/09/UserInterfaceAndApps/AppLocker/AppLocker-AD/AppLocker-AD/en_image13.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2022/09/09/UserInterfaceAndApps/AppLocker/AppLocker-AD/AppLocker-AD/en_image14.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2022/09/09/UserInterfaceAndApps/AppLocker/AppLocker-AD/AppLocker-AD/en_image15.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2022/09/09/UserInterfaceAndApps/AppLocker/AppLocker-AD/AppLocker-AD/en_image16.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2022/09/09/UserInterfaceAndApps/AppLocker/AppLocker-AD/AppLocker-AD/en_image17.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2022/09/09/UserInterfaceAndApps/AppLocker/AppLocker-AD/AppLocker-AD/en_image18.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2022/09/09/UserInterfaceAndApps/AppLocker/AppLocker-AD/AppLocker-AD/en_image19.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2022/09/09/UserInterfaceAndApps/AppLocker/AppLocker-AD/AppLocker-AD/en_image20.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2022/09/09/UserInterfaceAndApps/AppLocker/AppLocker-AD/AppLocker-AD/en_image21.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2022/09/09/UserInterfaceAndApps/AppLocker/AppLocker-AD/AppLocker-AD/en_image22.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2022/09/09/UserInterfaceAndApps/AppLocker/AppLocker-AD/AppLocker-AD/en_image25.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2022/09/09/UserInterfaceAndApps/AppLocker/AppLocker-AD/AppLocker-AD/en_image23.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2022/09/09/UserInterfaceAndApps/AppLocker/AppLocker-AD/AppLocker-AD/en_image24.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2022/09/09/UserInterfaceAndApps/AppLocker/AppLocker-AD/AppLocker-AD/en_image26.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2022/09/09/UserInterfaceAndApps/AppLocker/AppLocker-AD/AppLocker-AD/en_image27.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2022/09/09/UserInterfaceAndApps/AppLocker/AppLocker-AD/AppLocker-AD/en_image28.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2022/09/09/UserInterfaceAndApps/AppLocker/AppLocker-AD/AppLocker-AD/en_image29.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2022/09/09/UserInterfaceAndApps/AppLocker/AppLocker-AD/AppLocker-AD/en_image39.png">
+<meta property="article:published_time" content="2022-09-09T08:00:00.000Z">
+<meta property="article:modified_time" content="2026-02-19T02:53:58.671Z">
+<meta property="article:author" content="Microsoft Japan Windows Technology Support Team">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://jpwinsup.github.io/blog/2022/09/09/UserInterfaceAndApps/AppLocker/AppLocker-AD/AppLocker-AD/image40.png">
+  
+    <link rel="alternate" href="/blog/atom.xml" title="Microsoft Japan Windows Technology Support Blog" type="application/atom+xml">
+  
+
+  <link rel="icon" href="/blog/favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="/blog/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/blog/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/blog/favicon-16x16.png">
+  <link rel="manifest" href="/blog/site.webmanifest">
+  <link rel="mask-icon" href="/blog/safari-pinned-tab.svg" color="#5bbad5">
+  <meta name="msapplication-TileColor" content="#ffffff">
+  <meta name="theme-color" content="#ffffff">
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/blog/css/style.css">
+
+<meta name="generator" content="Hexo 5.2.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="site-header-logo"></div>
+  <div id="site-header-blog-wrapper"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        <div id="ms-logo"></div>
+        
+          <a class="main-nav-link" href="/blog/">Home</a>
+        
+          <a class="main-nav-link" href="/blog/archives">Archives</a>
+        
+        <a class="main-nav-link" target="_blank" rel="noopener" href="https://cssjpn.github.io/">サポート情報</a>
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/blog/atom.xml" title="RSSフィード"></a>
+        
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//www.bing.com/search" method="get" accept-charset="UTF-8" name="bing-search" onsubmit="var f=this;if(f['q'].value){var searchUrl =  'https://www.bing.com/search?q=' +  encodeURIComponent(f['q'].value + ' site:' + f['sitesearch'].value) ;window.open(searchUrl, 'blank') };return false;" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="検索"><button type="submit" id="nav-search-btn" class="search-form-submit"></button><input type="hidden" name="sitesearch" value="https://jpwinsup.github.io/blog"></form>
+      </div>
+    </div>
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/blog/" id="logo">Microsoft Japan Windows Technology Support Blog</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/blog/" id="subtitle">日本マイクロソフト Windows Support チームによる、サポート情報 Blog です。</a>
+        </h2>
+      
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-UserInterfaceAndApps/AppLocker/AppLocker-AD/AppLocker-AD" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    
+    
+      <header class="article-header-single">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Active Directory を使用した AppLocker 設定方法
+    </h1>
+  
+
+      </header>
+      <div class="article-share">
+        Last Update: 
+        <a href="/blog/2022/09/09/UserInterfaceAndApps/AppLocker/AppLocker-AD/AppLocker-AD/" class="article-date-single">
+  <time datetime="2022-09-09T08:00:00.000Z" itemprop="datePublished">2022-09-09</time>
+</a>
+        
+  <div class="article-category">
+    <a class="article-category-link" href="/blog/categories/AppLocker/">AppLocker</a>►<a class="article-category-link" href="/blog/categories/AppLocker/Active-Directory/">Active Directory</a>
+  </div>
+
+        
+        <a href="https://github.com/jpwinsup/blog/issues/new?title=&body=%EF%BB%BF%0A%0A---%0A%0A%23%23%23%23+Document+Details%0A%0A*+Article+ID%3A+50e27469-eb49-57ba-b8b0-4f95dc14ae0d%0A*+TITLE%3A+Active+Directory+%E3%82%92%E4%BD%BF%E7%94%A8%E3%81%97%E3%81%9F+AppLocker+%E8%A8%AD%E5%AE%9A%E6%96%B9%E6%B3%95%0A*+URL+https%3A%2F%2Fjpwinsup.github.io%2Fblog%2F2022%2F09%2F09%2FUserInterfaceAndApps%2FAppLocker%2FAppLocker-AD%2FAppLocker-AD%2F%0A*+SourceFileName%3A+source%2F_posts%2FUserInterfaceAndApps%2FAppLocker%2FAppLocker-AD%2FAppLocker-AD.md%0A" class="article-github-issue-link" target="_blank" rel="noopener noreferrer">feedback</a>
+        
+        <a data-url="https://jpwinsup.github.io/blog/2022/09/09/UserInterfaceAndApps/AppLocker/AppLocker-AD/AppLocker-AD/" data-id="cmlsvjdp601juru3y8l1n7khw" class="article-share-link">共有</a>
+      </div>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>みなさん、こんにちは。</p>
+<p>Windows サポート チームの亀井です。</p>
+<p>AppLocker は、端末を使用している特定のユーザーやグループが、対象のアプリケーションなどを実行できないよう制御する機能です。<br>本記事では Active Directory と AppLocker を使用して、アプリケーションの起動を制限する方法についてご紹介します。<br><br></p>
+<p>英語版は、<a href="#How-to-set-up-AppLocker-with-Active-Directory">こちら</a>からご覧ください。<br>(Please click <a href="#How-to-set-up-AppLocker-with-Active-Directory">here</a> for the English version.)</p>
+<p>——関連情報 (Related information)——</p>
+<p>Microsoft Intune を使用した AppLocker 設定方法<br>(How to set up AppLocker with Microsoft Intune)</p>
+<p>日本語版：<a href="https://jpwinsup.github.io/blog/2022/09/26/UserInterfaceAndApps/AppLocker/AppLocker-Intune/AppLocker-Intune/">こちら</a>からご覧ください。<br>(Please click <a href="https://jpwinsup.github.io/blog/2022/09/26/UserInterfaceAndApps/AppLocker/AppLocker-Intune/AppLocker-Intune/">here</a> for the Japanese version.)</p>
+<p>英語版：<a target="_blank" rel="noopener" href="https://techcommunity.microsoft.com/t5/intune-customer-success/support-tip-using-applocker-to-create-custom-intune-policies-for/ba-p/364981">こちら</a>からご覧ください。<br>(Please click <a target="_blank" rel="noopener" href="https://techcommunity.microsoft.com/t5/intune-customer-success/support-tip-using-applocker-to-create-custom-intune-policies-for/ba-p/364981">here</a> for the English version.)</p>
+<p>
+--------------------------------------------
+</p>
+
+<br>
+
+<h2 id="目次"><a href="#目次" class="headerlink" title="目次"></a>目次</h2><ul>
+<li><a href="#AppLocker-%E3%81%A8%E3%81%AF">AppLocker とは</a></li>
+<li><a href="#AppLocker-%E3%81%A8%E3%82%BD%E3%83%95%E3%83%88%E3%82%A6%E3%82%A7%E3%82%A2%E3%81%AE%E5%88%B6%E9%99%90%E3%81%AE%E3%83%9D%E3%83%AA%E3%82%B7%E3%83%BC%E3%81%AE%E9%81%95%E3%81%84">AppLocker とソフトウェアの制限のポリシーの違い</a></li>
+<li><a href="#AppLocker-%E3%82%92%E4%BD%BF%E7%94%A8%E3%81%99%E3%82%8B%E3%81%9F%E3%82%81%E3%81%AE%E8%A6%81%E4%BB%B6">AppLocker を使用するための要件</a></li>
+<li><a href="#%E6%9C%AC%E8%A8%98%E4%BA%8B%E3%81%A7%E4%BD%BF%E7%94%A8%E3%81%99%E3%82%8B%E7%92%B0%E5%A2%83">本記事で使用する環境</a></li>
+<li><a href="#Application-Identity-%E3%82%B5%E3%83%BC%E3%83%93%E3%82%B9%E3%81%AE%E8%87%AA%E5%8B%95%E8%B5%B7%E5%8B%95%E8%A8%AD%E5%AE%9A">Application Identity サービスの自動起動設定</a></li>
+<li><a href="#AppLocker-%E3%81%AE%E3%83%9D%E3%83%AA%E3%82%B7%E3%83%BC%E8%A8%AD%E5%AE%9A">AppLocker のポリシー設定</a><ul>
+<li><a href="#%E5%AE%9F%E8%A1%8C%E5%8F%AF%E8%83%BD%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB%E3%81%AE%E8%B5%B7%E5%8B%95%E5%88%B6%E5%BE%A1%E3%82%92%E8%A1%8C%E3%81%86%E9%9A%9B%E3%81%AE%E7%95%99%E6%84%8F%E4%BA%8B%E9%A0%85">実行可能ファイルの起動制御を行う際の留意事項</a></li>
+<li><a href="#%E5%AE%9F%E8%A1%8C%E5%8F%AF%E8%83%BD%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB%E3%81%AE%E8%B5%B7%E5%8B%95%E5%88%B6%E5%BE%A1%E6%89%8B%E9%A0%86">実行可能ファイルの起動制御手順</a></li>
+</ul>
+</li>
+<li><a href="#AppLocker-%E3%81%AE%E3%83%97%E3%83%AD%E3%83%91%E3%83%86%E3%82%A3%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6">AppLocker のプロパティについて</a><ul>
+<li><a href="#%E6%A7%8B%E6%88%90%E6%B8%88%E3%81%BF%E7%84%A1%E3%81%97%E3%81%AE%E3%81%BF%E3%81%8C%E5%AD%98%E5%9C%A8%E3%81%99%E3%82%8B%E5%A0%B4%E5%90%88">構成済み無しのみが存在する場合</a></li>
+<li><a href="#%E6%A7%8B%E6%88%90%E6%B8%88%E3%81%BF%E7%84%A1%E3%81%97%E3%81%A8%E6%A7%8B%E6%88%90%E6%B8%88%E3%81%BF%E3%81%9D%E3%82%8C%E3%81%9E%E3%82%8C%E3%81%8C%E5%AD%98%E5%9C%A8%E3%81%99%E3%82%8B%E5%A0%B4%E5%90%88">構成済み無しと構成済みそれぞれが存在する場合</a></li>
+<li><a href="#%E6%A7%8B%E6%88%90%E6%B8%88%E3%81%BF%E7%84%A1%E3%81%97%E3%81%A8%E7%9B%A3%E6%9F%BB%E3%81%AE%E3%81%BF%E3%81%8C%E3%81%9D%E3%82%8C%E3%81%9E%E3%82%8C%E5%AD%98%E5%9C%A8%E3%81%99%E3%82%8B%E5%A0%B4%E5%90%88">構成済み無しと監査のみがそれぞれ存在する場合</a></li>
+<li><a href="#%E3%81%BE%E3%81%A8%E3%82%81">まとめ</a><br>
+<br>
+
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="AppLocker-とは"><a href="#AppLocker-とは" class="headerlink" title="AppLocker とは"></a>AppLocker とは</h2><p>世の中には様々なアプリケーションが存在します。組織や会社では、組織でライセンスを保有している特定のアプリケーションや、特定のバージョンのアプリケーションのみの実行を許可、または拒否することで、セキュリティ対策を講じています。<br>このようなニーズを満たすために AppLocker を使用することができます。AppLocker はグループ ポリシーから設定することができ、AppLocker の規則を作成して規則の条件に該当するアプリケーションの実行を許可、または拒否できます。<br>AppLocker はソフトウェアの制限のポリシーの後継となる機能として実装されており、Windows 7、Windows Server 2008 R2 以降でご使用いただくことが可能です。<br><br><br><br></p>
+<h2 id="AppLocker-とソフトウェアの制限のポリシーの違い"><a href="#AppLocker-とソフトウェアの制限のポリシーの違い" class="headerlink" title="AppLocker とソフトウェアの制限のポリシーの違い"></a>AppLocker とソフトウェアの制限のポリシーの違い</h2><p>AppLocker とソフトウェアの制限のポリシーは、ドメイン管理している端末にポリシーを適用し、アプリケーションの起動制限などに関して設定することができます。<br>ソフトウェアの制限のポリシーは、現在積極的に開発されておらず、将来の更新プログラムで削除される可能性があるため、非推奨の機能として記載しています。  詳細については、<a target="_blank" rel="noopener" href="https://learn.microsoft.com/en-us/windows/deployment/planning/windows-10-deprecated-features">「こちら」</a>をご覧ください。</p>
+<p>また、Windows OS のバージョンが、Windows 7 以降のコンピューターに、AppLocker のポリシーとソフトウェアの制限のポリシー両方が適用されている場合、ソフトウェアの制限のポリシーの設定内容は無視されます。<br>そのため、AppLocker のポリシーの設定内容が適用されます。<br><br><br><br></p>
+<h2 id="AppLocker-を使用するための要件"><a href="#AppLocker-を使用するための要件" class="headerlink" title="AppLocker を使用するための要件"></a>AppLocker を使用するための要件</h2><p>AppLocker が利用可能な Windows バージョンについては、<a target="_blank" rel="noopener" href="https://learn.microsoft.com/en-us/windows/security/threat-protection/windows-defender-application-control/applocker/requirements-to-use-applocker">こちらの公開情報</a>に記載されておりますので、ご確認ください。</p>
+<p>なお、Windows 10 および Windows 11 のクライアント OS につきましては、AppLocker が利用可能なエディションのチェックは削除されました。詳しくは、<a target="_blank" rel="noopener" href="https://support.microsoft.com/en-us/topic/kb5024351-removal-of-windows-edition-checks-for-applocker-e3a763c9-6a3e-4d9c-8623-0ffe69046470">こちらの公開情報</a>をご確認ください。</p>
+<br>
+<br>
+
+<h2 id="本記事で使用する環境"><a href="#本記事で使用する環境" class="headerlink" title="本記事で使用する環境"></a>本記事で使用する環境</h2><p>ドメイン コントローラー： Windows Server 2022<br>クライアント端末： Windows 10 Enterprise<br><br><br><br></p>
+<h2 id="Application-Identity-サービスの自動起動設定"><a href="#Application-Identity-サービスの自動起動設定" class="headerlink" title="Application Identity サービスの自動起動設定"></a>Application Identity サービスの自動起動設定</h2><p>AppLocker の使用には、Application Identity が起動していることが必要です。<br>デフォルトでは手動で起動する設定となっているため、ドメインに参加している端末において、サービスが自動的に起動するよう設定を変更します。<br><br></p>
+<ul>
+<li>サーバー マネージャーから [ツール]－[グループ ポリシーの管理] をクリック</li>
+</ul>
+<img src="./image40.png" width="600" alt="[サーバー マネージャー] ウィンドウ">
+<br>
+<br>
+
+<ul>
+<li>[グループ ポリシー管理] ウィンドウより、[フォレスト：任意ドメイン名]－[ドメイン]－[任意ドメイン名]－[グループ ポリシー オブジェクト] をクリック  </li>
+<li>[新規] をクリック</li>
+</ul>
+<img src="./image3.png" width="450" alt="[グループ ポリシー管理] ウィンドウ">
+<br>
+<br>
+
+<ul>
+<li>[新しい GPO] ウィンドウより、[名前] に任意のテキストを入力（今回は「Application Identity Auto」）  </li>
+<li>[OK] をクリック</li>
+</ul>
+<img src="./image4.png" width="600" alt="[新しい GPO] ウィンドウ">
+<br>
+<br>
+
+<ul>
+<li>[グループ ポリシー オブジェクト] に、[Application Identity Auto] ポリシーが追加されたことを確認</li>
+<li>[Application Identity Auto] ポリシーをクリック  </li>
+<li>[編集] をクリック</li>
+</ul>
+<img src="./image5.png" width="600" alt="グループ ポリシー オブジェクト編集">
+<br>
+<br>
+
+<ul>
+<li>グループ ポリシー管理エディターより、[コンピュータの構成]－[ポリシー]－[Windowsの設定]－[セキュリティの設定]－[システム サービス] をクリック  </li>
+<li>サービス名一覧より [Application Identity] を右クリック  </li>
+<li>[プロパティ] をクリック</li>
+</ul>
+<img src="./image6.png" width="600" alt="Application Identity プロパティ 起動" >
+<br>
+<br>
+
+<ul>
+<li>Applicaition Identity のプロパティより、[このポリシーの設定を定義する] にチェック マークを入れる。</li>
+<li>サービスのスタートアップ モードとして [自動] を選択  </li>
+<li>[OK] をクリック</li>
+</ul>
+<img src="./image7.png" width="600" alt="[Application Identityのプロパティ] ウィンドウ">
+<br>
+<br>
+
+<ul>
+<li>サービス一覧より、Application Identity のスタートアップが自動となっていることを確認</li>
+<li>グループ ポリシー管理エディターを閉じる。</li>
+</ul>
+<img src="./image8.png" width="600" alt="Application Identity サービスのスタートアップの種類を確認">
+<br>
+<br>
+
+<p>ここまでの手順で、Application Identity を自動起動するポリシーを作成できました。<br>このポリシーを適用するため、グループ ポリシー管理の [グループ ポリシー オブジェクト] に作成したポリシーをリンクします。 </p>
+<ul>
+<li>作成したポリシー（今回は [Application Identity Auto] ）を [ドメイン]－[任意ドメイン名] にドラッグ アンド ドロップ。</li>
+<li>[グループ ポリシーの管理] ウィンドウから [OK] をクリック</li>
+</ul>
+<img src="./image9.png" width="600" alt="GPO をドメインにリンク">
+<br>
+<br>
+
+<ul>
+<li>ドメイン名直下に [Application Identity Auto] ポリシーがリンクされたことを確認</li>
+</ul>
+<p>ここまでの手順で、ドメインに参加している端末の [Application Identity] サービスを自動起動に設定できました。</p>
+<img src="./image10.png" width="600" alt="ドメインのリンクを確認">
+<br />
+<br />
+
+<h2 id="AppLocker-のポリシー設定"><a href="#AppLocker-のポリシー設定" class="headerlink" title="AppLocker のポリシー設定"></a>AppLocker のポリシー設定</h2><p>AppLocker は、以下の表に示すように、様々なファイル形式に関してポリシーを作成して起動を抑制することができます。</p>
+<table>
+<thead>
+<tr>
+<th align="left">ルール コレクション</th>
+<th align="center">ファイル形式</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">実行可能ファイル</td>
+<td align="center">.exe, .com</td>
+</tr>
+<tr>
+<td align="left">スクリプト</td>
+<td align="center">.ps1, .bat, .cmd, .vbs, .js</td>
+</tr>
+<tr>
+<td align="left">Windows インストーラー ファイル</td>
+<td align="center">.msi, .msp, .mst</td>
+</tr>
+<tr>
+<td align="left">パッケージ アプリ<br>パッケージ化されたアプリ インストーラー</td>
+<td align="center">.appx</td>
+</tr>
+<tr>
+<td align="left">DLL ファイル</td>
+<td align="center">.dll, .ocx</td>
+</tr>
+</tbody></table>
+<br>
+
+<p>また、AppLocker の設定は Deny list 型と Allow list 型の2種類があります。二つの違いを以下の表に示します。</p>
+<table>
+<thead>
+<tr>
+<th align="center"></th>
+<th align="center">Deny list 型</th>
+<th align="center">Allow list 型</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">特定のアプリの起動</td>
+<td align="center">拒否</td>
+<td align="center">許可</td>
+</tr>
+<tr>
+<td align="center">設定方法</td>
+<td align="center">全てのアプリの起動を許可する既定の規則の作成<br>特定のアプリの起動を拒否する規則の作成</td>
+<td align="center">特定のアプリの起動を許可する規則の作成</td>
+</tr>
+</tbody></table>
+<br>
+
+<p>AppLocker の設定は、基本的に特定のアプリケーションのみを起動制限する Deny list 型で設定します。<br>対して、 Allow list 型は、特定のアプリケーションのみの起動を許可し、それ以外のアプリケーションの起動を拒否します。<br> Allow list 型で設定すると、OS は規定で様々なアプリケーションやファイルを使用して動作しているため、想定外の様々な問題が生じる可能性があります。<br> Allow list 型を設定した後に問題が生じた場合には、まずは AppLocker の設定を解除して問題が解消するか確認してください。</p>
+<p>本記事では、</p>
+<ul>
+<li>実行可能ファイルを Deny list 型で設定する方法  <br></li>
+</ul>
+<p>について紹介します。<br><br><br><br></p>
+<h3 id="実行可能ファイルの起動制御を行う際の留意事項"><a href="#実行可能ファイルの起動制御を行う際の留意事項" class="headerlink" title="実行可能ファイルの起動制御を行う際の留意事項"></a>実行可能ファイルの起動制御を行う際の留意事項</h3><p>「実行可能ファイル規則」を使用して、実行可能ファイルの制御を行う場合には、後述の手順の通り「パッケージ アプリの規則」の既定の規則も、併せて作成する必要があります。<br>こちらは、制御したい UWP アプリがない場合にも、必要な手順となりますので、ご留意ください。</p>
+<p>「パッケージ アプリの規則」の既定の規則を作成せずに、「実行可能ファイルの規則」の拒否の規則を配布した場合には、Windows が正常に動作するために起動が必要な UWP のシステム アプリの起動も抑止され、スタート メニューが起動しないなど、予期しない問題が発生する可能性があります。詳しくは、<a target="_blank" rel="noopener" href="https://learn.microsoft.com/en-us/windows/security/threat-protection/windows-defender-application-control/applocker/working-with-applocker-rules#applocker-rule-behavior">こちらの公開情報</a> をご参照ください。</p>
+<h3 id="実行可能ファイルの起動制御手順"><a href="#実行可能ファイルの起動制御手順" class="headerlink" title="実行可能ファイルの起動制御手順"></a>実行可能ファイルの起動制御手順</h3><p>この節では、Windows Media Player を起動制限します。  </p>
+<ul>
+<li>[グループ ポリシーの管理] ウィンドウより、[グループ ポリシー オブジェクト] を右クリック  </li>
+<li>[新規] をクリック</li>
+<li>[新しい GPO] ウィンドウより、[名前] に任意のテキスト入力（今回は「AppLocker winplayer block」）  </li>
+<li>[OK] をクリック</li>
+<li>作成した [AppLocker winplayer block] ポリシーを右クリック  </li>
+<li>[編集] をクリック</li>
+</ul>
+<img src="./image11.png" width="600" alt="[新しい GPO] ウィンドウ">
+<br>
+<br>
+
+<p>まず、既定の規則を作成します。これを行わないと、全ての実行ファイルの起動が制限されてしまいます。これは、AppLocker は、各々のファイルに対して実行を許可もしくは拒否する規則を作成していない場合、実行が拒否されるように設定しているためです。<br>既定の規則を作成することで、Windows システムを動かすのに必要な実行ファイルが配置されている “Program Files フォルダー” および “Windows フォルダー” 配下のファイル実行を許可する規則を作成します。<br>詳細については、<a target="_blank" rel="noopener" href="https://learn.microsoft.com/en-us/windows/security/threat-protection/windows-defender-application-control/applocker/understanding-applocker-allow-and-deny-actions-on-rules">「こちら」</a>をご覧ください。  </p>
+<ul>
+<li>グループ ポリシー管理エディターより、[コンピュータの構成]－[ポリシー]－[Windowsの設定]－[セキュリティの設定]－[アプリケーション制限ポリシー]－[AppLocker]－[実行可能ファイルの規則] を右クリック  </li>
+<li>[既定の規則の作成] をクリック</li>
+<li>規則が3つ作成されたことを確認</li>
+</ul>
+<p>※ BUILTIN\Administrators は既定の規則にてすべてのファイルの実行が許可されています。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AppLocker の構成は設計考慮事項などを踏まえて貴社セキュリティ ポリシーに応じた設定をお願いします。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;詳細については、<a target="_blank" rel="noopener" href="https://learn.microsoft.com/ja-jp/windows/security/application-security/application-control/app-control-for-business/applocker/executable-rules-in-applocker">「こちら」</a>をご覧ください。<br><br><br><br></p>
+<img src="./image12.png" width="600" alt="既定の規則の作成">
+<br>
+<br>
+
+<ul>
+<li>[実行可能ファイルの規則] を右クリック  </li>
+<li>[新しい規則の作成] をクリック</li>
+</ul>
+<img src="./image13.png" width="600" alt="新しい規則の作成">
+<br>
+<br>
+
+<ul>
+<li>[次へ] をクリック</li>
+</ul>
+<img src="./image14.png" width="600" alt="作成：開始する前に">
+<br>
+<br>
+
+<ul>
+<li>操作：[拒否] を選択</li>
+<li>[次へ] をクリック</li>
+</ul>
+<img src="./image15.png" width="600" alt="作成：アクセス許可">
+<br>
+<br>
+
+<p>今回は発行元を選択してアプリケーションを制限します。</p>
+<ul>
+<li>署名されたアプリケーションの起動制御をする際には、発行元を選択  </li>
+<li>署名されていないアプリケーションの起動制御をする際には、ハッシュを選択</li>
+</ul>
+<img src="./image16.png" width="600" alt="作成：条件">
+<br>
+<br>
+
+<ul>
+<li>参照ファイル：[参照] をクリック  </li>
+<li>ダイアログ ボックスで実行可能ファイル（.exe, .com）を選択  </li>
+<li>今回は、”C:\Program Files\Windows Media Player\wmplayer.exe” ファイルを選択</li>
+</ul>
+<img src="./image17.png" width="600" alt="作成：条件－発行元 ファイル参照">
+<br>
+<br>
+
+<p>参照ファイルが選択されていることを確認  </p>
+<ul>
+<li>[次へ] をクリック</li>
+</ul>
+<img src="./image18.png" width="600" alt="作成：条件－発行元 次へ">
+<br>
+<br>
+
+<p>今回は Deny list 型なので、例外は設定しません。  </p>
+<ul>
+<li>[次へ] をクリック</li>
+</ul>
+<img src="./image19.png" width="600" alt="作成：条件－例外">
+<br>
+<br>
+
+<p>規則の名前と説明を記述できます。  </p>
+<ul>
+<li>今回は、変更せず [次へ] をクリック</li>
+</ul>
+<img src="./image20.png" width="600"  alt="作成：名前">
+<br>
+<br>
+
+<ul>
+<li>規則が新しく作成されたことを確認</li>
+</ul>
+<p>全ての実行ファイルの起動を許可する規則と、特定の実行ファイル（今回は Windows Media Player）の起動を拒否する規則を作成しました。<br>全ての実行ファイルの起動を許可する規則では、Windows Media Player の起動も許可されていますが、<span style="color: red; ">許可と拒否どちらもの規則が存在していた場合、拒否が優先される</span>ため、Windows Media Player の起動は拒否されます。  詳細については、<a target="_blank" rel="noopener" href="https://learn.microsoft.com/en-us/windows/security/threat-protection/windows-defender-application-control/applocker/understanding-applocker-allow-and-deny-actions-on-rules">「こちら」</a>をご覧ください。  </p>
+<img src="./image21.png" width="600" alt="新しい規則の作成を確認">
+<br>
+<br>
+
+<p>ここまでの手順で、実行可能ファイルの規則を設定できました。<br>次にパッケージ アプリの規則についても設定します。<br>これを設定しないと、Windows アプリケーション（Microsoft フォトや MSN 天気など）まで起動制限されてしまいます。</p>
+<ul>
+<li>[AppLocker]－[パッケージ アプリの規則] を右クリック  </li>
+<li>[既定の規則の作成] をクリック  </li>
+<li>1つの規則が追加されたことを確認</li>
+</ul>
+<img src="./image22.png" width="600" alt="既定の規則の作成">
+<br>
+<br>
+
+<ul>
+<li>[AppLocker] を右クリックして [プロパティ] をクリック  </li>
+<li>AppLocker のプロパティより、実行可能ファイルの規則とパッケージ アプリの規則に関して、構成済みにチェック マークを入れる。</li>
+</ul>
+<p>このチェックを入れないと、AppLocker に関連した複数の GPO を作成した場合、規則が実施されないことがあるため、必ずチェックを入れてください。詳細は下記に記載（<a href="#AppLocker-%E3%81%AE%E3%83%97%E3%83%AD%E3%83%91%E3%83%86%E3%82%A3%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6">「AppLocker のプロパティについて」</a>）</p>
+<img src="./image25.png" width="600" alt="AppLocker のプロパティ設定">
+<br>
+<br>
+
+<p>以上でポリシーの作成が完了しました。  </p>
+<ul>
+<li>グループ ポリシー管理エディターを閉じる。</li>
+<li>先ほどと同様に、作成したポリシーをドメイン直下にドラッグ</li>
+<li>[グループ ポリシーの管理] ウィンドウより、[OK] をクリック</li>
+</ul>
+<img src="./image23.png" width="500" alt="GPO をドメインにリンク">
+<br>
+<br>
+
+<p>ポリシーがドメイン直下にリンクされました。</p>
+<img src="./image24.png" width="500" alt="ドメインのリンクを確認">
+<br>
+<br>
+
+<p>実際に作成したポリシーを、ドメインに参加している端末を操作して規則を適用します。  </p>
+<ul>
+<li>スタートメニューをクリック  </li>
+<li>「cmd」と入力  </li>
+<li>“Command Prompt” (コマンド プロンプト) を<span style="color: red; ">管理者権限</span>で起動</li>
+</ul>
+<img src="./image26.png" width="600" alt="コマンドプロンプトの起動">
+<br>
+<br>
+
+<ul>
+<li>「gpupdate /force」と入力して、Enter キーを押してコマンドを実行</li>
+<li>“Computer Policy update has completed successfully.” (コンピュータ ポリシーの更新が正常に完了しました。) という文字が表示されることを確認</li>
+<li>端末の再起動</li>
+</ul>
+<img src="./image27.png" width="700" alt="ポリシーの更新を確認">
+<br>
+<br>
+
+<p>規則が適用されたのを実際にアプリケーションを実行して確認しましょう。<br>今回は、Windows Media Player を実行します。<br>“This app has been blocked by your system administrator.” (このアプリは、システム管理者によってブロックされています。) という文字が表示され、アプリの実行が拒否されました。</p>
+<img src="./image28.png" width="500" alt="Windows Media Player 起動">  
+<br />
+<br />
+
+<img src="./image29.png" width="600" alt="アプリの実行が拒否されたことを確認">
+<br>
+<br>
+
+
+<p>ここまでの手順で、AppLocker によるアプリケーションの起動を制限することが可能となりましたが、より詳細な設定を行われる際に重要な情報として AppLocker のプロパティ設定があります。以降ではプロパティ画面での設定についてご説明します。</p>
+<h2 id="AppLocker-のプロパティについて"><a href="#AppLocker-のプロパティについて" class="headerlink" title="AppLocker のプロパティについて"></a>AppLocker のプロパティについて</h2><p>AppLocker のプロパティ画面では、以下の表に示す3つの選択肢があります。</p>
+<table>
+<thead>
+<tr>
+<th align="center"></th>
+<th align="center">ファイルの起動制御</th>
+<th align="center">起動制限ログの記録</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">構成済み無し</td>
+<td align="center">その他のポリシーの設定に依存</td>
+<td align="center">実施</td>
+</tr>
+<tr>
+<td align="center">規則の実施</td>
+<td align="center">実施</td>
+<td align="center">実施</td>
+</tr>
+<tr>
+<td align="center">監査のみ</td>
+<td align="center">実施なし</td>
+<td align="center">実施</td>
+</tr>
+</tbody></table>
+<p>そのため、作成した規則を確実に実施させるためには、以下の2点を行う必要があります。</p>
+<ul>
+<li>構成済みにチェック マークを入れる。</li>
+<li>規則の実施を選択  </li>
+</ul>
+<p>ただし、構成済みにチェック マークを入れなくても規則が実施されることがあります。</p>
+<p>このことに関して、複数の例を挙げて解説したいと思います。<br><br><br><br><br><img src="./image39.png" width="400" alt="AppLocker のプロパティ"><br><br><br><br></p>
+<h3 id="構成済み無しのみが存在する場合"><a href="#構成済み無しのみが存在する場合" class="headerlink" title="構成済み無しのみが存在する場合"></a>構成済み無しのみが存在する場合</h3><p>2つの GPO それぞれに AppLocker のポリシー（ポリシー1、または、ポリシー2）を作成し、下記の表に示すように設定を行った場合を考えます。</p>
+<table>
+<thead>
+<tr>
+<th align="center"></th>
+<th align="center">ポリシー 1</th>
+<th align="center">ポリシー 2</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">実行可能ファイルの規則</td>
+<td align="center">構成済み無し</td>
+<td align="center">構成済み無し</td>
+</tr>
+<tr>
+<td align="center">拒否設定したアプリケーション</td>
+<td align="center">Windows Media Player</td>
+<td align="center">Internet Explorer</td>
+</tr>
+</tbody></table>
+<p>この場合は、 Windows Media PlayerとInternet Explorer が起動制御されます。<br><br><br><br></p>
+<h3 id="構成済み無しと構成済みそれぞれが存在する場合"><a href="#構成済み無しと構成済みそれぞれが存在する場合" class="headerlink" title="構成済み無しと構成済みそれぞれが存在する場合"></a>構成済み無しと構成済みそれぞれが存在する場合</h3><p>2つの GPO それぞれに AppLocker のポリシー（ポリシー1、または、ポリシー2）を作成し、下記の表に示すように設定を行った場合を考えます。</p>
+<table>
+<thead>
+<tr>
+<th align="center"></th>
+<th align="center">ポリシー 1</th>
+<th align="center">ポリシー 2</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">実行可能ファイルの規則</td>
+<td align="center">構成済み無し</td>
+<td align="center">規則の実施</td>
+</tr>
+<tr>
+<td align="center">拒否設定したアプリケーション</td>
+<td align="center">Windows Media Player</td>
+<td align="center">Internet Explorer</td>
+</tr>
+</tbody></table>
+<p>この場合は、 Windows Media Player と Internet Explorer が起動制御されます。<br><br><br><br></p>
+<h3 id="構成済み無しと監査のみがそれぞれ存在する場合"><a href="#構成済み無しと監査のみがそれぞれ存在する場合" class="headerlink" title="構成済み無しと監査のみがそれぞれ存在する場合"></a>構成済み無しと監査のみがそれぞれ存在する場合</h3><p>2つの GPO それぞれに AppLocker のポリシー（ポリシー1、または、ポリシー2）を作成し、下記の表に示すように設定を行った場合を考えます。</p>
+<table>
+<thead>
+<tr>
+<th align="center"></th>
+<th align="center">ポリシー 1</th>
+<th align="center">ポリシー 2</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">実行可能ファイルの規則</td>
+<td align="center">構成済み無し</td>
+<td align="center">監査のみ</td>
+</tr>
+<tr>
+<td align="center">拒否設定したアプリケーション</td>
+<td align="center">Windows Media Player</td>
+<td align="center">Internet Explorer</td>
+</tr>
+</tbody></table>
+<p>この場合は、Windows Media Player と Internet Explorer が起動制御されず、起動されたという警告ログが残ります。<br>警告ログは、イベント ビューアーより、[アプリケーションとサービス ログ]－[Microsoft]－[WIndows]－[AppLocker] をクリックし、設定した規則の種類を選択することで確認することができます。</p>
+<br>
+
+<h3 id="まとめ"><a href="#まとめ" class="headerlink" title="まとめ　　"></a>まとめ　　</h3><p>このように、AppLocker のプロパティで各規則について「構成済み無し」とした場合、必ずしもアプリケーションの起動は制限されません。<br>AppLocker の設定する際には、基本的に AppLocker のプロパティにおいて、以下の設定を2点を行ってください。</p>
+<ul>
+<li>構成済みにチェック マークを入れる。</li>
+<li>規則の実施を選択  </li>
+</ul>
+<p>この内容の詳細については、<a target="_blank" rel="noopener" href="https://learn.microsoft.com/en-us/windows/security/threat-protection/windows-defender-application-control/applocker/understand-applocker-enforcement-settings">「こちら」</a>をご覧ください。 </p>
+<p>このブログの内容がお役に立てれば幸いです！<br><br><br><br></p>
+<p>このブログの内容は、 Microsoft の公開情報をおまとめしております.<br>(This blog summarizes information found in public documentation from Microsoft.)</p>
+<p>同様の内容を、英語でのブログでは提供されておりませんため、以降では、日本語と同じ内容を英語でも記載しております。<br>(Such content was not provided in English, so you can find the English translation below.)</p>
+<h1 id="How-to-set-up-AppLocker-with-Active-Directory"><a href="#How-to-set-up-AppLocker-with-Active-Directory" class="headerlink" title="How to set up AppLocker with Active Directory"></a>How to set up AppLocker with Active Directory</h1><p>Hello everyone.</p>
+<p>This is Takuya Kamei from the Windows support team.</p>
+<p>AppLocker is a feature that controls the execution of specific applications by specific users or groups.<br>In this article, we will describe how to restrict the start of an application using Active Directory and AppLocker.<br><br></p>
+<h2 id="Table-of-Contents"><a href="#Table-of-Contents" class="headerlink" title="Table of Contents"></a>Table of Contents</h2><ul>
+<li><a href="#What-is-AppLocker">What is AppLocker</a></li>
+<li><a href="#Differences-between-AppLocker-and-Software-Restriction-Policies">Differences between AppLocker and Software Restriction Policies</a></li>
+<li><a href="#Requirements-for-using-AppLocker">Requirements for using AppLocker</a></li>
+<li><a href="#Environment-used-in-this-article">Environment used in this article</a></li>
+<li><a href="#Configure-automatic-startup-of-Application-Identity-service">Configure automatic startup of Application Identity service</a></li>
+<li><a href="#AppLocker-policy-setting">AppLocker policy setting</a><ul>
+<li><a href="#Important-information-about-using-executable-file-rules">Important information about using executable file rules</a></li>
+<li><a href="#Control-the-startup-of-executable-files">Control the start of executable files</a></li>
+</ul>
+</li>
+<li><a href="#About-AppLocker-properties">About AppLocker properties</a><ul>
+<li><a href="#When-only-Not-configured-exists">When only Not Configured exists</a></li>
+<li><a href="#When-there-are-Not-configured-and-Enforce-rules">When there are Not Configured and Enforce rules</a></li>
+<li><a href="#When-there-are-Not-configured-and-Audit-only">When there are Not Configured and Audit only</a></li>
+<li><a href="#Summary">Summary</a><br>
+<br>
+
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="What-is-AppLocker"><a href="#What-is-AppLocker" class="headerlink" title="What is AppLocker"></a>What is AppLocker</h2><p>There are many different applications in the world. Organizations and businesses need to take security measures by allowing or denying the execution of specific applications or only specific versions of them.<br>AppLocker can be used to meet these needs. AppLocker rules can be created via group policy and set to allow or deny the execution of applications that meet the rule’s conditions.<br>AppLocker is implemented as a successor to Software Restriction Policy and is available on Windows 7, Windows Server 2008 R2, and later.<br><br></p>
+<h2 id="Differences-between-AppLocker-and-Software-Restriction-Policies"><a href="#Differences-between-AppLocker-and-Software-Restriction-Policies" class="headerlink" title="Differences between AppLocker and Software Restriction Policies"></a>Differences between AppLocker and Software Restriction Policies</h2><p>AppLocker and Software Restrictions Policies can be used to control the execution of applications, etc. in domain members.<br>Software Restriction Policies are listed as a deprecated feature since they aren’t being actively developed and may be removed in future updates.  For more information, please click <a target="_blank" rel="noopener" href="https://learn.microsoft.com/en-us/windows/deployment/planning/windows-10-deprecated-features">here</a>.</p>
+<p>In addition, if both AppLocker policies and Software Restriction Policies are applied to a computer running Windows 7 or later, the settings of the Software Restriction Policies are ignored, and only AppLocker settings will be applied.<br><br></p>
+<h2 id="Requirements-for-using-AppLocker"><a href="#Requirements-for-using-AppLocker" class="headerlink" title="Requirements for using AppLocker"></a>Requirements for using AppLocker</h2><p>AppLocker is available for the Windows versions and editions listed in <a target="_blank" rel="noopener" href="https://learn.microsoft.com/en-us/windows/security/threat-protection/windows-defender-application-control/applocker/requirements-to-use-applocker">this documentation</a>.</p>
+<p>Also, for Windows 10 and Windows 11, edition checks for AppLocker were removed. For more information, refer to <a target="_blank" rel="noopener" href="https://support.microsoft.com/en-us/topic/kb5024351-removal-of-windows-edition-checks-for-applocker-e3a763c9-6a3e-4d9c-8623-0ffe69046470">this article</a>.</p>
+<br>
+
+
+<h2 id="Environment-used-in-this-article"><a href="#Environment-used-in-this-article" class="headerlink" title="Environment used in this article"></a>Environment used in this article</h2><p>Domain controller： Windows Server 2022<br>Domain member： Windows 10 Enterprise<br><br></p>
+<h2 id="Configure-automatic-startup-of-Application-Identity-service"><a href="#Configure-automatic-startup-of-Application-Identity-service" class="headerlink" title="Configure automatic startup of Application Identity service"></a>Configure automatic startup of Application Identity service</h2><p>Application Identity must be running to use AppLocker.<br>Since the default setting is “manual”, change the setting so that the service starts automatically on domain members.<br><br></p>
+<ul>
+<li>On Server Manager, click [Tools]－[Group Policy Management]</li>
+</ul>
+<img src="./en_image40.png" width="600" alt="[Server Manager] Window">
+<br>
+<br>
+
+<ul>
+<li>On the [Group Policy Management] window, navigate to [Forest:arbitrary domain name]－[Domains]－[arbitrary domain name]－[Group Policy Objects].  </li>
+<li>Click [New]. </li>
+</ul>
+<img src="./en_image3.png" width="450" alt="[Group Policy Management] windows">
+<br>
+<br>
+
+<ul>
+<li>On the [New GPO] window, Enter a GPO name of your choice in the [Name] field (In this case, “Application Identity Auto”) .  </li>
+<li>Click [OK].</li>
+</ul>
+<img src="./en_image4.png" width="600" alt="[New GPO] window">
+<br>
+<br>
+
+<ul>
+<li>Make sure that [Application Identity Auto] Policy has been added to [Group Policy Objects].</li>
+<li>Right-click [Application Identity Auto] Policy.  </li>
+<li>Click [Edit].</li>
+</ul>
+<img src="./en_image5.png" width="600" alt="Edit Group Policy Objects">
+<br>
+<br>
+
+<ul>
+<li>On the [Group Policy Management Editor] window, click [Computer Configuration]－[Policies]－[windows Settings]－[Security Settings]－[System Services].  </li>
+<li>From the list of services, right-click [Application Identity].</li>
+<li>Click [Properties].</li>
+</ul>
+<img src="./en_image6.png" width="600" alt="Launch Application Identity Properties" >
+<br>
+<br>
+
+<ul>
+<li>On the [Applicaition Identity Properties] window, mark the [Define this policy setting] checkbox.</li>
+<li>As service startup mode, select [Automatic].  </li>
+<li>Click [OK].</li>
+</ul>
+<img src="./en_image7.png" width="600" alt="[Applicaition Identity Properties] window">
+<br>
+<br>
+
+<ul>
+<li>From the list of services, make sure that the startup type of the Application Identity service is Automatic.</li>
+<li>Close the [Group Policy Management Editor] window.</li>
+</ul>
+<img src="./en_image8.png" width="600" alt="Check startup type of Application Identity service">
+<br>
+<br>
+
+<p>With these steps, we were able to create a policy that starts the Application Identity service automatically.<br>To apply this policy, link the GPO to the domain.</p>
+<ul>
+<li>Drag and drop the GPO (In this case “Application Identity Auto”) to [Domain]-[arbitrary Domain Name].</li>
+<li>On the [Group Policy Management] window, click [OK].</li>
+</ul>
+<img src="./en_image9.png" width="600" alt="Link GPO to the domain.">
+<br>
+<br>
+
+<ul>
+<li>Make sure that the [Application Identity Auto] policy is linked directly under the domain.</li>
+</ul>
+<p>With these steps, the [Application Identity] service for domain members is set to start automatically.</p>
+<img src="./en_image10.png" width="600" alt="Make sure of link to the domain">
+<br />
+<br />
+
+<h2 id="AppLocker-policy-setting"><a href="#AppLocker-policy-setting" class="headerlink" title="AppLocker policy setting"></a>AppLocker policy setting</h2><p>With AppLocker, you can restrict various types of applications, as shown in the table below.</p>
+<table>
+<thead>
+<tr>
+<th align="left">Rule collection</th>
+<th align="center">Associated file formats</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">Executable files</td>
+<td align="center">.exe, .com</td>
+</tr>
+<tr>
+<td align="left">Scripts</td>
+<td align="center">.ps1, .bat, .cmd, .vbs, .js</td>
+</tr>
+<tr>
+<td align="left">Windows Installer files</td>
+<td align="center">.msi, .msp, .mst</td>
+</tr>
+<tr>
+<td align="left">Packaged apps<br>Packaged app installers</td>
+<td align="center">.appx</td>
+</tr>
+<tr>
+<td align="left">DLL files</td>
+<td align="center">.dll, .ocx</td>
+</tr>
+</tbody></table>
+<br>
+
+<p>In addition, there are two ways to setup AppLocker: deny list and allow list. The differences between them are shown in the table below.</p>
+<table>
+<thead>
+<tr>
+<th align="center"></th>
+<th align="center">deny list</th>
+<th align="center">allow list</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">Launching specific applications</td>
+<td align="center">Deny</td>
+<td align="center">Allow</td>
+</tr>
+<tr>
+<td align="center">How to set up</td>
+<td align="center">Create default rules allowing all apps to launch<br>Creating rules to deny the execution of specific apps</td>
+<td align="center">Creating rules allowing specific apps to launch</td>
+</tr>
+</tbody></table>
+<br>
+
+<p>AppLocker settings are usually configured as a deny list, in which you select the apps you don’t want to be launched.<br>In contrast, the allow list allows only specific applications, and prevents others from launching.<br>When AppLocker is configured as a allow list, various unexpected problems may occur because many applications that are essential for Windows to work properly, might be restricted.<br>If you have a problem after setting up the allow list type, first try to remove the AppLocker setting and check whether the issue is resolved.</p>
+<p>In this article, I will  introduce</p>
+<ul>
+<li>How to set up a deny list type of executable files.  <br></li>
+</ul>
+<br>
+<br>
+
+<h3 id="Important-information-about-using-executable-file-rules"><a href="#Important-information-about-using-executable-file-rules" class="headerlink" title="Important information about using executable file rules"></a>Important information about using executable file rules</h3><p>When using AppLocker’s executable file rules to prevent a specific file from launching, you also need to create the default rule for packaged app rules, as shown in the steps below.<br>Note that this also applies to situations in which you do not need to prevent any packaged apps (UWP apps) from launching.</p>
+<p>When apply deny rules for executable files without creating the default rule for packaged apps, some system UWP apps might be blocked, causing unexpected problems such as Start Menu not responding. For more information, please check <a target="_blank" rel="noopener" href="https://learn.microsoft.com/en-us/windows/security/threat-protection/windows-defender-application-control/applocker/working-with-applocker-rules#applocker-rule-behavior">this article</a>.</p>
+<h3 id="Control-the-startup-of-executable-files"><a href="#Control-the-startup-of-executable-files" class="headerlink" title="Control the startup of executable files"></a>Control the startup of executable files</h3><p>In this section, we will restrict the launch of Windows Media Player.  </p>
+<ul>
+<li>On the [Group Policy Management] window, right-click [Group Policy Objects].</li>
+<li>Click [New].</li>
+<li>On the [New GPO] window, Enter a GPO name of your choice text in the [Name] field (In this case, “AppLocker winplayer block”).  </li>
+<li>Click [OK].</li>
+<li>Right-click the GPO [AppLocker winplayer block] you created.</li>
+<li>Click [Edit].</li>
+</ul>
+<img src="./en_image11.png" width="600" alt="[New GPO] Window">
+<br>
+<br>
+
+<p>First, create default rules. Without this, all executable files will be restricted from running. This is because AppLocker will deny execution if there are no rules (allow nor deny) for executing the file.<br>By creating default rules, executable files necessary for Windows to run properly (located in the “Program Files” and “Windows” folders) are allowed to be executed.<br>For more information, please click <a target="_blank" rel="noopener" href="https://learn.microsoft.com/en-us/windows/security/threat-protection/windows-defender-application-control/applocker/understanding-applocker-allow-and-deny-actions-on-rules">here</a>.  </p>
+<ul>
+<li>On the [Group Policy Management Editor] window, right-click [Computer Configuration]－[Policies]－[Windows Settings]－[Security Settings]－[Application Control Policies]－[AppLocker]－[Executable Rules].</li>
+<li>Make sure that three rules have been added.<br>
+<br>
+
+</li>
+</ul>
+<img src="./en_image12.png" width="600" alt="Create default rules">
+<br>
+<br>
+
+<ul>
+<li>Click [Executable Rules].  </li>
+<li>Click [Create New Rule].</li>
+</ul>
+<img src="./en_image13.png" width="600" alt="Create New Rule">
+<br>
+<br>
+
+<ul>
+<li>Click [Next].</li>
+</ul>
+<img src="./en_image14.png" width="600" alt="Create:Before You Begin">
+<br>
+<br>
+
+<ul>
+<li>Select Action:[Deny].</li>
+<li>Click [Next].</li>
+</ul>
+<img src="./en_image15.png" width="600" alt="Create:Permissions">
+<br>
+<br>
+
+<p>In this case, we will select “Publisher” as the condition to restrict the application.</p>
+<ul>
+<li>Select [Publisher] for unsigned application launch control.</li>
+<li>Select [File hash] for unsigned application launch control.</li>
+</ul>
+<img src="./en_image16.png" width="600" alt="Create:Conditions">
+<br>
+<br>
+
+<ul>
+<li>Click Reference file:[Browse].  </li>
+<li>In the dialog box, select an executable file (.exe, .com).  </li>
+<li>In this case, we will select “C:\Program Files\Windows Media Player\wmplayer.exe”.</li>
+</ul>
+<img src="./en_image17.png" width="600" alt="Create:Conditions-Publisher reference file">
+<br>
+<br>
+
+<p>Make sure the file is selected.</p>
+<ul>
+<li>Click [Next].</li>
+</ul>
+<img src="./en_image18.png" width="600" alt="Create:Conditions-Publisher Next">
+<br>
+<br>
+
+<p>In this case, we won’t set any exceptions because this is a deny list setting.  </p>
+<ul>
+<li>Click [Next].</li>
+</ul>
+<img src="./en_image19.png" width="600" alt="Create:Conditions-Exceptions">
+<br>
+<br>
+
+<p>You can add a name and description for the rule.  </p>
+<ul>
+<li>In this case, we won’t change anything, so we just click [Next]. </li>
+</ul>
+<img src="./en_image20.png" width="600"  alt="Create:Name">
+<br>
+<br>
+
+<ul>
+<li>Make sure the rule is newly created.</li>
+</ul>
+<p>We have created a rule that allows all executables to start and a rule that denies the start of a specific application (in this case, Windows Media Player).<br>The Default Rules allow all executables including Windows Media Player to launch, however <span style="color: red; ">if both “allow” and “deny” rules exist, the “deny” rule will be applied</span> and the execution of Windows Media Player is denied.   For more information, please click <a target="_blank" rel="noopener" href="https://learn.microsoft.com/en-us/windows/security/threat-protection/windows-defender-application-control/applocker/understanding-applocker-allow-and-deny-actions-on-rules">here</a>.</p>
+<img src="./en_image21.png" width="600" alt="Make sure that new rules are created">
+<br>
+<br>
+
+<p>With these steps, we have configured the rules for executables.<br>Next, we need to configure the rules for packaged applications.<br>If you do not set this, even Windows applications (such as Microsoft Photos and MSN Weather) will be restricted from launching.</p>
+<ul>
+<li>Right-click [AppLocker]－[Package app Rules]  </li>
+<li>Click [Create Default Rules]  </li>
+<li>Make sure one rule has been added</li>
+</ul>
+<img src="./en_image22.png" width="600" alt="Create default rules">
+<br>
+<br>
+
+<ul>
+<li>Right-click [AppLocker] and click [Properties]  </li>
+<li>On the [AppLocker Properties] window, mark the “Configured” checkbox and Select [Enforce rules] for executable rules and packaged app rules.</li>
+</ul>
+<p>Be sure to check this box, otherwise the rule may not be enforced if multiple GPOs associated with AppLocker are created. Details are described below（<a href="#About-AppLocker-properties">About AppLocker Properties</a>）</p>
+<img src="./en_image25.png" width="600" alt="AppLocker properties settings">
+<br>
+<br>
+
+<p>The policy has been now created successfully. </p>
+<ul>
+<li>Close the [Group Policy Management Editor] window</li>
+<li>Just like the previous steps, drag the created policy directly under the domain.</li>
+<li>On the [Group Policy Management] window, click [OK]</li>
+</ul>
+<img src="./en_image23.png" width="500" alt="Link GPO to the domain">
+<br>
+<br>
+
+<p>The policy is now linked directly under the domain.</p>
+<img src="./en_image24.png" width="500" alt="Make sure the link to the domain">
+<br>
+<br>
+
+<p>Now, apply the rules to the domain member.</p>
+<ul>
+<li>Open the Start menu.  </li>
+<li>Type “cmd”  </li>
+<li>Launch “Command Prompt” <span style="color: red; ">as an administrator</span>.</li>
+</ul>
+<img src="./en_image26.png" width="600" alt="Launch the Command Prompt">
+<br>
+<br>
+
+<ul>
+<li>Type “gpupdate /force” and press Enter to execute the command.</li>
+<li>Make sure a message saying, “Computer Policy update has completed successfully.” is displayed.</li>
+<li>Restart the domain member.</li>
+</ul>
+<img src="./en_image27.png" width="700" alt="Check for policy updates">
+<br>
+<br>
+
+<p>Let’s confirm that the rule has been applied by actually trying to launch the application.<br>In this case, we will try and launch Windows Media Player.<br>The text “This app has been blocked by your system administrator” is displayed and the application will not launch.</p>
+<img src="./en_image28.png" width="500" alt="Launch Windows Media Player">  
+<br />
+<br />
+
+<img src="./en_image29.png" width="600" alt="Make sure the execution of application is denied">
+<br>
+<br>
+
+
+<p>Now you can control the startup of applications with AppLocker!<br><br></p>
+<p>——Additional information——</p>
+<p>There are some important points about AppLocker’s property settings that you need to know when configuring more detailed policies. In the following section, we will talk about these settings.<br><br></p>
+<h2 id="About-AppLocker-properties"><a href="#About-AppLocker-properties" class="headerlink" title="About AppLocker properties"></a>About AppLocker properties</h2><p>In AppLocker properties, there are three choices shown in the table below.</p>
+<table>
+<thead>
+<tr>
+<th align="center"></th>
+<th align="center">Application launch control</th>
+<th align="center">Recording of startup restriction logs</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">Not Configured</td>
+<td align="center">Depend on other policy settings</td>
+<td align="center">enforced</td>
+</tr>
+<tr>
+<td align="center">Enforce rules</td>
+<td align="center">enforced</td>
+<td align="center">enforced</td>
+</tr>
+<tr>
+<td align="center">Audit only</td>
+<td align="center">Not enforced</td>
+<td align="center">enforced</td>
+</tr>
+</tbody></table>
+<p>Follow these two steps below to apply created rules properly.</p>
+<ul>
+<li>Mark the “Configured” checkbox</li>
+<li>Select [Enforce rules] </li>
+</ul>
+<p>However, there are cases in which the rule may be enforced without marking the “configured” checkbox. </p>
+<p>I would like to explain this with several examples.<br><br><br><br><br><img src="./en_image39.png" width="300" alt="AppLocker Properties"><br><br><br><br></p>
+<h3 id="When-only-Not-configured-exists"><a href="#When-only-Not-configured-exists" class="headerlink" title="When only Not configured exists"></a>When only Not configured exists</h3><p>Consider a case where an AppLocker policy (Policy 1 or Policy 2) is created for each of the two GPOs and configured as shown in the table below.</p>
+<table>
+<thead>
+<tr>
+<th align="center"></th>
+<th align="center">Policy 1</th>
+<th align="center">Policy 2</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">Executable file rules</td>
+<td align="center">Not configured</td>
+<td align="center">Not configured</td>
+</tr>
+<tr>
+<td align="center">Applications set to Deny</td>
+<td align="center">Windows Media Player</td>
+<td align="center">Internet Explorer</td>
+</tr>
+</tbody></table>
+<p>In this case, Windows Media Player and Internet Explorer are restricted from launching.<br><br><br><br></p>
+<h3 id="When-there-are-Not-configured-and-Enforce-rules"><a href="#When-there-are-Not-configured-and-Enforce-rules" class="headerlink" title="When there are Not configured and Enforce rules"></a>When there are Not configured and Enforce rules</h3><p>Consider a case where an AppLocker policy (Policy 1 or Policy 2) is created for each of the two GPOs and configured as shown in the table below.</p>
+<table>
+<thead>
+<tr>
+<th align="center"></th>
+<th align="center">Policy 1</th>
+<th align="center">Policy 2</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">Executable file rules</td>
+<td align="center">Not configured</td>
+<td align="center">Enforce rules</td>
+</tr>
+<tr>
+<td align="center">Applications set to Deny</td>
+<td align="center">Windows Media Player</td>
+<td align="center">Internet Explorer</td>
+</tr>
+</tbody></table>
+<p>In this case, Windows Media Player and Internet Explorer are restricted from launching.<br><br><br><br></p>
+<h3 id="When-there-are-Not-configured-and-Audit-only"><a href="#When-there-are-Not-configured-and-Audit-only" class="headerlink" title="When there are Not configured and Audit only"></a>When there are Not configured and Audit only</h3><p>Consider a case where an AppLocker policy (Policy 1 or Policy 2) is created for each of the two GPOs and configured as shown in the table below.</p>
+<table>
+<thead>
+<tr>
+<th align="center"></th>
+<th align="center">Policy 1</th>
+<th align="center">Policy 2</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">Executable file rules</td>
+<td align="center">Not configured</td>
+<td align="center">Audit only</td>
+</tr>
+<tr>
+<td align="center">Applications set to Deny</td>
+<td align="center">Windows Media Player</td>
+<td align="center">Internet Explorer</td>
+</tr>
+</tbody></table>
+<p>In this case, Windows Media Player and Internet Explorer will not be restricted from launching. A Warning event will be logged, stating the application was launched.<br>The warning log can be viewed in the Event Viewer by clicking [Applications and Services Logs]-[Microsoft]-[Windows]-[AppLocker] and selecting the type of rule you have configured.</p>
+<br>
+
+<h3 id="Summary"><a href="#Summary" class="headerlink" title="Summary"></a>Summary</h3><p>To summarize the points above, setting “not configured” for each rule in the AppLocker properties doesn’t necessarily restrict application from launching.<br>When setting up AppLocker, follow two steps below to apply the created rules properly.</p>
+<ul>
+<li>Mark the “Configured” checkbox</li>
+<li>Select [Enforce rules] </li>
+</ul>
+<p>For more information, please click <a target="_blank" rel="noopener" href="https://learn.microsoft.com/en-us/windows/security/threat-protection/windows-defender-application-control/applocker/understand-applocker-enforcement-settings">here</a>. </p>
+<p>I hope this blog helps you when setting up AppLocker!</p>
+
+      
+      
+    </div>
+    <footer class="article-footer">
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/blog/2022/09/13/Storage/Management/howtoformatvolume/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">次の記事</strong>
+      <div class="article-nav-title">
+        
+          ボリューム拡張時に「ダイナミック ディスクに変換しようとしています」というポップアップが表示される事象について
+        
+      </div>
+    </a>
+  
+  
+    <a href="/blog/2022/09/05/Performance/Hang_BSOD/UnintentionalReboot/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">前の記事</strong>
+      <div class="article-nav-title">意図しないシャットダウン・再起動が発生したら</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">カテゴリ</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Activation/">Activation</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Activation/ESU/">ESU</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Activation/security-SPP/">security-SPP</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/">Active Directory</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Authentication/">Authentication</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/DFSR/">DFSR</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/FunctionalLevel/">FunctionalLevel</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Group-Policy/">Group Policy</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Promotion-and-Demotion/">Promotion and Demotion</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/User-Profile/">User Profile</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Windows-Hello/">Windows Hello</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Windows-Time-Service/">Windows Time Service</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/AppLocker/">AppLocker</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/AppLocker/Active-Directory/">Active Directory</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/AppLocker/Microsoft-Intune/">Microsoft Intune</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Deployment/">Deployment</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Deployment/Feature-on-demand/">Feature on demand</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Deployment/Sysprep/">Sysprep</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Failover-Clustering/">Failover Clustering</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Failover-Clustering/Configuration-and-Management/">Configuration and Management</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/FileServices/">FileServices</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/FileServices/FTP/">FTP</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/FileServices/SMB/">SMB</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Hyper-V/">Hyper-V</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Hyper-V/Configuration-and-Management/">Configuration and Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Hyper-V/Migration/">Migration</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Microsoft-Connected-Cache/">Microsoft Connected Cache</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/">Networking</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/BITS/">BITS</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/Bluetooth/">Bluetooth</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/DHCP/">DHCP</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/DNS/">DNS</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/Firewall/">Firewall</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/LBFO/">LBFO</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/NCSI/">NCSI</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/NetworkInterface/">NetworkInterface</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/Proxy/">Proxy</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/TCPIP/">TCPIP</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/OpenSSH/">OpenSSH</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/">Performance</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/Hang-up-BSoD/">Hang-up/BSoD</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/No-Boot/">No Boot</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/Slow-Response/">Slow Response</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/System-Resource/">System Resource</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/Tools/">Tools</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/">Public Key Infrastructure</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Certificate-Authority/">Certificate Authority</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Certificate-Management/">Certificate Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Code-Signing/">Code Signing</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/SSL-TLS-Communication/">SSL TLS Communication</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/SSL-TLS-Connection/">SSL TLS Connection</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Smart-Card-Logon/">Smart Card Logon</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/">Remote Desktop</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/Azure-Virtual-Desktop-AVD/">Azure Virtual Desktop (AVD)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/Remote-Desktop-Service-RDS/">Remote Desktop Service (RDS)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/Windows-Virtual-Desktop-WVD/">Windows Virtual Desktop (WVD)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/RemoteAccess/">RemoteAccess</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/RemoteAccess/%E3%83%80%E3%82%A4%E3%83%A4%E3%83%AB%E3%82%A2%E3%83%83%E3%83%97%E6%8E%A5%E7%B6%9A/">ダイヤルアップ接続</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Setup/">Setup</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Setup/Feature-Update-FU/">Feature Update (FU)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Shell/">Shell</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Shell/Explorer/">Explorer</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/">Storage</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/Backup/">Backup</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/FSRM/">FSRM</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/Management/">Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/StorageMigrationService/">StorageMigrationService</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/UEFI/">UEFI</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/UEFI/Secure-Boot/">Secure Boot</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/">User Interface and Apps</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Command-Prompt/">Command Prompt</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/EventLog/">EventLog</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Language-Support/">Language Support</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Microsoft-Store/">Microsoft Store</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Performance/">Performance</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/PowerShell/">PowerShell</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Printing-%E5%8D%B0%E5%88%B7/">Printing (印刷)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Server-Management/">Server Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Taskscheduler/">Taskscheduler</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Windows-Management-Instrumentation/">Windows Management Instrumentation</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps-Language-support/">User Interface and Apps - Language support</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-365/">Windows 365</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Admin-Center/">Windows Admin Center</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Search/">Windows Search</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/">Windows Update</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Delivery-Optimization-DO/">Delivery Optimization (DO)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Feature-Update-FU/">Feature Update (FU)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Quality-Update-QU/">Quality Update (QU)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Windows-Update-Agent/">Windows Update Agent</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Windows-Update-Agent-WUA/">Windows Update Agent (WUA)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/">WirelessNetwork</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/NPS/">NPS</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/Wi-Fi/">Wi-Fi</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/%E3%83%A2%E3%83%90%E3%82%A4%E3%83%AB-%E3%83%96%E3%83%AD%E3%83%BC%E3%83%89%E3%83%90%E3%83%B3%E3%83%89%E6%8E%A5%E7%B6%9A-LTE/">モバイル ブロードバンド接続 (LTE)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/%E7%B5%84%E7%B9%94%E7%B4%B9%E4%BB%8B%E3%83%96%E3%83%AD%E3%82%B0%EF%BC%88Windows-Commercial%EF%BC%89/">組織紹介ブログ（Windows Commercial）</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最近の投稿</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/blog/2026/02/16/ActiveDirectory/GroupPolicy/UacPolicyIsEnabled/">「ユーザー アカウント制御：ビルトイン Administrator アカウントのための管理者承認モード」ポリシーが有効になる動作ついて</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/02/15/UserInterfaceAndApps/Printing/printer-queue-app-preview/">印刷キューアプリのプレビュー機能について</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/02/02/ActiveDirectory/Authentication/kerberos-rc4-for-service-account-ticket-issuance-changes-related-to-cve-2026-20833/">CVE‑2026‑20833 への対応とその影響について [KB5073381]</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/01/12/Hyper-V/vmwp-does-not-save-the-RTC-value-of-a-virtual-machine-when-performing-Live-Migration/">ライブ マイグレーション後の再起動でゲスト OS の時刻がずれる場合がある</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/01/07/WindowsUpdate/FU/fublog-txt/">ISO メディア経由かつ動的更新無効な状態で Windows 11 バージョン 24H2 または 25H2 へのアップグレードが失敗 (0x8007042B 0x2000D) する事象と対策について</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">アーカイブ</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2026/02/">2026 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2026/01/">2026 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/12/">2025 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/11/">2025 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/10/">2025 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/09/">2025 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/08/">2025 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/07/">2025 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/06/">2025 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/05/">2025 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/04/">2025 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/03/">2025 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/02/">2025 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/01/">2025 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/12/">2024 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/11/">2024 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/10/">2024 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/09/">2024 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/08/">2024 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/07/">2024 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/06/">2024 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/05/">2024 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/04/">2024 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/03/">2024 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/02/">2024 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/01/">2024 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/12/">2023 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/11/">2023 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/10/">2023 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/09/">2023 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/08/">2023 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/07/">2023 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/06/">2023 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/05/">2023 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/04/">2023 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/03/">2023 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/02/">2023 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/01/">2023 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/12/">2022 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/11/">2022 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/10/">2022 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/09/">2022 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/08/">2022 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/07/">2022 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/06/">2022 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/05/">2022 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/04/">2022 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/03/">2022 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/02/">2022 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/01/">2022 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/12/">2021 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/11/">2021 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/10/">2021 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/09/">2021 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/08/">2021 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/07/">2021 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/06/">2021 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/05/">2021 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/04/">2021 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/03/">2021 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/02/">2021 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/01/">2021 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/12/">2020 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/11/">2020 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/10/">2020 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/07/">2020 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/03/">2020 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2019/03/">2019 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/11/">2018 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/10/">2018 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/09/">2018 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/08/">2018 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/07/">2018 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/06/">2018 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/04/">2018 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/02/">2018 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/12/">2017 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/11/">2017 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/09/">2017 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/05/">2017 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/03/">2017 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/02/">2017 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2016/08/">2016 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2016/05/">2016 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2014/03/">2014 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2012/02/">2012 / 02</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2026 Microsoft Japan Windows Technology Support Team<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/blog/" class="mobile-nav-link">Home</a>
+  
+    <a href="/blog/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+<script src="/blog/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

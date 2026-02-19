@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-180187723-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-180187723-1');
+</script>
+<!-- End Google Analytics -->
+
+  
+  <title>RSAT のインストールができない場合の対処法 | Microsoft Japan Windows Technology Support Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="本記事はマイクロソフト社員によって公開されております。こんにちは。Windows Commercial Support Directory Services チームです。 ドメイン コントローラー上ではなく、メンバー コンピューターからドメインのオブジェクトを操作しようとする場合、[RSAT: Active Directory Domain Services およびライトウェイト ディレクトリ サ">
+<meta property="og:type" content="article">
+<meta property="og:title" content="RSAT のインストールができない場合の対処法">
+<meta property="og:url" content="https://jpwinsup.github.io/blog/2024/01/09/ActiveDirectory/Authentication/rsat-install/index.html">
+<meta property="og:site_name" content="Microsoft Japan Windows Technology Support Blog">
+<meta property="og:description" content="本記事はマイクロソフト社員によって公開されております。こんにちは。Windows Commercial Support Directory Services チームです。 ドメイン コントローラー上ではなく、メンバー コンピューターからドメインのオブジェクトを操作しようとする場合、[RSAT: Active Directory Domain Services およびライトウェイト ディレクトリ サ">
+<meta property="og:locale" content="ja_JP">
+<meta property="article:published_time" content="2024-01-09T02:00:00.000Z">
+<meta property="article:modified_time" content="2026-02-19T02:53:58.327Z">
+<meta property="article:author" content="Microsoft Japan Windows Technology Support Team">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/blog/atom.xml" title="Microsoft Japan Windows Technology Support Blog" type="application/atom+xml">
+  
+
+  <link rel="icon" href="/blog/favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="/blog/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/blog/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/blog/favicon-16x16.png">
+  <link rel="manifest" href="/blog/site.webmanifest">
+  <link rel="mask-icon" href="/blog/safari-pinned-tab.svg" color="#5bbad5">
+  <meta name="msapplication-TileColor" content="#ffffff">
+  <meta name="theme-color" content="#ffffff">
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/blog/css/style.css">
+
+<meta name="generator" content="Hexo 5.2.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="site-header-logo"></div>
+  <div id="site-header-blog-wrapper"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        <div id="ms-logo"></div>
+        
+          <a class="main-nav-link" href="/blog/">Home</a>
+        
+          <a class="main-nav-link" href="/blog/archives">Archives</a>
+        
+        <a class="main-nav-link" target="_blank" rel="noopener" href="https://cssjpn.github.io/">サポート情報</a>
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/blog/atom.xml" title="RSSフィード"></a>
+        
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//www.bing.com/search" method="get" accept-charset="UTF-8" name="bing-search" onsubmit="var f=this;if(f['q'].value){var searchUrl =  'https://www.bing.com/search?q=' +  encodeURIComponent(f['q'].value + ' site:' + f['sitesearch'].value) ;window.open(searchUrl, 'blank') };return false;" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="検索"><button type="submit" id="nav-search-btn" class="search-form-submit"></button><input type="hidden" name="sitesearch" value="https://jpwinsup.github.io/blog"></form>
+      </div>
+    </div>
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/blog/" id="logo">Microsoft Japan Windows Technology Support Blog</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/blog/" id="subtitle">日本マイクロソフト Windows Support チームによる、サポート情報 Blog です。</a>
+        </h2>
+      
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-ActiveDirectory/Authentication/rsat-install" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    
+    
+      <header class="article-header-single">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      RSAT のインストールができない場合の対処法
+    </h1>
+  
+
+      </header>
+      <div class="article-share">
+        Last Update: 
+        <a href="/blog/2024/01/09/ActiveDirectory/Authentication/rsat-install/" class="article-date-single">
+  <time datetime="2024-01-09T02:00:00.000Z" itemprop="datePublished">2024-01-09</time>
+</a>
+        
+  <div class="article-category">
+    <a class="article-category-link" href="/blog/categories/Active-Directory/">Active Directory</a>►<a class="article-category-link" href="/blog/categories/Active-Directory/Authentication/">Authentication</a>
+  </div>
+
+        
+        <a href="https://github.com/jpwinsup/blog/issues/new?title=&body=%EF%BB%BF%0A%0A---%0A%0A%23%23%23%23+Document+Details%0A%0A*+Article+ID%3A+a2474882-db77-5083-b583-aca4171652ae%0A*+TITLE%3A+RSAT+%E3%81%AE%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AB%E3%81%8C%E3%81%A7%E3%81%8D%E3%81%AA%E3%81%84%E5%A0%B4%E5%90%88%E3%81%AE%E5%AF%BE%E5%87%A6%E6%B3%95%0A*+URL+https%3A%2F%2Fjpwinsup.github.io%2Fblog%2F2024%2F01%2F09%2FActiveDirectory%2FAuthentication%2Frsat-install%2F%0A*+SourceFileName%3A+source%2F_posts%2FActiveDirectory%2FAuthentication%2Frsat-install.md%0A" class="article-github-issue-link" target="_blank" rel="noopener noreferrer">feedback</a>
+        
+        <a data-url="https://jpwinsup.github.io/blog/2024/01/09/ActiveDirectory/Authentication/rsat-install/" data-id="cmlsvjdap0062ru3y1vnv53yf" class="article-share-link">共有</a>
+      </div>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>本記事はマイクロソフト社員によって公開されております。<br>こんにちは。Windows Commercial Support Directory Services チームです。</p>
+<p>ドメイン コントローラー上ではなく、メンバー コンピューターからドメインのオブジェクトを操作しようとする場合、[RSAT: Active Directory Domain Services およびライトウェイト ディレクトリ サービス ツール] のインストールが必要になります。<br>Windows 10 バージョン 1809 以降の場合、この RSAT のインストールにインターネット接続が必要になりました。<br>本ブログでは、[RSAT: Active Directory Domain Services およびライトウェイト ディレクトリ サービス ツール] のインストール方法と、インストールに失敗した場合の切り分け手順についてご紹介します。</p>
+<h1 id="RSAT-のインストール手順"><a href="#RSAT-のインストール手順" class="headerlink" title="RSAT のインストール手順"></a>RSAT のインストール手順</h1><ol>
+<li><p>対象のコンピューターにローカルの管理者権限を持つユーザーでログオンします。</p>
+</li>
+<li><p>スタート メニューから [Windows の設定] を起動します。</p>
+</li>
+<li><p>[アプリ] をクリックします。</p>
+</li>
+<li><p>[アプリと機能] から [オプション機能] をクリックします。</p>
+</li>
+<li><p>[機能の追加] をクリックします。</p>
+</li>
+<li><p>[RSAT: Active Directory Domain Services およびライトウェイト ディレクトリ サービス ツール] を選択し、[インストール] をクリックします。</p>
+</li>
+<li><p>[ファイル名を指定して実行] から dsa.msc を実行し、[Active Directory ユーザーとコンピューター] が起動することを確認します。(インストールに時間が掛かる場合があるため、起動しない場合にはしばらく時間をおいてから再度お試しください。)</p>
+</li>
+</ol>
+<h1 id="RSAT-のインストールに失敗した場合の切り分け手順"><a href="#RSAT-のインストールに失敗した場合の切り分け手順" class="headerlink" title="RSAT のインストールに失敗した場合の切り分け手順"></a>RSAT のインストールに失敗した場合の切り分け手順</h1><p>しかしながら、インターネット接続があるにも関わらず、RSAT のインストールに失敗する場合がございます。<br>そのようなときは、以下の切り分けを実施すると、ある程度原因を特定できます。</p>
+<ol>
+<li>まずは PowerShell コマンドで RSAT のインストール状態を確認します。</li>
+</ol>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">&gt; <span class="built_in">Get-WindowsCapability</span> <span class="literal">-Online</span> <span class="literal">-Name</span> <span class="string">&quot;Rsat*&quot;</span> | <span class="built_in">select</span> Name,State</span><br><span class="line"> </span><br><span class="line">Name                                                          State</span><br><span class="line">----                                                          -----</span><br><span class="line">Rsat.ActiveDirectory.DS<span class="literal">-LDS</span>.Tools~~~~<span class="number">0.0</span>.<span class="number">1.0</span>             NotPresent</span><br><span class="line">Rsat.BitLocker.Recovery.Tools~~~~<span class="number">0.0</span>.<span class="number">1.0</span>                 NotPresent</span><br><span class="line">Rsat.CertificateServices.Tools~~~~<span class="number">0.0</span>.<span class="number">1.0</span>                NotPresent</span><br><span class="line">Rsat.DHCP.Tools~~~~<span class="number">0.0</span>.<span class="number">1.0</span>                               NotPresent</span><br><span class="line">Rsat.Dns.Tools~~~~<span class="number">0.0</span>.<span class="number">1.0</span>                                NotPresent</span><br><span class="line">Rsat.FailoverCluster.Management.Tools~~~~<span class="number">0.0</span>.<span class="number">1.0</span>         NotPresent</span><br><span class="line">Rsat.FileServices.Tools~~~~<span class="number">0.0</span>.<span class="number">1.0</span>                       NotPresent</span><br><span class="line">Rsat.GroupPolicy.Management.Tools~~~~<span class="number">0.0</span>.<span class="number">1.0</span>             NotPresent</span><br><span class="line">Rsat.IPAM.Client.Tools~~~~<span class="number">0.0</span>.<span class="number">1.0</span>                        NotPresent</span><br><span class="line">Rsat.LLDP.Tools~~~~<span class="number">0.0</span>.<span class="number">1.0</span>                               NotPresent</span><br><span class="line">Rsat.NetworkController.Tools~~~~<span class="number">0.0</span>.<span class="number">1.0</span>                  NotPresent</span><br><span class="line">Rsat.NetworkLoadBalancing.Tools~~~~<span class="number">0.0</span>.<span class="number">1.0</span>               NotPresent</span><br><span class="line">Rsat.RemoteAccess.Management.Tools~~~~<span class="number">0.0</span>.<span class="number">1.0</span>            NotPresent</span><br><span class="line">Rsat.RemoteDesktop.Services.Tools~~~~<span class="number">0.0</span>.<span class="number">1.0</span>             NotPresent</span><br><span class="line">Rsat.ServerManager.Tools~~~~<span class="number">0.0</span>.<span class="number">1.0</span>                      NotPresent</span><br><span class="line">Rsat.Shielded.VM.Tools~~~~<span class="number">0.0</span>.<span class="number">1.0</span>                        NotPresent</span><br><span class="line">Rsat.StorageMigrationService.Management.Tools~~~~<span class="number">0.0</span>.<span class="number">1.0</span> NotPresent</span><br><span class="line">Rsat.StorageReplica.Tools~~~~<span class="number">0.0</span>.<span class="number">1.0</span>                     NotPresent</span><br><span class="line">Rsat.SystemInsights.Management.Tools~~~~<span class="number">0.0</span>.<span class="number">1.0</span>          NotPresent</span><br><span class="line">Rsat.VolumeActivation.Tools~~~~<span class="number">0.0</span>.<span class="number">1.0</span>                   NotPresent</span><br><span class="line">Rsat.WSUS.Tools~~~~<span class="number">0.0</span>.<span class="number">1.0</span>                               NotPresent</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>続いて、上記の確認結果の Name 項目に該当する名前を下記のコマンドで指定いただくことで、個別にインストールが可能となります。<br>なお、本コマンドはインターネットへ接続可能な状態で実施いただく必要があります。</li>
+</ol>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&gt; <span class="built_in">Add-WindowsCapability</span> <span class="literal">-Online</span> <span class="literal">-Name</span> <span class="string">&quot;Rsat.ActiveDirectory.DS-LDS.Tools~~~~0.0.1.0&quot;</span></span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line">Path          :</span><br><span class="line">Online        : True</span><br><span class="line">RestartNeeded : False</span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>インストールに成功すれば、先にご案内いたしましたコマンドにて、下記のように [RSAT：Active Directory Domain Services] がインストールされたことを確認いただけます。</li>
+</ol>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">&gt; <span class="built_in">Get-WindowsCapability</span> <span class="literal">-Online</span> <span class="literal">-Name</span> <span class="string">&quot;Rsat*&quot;</span> | <span class="built_in">select</span> Name,State</span><br><span class="line"></span><br><span class="line">Name                                                          State</span><br><span class="line">----                                                          -----</span><br><span class="line">Rsat.ActiveDirectory.DS<span class="literal">-LDS</span>.Tools~~~~<span class="number">0.0</span>.<span class="number">1.0</span>                Installed   &lt;&lt;&lt;&lt; ★ インストールされていることが確認可能</span><br><span class="line">Rsat.IPAM.Client.Tools~~~~<span class="number">0.0</span>.<span class="number">1.0</span>                        NotPresent</span><br><span class="line">Rsat.BitLocker.Recovery.Tools~~~~<span class="number">0.0</span>.<span class="number">1.0</span>                 NotPresent</span><br><span class="line">Rsat.CertificateServices.Tools~~~~<span class="number">0.0</span>.<span class="number">1.0</span>                NotPresent</span><br><span class="line">Rsat.DHCP.Tools~~~~<span class="number">0.0</span>.<span class="number">1.0</span>                               NotPresent</span><br><span class="line">Rsat.Dns.Tools~~~~<span class="number">0.0</span>.<span class="number">1.0</span>                                NotPresent</span><br><span class="line">Rsat.FailoverCluster.Management.Tools~~~~<span class="number">0.0</span>.<span class="number">1.0</span>         NotPresent</span><br><span class="line">Rsat.FileServices.Tools~~~~<span class="number">0.0</span>.<span class="number">1.0</span>                       NotPresent</span><br><span class="line">Rsat.GroupPolicy.Management.Tools~~~~<span class="number">0.0</span>.<span class="number">1.0</span>             NotPresent</span><br><span class="line">Rsat.LLDP.Tools~~~~<span class="number">0.0</span>.<span class="number">1.0</span>                               NotPresent</span><br><span class="line">Rsat.NetworkController.Tools~~~~<span class="number">0.0</span>.<span class="number">1.0</span>                  NotPresent</span><br><span class="line">Rsat.NetworkLoadBalancing.Tools~~~~<span class="number">0.0</span>.<span class="number">1.0</span>               NotPresent</span><br><span class="line">Rsat.RemoteAccess.Management.Tools~~~~<span class="number">0.0</span>.<span class="number">1.0</span>            NotPresent</span><br><span class="line">Rsat.RemoteDesktop.Services.Tools~~~~<span class="number">0.0</span>.<span class="number">1.0</span>             NotPresent</span><br><span class="line">Rsat.ServerManager.Tools~~~~<span class="number">0.0</span>.<span class="number">1.0</span>                      NotPresent</span><br><span class="line">Rsat.Shielded.VM.Tools~~~~<span class="number">0.0</span>.<span class="number">1.0</span>                        NotPresent</span><br><span class="line">Rsat.StorageMigrationService.Management.Tools~~~~<span class="number">0.0</span>.<span class="number">1.0</span> NotPresent</span><br><span class="line">Rsat.StorageReplica.Tools~~~~<span class="number">0.0</span>.<span class="number">1.0</span>                     NotPresent</span><br><span class="line">Rsat.SystemInsights.Management.Tools~~~~<span class="number">0.0</span>.<span class="number">1.0</span>          NotPresent</span><br><span class="line">Rsat.VolumeActivation.Tools~~~~<span class="number">0.0</span>.<span class="number">1.0</span>                   NotPresent</span><br></pre></td></tr></table></figure>
+
+<ol start="4">
+<li>一方、RSAT のインストールに失敗した場合、2 の手順にて以下のようなエラーメッセージが表示されます。<br>こちらで表示されたエラー コードをもとに原因を推測し対応していきます。</li>
+</ol>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&gt; <span class="built_in">Add-WindowsCapability</span> <span class="literal">-Online</span> <span class="literal">-Name</span> <span class="string">&quot;Rsat.ActiveDirectory.DS-LDS.Tools~~~~0.0.1.0&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">Add-WindowsCapability</span> : <span class="built_in">Add-WindowsCapability</span> に失敗しました。エラー コード</span><br><span class="line">= <span class="number">0</span>x800f0954</span><br><span class="line">発生場所 行:<span class="number">1</span> 文字:<span class="number">1</span></span><br><span class="line">+ <span class="built_in">Add-WindowsCapability</span> <span class="literal">-Online</span> <span class="literal">-Name</span> <span class="string">&quot;Rsat.ActiveDirectory.DS-LDS.Tool ...</span></span><br><span class="line"><span class="string">+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~</span></span><br><span class="line"><span class="string">    + CategoryInfo          : NotSpecified: (:) [Add-WindowsCapability],</span></span><br><span class="line"><span class="string">COMException</span></span><br><span class="line"><span class="string">    + FullyQualifiedErrorId :</span></span><br><span class="line"><span class="string">Microsoft.Dism.Commands.AddWindowsCapabilityCommand</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="よくあるエラーコードについて"><a href="#よくあるエラーコードについて" class="headerlink" title="よくあるエラーコードについて"></a>よくあるエラーコードについて</h1><h2 id="A-エラーコード-“0x800f0954”-が表示された場合"><a href="#A-エラーコード-“0x800f0954”-が表示された場合" class="headerlink" title="A. エラーコード “0x800f0954” が表示された場合"></a>A. エラーコード “0x800f0954” が表示された場合</h2><p>エラーコード “0x800f0954” は “WindowsUpdateSearch returns invalid number of updates from WSUS server.” を意味しており、WSUS サーバーに通信を行っていると考えられます。<br>もし、対象の Windowsクライアントが WSUS サーバーを利用している場合、以下の手順を実施し、直接インターネットから RSAT ツールをインストールできるように一時的にポリシーを変更していただければと存じます。  </p>
+<h3 id="ローカル-グループ-ポリシーから変更する場合"><a href="#ローカル-グループ-ポリシーから変更する場合" class="headerlink" title="ローカル グループ ポリシーから変更する場合"></a>ローカル グループ ポリシーから変更する場合</h3><ol>
+<li>[ファイル名を指定して実行] から [gpedit.msc] と入力し、ローカル グループポリシー エディターを起動します。</li>
+<li>[コンピューターの構成] - [管理用テンプレート] - [システム] - [オプションコンポーネントのインストールおよびコンポーネントの修復のための設定を指定する] を [有効] に設定し、”Windows Server Update Services (WSUS) の代わりに、Windows Update から修復コンテンツとオプション機能を直接ダウンロードする” にチェックを入れます。</li>
+<li>[適用]、[OK] を押下しポリシーを反映します。</li>
+<li>クライアント端末を再起動し、再び RSAT ツールのインストールを実行します。</li>
+</ol>
+<h3 id="DC-上のグループ-ポリシーから変更する場合"><a href="#DC-上のグループ-ポリシーから変更する場合" class="headerlink" title="DC 上のグループ ポリシーから変更する場合"></a>DC 上のグループ ポリシーから変更する場合</h3><ol>
+<li>DC 上で [グループ ポリシーの管理] を開き、対象のコンピューターに適用しているグループ ポリシーを選択します。</li>
+<li>[コンピューターの構成] - [管理用テンプレート] - [システム] - [オプションコンポーネントのインストールおよびコンポーネントの修復のための設定を指定する] を [有効] に設定し、”Windows Server Update Services (WSUS) の代わりに、Windows Update から修復コンテンツとオプション機能を直接ダウンロードする” にチェックを入れます。</li>
+<li>[適用]、[OK] を押下しポリシーを反映します。</li>
+<li>クライアント端末を再起動し、再び RSAT ツールのインストールを実行します。</li>
+</ol>
+<h2 id="B-エラーコード-“0x8024500c”-が表示された場合"><a href="#B-エラーコード-“0x8024500c”-が表示された場合" class="headerlink" title="B. エラーコード “0x8024500c” が表示された場合"></a>B. エラーコード “0x8024500c” が表示された場合</h2><p>“0x8024500c” のエラーが表示された場合は、以下の手順を実施後、RSAT のインストールが可能かお試しいただければと存じます。</p>
+<ol>
+<li>[ファイル名を指定して実行] から [regedit] と入力し、レジストリー エディターを起動します。</li>
+<li>HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU\UseWUServer の値のデータを 1 から 0 に変更します。これにより、WSUS ではなく、Windows Updateを使用するようになります。</li>
+<li>[ファイル名を指定して実行] から [services.msc] と入力し、[サービス] の管理コンソールを起動します。</li>
+<li>[Windows Update] サービスを選択し、サービスの再起動を行います。</li>
+</ol>
+<h1 id="その他の-RSAT-のインストール方法"><a href="#その他の-RSAT-のインストール方法" class="headerlink" title="その他の RSAT のインストール方法"></a>その他の RSAT のインストール方法</h1><p>上記の対応で解消しない場合、RSATをオフラインでインストールすることも可能です。<br>具体的には、対象の環境がボリューム ライセンスにより提供されている場合には、M365管理センターあるいは Microsoft Business Center から Feature on Demand (FoD) の ISO メディアを入手いただくことで、オフライン インストールが可能です。</p>
+<p>ISO ファイルが D ドライブにマウントされております場合、PowerShell を起動してから以下のようなコマンドを実行いたしますと、RSAT のすべての機能がインストール出来ます。</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">Get-WindowsCapability</span> <span class="literal">-Online</span> | <span class="built_in">where</span> &#123;<span class="variable">$_</span>.Name <span class="operator">-like</span> <span class="string">&quot;Rsat*&quot;</span>&#125; | <span class="built_in">Add-WindowsCapability</span> <span class="literal">-Online</span> <span class="literal">-LimitAccess</span> <span class="literal">-Source</span> D:</span><br></pre></td></tr></table></figure>
+
+<h1 id="ご参考"><a href="#ご参考" class="headerlink" title="ご参考"></a>ご参考</h1><ul>
+<li>Title: Add-WindowsCapability</li>
+<li>URL: <a target="_blank" rel="noopener" href="https://docs.microsoft.com/en-us/powershell/module/dism/add-windowscapability?view=win10-ps">https://docs.microsoft.com/en-us/powershell/module/dism/add-windowscapability?view=win10-ps</a></li>
+</ul>
+<p>FoD のオフラインパッケージのダウンロード方法につきまして、<br>FoD (.cab) が収録されたメディア (.iso) は、下記に記載の Microsoft Business Center<br>または、 M365管理センター からダウンロードいただくことができます。</p>
+<blockquote>
+<p>※ FOD_1 と FOD_2 と表記されている場合は、FOD_1 を使用します。</p>
+</blockquote>
+<ul>
+<li><p>Title: Microsoft Business Center</p>
+</li>
+<li><p>URL: <a target="_blank" rel="noopener" href="https://licensing.microsoft.com/">https://licensing.microsoft.com/</a></p>
+</li>
+<li><p>Title: M365管理センター</p>
+</li>
+<li><p>URL: <a target="_blank" rel="noopener" href="https://admin.microsoft.com/#/subscriptions/vlnew">https://admin.microsoft.com/#/subscriptions/vlnew</a></p>
+</li>
+</ul>
+<p>本投稿が少しでも皆様のお役に立てば幸いです。<br>※ 本情報の内容 (リンク先などを含む) は、作成日時点でのものであり、予告なく変更される場合があります。</p>
+
+      
+      
+    </div>
+    <footer class="article-footer">
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/blog/2024/01/15/Performance/SystemResource/Perflib2017/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">次の記事</strong>
+      <div class="article-nav-title">
+        
+          Perflib (NUMA): 2017
+        
+      </div>
+    </a>
+  
+  
+    <a href="/blog/2024/01/09/ActiveDirectory/PromotionAndDemotion/fsmo-role-owner/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">前の記事</strong>
+      <div class="article-nav-title">fSMORoleOwner 属性の Infrastructure マスターの値にご注意</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">カテゴリ</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Activation/">Activation</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Activation/ESU/">ESU</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Activation/security-SPP/">security-SPP</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/">Active Directory</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Authentication/">Authentication</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/DFSR/">DFSR</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/FunctionalLevel/">FunctionalLevel</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Group-Policy/">Group Policy</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Promotion-and-Demotion/">Promotion and Demotion</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/User-Profile/">User Profile</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Windows-Hello/">Windows Hello</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Windows-Time-Service/">Windows Time Service</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/AppLocker/">AppLocker</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/AppLocker/Active-Directory/">Active Directory</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/AppLocker/Microsoft-Intune/">Microsoft Intune</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Deployment/">Deployment</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Deployment/Feature-on-demand/">Feature on demand</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Deployment/Sysprep/">Sysprep</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Failover-Clustering/">Failover Clustering</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Failover-Clustering/Configuration-and-Management/">Configuration and Management</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/FileServices/">FileServices</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/FileServices/FTP/">FTP</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/FileServices/SMB/">SMB</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Hyper-V/">Hyper-V</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Hyper-V/Configuration-and-Management/">Configuration and Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Hyper-V/Migration/">Migration</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Microsoft-Connected-Cache/">Microsoft Connected Cache</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/">Networking</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/BITS/">BITS</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/Bluetooth/">Bluetooth</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/DHCP/">DHCP</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/DNS/">DNS</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/Firewall/">Firewall</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/LBFO/">LBFO</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/NCSI/">NCSI</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/NetworkInterface/">NetworkInterface</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/Proxy/">Proxy</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/TCPIP/">TCPIP</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/OpenSSH/">OpenSSH</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/">Performance</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/Hang-up-BSoD/">Hang-up/BSoD</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/No-Boot/">No Boot</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/Slow-Response/">Slow Response</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/System-Resource/">System Resource</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/Tools/">Tools</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/">Public Key Infrastructure</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Certificate-Authority/">Certificate Authority</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Certificate-Management/">Certificate Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Code-Signing/">Code Signing</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/SSL-TLS-Communication/">SSL TLS Communication</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/SSL-TLS-Connection/">SSL TLS Connection</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Smart-Card-Logon/">Smart Card Logon</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/">Remote Desktop</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/Azure-Virtual-Desktop-AVD/">Azure Virtual Desktop (AVD)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/Remote-Desktop-Service-RDS/">Remote Desktop Service (RDS)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/Windows-Virtual-Desktop-WVD/">Windows Virtual Desktop (WVD)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/RemoteAccess/">RemoteAccess</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/RemoteAccess/%E3%83%80%E3%82%A4%E3%83%A4%E3%83%AB%E3%82%A2%E3%83%83%E3%83%97%E6%8E%A5%E7%B6%9A/">ダイヤルアップ接続</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Setup/">Setup</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Setup/Feature-Update-FU/">Feature Update (FU)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Shell/">Shell</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Shell/Explorer/">Explorer</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/">Storage</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/Backup/">Backup</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/FSRM/">FSRM</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/Management/">Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/StorageMigrationService/">StorageMigrationService</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/UEFI/">UEFI</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/UEFI/Secure-Boot/">Secure Boot</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/">User Interface and Apps</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Command-Prompt/">Command Prompt</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/EventLog/">EventLog</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Language-Support/">Language Support</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Microsoft-Store/">Microsoft Store</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Performance/">Performance</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/PowerShell/">PowerShell</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Printing-%E5%8D%B0%E5%88%B7/">Printing (印刷)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Server-Management/">Server Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Taskscheduler/">Taskscheduler</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Windows-Management-Instrumentation/">Windows Management Instrumentation</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps-Language-support/">User Interface and Apps - Language support</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-365/">Windows 365</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Admin-Center/">Windows Admin Center</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Search/">Windows Search</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/">Windows Update</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Delivery-Optimization-DO/">Delivery Optimization (DO)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Feature-Update-FU/">Feature Update (FU)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Quality-Update-QU/">Quality Update (QU)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Windows-Update-Agent/">Windows Update Agent</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Windows-Update-Agent-WUA/">Windows Update Agent (WUA)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/">WirelessNetwork</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/NPS/">NPS</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/Wi-Fi/">Wi-Fi</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/%E3%83%A2%E3%83%90%E3%82%A4%E3%83%AB-%E3%83%96%E3%83%AD%E3%83%BC%E3%83%89%E3%83%90%E3%83%B3%E3%83%89%E6%8E%A5%E7%B6%9A-LTE/">モバイル ブロードバンド接続 (LTE)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/%E7%B5%84%E7%B9%94%E7%B4%B9%E4%BB%8B%E3%83%96%E3%83%AD%E3%82%B0%EF%BC%88Windows-Commercial%EF%BC%89/">組織紹介ブログ（Windows Commercial）</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最近の投稿</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/blog/2026/02/16/ActiveDirectory/GroupPolicy/UacPolicyIsEnabled/">「ユーザー アカウント制御：ビルトイン Administrator アカウントのための管理者承認モード」ポリシーが有効になる動作ついて</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/02/15/UserInterfaceAndApps/Printing/printer-queue-app-preview/">印刷キューアプリのプレビュー機能について</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/02/02/ActiveDirectory/Authentication/kerberos-rc4-for-service-account-ticket-issuance-changes-related-to-cve-2026-20833/">CVE‑2026‑20833 への対応とその影響について [KB5073381]</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/01/12/Hyper-V/vmwp-does-not-save-the-RTC-value-of-a-virtual-machine-when-performing-Live-Migration/">ライブ マイグレーション後の再起動でゲスト OS の時刻がずれる場合がある</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/01/07/WindowsUpdate/FU/fublog-txt/">ISO メディア経由かつ動的更新無効な状態で Windows 11 バージョン 24H2 または 25H2 へのアップグレードが失敗 (0x8007042B 0x2000D) する事象と対策について</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">アーカイブ</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2026/02/">2026 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2026/01/">2026 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/12/">2025 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/11/">2025 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/10/">2025 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/09/">2025 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/08/">2025 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/07/">2025 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/06/">2025 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/05/">2025 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/04/">2025 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/03/">2025 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/02/">2025 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/01/">2025 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/12/">2024 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/11/">2024 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/10/">2024 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/09/">2024 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/08/">2024 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/07/">2024 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/06/">2024 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/05/">2024 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/04/">2024 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/03/">2024 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/02/">2024 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/01/">2024 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/12/">2023 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/11/">2023 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/10/">2023 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/09/">2023 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/08/">2023 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/07/">2023 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/06/">2023 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/05/">2023 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/04/">2023 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/03/">2023 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/02/">2023 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/01/">2023 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/12/">2022 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/11/">2022 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/10/">2022 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/09/">2022 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/08/">2022 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/07/">2022 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/06/">2022 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/05/">2022 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/04/">2022 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/03/">2022 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/02/">2022 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/01/">2022 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/12/">2021 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/11/">2021 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/10/">2021 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/09/">2021 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/08/">2021 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/07/">2021 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/06/">2021 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/05/">2021 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/04/">2021 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/03/">2021 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/02/">2021 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/01/">2021 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/12/">2020 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/11/">2020 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/10/">2020 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/07/">2020 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/03/">2020 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2019/03/">2019 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/11/">2018 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/10/">2018 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/09/">2018 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/08/">2018 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/07/">2018 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/06/">2018 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/04/">2018 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/02/">2018 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/12/">2017 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/11/">2017 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/09/">2017 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/05/">2017 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/03/">2017 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/02/">2017 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2016/08/">2016 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2016/05/">2016 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2014/03/">2014 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2012/02/">2012 / 02</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2026 Microsoft Japan Windows Technology Support Team<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/blog/" class="mobile-nav-link">Home</a>
+  
+    <a href="/blog/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+<script src="/blog/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

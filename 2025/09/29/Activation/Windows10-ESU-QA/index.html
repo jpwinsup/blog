@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-180187723-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-180187723-1');
+</script>
+<!-- End Google Analytics -->
+
+  
+  <title>Windows 10 ESU に関するよくあるお問い合わせ | Microsoft Japan Windows Technology Support Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="※本記事はマイクロソフト社員によって公開されております。 みなさま、こんにちは。Windows サポート チームです。Windows 10 のサポートは、2025 年 10 月 14 日に終了します。サポート終了後は、基本的にセキュリティ更新および技術サポートが提供されなくなりますが、ESU を適用することで、最大 3 年間セキュリティ更新を受けることができます。本記事では、オンプレミス環境におけ">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Windows 10 ESU に関するよくあるお問い合わせ">
+<meta property="og:url" content="https://jpwinsup.github.io/blog/2025/09/29/Activation/Windows10-ESU-QA/index.html">
+<meta property="og:site_name" content="Microsoft Japan Windows Technology Support Blog">
+<meta property="og:description" content="※本記事はマイクロソフト社員によって公開されております。 みなさま、こんにちは。Windows サポート チームです。Windows 10 のサポートは、2025 年 10 月 14 日に終了します。サポート終了後は、基本的にセキュリティ更新および技術サポートが提供されなくなりますが、ESU を適用することで、最大 3 年間セキュリティ更新を受けることができます。本記事では、オンプレミス環境におけ">
+<meta property="og:locale" content="ja_JP">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2025/09/29/Activation/Windows10-ESU-QA/step4.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2025/09/29/Activation/Windows10-ESU-QA/step5.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2025/09/29/Activation/Windows10-ESU-QA/step6.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2025/09/29/Activation/Windows10-ESU-QA/step6-2.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2025/09/29/Activation/Windows10-ESU-QA/step7.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2025/09/29/Activation/Windows10-ESU-QA/step8.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2025/09/29/Activation/Windows10-ESU-QA/step8-2.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2025/09/29/Activation/Windows10-ESU-QA/step9.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2025/09/29/Activation/Windows10-ESU-QA/step10.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2025/09/29/Activation/Windows10-ESU-QA/step11.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2025/09/29/Activation/Windows10-ESU-QA/step12.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2025/09/29/Activation/Windows10-ESU-QA/step13.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2025/09/29/Activation/Windows10-ESU-QA/step14.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2025/09/29/Activation/Windows10-ESU-QA/step15.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2025/09/29/Activation/Windows10-ESU-QA/step15-2.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2025/09/29/Activation/Windows10-ESU-QA/step15-3.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2025/09/29/Activation/Windows10-ESU-QA/step16.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2025/09/29/Activation/Windows10-ESU-QA/step16-2.png">
+<meta property="article:published_time" content="2025-09-29T15:00:00.000Z">
+<meta property="article:modified_time" content="2026-02-19T02:53:58.305Z">
+<meta property="article:author" content="Microsoft Japan Windows Technology Support Team">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://jpwinsup.github.io/blog/2025/09/29/Activation/Windows10-ESU-QA/step4.png">
+  
+    <link rel="alternate" href="/blog/atom.xml" title="Microsoft Japan Windows Technology Support Blog" type="application/atom+xml">
+  
+
+  <link rel="icon" href="/blog/favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="/blog/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/blog/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/blog/favicon-16x16.png">
+  <link rel="manifest" href="/blog/site.webmanifest">
+  <link rel="mask-icon" href="/blog/safari-pinned-tab.svg" color="#5bbad5">
+  <meta name="msapplication-TileColor" content="#ffffff">
+  <meta name="theme-color" content="#ffffff">
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/blog/css/style.css">
+
+<meta name="generator" content="Hexo 5.2.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="site-header-logo"></div>
+  <div id="site-header-blog-wrapper"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        <div id="ms-logo"></div>
+        
+          <a class="main-nav-link" href="/blog/">Home</a>
+        
+          <a class="main-nav-link" href="/blog/archives">Archives</a>
+        
+        <a class="main-nav-link" target="_blank" rel="noopener" href="https://cssjpn.github.io/">サポート情報</a>
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/blog/atom.xml" title="RSSフィード"></a>
+        
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//www.bing.com/search" method="get" accept-charset="UTF-8" name="bing-search" onsubmit="var f=this;if(f['q'].value){var searchUrl =  'https://www.bing.com/search?q=' +  encodeURIComponent(f['q'].value + ' site:' + f['sitesearch'].value) ;window.open(searchUrl, 'blank') };return false;" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="検索"><button type="submit" id="nav-search-btn" class="search-form-submit"></button><input type="hidden" name="sitesearch" value="https://jpwinsup.github.io/blog"></form>
+      </div>
+    </div>
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/blog/" id="logo">Microsoft Japan Windows Technology Support Blog</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/blog/" id="subtitle">日本マイクロソフト Windows Support チームによる、サポート情報 Blog です。</a>
+        </h2>
+      
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-Activation/Windows10-ESU-QA" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    
+    
+      <header class="article-header-single">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Windows 10 ESU に関するよくあるお問い合わせ
+    </h1>
+  
+
+      </header>
+      <div class="article-share">
+        Last Update: 
+        <a href="/blog/2025/09/29/Activation/Windows10-ESU-QA/" class="article-date-single">
+  <time datetime="2025-09-29T15:00:00.000Z" itemprop="datePublished">2025-09-30</time>
+</a>
+        
+  <div class="article-category">
+    <a class="article-category-link" href="/blog/categories/Activation/">Activation</a>►<a class="article-category-link" href="/blog/categories/Activation/ESU/">ESU</a>
+  </div>
+
+        
+        <a href="https://github.com/jpwinsup/blog/issues/new?title=&body=%EF%BB%BF%0A%0A---%0A%0A%23%23%23%23+Document+Details%0A%0A*+Article+ID%3A+75ecfcc5-04cd-5fde-9f84-23e74f7005bb%0A*+TITLE%3A+Windows+10+ESU+%E3%81%AB%E9%96%A2%E3%81%99%E3%82%8B%E3%82%88%E3%81%8F%E3%81%82%E3%82%8B%E3%81%8A%E5%95%8F%E3%81%84%E5%90%88%E3%82%8F%E3%81%9B%0A*+URL+https%3A%2F%2Fjpwinsup.github.io%2Fblog%2F2025%2F09%2F29%2FActivation%2FWindows10-ESU-QA%2F%0A*+SourceFileName%3A+source%2F_posts%2FActivation%2FWindows10-ESU-QA.md%0A" class="article-github-issue-link" target="_blank" rel="noopener noreferrer">feedback</a>
+        
+        <a data-url="https://jpwinsup.github.io/blog/2025/09/29/Activation/Windows10-ESU-QA/" data-id="cmlsvjdny01hfru3yfesxazor" class="article-share-link">共有</a>
+      </div>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>※本記事はマイクロソフト社員によって公開されております。</p>
+<p>みなさま、こんにちは。Windows サポート チームです。<br>Windows 10 のサポートは、2025 年 10 月 14 日に終了します。サポート終了後は、基本的にセキュリティ更新および技術サポートが提供されなくなりますが、ESU を適用することで、最大 3 年間セキュリティ更新を受けることができます。<br>本記事では、オンプレミス環境における Windows 10 ESU の認証に関するよくあるお問い合わせをご紹介いたします。</p>
+<ul>
+<li>本内容はすべて本記事記載時点の情報に基づいたものとなりますのでご留意ください。</li>
+</ul>
+<p>初めに、ESU 適用する必要なケースと必要でないケースについて、以下の表をご覧ください。</p>
+<table>
+<thead>
+<tr>
+<th>環境構成</th>
+<th>ESU 適用要否</th>
+<th>ESU キー入手要否</th>
+<th>ESU キー提供形態</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Windows 365 <br> Azure Virtual Desktop <br> Azure 仮想マシン <br> Azure Dedicated Host <br> Azure Local (Azure Local は Azure Stack HCI の新名称) <br> Azure Stack Hub <br> Azure Stack Edge</td>
+<td>不要</td>
+<td>不要</td>
+<td>N/A</td>
+</tr>
+<tr>
+<td>その他の仮想化プラットフォーム (<a target="_blank" rel="noopener" href="https://learn.microsoft.com/en-us/windows/whats-new/enable-extended-security-updates#cloud-and-virtualization-scenario-considerations">参考ページ</a>)</td>
+<td>(プラットフォームによっては必要)</td>
+<td>(プラットフォームによっては必要)</td>
+<td>5×5 MAK キー</td>
+</tr>
+<tr>
+<td>オンプレ Windows 10</td>
+<td>必要</td>
+<td>必要</td>
+<td>5×5 MAK キー</td>
+</tr>
+<tr>
+<td>Intune で管理された Windows 10</td>
+<td>必要</td>
+<td>必要</td>
+<td>5×5 MAK キー( 配布方法は <a href="#Intune-%E3%81%A7%E8%A4%87%E6%95%B0%E3%81%AE%E7%AB%AF%E6%9C%AB%E3%81%AB%E5%AF%BE%E3%81%97%E3%81%A6%E3%80%81%E3%83%A9%E3%82%A4%E3%82%BB%E3%83%B3%E3%82%B9%E3%82%AD%E3%83%BC%E3%82%92%E9%85%8D%E5%B8%83%E5%8F%AF%E8%83%BD%E3%81%A7%E3%81%99%E3%81%8B%EF%BC%9F">「Intune-で複数の端末に対して、ライセンスキーを配布可能ですか？」</a> を参照)</td>
+</tr>
+</tbody></table>
+<p>上記のオンプレ Windows 10 環境を利用する場合、5x5 MAK キーによる適用が必要となるため、MAK キーによる適用に関連する Q&amp;A を以下に記載します。</p>
+<h1 id="目次"><a href="#目次" class="headerlink" title="目次"></a>目次</h1><h2 id="セクション1-ESU-の導入とライセンス認証方法"><a href="#セクション1-ESU-の導入とライセンス認証方法" class="headerlink" title="セクション1: ESU の導入とライセンス認証方法"></a>セクション1: ESU の導入とライセンス認証方法</h2><p>-<a href="#MAK-%E3%82%AD%E3%83%BC%E3%81%AB%E3%82%88%E3%82%8B-Windows-10-ESU-%E3%82%92%E9%81%A9%E7%94%A8%E3%81%97%E3%81%9F%E3%81%84%E3%81%A7%E3%81%99%E3%81%8C%E3%80%81%E3%81%A9%E3%81%86%E3%81%99%E3%82%8C%E3%81%B0%E3%82%88%E3%81%84%E3%81%A7%E3%81%99%E3%81%8B%EF%BC%9F">MAK キーによる Windows 10 ESU を適用したいですが、どうすればよいですか？</a></p>
+<p>-<a href="#KMS-%E7%92%B0%E5%A2%83%E3%81%A7%E9%81%8B%E7%94%A8%E3%81%97%E3%81%A6%E3%81%84%E3%81%BE%E3%81%99%E3%81%8C%E3%80%81ESU-%E3%82%92%E9%81%A9%E7%94%A8%E3%81%99%E3%82%8B%E3%81%AB%E3%81%AF%E4%BD%95%E3%81%8C%E5%BF%85%E8%A6%81%E3%81%A7%E3%81%99%E3%81%8B%EF%BC%9F">KMS 環境で運用していますが、ESU を適用するには何が必要ですか</a></p>
+<p>-<a href="#Windows-10-ESU-%E3%82%92%E4%B8%80%E6%8B%AC%E9%81%A9%E7%94%A8%E3%81%99%E3%82%8B%E3%81%93%E3%81%A8%E3%81%8C%E3%81%A7%E3%81%8D%E3%81%BE%E3%81%99%E3%81%8B%EF%BC%9F">Windows 10 ESU を一括適用することができますか？</a></p>
+<p>-<a href="#Sysprep-%E5%AE%9F%E8%A1%8C%E5%BE%8C%E3%81%AE%E3%83%A9%E3%82%A4%E3%82%BB%E3%83%B3%E3%82%B9%E5%86%8D%E8%AA%8D%E8%A8%BC%E3%81%AF%E5%BF%85%E8%A6%81%E3%81%A7%E3%81%99%E3%81%8B%EF%BC%9F">Sysprep 実行後のライセンス再認証は必要ですか？</a></p>
+<p>-<a href="#%E9%81%A9%E7%94%A8%E6%B8%88%E3%81%BF%E3%81%AE-ESU-%E3%82%92%E5%A4%B1%E5%8A%B9%E3%81%95%E3%81%9B%E3%82%8B%E3%81%93%E3%81%A8%E3%81%8C%E5%87%BA%E6%9D%A5%E3%81%BE%E3%81%99%E3%81%8B%EF%BC%9F">適用済みの ESU を失効させることが出来ますか？</a></p>
+<p>-<a href="#VAMT-%E3%81%A7-Windows-10-ESU-%E3%82%AD%E3%83%BC%E3%82%92%E5%B1%95%E9%96%8B%E3%81%A7%E3%81%8D%E3%81%BE%E3%81%99%E3%81%8B%EF%BC%9F">VAMT で Windows 10 ESU キーを展開できますか？</a></p>
+<p>-<a href="#Intune-%E3%81%A7%E8%A4%87%E6%95%B0%E3%81%AE%E7%AB%AF%E6%9C%AB%E3%81%AB%E5%AF%BE%E3%81%97%E3%81%A6%E3%80%81%E3%83%A9%E3%82%A4%E3%82%BB%E3%83%B3%E3%82%B9%E3%82%AD%E3%83%BC%E3%82%92%E9%85%8D%E5%B8%83%E5%8F%AF%E8%83%BD%E3%81%A7%E3%81%99%E3%81%8B%EF%BC%9F">Intune で複数の端末に対して、ライセンスキーを配布可能ですか？</a></p>
+<h2 id="セクション2-運用環境への影響・周辺設定"><a href="#セクション2-運用環境への影響・周辺設定" class="headerlink" title="セクション2: 運用環境への影響・周辺設定"></a>セクション2: 運用環境への影響・周辺設定</h2><p>-<a href="#WSUS-%E3%82%84-SCCM-%E3%81%AB%E4%BD%95%E3%81%8B%E6%89%8B%E3%82%92%E5%8A%A0%E3%81%88%E3%82%8B%E5%BF%85%E8%A6%81%E3%81%8C%E3%81%82%E3%82%8A%E3%81%BE%E3%81%99%E3%81%8B%EF%BC%9F">WSUS や SCCM に何か手を加える必要がありますか？</a></p>
+<p>-<a href="#ESU-%E3%81%AE%E9%81%A9%E7%94%A8%E5%BE%8C%E3%80%81%E3%82%BB%E3%82%AD%E3%83%A5%E3%83%AA%E3%83%86%E3%82%A3%E6%9B%B4%E6%96%B0%E3%83%97%E3%83%AD%E3%82%B0%E3%83%A9%E3%83%A0%E3%81%AF%E3%81%A9%E3%81%AE%E3%82%88%E3%81%86%E3%81%AB%E9%85%8D%E4%BF%A1%E3%81%95%E3%82%8C%E3%81%BE%E3%81%99%E3%81%8B%EF%BC%9F">ESU の適用後、セキュリティ更新プログラムはどのように配信されますか？</a></p>
+<h2 id="セクション3-年次更新とエディション対応"><a href="#セクション3-年次更新とエディション対応" class="headerlink" title="セクション3: 年次更新とエディション対応"></a>セクション3: 年次更新とエディション対応</h2><p>-<a href="#ESU-%E7%94%A8%E3%81%AE-MAK-%E3%82%AD%E3%83%BC%E3%81%AF%E6%AF%8E%E5%B9%B4%E6%9B%B4%E6%96%B0%E3%81%95%E3%82%8C%E3%81%BE%E3%81%99%E3%81%8B%EF%BC%9F">ESU 用の MAK キーは毎年更新されますか？</a></p>
+<p>-<a href="#ESU-%E3%81%AF%E3%81%A9%E3%81%AE%E3%82%A8%E3%83%87%E3%82%A3%E3%82%B7%E3%83%A7%E3%83%B3%E3%81%AE-Windows-10-%E3%81%AB%E9%81%A9%E7%94%A8%E3%81%A7%E3%81%8D%E3%81%BE%E3%81%99%E3%81%8B%EF%BC%9F">ESU はどのエディションの Windows 10 に適用できますか？</a></p>
+<p>-<a href="#ESU-%E3%82%B5%E3%83%9D%E3%83%BC%E3%83%88%E3%81%AE%E9%96%8B%E5%A7%8B%E6%97%A5%E3%81%AF%E3%81%84%E3%81%A4%E3%81%A7%E3%81%99%E3%81%8B%EF%BC%9F">ESU サポートの開始日はいつですか？</a></p>
+<h2 id="セクション4-認証要件・接続条件"><a href="#セクション4-認証要件・接続条件" class="headerlink" title="セクション4: 認証要件・接続条件"></a>セクション4: 認証要件・接続条件</h2><p>-<a href="#ESU-%E8%AA%8D%E8%A8%BC%E7%94%A8%E3%81%AE-URLxxx-%E3%81%AE%E3%81%BF%E3%83%96%E3%83%AD%E3%83%83%E3%82%AF%E3%81%97%E3%81%A6%E3%82%82%E5%A4%A7%E4%B8%88%E5%A4%AB%E3%81%A7%E3%81%99%E3%81%8B%EF%BC%9F">ESU 認証用の URL の一部だけブロックしても大丈夫ですか？</a></p>
+<p>-<a href="#ESU-%E3%81%AE-MAK-%E3%82%AD%E3%83%BC%E3%82%92%E4%BD%BF%E3%81%A3%E3%81%9F%E8%AA%8D%E8%A8%BC%E3%81%AB-Microsoft-Entra-joined-Microsoft-Entra-hybrid-joined-%E3%81%AF%E5%BF%85%E8%A6%81%E3%81%A7%E3%81%99%E3%81%8B%EF%BC%9F">ESU の MAK キーを使った認証に Microsoft Entra joined / Microsoft Entra hybrid joined は必要ですか？</a></p>
+<p>-<a href="#KMS-%E3%83%9B%E3%82%B9%E3%83%88%E3%81%A7-ESU-%E3%82%92%E8%AA%8D%E8%A8%BC%E5%8F%AF%E8%83%BD%E3%81%A7%E3%81%99%E3%81%8B%EF%BC%9F">KMS ホストで ESU を認証可能ですか？</a></p>
+<hr>
+<h2 id="MAK-キーによる-Windows-10-ESU-を適用したいですが、どうすればよいですか？"><a href="#MAK-キーによる-Windows-10-ESU-を適用したいですが、どうすればよいですか？" class="headerlink" title="MAK キーによる Windows 10 ESU を適用したいですが、どうすればよいですか？"></a>MAK キーによる Windows 10 ESU を適用したいですが、どうすればよいですか？</h2><p>Windows 10 ESU 対応手順は、以下の公開情報にまとまっております。<br>下記に公開情報の手順を詳細に記載しておりますのでご参照ください。</p>
+<p>Title:拡張セキュリティ更新プログラム (ESU) を有効にする<br>URL:<a target="_blank" rel="noopener" href="https://learn.microsoft.com/en-us/windows/whats-new/enable-extended-security-updates">https://learn.microsoft.com/en-us/windows/whats-new/enable-extended-security-updates</a></p>
+<p>■ 前提条件</p>
+<ol>
+<li><p>Windows 10 バージョン 22H2  がインストールされており、かつ、2025 年 10 月 14 日 KB5066791 が適用されていること。</p>
+</li>
+<li><p>KB5066791 以降を適用後に、拡張セキュリティ Updates (ESU) ライセンス準備パッケージ KB5072653 をインストールしていること。</p>
+</li>
+<li><p>以下のエンドポイントに接続できること。<br>　<a target="_blank" rel="noopener" href="https://go.microsoft.com/">https://go.microsoft.com/</a><br>　<a target="_blank" rel="noopener" href="https://login.live.com/">https://login.live.com</a><br>　<a target="_blank" rel="noopener" href="https://activation.sls.microsoft.com/">https://activation.sls.microsoft.com/</a><br>　<a target="_blank" rel="noopener" href="http://crl.microsoft.com/">http://crl.microsoft.com/</a><br>　<a target="_blank" rel="noopener" href="https://validation.sls.microsoft.com/">https://validation.sls.microsoft.com/</a><br>　<a target="_blank" rel="noopener" href="https://activation-v2.sls.microsoft.com/">https://activation-v2.sls.microsoft.com/</a><br>　<a target="_blank" rel="noopener" href="https://validation-v2.sls.microsoft.com/">https://validation-v2.sls.microsoft.com/</a><br>　<a target="_blank" rel="noopener" href="https://displaycatalog.mp.microsoft.com/">https://displaycatalog.mp.microsoft.com/</a><br>　<a target="_blank" rel="noopener" href="https://licensing.mp.microsoft.com/">https://licensing.mp.microsoft.com/</a><br>　<a target="_blank" rel="noopener" href="https://purchase.mp.microsoft.com/">https://purchase.mp.microsoft.com/</a><br>　<a target="_blank" rel="noopener" href="https://displaycatalog.md.mp.microsoft.com/">https://displaycatalog.md.mp.microsoft.com/</a><br>　<a target="_blank" rel="noopener" href="https://licensing.md.mp.microsoft.com/">https://licensing.md.mp.microsoft.com/</a><br>　<a target="_blank" rel="noopener" href="https://purchase.md.mp.microsoft.com/">https://purchase.md.mp.microsoft.com/</a><br>※1. <a target="_blank" rel="noopener" href="http://crl.microsoft.com/pki">http://crl.microsoft.com/pki</a><br>※2. <a target="_blank" rel="noopener" href="http://www.microsoft.com/pkiops">http://www.microsoft.com/pkiops</a><br>※端末によって中間証明書の取得が必要となるため、※1,2 に接続できる必要がある。  </p>
+</li>
+</ol>
+<ol start="4">
+<li>ESU プロダクトキーを入手していること。  </li>
+</ol>
+<p>　ESU のプロダクトキーの入手方法:<br>　(1) Microsoft 365 管理センターにアクセスします。<br>　<a target="_blank" rel="noopener" href="https://admin.microsoft.com/Adminportal/Home#/homepage">https://admin.microsoft.com/Adminportal/Home#/homepage</a>  </p>
+<p>　※ Microsoft 365 管理センターへのサインインについては以下の公開情報もご参照ください。<br>　　Title:Microsoft 365 管理センター (ボリューム ライセンス) にサインインします<br>　　URL:<a target="_blank" rel="noopener" href="https://learn.microsoft.com/en-us/microsoft-365/commerce/licenses/vl-sign-in?view=o365-worldwide">https://learn.microsoft.com/en-us/microsoft-365/commerce/licenses/vl-sign-in?view=o365-worldwide</a><br>　<br>　(2) 管理センターで [課金] -&gt; [製品] ページに移動し、[ボリューム ライセンス] を選択します。<br>　(3) [契約] セクションで [契約の表示] を選択します。<br>　(4) [契約] ページで ESU ライセンスのライセンス認証 ID を探し、選択し [プロダクト キーの表示] を選択します。<br>　　※[プロダクト キーの詳細] ページには、契約の詳細とその契約のすべてのキーが表示されます。</p>
+<p>■ ESU ライセンス認証手順 (インターネット経由):</p>
+<ol>
+<li><p>コマンド プロンプトを管理者として実行します。</p>
+</li>
+<li><p>以下のコマンドを実行して、ESU プロダクト キーをインストールします。<br> ESU プロダクトキーは Microsoft 365 管理センターで入手したプロダト キーです。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">　cscript %WinDir%\system32\slmgr.vbs &#x2F;ipk ＜ESU プロダクト キー＞</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(例) cscript %WinDir%\system32\slmgr.vbs &#x2F;ipk XXXXX-XXXXX-XXXXX-XXXXX-XXXXX</span><br></pre></td></tr></table></figure>
+<p> プロダクト キーのインストールに成功すると、プロダクト キーが正常にインストールされた旨のメッセージが表示されます。</p>
+</li>
+<li><p>次の表から今回 ESU ライセンス認証を実行する ESU Activation ID を確認します。<br>　<br>ESU Program    Activation ID<br>Win10 ESU Year1    f520e45e-7413-4a34-a497-d2765967d094<br>Win10 ESU Year2    1043add5-23b1-4afb-9a0f-64343c8f3f8d<br>Win10 ESU Year3    83d49986-add3-41d7-ba33-87c7bfb5c0fb<br>※ Activation ID は、対象となるすべての Windows ESU エディションと、そのプログラムに登録されているすべてのデバイスで同じです。</p>
+</li>
+<li><p>以下のコマンドを実行して、ライセンス認証を行います。<br>　Activation ID は上記 Activation ID の一覧から確認したものに置き換えます。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">　cscript %WinDir%\system32\slmgr.vbs &#x2F;ato &lt;Activation ID&gt;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(例) 1 年目の認証を行う場合</span><br><span class="line">　cscript %WinDir%\system32\slmgr.vbs &#x2F;ato f520e45e-7413-4a34-a497-d2765967d094</span><br></pre></td></tr></table></figure>
+<p>　ライセンス認証に成功すると、コマンドの実行結果に正常にライセンス認証された旨のメッセージが表示されます。</p>
+</li>
+</ol>
+<ol start="5">
+<li>念のため、以下のコマンドを実行して、現在のライセンス認証の状態を確認します。<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">　cscript %WinDir%\system32\slmgr.vbs &#x2F;dlv</span><br></pre></td></tr></table></figure>
+　出力結果に対応する ESU プログラムの名前とその ESU の “ライセンスの状態” が “ライセンスされています” と表示されていれば問題ございません。<br>(英語表記の場合は “LICENSE STATUS” に “LICENSED”。)</li>
+</ol>
+<p>■ ESU ライセンス認証手順 (電話経由):</p>
+<ol>
+<li><p>コマンド プロンプトを管理者として実行します。</p>
+</li>
+<li><p>以下のコマンドを実行して、ESU プロダクト キーをインストールします。<br> ESU プロダクト キーは Microsoft 365 管理センターで入手したプロダクト キーです。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cscript %WinDir%\system32\slmgr.vbs &#x2F;ipk ＜ESU プロダクト キー＞</span><br><span class="line">(例) cscript %WinDir%\system32\slmgr.vbs &#x2F;ipk XXXXX-XXXXX-XXXXX-XXXXX-XXXXX</span><br></pre></td></tr></table></figure>
+<p> プロダクト キーのインストールに成功すると、プロダクト キーが正常にインストールされた旨のメッセージが表示されます。</p>
+</li>
+</ol>
+<ol start="3">
+<li><p>次の表から今回 ESU ライセンス認証を実行する ESU Activation ID を確認します。<br>　<br>ESU Program    Activation ID<br>Win10 ESU Year1    f520e45e-7413-4a34-a497-d2765967d094<br>Win10 ESU Year2    1043add5-23b1-4afb-9a0f-64343c8f3f8d<br>Win10 ESU Year3    83d49986-add3-41d7-ba33-87c7bfb5c0fb<br>※ Activation ID は、対象となるすべての Windows ESU エディションと、そのプログラムに登録されているすべてのデバイスで同じです。</p>
+</li>
+<li><p>以下のコマンドを実行し、インストール ID を確認します。<br>Activation ID は上記 Activation ID の一覧から確認したものに置き換えます。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">　cscript %WinDir%\system32\slmgr.vbs &#x2F;dti &lt;Activation ID&gt;</span><br></pre></td></tr></table></figure>
+
+<p>※ この後の手順でインストール ID を使用します。<br>メモ帳などのテキスト エディターにコピーし、以下のように 6 桁毎もしくは 7 桁毎に区切っておいていただくことをお勧めいたします。</p>
+</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">　  (例)    xxxxxx-xxxxxx-xxxxxx-xxxxxx-xxxxxx-xxxxxx-xxxxxx-xxxxxx-xxxxxx</span><br></pre></td></tr></table></figure>
+
+<ol start="5">
+<li><p>以下のブログに記載されている [認証手順] 4.- 13. を実施し、確認 ID を取得します。</p>
+<p> <a href="https://jpwinsup.github.io/blog/2025/12/11/Activation/PhoneActivation-changed/#%E8%AA%8D%E8%A8%BC%E6%89%8B%E9%A0%86">認証手順</a>  </p>
+</li>
+<li><p>認証対象の PC 上で以下のコマンドで、確認 ID を入力しライセンス認証を行います。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cscript %WinDir%\system32\slmgr.vbs &#x2F;atp &lt;確認 ID&gt; &lt;Activation ID&gt;</span><br></pre></td></tr></table></figure>
+
+<p>(例) 1 年目の認証を行う場合</p>
+</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cscript %WinDir%\system32\slmgr.vbs &#x2F;atp xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx f520e45e-7413-4a34-a497-d2765967d094</span><br></pre></td></tr></table></figure>
+<p>   上記コマンドが正しく実行されると、確認 ID が正常に登録された旨のメッセージが表示されます。</p>
+<ol start="7">
+<li>念のため、以下のコマンドを実行して、現在のライセンス認証の状態を確認します。<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">　cscript %WinDir%\system32\slmgr.vbs &#x2F;dlv</span><br></pre></td></tr></table></figure>
+出力結果に対応する ESU プログラムの名前とその ESU の “ライセンスの状態” が “ライセンスされています” と表示されていれば問題ございません。<br>(英語表記の場合は “LICENSE STATUS” に “LICENSED”。)</li>
+</ol>
+<hr>
+<h2 id="WSUS-や-SCCM-に何か手を加える必要がありますか？"><a href="#WSUS-や-SCCM-に何か手を加える必要がありますか？" class="headerlink" title="WSUS や SCCM に何か手を加える必要がありますか？"></a>WSUS や SCCM に何か手を加える必要がありますか？</h2><p>ESU の更新プログラムはすべて従来の更新プログラムと同様なチャンネルで配信しております。<br>そのため、通常通り WSUS、Windows Update および Microsoft カタログ サイトから取得可能となり、<br>これまでに WSUS サーバーに参照して、WSUS から更新プログラムを取得しているクライアントに関しては、<br>ESU 開始後にも WSUS サーバーから取得できるようになります。<br>(通常通り個々の更新プログラムに対して WSUS 側での承認作業が必要となります。)</p>
+<p>WSUS に関しては追加作業や設定変更はございませんが、<br>WSUS から取得した ESU の更新プログラムを各端末に適用可能にするには、<br>各クライアント端末にて、ESU 専用の MAK キーのインストールおよび認証作業を実施していただく必要がございます。<br>この ESU 専用の MAK キーのインストールおよび認証作業を実施しても、<br>WSUS 関連の設定や既存の OS のライセンス認証に影響を与えることは一切ありません。</p>
+<hr>
+<h2 id="ESU-用の-MAK-キーは毎年更新されますか？"><a href="#ESU-用の-MAK-キーは毎年更新されますか？" class="headerlink" title="ESU 用の MAK キーは毎年更新されますか？"></a>ESU 用の MAK キーは毎年更新されますか？</h2><p>はい、ESU は年間の契約となり、お客様の契約内容によって認証可能なデバイス数なども異なるため、毎年異なる MAK キーが発行されます。そのため、契約ごとに発行された MAK キーのインストールおよびライセンス認証は必ず必要となります。</p>
+<hr>
+<h2 id="KMS-環境で運用していますが、ESU-を適用するには何が必要ですか？"><a href="#KMS-環境で運用していますが、ESU-を適用するには何が必要ですか？" class="headerlink" title="KMS 環境で運用していますが、ESU を適用するには何が必要ですか？"></a>KMS 環境で運用していますが、ESU を適用するには何が必要ですか？</h2><p>ESU 有効化のために MAK 認証は既存の OS のライセンス認証を置き換えるものではなく、既存の OS ライセンス認証をこのまま維持したうえで、追加で ESU 有効化用の MAK キーをインストールし、認証していただく形となります。</p>
+<p>既存の環境に対して、 ESU 専用の MAK のインストールおよび (電話もしくはインターネットによる) MAK キーのライセンス認証を行っていただくことで、ESU のセキュリティ更新の適用が可能となります。(ESU 専用の MAK キーのインストールおよび認証作業を実施しない限り、ESU のセキュリティ更新を入手しても OS に適用することはできません。)</p>
+<p>また、今回のシナリオにおいて、上記作業はすべてエンドユーザー側にて各 OS に対して実施していただく必要があり、KCPS IaaS の基盤側における変更や操作は一切必要ございません。(このまま KCPS IaaS 上の KMS サーバーに参照するような設定で運用していただいて問題ございません)</p>
+<hr>
+<h2 id="ESU-認証用の-URLxxx-のみブロックしても大丈夫ですか？"><a href="#ESU-認証用の-URLxxx-のみブロックしても大丈夫ですか？" class="headerlink" title="ESU 認証用の URLｘｘｘ のみブロックしても大丈夫ですか？"></a>ESU 認証用の URLｘｘｘ のみブロックしても大丈夫ですか？</h2><p>以下の公開情報に記載されている URL は ESU 認証を行うための前提条件となっております。<br>そのため、原則すべて許可していただく必要がございます。</p>
+<p>タイトル：前提条件<br>URL: <a target="_blank" rel="noopener" href="https://learn.microsoft.com/ja-jp/windows/whats-new/enable-extended-security-updates#prerequisites">https://learn.microsoft.com/ja-jp/windows/whats-new/enable-extended-security-updates#prerequisites</a>  </p>
+<blockquote>
+<p>ESU for Windows 10を有効にするには、次の前提条件を満たす必要があります。<br>Windows 10、バージョン 22H2 とKB5046613、またはそれ以降の更新プログラムがインストールされている<br>デバイスの管理特権<br>クライアントのアクティブ化のエンドポイント:<br><a target="_blank" rel="noopener" href="https://go.microsoft.com/">https://go.microsoft.com/</a><br><a target="_blank" rel="noopener" href="https://login.live.com/">https://login.live.com</a><br><a target="_blank" rel="noopener" href="https://activation.sls.microsoft.com/">https://activation.sls.microsoft.com/</a><br><a target="_blank" rel="noopener" href="http://crl.microsoft.com/">http://crl.microsoft.com/</a><br><a target="_blank" rel="noopener" href="https://validation.sls.microsoft.com/">https://validation.sls.microsoft.com/</a><br><a target="_blank" rel="noopener" href="https://activation-v2.sls.microsoft.com/">https://activation-v2.sls.microsoft.com/</a><br><a target="_blank" rel="noopener" href="https://validation-v2.sls.microsoft.com/">https://validation-v2.sls.microsoft.com/</a><br><a target="_blank" rel="noopener" href="https://displaycatalog.mp.microsoft.com/">https://displaycatalog.mp.microsoft.com/</a><br><a target="_blank" rel="noopener" href="https://licensing.mp.microsoft.com/">https://licensing.mp.microsoft.com/</a><br><a target="_blank" rel="noopener" href="https://purchase.mp.microsoft.com/">https://purchase.mp.microsoft.com/</a><br><a target="_blank" rel="noopener" href="https://displaycatalog.md.mp.microsoft.com/">https://displaycatalog.md.mp.microsoft.com/</a><br><a target="_blank" rel="noopener" href="https://licensing.md.mp.microsoft.com/">https://licensing.md.mp.microsoft.com/</a><br><a target="_blank" rel="noopener" href="https://purchase.md.mp.microsoft.com/">https://purchase.md.mp.microsoft.com/</a>  </p>
+</blockquote>
+<h2 id="Windows-10-ESU-を一括適用することができますか？"><a href="#Windows-10-ESU-を一括適用することができますか？" class="headerlink" title="Windows 10 ESU を一括適用することができますか？"></a>Windows 10 ESU を一括適用することができますか？</h2><p>インターネット接続できる環境であれば、「ESU ライセンス認証手順 (インターネット経由)」に記載されているコマンドを何等かの方法でクライアント端末で実行させれば、ESU を認証することが可能です。</p>
+<p>インターネット接続なし、かつ複数台で電話認証が現実的に実施できない場合には、VAMT というツールが用意されており、クライアント OS の代わりに、本ツールでライセンス認証を実施することが可能です。<br>なお、VAMT については、無料で提供されているものであるため、技術サポートはベスト エフォートでの対応となり、製品側の不具合がある場合は修正を受け付けできないこと、ご了承ください。  </p>
+<p>また、ご利用にあたり、VAMTの構築が必要になりますので、必要に応じて下記の公開情報をご参考ください。<br>タイトル：ボリューム ライセンス認証管理ツール (VAMT) テクニカル リファレンス<br>URL: <a target="_blank" rel="noopener" href="https://learn.microsoft.com/ja-jp/windows/deployment/volume-activation/volume-activation-management-tool">https://learn.microsoft.com/ja-jp/windows/deployment/volume-activation/volume-activation-management-tool</a></p>
+<hr>
+<h2 id="Sysprep-実行後のライセンス再認証は必要ですか？"><a href="#Sysprep-実行後のライセンス再認証は必要ですか？" class="headerlink" title="Sysprep 実行後のライセンス再認証は必要ですか？"></a>Sysprep 実行後のライセンス再認証は必要ですか？</h2><p>はい。Sysprep 実行後は端末の固有情報が初期化されるため、ESU ライセンスの再認証が必要になります。再認証には同じキーを使用できますが、認証回数が減る点に注意が必要です 。  </p>
+<hr>
+<h2 id="適用済みの-ESU-を失効させることが出来ますか？"><a href="#適用済みの-ESU-を失効させることが出来ますか？" class="headerlink" title="適用済みの ESU を失効させることが出来ますか？"></a>適用済みの ESU を失効させることが出来ますか？</h2><p>以下のコマンドを実行することで、該当端末で ESU キーをアンインストールすることが可能です。<br>ただし、アンインストールしても、ESU キーの残数が +1 に戻ることがありませんので、ご留意ください。  </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">slmgr.vbs &#x2F;upk &lt;Activation ID&gt;</span><br></pre></td></tr></table></figure>
+
+<p>■ご参考: 各 Activation ID<br>Win10 ESU Year1: f520e45e-7413-4a34-a497-d2765967d094<br>Win10 ESU Year2: 1043add5-23b1-4afb-9a0f-64343c8f3f8d<br>Win10 ESU Year3: 83d49986-add3-41d7-ba33-87c7bfb5c0fb  </p>
+<hr>
+<h2 id="ESU-はどのエディションの-Windows-10-に適用できますか？"><a href="#ESU-はどのエディションの-Windows-10-に適用できますか？" class="headerlink" title="ESU はどのエディションの Windows 10 に適用できますか？"></a>ESU はどのエディションの Windows 10 に適用できますか？</h2><p>Windows 10 の ESU 対象エディションには、Home, Education、Pro,Pro for Workstations, Pro Education および  Enterprise が含まれます。  </p>
+<hr>
+<h2 id="ESU-の-MAK-キーを使った認証に-Microsoft-Entra-joined-Microsoft-Entra-hybrid-joined-は必要ですか？"><a href="#ESU-の-MAK-キーを使った認証に-Microsoft-Entra-joined-Microsoft-Entra-hybrid-joined-は必要ですか？" class="headerlink" title="ESU の MAK キーを使った認証に Microsoft Entra joined / Microsoft Entra hybrid joined は必要ですか？"></a>ESU の MAK キーを使った認証に Microsoft Entra joined / Microsoft Entra hybrid joined は必要ですか？</h2><p>いいえ、通常の 5x5 MAK Microsoft Entra joined 参加 や Microsoft Entra hybrid joined 参加 は不要です。Microsoft Entra joined / Microsoft Entra hybrid joined が必要なのは、クラウドベースの ESU サブスクリプション方式に限られます 。</p>
+<hr>
+<h2 id="ESU-の適用後、セキュリティ更新プログラムはどのように配信されますか？"><a href="#ESU-の適用後、セキュリティ更新プログラムはどのように配信されますか？" class="headerlink" title="ESU の適用後、セキュリティ更新プログラムはどのように配信されますか？"></a>ESU の適用後、セキュリティ更新プログラムはどのように配信されますか？</h2><p>ESU 適用後は、Windows Update、WSUS、Intune などの既存の配信チャネルを通じてセキュリティ更新プログラムが配信されます。</p>
+<hr>
+<h2 id="VAMT-で-Windows-10-ESU-キーを展開できますか？"><a href="#VAMT-で-Windows-10-ESU-キーを展開できますか？" class="headerlink" title="VAMT で Windows 10 ESU キーを展開できますか？"></a>VAMT で Windows 10 ESU キーを展開できますか？</h2><p>VAMT を構築済みで、かつ以下の前提条件を満たした場合、VAMT で Windows 10 ESU キーを展開できます。</p>
+<p>■ 前提条件1<br>クライアント側で、本記事 A1 で記載した Windows 10 ESU 公開情報にある前提条件を満たした。</p>
+<p>■ 前提条件2<br>各クライアント端末側で以下の設定を行っている。</p>
+<p>＜事前設定 1＞<br>各クライアント端末において、Windows ファイアウォールより設定する場合は、以下の操作を行います。<br> <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">1) [コントロール パネル] - [Windows ファイアウォール] を開きます。</span><br><span class="line"> </span><br><span class="line">2) [Windows ファイアウォールを介したアプリまたは機能を許可] をクリックします。</span><br><span class="line"> </span><br><span class="line">3) 表示された一覧がグレー アウトしている場合は、[設定の変更] ボタンをクリックします。</span><br><span class="line"> </span><br><span class="line">4) [Windows Management Instrumentation (WMI)] のチェックをオンにします。</span><br><span class="line"> </span><br><span class="line">5) [OK] ボタンをクリックします。</span><br></pre></td></tr></table></figure><br> 警告 既定では、Windows ファイアウォールの例外は、ローカルサブネットで送信されたトラフィックにのみ適用されます。<br> 複数のサブネットに適用する例外を展開するには、以下で説明するように、セキュリティが強化された Windows ファイアウォールの<br>例外設定を変更する必要があります。 </p>
+<p>＜コマンドで実行する場合＞<br>以下の内容をバッチ実行する。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">netsh advfirewall firewall set rule group&#x3D;&quot;windows management instrumentation (wmi)&quot; new enable&#x3D;yes</span><br></pre></td></tr></table></figure>
+<ul>
+<li>参考情報<br><a target="_blank" rel="noopener" href="https://docs.microsoft.com/en-us/windows/win32/wmisdk/connecting-to-wmi-remotely-starting-with-vista">https://docs.microsoft.com/en-us/windows/win32/wmisdk/connecting-to-wmi-remotely-starting-with-vista</a><br>※上記の設定は、Sysprep 後も保持されます。</li>
+</ul>
+<p>＜事前設定 2＞<br>ワークグループ環境の場合、各クライアント端末において、以下のレジストリの設定も行っていただく必要がございます。<br> <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">キー : HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System</span><br><span class="line">種類 : REG_DWORD</span><br><span class="line">名前 : LocalAccountTokenFilterPolicy</span><br><span class="line">データ : 1</span><br></pre></td></tr></table></figure><br>※上記のレジストリ設定は、Sysprep 後も保持されます。</p>
+<ul>
+<li>参考情報<br>クライアント端末での設定につきましては、以下の公開情報にも掲載しておりますので、あわせてご参照ください。</li>
+</ul>
+<p>※ 複数のサブネットにわたる VAMT アクセスを許可する場合の設定などについても掲載しております。</p>
+<p>Configure client computers<br><a target="_blank" rel="noopener" href="https://learn.microsoft.com/en-us/windows/deployment/volume-activation/configure-client-computers-vamt">https://learn.microsoft.com/en-us/windows/deployment/volume-activation/configure-client-computers-vamt</a><br><a target="_blank" rel="noopener" href="https://learn.microsoft.com/ja-jp/windows/deployment/volume-activation/configure-client-computers-vamt">https://learn.microsoft.com/ja-jp/windows/deployment/volume-activation/configure-client-computers-vamt</a> (機械翻訳)  </p>
+<p>■ VAMT を使った Windows 10 ESU キーの展開手順</p>
+<p>1.下記サイトより VAMT-ESU 構成ファイルをダウンロードします。</p>
+<p>タイトル: VAMT- ESU Configuration March 2025<br>アドレス:  <a target="_blank" rel="noopener" href="https://www.microsoft.com/en-us/download/details.aspx?id=106364">https://www.microsoft.com/en-us/download/details.aspx?id=106364</a>  </p>
+<ol start="2">
+<li><p>ダウンロードした構成ファイル (pkconfig_win10_esu.xrm-ms) を以下のパスに配置します。<br>  C:\Program Files (x86)\Windows Kits\10\Assessment and Deployment Kit\VAMT3\pkconfig</p>
+</li>
+<li><p>VAMT を起動し、左ペインにある [Product Keys] を選択し右クリックメニューから [Add Product Keys] を押下します。</p>
+</li>
+<li><p>表示されたウインドウに入手した ESU キーを入力し [Add Key(s)] 押下で追加します。<br><img src="./step4.png"></p>
+</li>
+</ol>
+<ol start="5">
+<li>次に左ペインにある [Products] &gt; [Windows] を選択し、右クリックメニューから [Discover products…] を押下します。<br><img src="./step5.png"></li>
+</ol>
+<ol start="6">
+<li>表示されたウインドウにてプルダウンメニューから ESU キーのインストールを行うクライアントの検索方法を選択し、検索句を入力後、 [Search] を押下して検索を行います。</li>
+</ol>
+<p>例1) ドメインに参加しているコンピューターを検索する場合<br>(ドメイン名: testDomain.com / コンピューター名: 対象のコンピューターが例えば “WIN10” から始まる場合 “WIN10*” で検索対象をフィルターすることが出来ます。)<br><img src="./step6.png"></p>
+<p>例2) 個々のコンピューター名や IP アドレスで検索する場合<br>(画像では “WIN10PC” という名称のコンピューターを追加したい場合の入力例)<br> <img src="./step6-2.png"></p>
+<p>利用可能な検索方法などにつきましては下記弊社公開情報もご参照ください。</p>
+<ul>
+<li>参考情報<br>タイトル: コンピューターの追加と削除<br>URL: <a target="_blank" rel="noopener" href="https://learn.microsoft.com/ja-jp/windows/deployment/volume-activation/add-remove-computers-vamt">https://learn.microsoft.com/ja-jp/windows/deployment/volume-activation/add-remove-computers-vamt</a>  </li>
+</ul>
+<ol start="7">
+<li>検索に成功した場合、以下のようなダイアログが表示されます。<br><img src="./step7.png"></li>
+</ol>
+<ol start="8">
+<li>コンピューターが追加されましたら、クライアントの情報を収集するために追加されたコンピューターを選択し、右クリックメニューから [Update license status] &gt; [Current credential] もしくは [Alternate credential…] を押下します。<br><img src="./step8.png"></li>
+</ol>
+<p>※ [Current credential] と [Alternate credential…] について</p>
+<ul>
+<li><p>VAMT を使用している端末にログオンしているユーザーが、クライアント端末の Administrators グループ (ローカル管理者権限) のユーザーである場合は、[Current credential] をクリックします。</p>
+</li>
+<li><p>VAMT を使用している端末にログオンしているユーザーが、クライアント端末の Administrators グループ (ローカル管理者権限) のユーザーではない場合は、[Alternate credential] をクリックすると、ユーザー名とパスワードの入力画面が表示されますので、クライアント端末の Administrators グループ (ローカル管理者権限) のユーザーのユーザー名およびパスワードを入力します。</p>
+</li>
+</ul>
+<p>(ユーザー名 / パスワードの入力画面サンプル)<br><img src="./step8-2.png"></p>
+<ol start="9">
+<li>以下の画像のように情報収集が完了しましたら [Close] を押下し、ウインドウを閉じます。<br><img src="./step9.png"></li>
+</ol>
+<ol start="10">
+<li>ESU キーをインストールしたい端末を選択し、右クリックメニューから [Install product key…] を押下します。 (CtrlキーまたはShiftキーを用いて一度に複数選択も可能です。)<br><img src="./step10.png"></li>
+</ol>
+<ol start="11">
+<li>表示されたウインドウにてインストールを行う ESU キーを選択し、 [Install Key] を押下します。<br><img src="./step11.png"></li>
+</ol>
+<p>※「8.」 にて [Alternate credential…] を選択した場合は本画面においても左下の [Use Alternate Credentials] にチェックを入れ、 [Install Key] 押下後に表示されるユーザー名とパスワードの入力画面にて、クライアント端末の Administrators グループ (ローカル管理者権限) のユーザーのユーザー名およびパスワードを入力します。</p>
+<ol start="12">
+<li>以下の画像のようにキーのインストールが完了しましたら [Close] を押下し、ウインドウを閉じます。<br><img src="./step12.png"></li>
+</ol>
+<ol start="13">
+<li>キーのインストールが完了しましたら、次に認証を行います。認証するクライアントと ESU キーの組み合わせを選択し、右クリックメニューから [Activate] &gt; [Online activate] もしくは [Proxy activate…] を押下します。<br><img src="./step13.png"></li>
+</ol>
+<p>※ [Online activate] と [Proxy activate…] について</p>
+<ul>
+<li><p>該当のクライアントが直接インターネットに接続可能な場合は [Online activate] より [Current credential] もしくは [Alternate credential…] を押下し認証します。</p>
+</li>
+<li><p>該当のクライアントがインターネットに接続できない場合は代わりに VAMT にて代理 (Proxy) で認証を行うために [Proxy activate…] を押下します。</p>
+</li>
+</ul>
+<ol start="14">
+<li>([Proxy activate…] を押下した場合のみ) 表示されたウインドウにて [Acquire confirmation ID, apply to selected machine(s) and activate] のラジオボタンを選択し、 [OK] を押下します。<br><img src="./step14.png"></li>
+</ol>
+<p>※「8.」 にて [Alternate credential…] を選択した場合は本画面においても [Use Alternate Credentials when applying confirmation ID] にチェックを入れ、 [OK] 押下後に表示されるユーザー名とパスワードの入力画面にて、クライアント端末の Administrators グループ (ローカル管理者権限) のユーザーのユーザー名およびパスワードを入力します。</p>
+<ol start="15">
+<li>[Online activate] の場合はウインドウが 1 回、 [Proxy activate…] の場合は 2 回ウインドウが表示されますので、それぞれ処理が完了しましたら [Close] を押下します。</li>
+</ol>
+<p>[Online activate] の場合)<br><img src="./step15.png"></p>
+<p> [Proxy activate…] の場合)<br>●1 回目 (Confirmation ID の 取得)<br><img src="./step15-2.png"></p>
+<p>●2 回目 (取得した Confirmation ID のクライアントへの適用)<br><img src="./step15-3.png"></p>
+<p>※ [Automatically close when done] にチェックを入れることでウインドウを自動で閉じることも可能です。</p>
+<ol start="16">
+<li>認証が完了し、インストールした ESU キーについて [License Status] 列が “Licensed” となっていることを確認します。<br><img src="./step16.png"></li>
+</ol>
+<p>これにて ESU の適用が完了となります。</p>
+<hr>
+<p>▼参考<br>手順完了後の端末の状態 (slmgr /dlv の結果)<br>端末側でも ESU Year1 のキーが “ライセンスされています” になっていることが確認できる。<br><img src="./step16-2.png"></p>
+<hr>
+<h2 id="Intune-で複数の端末に対して、ライセンスキーを配布可能ですか？"><a href="#Intune-で複数の端末に対して、ライセンスキーを配布可能ですか？" class="headerlink" title="Intune で複数の端末に対して、ライセンスキーを配布可能ですか？"></a>Intune で複数の端末に対して、ライセンスキーを配布可能ですか？</h2><p>はい、Intune Win32 アプリもしくは PowerShell スクリプトの修復にて ESU ライセンスキーを配布することが可能です。<br>具体的なやり方については、以下の情報をご参考ください。</p>
+<ul>
+<li>Enabling Extended Security Updates (ESU) for Windows 10 with Intune<br><a target="_blank" rel="noopener" href="https://techcommunity.microsoft.com/blog/coreinfrastructureandsecurityblog/enabling-extended-security-updates-esu-for-windows-10-with-intune/4420182">https://techcommunity.microsoft.com/blog/coreinfrastructureandsecurityblog/enabling-extended-security-updates-esu-for-windows-10-with-intune/4420182</a></li>
+</ul>
+<hr>
+<h2 id="KMS-ホストで-ESU-を認証可能ですか？"><a href="#KMS-ホストで-ESU-を認証可能ですか？" class="headerlink" title="KMS ホストで ESU を認証可能ですか？"></a>KMS ホストで ESU を認証可能ですか？</h2><p>ESU は MAK キーによる認証方式となっているため、KMS ホストでは認証できません。</p>
+<hr>
+<h2 id="ESU-サポートの開始日はいつですか？"><a href="#ESU-サポートの開始日はいつですか？" class="headerlink" title="ESU サポートの開始日はいつですか？"></a>ESU サポートの開始日はいつですか？</h2><p>ESU サポートの開始日は 2025 年 10 月 14 日です。（Windows 10 のサポート終了日と同じ日です。）<br><a target="_blank" rel="noopener" href="https://learn.microsoft.com/en-us/lifecycle/faq/extended-security-updates#esu-availability-and-end-dates">https://learn.microsoft.com/en-us/lifecycle/faq/extended-security-updates#esu-availability-and-end-dates</a></p>
+<hr>
+<h2 id="更新履歴"><a href="#更新履歴" class="headerlink" title="更新履歴"></a>更新履歴</h2><p>2025/09/30 : 本ブログの公開<br>2025/10/06 : Azure VMware Solution (Nutanix など) に ESU の適用が必要であることを明記<br>2025/11/14 : Azure VMware Solution (Nutanix など) 、プラットフォームによって ESU の適用が必要であることに変更<br>2025/12/11 : 新しい電話認証手順を引用。ESU 認証に必要なエンドポイントを追加。</p>
+
+      
+      
+    </div>
+    <footer class="article-footer">
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/blog/2025/10/28/UEFI/Secure%20Boot/about-tpm-wmi-1801/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">次の記事</strong>
+      <div class="article-nav-title">
+        
+          TPM-WMI イベント ID: 1801 について
+        
+      </div>
+    </a>
+  
+  
+    <a href="/blog/2025/09/29/Setup/FU/FU_Win10EOS/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">前の記事</strong>
+      <div class="article-nav-title">Windows 11 へアップグレードしましょう！</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">カテゴリ</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Activation/">Activation</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Activation/ESU/">ESU</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Activation/security-SPP/">security-SPP</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/">Active Directory</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Authentication/">Authentication</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/DFSR/">DFSR</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/FunctionalLevel/">FunctionalLevel</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Group-Policy/">Group Policy</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Promotion-and-Demotion/">Promotion and Demotion</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/User-Profile/">User Profile</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Windows-Hello/">Windows Hello</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Windows-Time-Service/">Windows Time Service</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/AppLocker/">AppLocker</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/AppLocker/Active-Directory/">Active Directory</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/AppLocker/Microsoft-Intune/">Microsoft Intune</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Deployment/">Deployment</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Deployment/Feature-on-demand/">Feature on demand</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Deployment/Sysprep/">Sysprep</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Failover-Clustering/">Failover Clustering</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Failover-Clustering/Configuration-and-Management/">Configuration and Management</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/FileServices/">FileServices</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/FileServices/FTP/">FTP</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/FileServices/SMB/">SMB</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Hyper-V/">Hyper-V</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Hyper-V/Configuration-and-Management/">Configuration and Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Hyper-V/Migration/">Migration</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Microsoft-Connected-Cache/">Microsoft Connected Cache</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/">Networking</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/BITS/">BITS</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/Bluetooth/">Bluetooth</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/DHCP/">DHCP</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/DNS/">DNS</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/Firewall/">Firewall</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/LBFO/">LBFO</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/NCSI/">NCSI</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/NetworkInterface/">NetworkInterface</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/Proxy/">Proxy</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/TCPIP/">TCPIP</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/OpenSSH/">OpenSSH</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/">Performance</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/Hang-up-BSoD/">Hang-up/BSoD</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/No-Boot/">No Boot</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/Slow-Response/">Slow Response</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/System-Resource/">System Resource</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/Tools/">Tools</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/">Public Key Infrastructure</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Certificate-Authority/">Certificate Authority</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Certificate-Management/">Certificate Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Code-Signing/">Code Signing</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/SSL-TLS-Communication/">SSL TLS Communication</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/SSL-TLS-Connection/">SSL TLS Connection</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Smart-Card-Logon/">Smart Card Logon</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/">Remote Desktop</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/Azure-Virtual-Desktop-AVD/">Azure Virtual Desktop (AVD)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/Remote-Desktop-Service-RDS/">Remote Desktop Service (RDS)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/Windows-Virtual-Desktop-WVD/">Windows Virtual Desktop (WVD)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/RemoteAccess/">RemoteAccess</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/RemoteAccess/%E3%83%80%E3%82%A4%E3%83%A4%E3%83%AB%E3%82%A2%E3%83%83%E3%83%97%E6%8E%A5%E7%B6%9A/">ダイヤルアップ接続</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Setup/">Setup</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Setup/Feature-Update-FU/">Feature Update (FU)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Shell/">Shell</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Shell/Explorer/">Explorer</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/">Storage</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/Backup/">Backup</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/FSRM/">FSRM</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/Management/">Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/StorageMigrationService/">StorageMigrationService</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/UEFI/">UEFI</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/UEFI/Secure-Boot/">Secure Boot</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/">User Interface and Apps</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Command-Prompt/">Command Prompt</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/EventLog/">EventLog</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Language-Support/">Language Support</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Microsoft-Store/">Microsoft Store</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Performance/">Performance</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/PowerShell/">PowerShell</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Printing-%E5%8D%B0%E5%88%B7/">Printing (印刷)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Server-Management/">Server Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Taskscheduler/">Taskscheduler</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Windows-Management-Instrumentation/">Windows Management Instrumentation</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps-Language-support/">User Interface and Apps - Language support</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-365/">Windows 365</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Admin-Center/">Windows Admin Center</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Search/">Windows Search</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/">Windows Update</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Delivery-Optimization-DO/">Delivery Optimization (DO)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Feature-Update-FU/">Feature Update (FU)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Quality-Update-QU/">Quality Update (QU)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Windows-Update-Agent/">Windows Update Agent</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Windows-Update-Agent-WUA/">Windows Update Agent (WUA)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/">WirelessNetwork</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/NPS/">NPS</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/Wi-Fi/">Wi-Fi</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/%E3%83%A2%E3%83%90%E3%82%A4%E3%83%AB-%E3%83%96%E3%83%AD%E3%83%BC%E3%83%89%E3%83%90%E3%83%B3%E3%83%89%E6%8E%A5%E7%B6%9A-LTE/">モバイル ブロードバンド接続 (LTE)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/%E7%B5%84%E7%B9%94%E7%B4%B9%E4%BB%8B%E3%83%96%E3%83%AD%E3%82%B0%EF%BC%88Windows-Commercial%EF%BC%89/">組織紹介ブログ（Windows Commercial）</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最近の投稿</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/blog/2026/02/16/ActiveDirectory/GroupPolicy/UacPolicyIsEnabled/">「ユーザー アカウント制御：ビルトイン Administrator アカウントのための管理者承認モード」ポリシーが有効になる動作ついて</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/02/15/UserInterfaceAndApps/Printing/printer-queue-app-preview/">印刷キューアプリのプレビュー機能について</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/02/02/ActiveDirectory/Authentication/kerberos-rc4-for-service-account-ticket-issuance-changes-related-to-cve-2026-20833/">CVE‑2026‑20833 への対応とその影響について [KB5073381]</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/01/12/Hyper-V/vmwp-does-not-save-the-RTC-value-of-a-virtual-machine-when-performing-Live-Migration/">ライブ マイグレーション後の再起動でゲスト OS の時刻がずれる場合がある</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/01/07/WindowsUpdate/FU/fublog-txt/">ISO メディア経由かつ動的更新無効な状態で Windows 11 バージョン 24H2 または 25H2 へのアップグレードが失敗 (0x8007042B 0x2000D) する事象と対策について</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">アーカイブ</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2026/02/">2026 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2026/01/">2026 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/12/">2025 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/11/">2025 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/10/">2025 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/09/">2025 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/08/">2025 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/07/">2025 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/06/">2025 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/05/">2025 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/04/">2025 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/03/">2025 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/02/">2025 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/01/">2025 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/12/">2024 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/11/">2024 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/10/">2024 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/09/">2024 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/08/">2024 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/07/">2024 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/06/">2024 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/05/">2024 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/04/">2024 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/03/">2024 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/02/">2024 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/01/">2024 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/12/">2023 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/11/">2023 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/10/">2023 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/09/">2023 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/08/">2023 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/07/">2023 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/06/">2023 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/05/">2023 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/04/">2023 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/03/">2023 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/02/">2023 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/01/">2023 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/12/">2022 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/11/">2022 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/10/">2022 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/09/">2022 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/08/">2022 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/07/">2022 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/06/">2022 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/05/">2022 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/04/">2022 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/03/">2022 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/02/">2022 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/01/">2022 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/12/">2021 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/11/">2021 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/10/">2021 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/09/">2021 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/08/">2021 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/07/">2021 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/06/">2021 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/05/">2021 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/04/">2021 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/03/">2021 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/02/">2021 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/01/">2021 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/12/">2020 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/11/">2020 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/10/">2020 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/07/">2020 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/03/">2020 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2019/03/">2019 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/11/">2018 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/10/">2018 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/09/">2018 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/08/">2018 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/07/">2018 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/06/">2018 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/04/">2018 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/02/">2018 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/12/">2017 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/11/">2017 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/09/">2017 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/05/">2017 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/03/">2017 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/02/">2017 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2016/08/">2016 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2016/05/">2016 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2014/03/">2014 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2012/02/">2012 / 02</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2026 Microsoft Japan Windows Technology Support Team<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/blog/" class="mobile-nav-link">Home</a>
+  
+    <a href="/blog/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+<script src="/blog/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

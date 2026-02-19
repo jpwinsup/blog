@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-180187723-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-180187723-1');
+</script>
+<!-- End Google Analytics -->
+
+  
+  <title>Hyper-V 環境にて仮想 SAN を利用する場合の設計の留意点 | Microsoft Japan Windows Technology Support Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="※ 本記事は弊社の Technet から移行した記事です。いつも弊社製品をご利用いただきまして誠にありがとうございます。日本マイクロソフトの Windows サポートチームです。今回は Hyper-V 環境にて仮想 SAN を利用する場合の設計の留意点についてご紹介します。 1. Hyper-V の仮想 SAN の概要複数の仮想マシンを 1 台のHyper-V 上の物理サーバーで稼働させる環境では">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hyper-V 環境にて仮想 SAN を利用する場合の設計の留意点">
+<meta property="og:url" content="https://jpwinsup.github.io/blog/2019/03/01/Hyper-V/vSAN/index.html">
+<meta property="og:site_name" content="Microsoft Japan Windows Technology Support Blog">
+<meta property="og:description" content="※ 本記事は弊社の Technet から移行した記事です。いつも弊社製品をご利用いただきまして誠にありがとうございます。日本マイクロソフトの Windows サポートチームです。今回は Hyper-V 環境にて仮想 SAN を利用する場合の設計の留意点についてご紹介します。 1. Hyper-V の仮想 SAN の概要複数の仮想マシンを 1 台のHyper-V 上の物理サーバーで稼働させる環境では">
+<meta property="og:locale" content="ja_JP">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2019/03/01/Hyper-V/vSAN/1.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2019/03/01/Hyper-V/vSAN/2.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2019/03/01/Hyper-V/vSAN/3.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2019/03/01/Hyper-V/vSAN/4.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2019/03/01/Hyper-V/vSAN/5.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2019/03/01/Hyper-V/vSAN/6.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2019/03/01/Hyper-V/vSAN/7.png">
+<meta property="article:published_time" content="2019-03-01T02:16:00.000Z">
+<meta property="article:modified_time" content="2026-02-19T02:53:58.385Z">
+<meta property="article:author" content="Microsoft Japan Windows Technology Support Team">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://jpwinsup.github.io/blog/2019/03/01/Hyper-V/vSAN/1.png">
+  
+    <link rel="alternate" href="/blog/atom.xml" title="Microsoft Japan Windows Technology Support Blog" type="application/atom+xml">
+  
+
+  <link rel="icon" href="/blog/favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="/blog/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/blog/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/blog/favicon-16x16.png">
+  <link rel="manifest" href="/blog/site.webmanifest">
+  <link rel="mask-icon" href="/blog/safari-pinned-tab.svg" color="#5bbad5">
+  <meta name="msapplication-TileColor" content="#ffffff">
+  <meta name="theme-color" content="#ffffff">
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/blog/css/style.css">
+
+<meta name="generator" content="Hexo 5.2.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="site-header-logo"></div>
+  <div id="site-header-blog-wrapper"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        <div id="ms-logo"></div>
+        
+          <a class="main-nav-link" href="/blog/">Home</a>
+        
+          <a class="main-nav-link" href="/blog/archives">Archives</a>
+        
+        <a class="main-nav-link" target="_blank" rel="noopener" href="https://cssjpn.github.io/">サポート情報</a>
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/blog/atom.xml" title="RSSフィード"></a>
+        
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//www.bing.com/search" method="get" accept-charset="UTF-8" name="bing-search" onsubmit="var f=this;if(f['q'].value){var searchUrl =  'https://www.bing.com/search?q=' +  encodeURIComponent(f['q'].value + ' site:' + f['sitesearch'].value) ;window.open(searchUrl, 'blank') };return false;" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="検索"><button type="submit" id="nav-search-btn" class="search-form-submit"></button><input type="hidden" name="sitesearch" value="https://jpwinsup.github.io/blog"></form>
+      </div>
+    </div>
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/blog/" id="logo">Microsoft Japan Windows Technology Support Blog</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/blog/" id="subtitle">日本マイクロソフト Windows Support チームによる、サポート情報 Blog です。</a>
+        </h2>
+      
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-Hyper-V/vSAN" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    
+    
+      <header class="article-header-single">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Hyper-V 環境にて仮想 SAN を利用する場合の設計の留意点
+    </h1>
+  
+
+      </header>
+      <div class="article-share">
+        Last Update: 
+        <a href="/blog/2019/03/01/Hyper-V/vSAN/" class="article-date-single">
+  <time datetime="2019-03-01T02:16:00.000Z" itemprop="datePublished">2019-03-01</time>
+</a>
+        
+  <div class="article-category">
+    <a class="article-category-link" href="/blog/categories/Hyper-V/">Hyper-V</a>►<a class="article-category-link" href="/blog/categories/Hyper-V/Configuration-and-Management/">Configuration and Management</a>
+  </div>
+
+        
+        <a href="https://github.com/jpwinsup/blog/issues/new?title=&body=%EF%BB%BF%0A%0A---%0A%0A%23%23%23%23+Document+Details%0A%0A*+Article+ID%3A+4a69ee48-e222-5bf1-8cd2-07ef9849f3d2%0A*+TITLE%3A+Hyper-V+%E7%92%B0%E5%A2%83%E3%81%AB%E3%81%A6%E4%BB%AE%E6%83%B3+SAN+%E3%82%92%E5%88%A9%E7%94%A8%E3%81%99%E3%82%8B%E5%A0%B4%E5%90%88%E3%81%AE%E8%A8%AD%E8%A8%88%E3%81%AE%E7%95%99%E6%84%8F%E7%82%B9%0A*+URL+https%3A%2F%2Fjpwinsup.github.io%2Fblog%2F2019%2F03%2F01%2FHyper-V%2FvSAN%2F%0A*+SourceFileName%3A+source%2F_posts%2FHyper-V%2FvSAN.md%0A" class="article-github-issue-link" target="_blank" rel="noopener noreferrer">feedback</a>
+        
+        <a data-url="https://jpwinsup.github.io/blog/2019/03/01/Hyper-V/vSAN/" data-id="cmlsvjdnz01hgru3yfwmq9x4r" class="article-share-link">共有</a>
+      </div>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>※ 本記事は弊社の Technet から移行した記事です。<br>いつも弊社製品をご利用いただきまして誠にありがとうございます。日本マイクロソフトの Windows サポートチームです。<br>今回は Hyper-V 環境にて仮想 SAN を利用する場合の設計の留意点についてご紹介します。</p>
+<h3 id="1-Hyper-V-の仮想-SAN-の概要"><a href="#1-Hyper-V-の仮想-SAN-の概要" class="headerlink" title="1. Hyper-V の仮想 SAN の概要"></a>1. Hyper-V の仮想 SAN の概要</h3><p>複数の仮想マシンを 1 台のHyper-V 上の物理サーバーで稼働させる環境では、外部ストレージを利用することが多くあります。外部ストレージとして FC 接続のストレージを利用する環境において、仮想マシンから直接 FC 接続のディスクを利用するために、Windows Server 2012 以降の Hyper-V では仮想 SAN と仮想ファイバー チャネル アダプターの機能が用意されています。  </p>
+<p>仮想 SAN では Hyper-V 環境内で各仮想マシンに SAN 環境を提供するため、Hyper-V マネージャーの “仮想 SAN マネージャー” から物理ファイバー チャネル ポートのグループに “仮想 SAN 名” を定義します。同じく “仮想 SAN マネージャー” では、個々の仮想マシンに動的に割り当てることができる WWPN (World Wide Port Number) の範囲や WWNN (World Wide Node Number) を定義することができます。  </p>
+<p>WWPN は、ネットワーク上のカード (ポート) を識別する MAC アドレスに似ており、ファイバー チャネル HBA (Host Bus Adapter) に提供される固有の番号です。この固有の番号は、ストレージ装置が特定の HBA を認識するために利用されます。また、WWNN は 1 台のデバイスに 1 つのみ付加される識別子です。  </p>
+<h3 id="2-仮想-SAN-仮想ファイバー-チャネル-アダプターを利用するための前提条件"><a href="#2-仮想-SAN-仮想ファイバー-チャネル-アダプターを利用するための前提条件" class="headerlink" title="2. 仮想 SAN / 仮想ファイバー チャネル アダプターを利用するための前提条件"></a>2. 仮想 SAN / 仮想ファイバー チャネル アダプターを利用するための前提条件</h3><p>Hyper-V 環境で、仮想 SAN / 仮想ファイバー チャネル アダプターを利用するためには、ハードウェアにも要件があります。以下のリンクに前提条件の記載がありますので、ご利用いただく環境が前提条件を満たしているかを確認してください。<br><a target="_blank" rel="noopener" href="https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-server-2012-R2-and-2012/dn551169(v=ws.11)?redirectedfrom=MSDN">Implement Hyper-V Virtual Fibre Channel</a>  </p>
+<p>前提条件にある NPIV (N_Port ID Virtualization) とは 1 つの物理ファイバー チャネル ポートに複数の複数の仮想ファイバー チャネル アダプターをマッピングし、仮想的な WWPN を割り当てるファイバー チャネル ポートの仮想化技術のひとつです。  </p>
+<p>このポイントとしては、NPIV 対応の “SAN” が必要であることです。このことは通常、NPIV 対応の “SAN スイッチ” が必要であることを意味します。つまりストレージに直結の構成では仮想 SAN は構成できません。  </p>
+<p>NPIV 対応の物理 HBA が物理ホスト サーバーには必要ですが、ハードウェアによっては、NPIV の機能を利用するために、ハードウェアの設定が必要な場合はあります。具体的な設定手順につきましては利用する HBA カードのベンダーに確認してください。また、1 つの NPIV のポートからアクセスできるターゲットの WWPN 数が制限されている場合があります。仮想マシンから一部のターゲットのディスクまたはテープが認識できない場合は、このようなハードウェアの制限に抵触していないかの確認および HBA カードのドライバーのバージョンが NPIV に対応しているか (既知の不具合がないか) をまず確認する必要があります。  </p>
+<p>また、Hyper-V 環境では、”パス スルー ディスク” という物理サーバーに接続されたディスクをそのまま仮想マシンに接続することができる機能も用意されています。この機能を利用して FC 接続など外部ストレージを仮想マシンから利用することもできますが、Windows Server 2012 以降ではパス スルー ディスクを利用するメリットは少なく、推奨されていません。  </p>
+<p>パス スルー ディスクはクラスター環境で、仮想マシン リソースとは別のリソースとして管理しなくてはなりません。また、クラスターを構成していない Hyper-V ホスト間のライブ マイグレーションもサポートされていないなど、管理面でも機能面でもパス スルー ディスクを使うメリットはありません。  </p>
+<p>そのため、ハードウェアなどの要件を満たせる場合は、仮想 SAN 環境を利用することを検討ください。  </p>
+<p>Windows Server 2012 以降では、VHDX が登場し、仮想ディスクの最大サイズの点でも、パフォーマンスの点でも、物理ディスクを直接利用した場合とほぼ同等になっています。そのため、もしハードウェアの要件を満たせない場合でも、パス スルー ディスクを利用せずに、VHDX の仮想ディスクを利用することをお奨めします。<br><a target="_blank" rel="noopener" href="https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-server-2012-R2-and-2012/dn803924(v=ws.11)?redirectedfrom=MSDN">Migrate Pass-Through Disk Storage by Using Hyper-V in Windows Server 2012 R2</a> </p>
+<h3 id="3-仮想ファイバー-チャネル-アダプターの設定"><a href="#3-仮想ファイバー-チャネル-アダプターの設定" class="headerlink" title="3. 仮想ファイバー チャネル アダプターの設定"></a>3. 仮想ファイバー チャネル アダプターの設定</h3><p>仮想 SAN の設定については項番 1 で触れましたが、この項目では仮想ファイバー チャネル アダプターの設定について紹介します。  </p>
+<p>仮想マシンへの仮想ファイバー チャネル アダプターの追加はネットワーク アダプターと同様に仮想マシンの “設定” から行うことができます。  </p>
+<p>仮想ファイバー チャネル アダプターを追加し、接続する仮想 SAN を選択します。ポートのアドレスは既定では仮想 SAN の定義の際に設定した WWNN や WWPN の範囲から、自動的に割り当てられますが、固定で割り当てる必要がある場合には、”アドレスを編集する” ボタンから、任意の値を割り当てることが可能です。通常 SAN スイッチにて zoning を行うことでアクセス可能な LUN を制限するので、WWPN も設計に沿った値にすることが一般的です。<br><img src="1.png"><br>ここで設定可能なアドレス セット A とアドレス セット B はクラスター環境でライブ マイグレーションを行う際に利用されます。Hyper-V では、すべての LUN が移行先コンピュータで使用可能であることを確認してから、ライブ マイグレーションを実行するため、移行前と移行後で異なる WWPN が割り当てられる必要があります。そのため、仮想マシンにはライブ マイグレーション用に 2 つのアドレスを セットを事前に定義しておく必要があります。また、これらのアドレス セットはライブ マイグレーションを行うたびに変更されるため、SAN スイッチで zoning を行う際には、両方のアドレス セットがいずれのクラスター ノードからもアクセスできるように設定します。  </p>
+<p><img src="2.png">   </p>
+<h3 id="4-マルチ-パス接続の場合の設計"><a href="#4-マルチ-パス接続の場合の設計" class="headerlink" title="4. マルチ パス接続の場合の設計"></a>4. マルチ パス接続の場合の設計</h3><p>本項では、仮想 SAN を経由してアクセスするディスクをマルチパス構成にする場合の設計ポイントについてご紹介いたします。  </p>
+<p>Hyper-V の仮想 SAN 機能では仮想マシンの起動時に仮想ファイバー チャネル アダプターを物理の HBA のポートにマッピングする機能を提供します。”起動” 時にマッピングンを行うのみで、例えば仮想 SAN に複数の物理 HBA のポートをアサインしても、片方のポートの障害時にそのポートの紐づけられていた仮想ファイバー チャネル アダプターのポートを障害でないポートに再マッピングする、いわゆるフェールオーバーなどは行われません。そのため、ディスクへのマルチパス化を行う際は、仮想マシン OS にて MPIO 機能を有効化し、パス障害時の挙動を制御する必要があります。  </p>
+<p>ここで、パスの耐障害性のために 2 パスのマルチパス構成を行う例にして、設計のポイントをご紹介いたします。  </p>
+<p>2 パスのマルチパス構成の場合には、以下の 2 つの設計が可能です。<br>A. 2 つの物理 HBA ポートでそれぞれ別の仮想 SAN を構成し、仮想マシンにはそれぞれの仮想 SAN に接続する 2 つの仮想ファイバー チャネル アダプターを作成する。<br>B. 2 つの物理 HBA ポートで 1 つの仮想 SAN を構成し、仮想マシンには同一の仮想 SAN に接続する 2 つの仮想ファイバー チャネル アダプターを作成する。  </p>
+<p>先述の通り、仮想 SAN 内で障害時のフェールオーバーは行われないため、B の構成に 1 つの仮想ファイバー チャネル アダプターを作成する構成は要件を満たすことができません。<br>以下にそれぞれの構成を図にします。  </p>
+<p><img src="3.png"><br><img src="4.png">   </p>
+<p>A の構成の場合、必ず 2 つの仮想ファイバー チャネル アダプターに別の物理ポートがアサインされるため、片方のパスが障害になっても MPIO でマルチパス化されたディスクへの I/O を継続することが可能です。しかしながら、デメリットとしては、片方のパスの障害時に仮想マシンの “起動” ができない事象が発生します。これはパスのマッピングは仮想マシンが起動するタイミングにのみ行われますが、その際にマッピング可能なパスがないと、リソースの割り当てが行えず、エラーとなるためです。  </p>
+<p><img src="5.png">   </p>
+<p>B の構成の場合、A の構成のデメリットである仮想マシンが “起動” できない問題は発生しません。しかし、”起動” 時に仮想ファイバー チャネル アダプターに同一の物理ポートが割り当てられていた場合、その割り当てられたポートに障害が発生すると仮想マシン OS の両方のパスが障害となってしまう懸念があります。この点については、仮想ファイバー チャネル アダプターにはラウンド ロビンで物理 HBA ポートがアサインされるため、基本的には別のポートが割り当てられます。もし、起動後に別のパスが割り当てられているかを確認したい場合は、NPIV のポート割り当てをコマンドレットで確認することも可能です。(後述します。)  </p>
+<p><img src="6.png">   </p>
+<p>つまり、耐障害性を担保しつつ、容易な運用のためには、B の構成が推奨であるといえます。<br>なお、パスの冗長化の目的として、耐障害性だけでなく帯域確保の目的がある場合、A の構成でも B の構成でも障害発生時は物理 HBA ポート 1 つで I/O することになるため、帯域としては縮退することになります。もし物理 HBA ポートを 4 つ用意できる場合は、2 つずつに分けて、仮想 SAN を構成 (以下の構成 C) することで障害時の帯域も確保できる構成となります。</p>
+<p><img src="7.png">   </p>
+<p>構成の設計については、以下にガイドがありますので、必要に応じてご参照ください。<br><a target="_blank" rel="noopener" href="https://docs.microsoft.com/en-us/previous-versions/windows/it-pro/windows-server-2012-R2-and-2012/dn550728(v=ws.11)">Hyper-V Virtual Fibre Channel Design Guide</a><br>ただし、いずれの構成の場合でも、障害発生時に “起動” した仮想マシンは、パス障害からの復旧後、再度、起動を行うまで、複数ポートにマッピングはされません。ここでの再度の起動とは、仮想マシン OS 内部からの再起動では反映されず、シャットダウンおよび Hyper-V マネージャーなどからの起動の操作が必要です。(仮想マシン ワーカー プロセスである vmwp.exe のリサイクルが必要です。)  </p>
+<p>最後に Hyper-V ホストの物理 HBA の WWPN や仮想マシン OS 内部から、自身の仮想ファイバー チャネル アダプターに割り当てられた WWPN の値や、仮想マシンの起動後にマッピングされた WWPN が正しく複数パスに分散されているかをコマンドから確認したいこともあるかと思います。その場合は以下の PowerShell コマンドレットで確認できますのでご紹介いたします。  </p>
+<p>•  ポートにアサインされた WWPN を確認する  </p>
+<pre><code class="powershell">wmic /namespace:\\root\wmi\ path MSFC_FibrePortHbaAttributes get /value  </code></pre>
+<p>出力例)  </p>
+<pre><code>Active=TRUE  
+HBAStatus=0  
+InstanceName=PCI\VEN_1077&amp;amp;DEV_2432&amp;amp;SUBSYS_7041103C&amp;amp;REV_03\4&amp;amp;160c5d44&amp;amp;0&amp;amp;0018_0  
+UniquePortId=18446708891294105616  
+
+__PATH=  
+__NAMESPACE=  
+   :(省略)  
+NodeWWN=&#123;xx,xx,xx,xx,4,195,246,37&#125;  &lt;--- 16 進数で xx:xx:xx:xx:04:c3:f6:25  
+NumberofDiscoveredPorts=2  
+PortActiveFc4Types=&#123;0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0&#125;  
+PortFcId=66048  
+PortMaxFrameSize=2048  
+PortSpeed=8  
+PortState=2  
+PortSupportedClassofService=8  
+PortSupportedFc4Types=&#123;0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0&#125;  
+PortSupportedSpeed=11  
+PortType=5  
+PortWWN=&#123;xx,xx,xx,xxx,4,195,246,36&#125;   &lt;--- 16 進数で xx:xx:xx:xx:04:c3:f6:24  </code></pre>
+<p>• NPIV 機能でアサインされた WWPN を確認する  </p>
+<pre><code class="powershell">wmic /namespace:\\root\wmi\ path MSFC_FibrePortNPIVAttributes get /value  </code></pre>
+<p>出力例)  </p>
+<pre><code> Active=TRUE  
+ InstanceName=PCI\VEN_1077&amp;amp;DEV_2432&amp;amp;SUBSYS_7041103C&amp;amp;REV_03\4&amp;amp;160c5d44&amp;amp;0&amp;amp;0018_0  
+ NumberVirtualPorts=1   &lt;--- 1 つの仮想ファイバー チャネル アダプターがマッピングされている  
+ WWNN=&#123;xx,xx,xx,xx,4,195,246,37&#125;  
+ WWPN=&#123;xx,xx,xx,xx,4,195,246,36&#125;__PATH=  
+ __NAMESPACE=  
+    :(省略)  
+ VirtualName=&#123;72,121,112,101,114,45,86,32,86,77,32,221,252,200,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,  
+ 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0&#125;  
+ WWNN=&#123;192,3,255,0,0,255,255,0&#125;  &lt;--- 16 進数で C0:03:FF:00:00:FF:FF:00  
+ WWPN=&#123;192,3,255,82,158,199,0,0&#125;  &lt;--- 16 進数で C0:03:FF:52:9E:C7:00:00  </code></pre>
+<p>なお、ポートの情報については類似の情報を採取するツールとして fcinfo (Fibre Channel Information Tool) というツールがあります。<br><a target="_blank" rel="noopener" href="https://www.microsoft.com/en-us/download/details.aspx?id=17506">Fibre Channel Information Tool (fcinfo)</a><br>• fcinfo でポートの情報を確認する  </p>
+<pre><code class="powershell">fcinfo.exe /ports /details  </code></pre>
+<p>出力例) FC ポートからケーブルを抜線した場合  </p>
+<pre><code>com.xxxxxxx-xxxxxxxx-0, num: 1  
+ -----------------------------------------------------------------------------  
+ NodeWWN: xx:xx:xx:xx:04:c3:f6:25  
+ PortWWN: xx:xx:xx:xx:04:c3:f6:24  
+ PortFcId: xxxxxxx  
+ PortSymbolicName:  
+ PortType: N_Port  
+ PortState: linkdown   &lt;--- リンク ダウン状態の場合  
+ PortSupportedClassofService: Class_3  
+ PortSpeed:  unkn  
+ PortMaxFrameSize: 2048  
+ FabricName: 00:00:00:00:00:00:00:00  </code></pre>
+<p>こちらは PowerShell のコマンドレットの出力結果よりも見やすく結果を得ることができます。例えば、PowerShell の PortState がステータス コードでの表示となっていますが、fcinfo では不要な情報表示も少なく、ポートのステータスについても具体的な状況を簡単に確認することができます。  </p>
+<p>fcinfo は弊社にて公開されている無償のツールですが、本ツール自身はサポートの対象ではありませんので、ご参考としてご紹介します。対象環境で問題なく情報採取可能かどうかは、十分検証の上、ご利用ください。  </p>
+<p>物理サーバーで多数の CPU が搭載されている環境では、Hyper-V 上の仮想マシンとして DB サーバーなどを動かすことも珍しくありません。そのような環境では、外部接続のストレージを利用する構成も多くあります。本ブログの情報が Hyper-V 環境の仮想 SAN / 仮想ファイバー チャネル アダプターの有効な設計のお役に立てれば幸いです。  </p>
+
+      
+      
+    </div>
+    <footer class="article-footer">
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/blog/2019/03/01/FailoverClustering/NotesNonClusteredVM/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">次の記事</strong>
+      <div class="article-nav-title">
+        
+          Hyper-V クラスター環境にて非クラスター仮想マシンを動作させる場合の注意点
+        
+      </div>
+    </a>
+  
+  
+    <a href="/blog/2018/11/02/Storage/Management/VSS-Maxshadowcopies/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">前の記事</strong>
+      <div class="article-nav-title">最も古い共有フォルダーのシャドウコピーが削除されてしまう事象について</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">カテゴリ</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Activation/">Activation</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Activation/ESU/">ESU</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Activation/security-SPP/">security-SPP</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/">Active Directory</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Authentication/">Authentication</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/DFSR/">DFSR</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/FunctionalLevel/">FunctionalLevel</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Group-Policy/">Group Policy</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Promotion-and-Demotion/">Promotion and Demotion</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/User-Profile/">User Profile</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Windows-Hello/">Windows Hello</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Windows-Time-Service/">Windows Time Service</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/AppLocker/">AppLocker</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/AppLocker/Active-Directory/">Active Directory</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/AppLocker/Microsoft-Intune/">Microsoft Intune</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Deployment/">Deployment</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Deployment/Feature-on-demand/">Feature on demand</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Deployment/Sysprep/">Sysprep</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Failover-Clustering/">Failover Clustering</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Failover-Clustering/Configuration-and-Management/">Configuration and Management</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/FileServices/">FileServices</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/FileServices/FTP/">FTP</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/FileServices/SMB/">SMB</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Hyper-V/">Hyper-V</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Hyper-V/Configuration-and-Management/">Configuration and Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Hyper-V/Migration/">Migration</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Microsoft-Connected-Cache/">Microsoft Connected Cache</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/">Networking</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/BITS/">BITS</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/Bluetooth/">Bluetooth</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/DHCP/">DHCP</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/DNS/">DNS</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/Firewall/">Firewall</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/LBFO/">LBFO</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/NCSI/">NCSI</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/NetworkInterface/">NetworkInterface</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/Proxy/">Proxy</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/TCPIP/">TCPIP</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/OpenSSH/">OpenSSH</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/">Performance</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/Hang-up-BSoD/">Hang-up/BSoD</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/No-Boot/">No Boot</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/Slow-Response/">Slow Response</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/System-Resource/">System Resource</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/Tools/">Tools</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/">Public Key Infrastructure</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Certificate-Authority/">Certificate Authority</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Certificate-Management/">Certificate Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Code-Signing/">Code Signing</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/SSL-TLS-Communication/">SSL TLS Communication</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/SSL-TLS-Connection/">SSL TLS Connection</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Smart-Card-Logon/">Smart Card Logon</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/">Remote Desktop</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/Azure-Virtual-Desktop-AVD/">Azure Virtual Desktop (AVD)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/Remote-Desktop-Service-RDS/">Remote Desktop Service (RDS)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/Windows-Virtual-Desktop-WVD/">Windows Virtual Desktop (WVD)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/RemoteAccess/">RemoteAccess</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/RemoteAccess/%E3%83%80%E3%82%A4%E3%83%A4%E3%83%AB%E3%82%A2%E3%83%83%E3%83%97%E6%8E%A5%E7%B6%9A/">ダイヤルアップ接続</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Setup/">Setup</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Setup/Feature-Update-FU/">Feature Update (FU)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Shell/">Shell</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Shell/Explorer/">Explorer</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/">Storage</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/Backup/">Backup</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/FSRM/">FSRM</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/Management/">Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/StorageMigrationService/">StorageMigrationService</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/UEFI/">UEFI</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/UEFI/Secure-Boot/">Secure Boot</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/">User Interface and Apps</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Command-Prompt/">Command Prompt</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/EventLog/">EventLog</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Language-Support/">Language Support</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Microsoft-Store/">Microsoft Store</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Performance/">Performance</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/PowerShell/">PowerShell</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Printing-%E5%8D%B0%E5%88%B7/">Printing (印刷)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Server-Management/">Server Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Taskscheduler/">Taskscheduler</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Windows-Management-Instrumentation/">Windows Management Instrumentation</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps-Language-support/">User Interface and Apps - Language support</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-365/">Windows 365</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Admin-Center/">Windows Admin Center</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Search/">Windows Search</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/">Windows Update</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Delivery-Optimization-DO/">Delivery Optimization (DO)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Feature-Update-FU/">Feature Update (FU)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Quality-Update-QU/">Quality Update (QU)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Windows-Update-Agent/">Windows Update Agent</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Windows-Update-Agent-WUA/">Windows Update Agent (WUA)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/">WirelessNetwork</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/NPS/">NPS</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/Wi-Fi/">Wi-Fi</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/%E3%83%A2%E3%83%90%E3%82%A4%E3%83%AB-%E3%83%96%E3%83%AD%E3%83%BC%E3%83%89%E3%83%90%E3%83%B3%E3%83%89%E6%8E%A5%E7%B6%9A-LTE/">モバイル ブロードバンド接続 (LTE)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/%E7%B5%84%E7%B9%94%E7%B4%B9%E4%BB%8B%E3%83%96%E3%83%AD%E3%82%B0%EF%BC%88Windows-Commercial%EF%BC%89/">組織紹介ブログ（Windows Commercial）</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最近の投稿</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/blog/2026/02/16/ActiveDirectory/GroupPolicy/UacPolicyIsEnabled/">「ユーザー アカウント制御：ビルトイン Administrator アカウントのための管理者承認モード」ポリシーが有効になる動作ついて</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/02/15/UserInterfaceAndApps/Printing/printer-queue-app-preview/">印刷キューアプリのプレビュー機能について</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/02/02/ActiveDirectory/Authentication/kerberos-rc4-for-service-account-ticket-issuance-changes-related-to-cve-2026-20833/">CVE‑2026‑20833 への対応とその影響について [KB5073381]</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/01/12/Hyper-V/vmwp-does-not-save-the-RTC-value-of-a-virtual-machine-when-performing-Live-Migration/">ライブ マイグレーション後の再起動でゲスト OS の時刻がずれる場合がある</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/01/07/WindowsUpdate/FU/fublog-txt/">ISO メディア経由かつ動的更新無効な状態で Windows 11 バージョン 24H2 または 25H2 へのアップグレードが失敗 (0x8007042B 0x2000D) する事象と対策について</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">アーカイブ</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2026/02/">2026 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2026/01/">2026 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/12/">2025 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/11/">2025 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/10/">2025 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/09/">2025 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/08/">2025 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/07/">2025 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/06/">2025 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/05/">2025 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/04/">2025 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/03/">2025 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/02/">2025 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/01/">2025 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/12/">2024 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/11/">2024 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/10/">2024 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/09/">2024 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/08/">2024 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/07/">2024 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/06/">2024 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/05/">2024 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/04/">2024 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/03/">2024 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/02/">2024 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/01/">2024 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/12/">2023 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/11/">2023 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/10/">2023 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/09/">2023 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/08/">2023 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/07/">2023 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/06/">2023 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/05/">2023 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/04/">2023 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/03/">2023 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/02/">2023 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/01/">2023 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/12/">2022 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/11/">2022 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/10/">2022 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/09/">2022 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/08/">2022 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/07/">2022 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/06/">2022 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/05/">2022 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/04/">2022 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/03/">2022 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/02/">2022 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/01/">2022 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/12/">2021 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/11/">2021 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/10/">2021 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/09/">2021 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/08/">2021 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/07/">2021 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/06/">2021 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/05/">2021 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/04/">2021 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/03/">2021 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/02/">2021 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/01/">2021 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/12/">2020 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/11/">2020 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/10/">2020 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/07/">2020 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/03/">2020 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2019/03/">2019 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/11/">2018 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/10/">2018 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/09/">2018 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/08/">2018 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/07/">2018 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/06/">2018 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/04/">2018 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/02/">2018 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/12/">2017 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/11/">2017 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/09/">2017 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/05/">2017 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/03/">2017 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/02/">2017 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2016/08/">2016 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2016/05/">2016 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2014/03/">2014 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2012/02/">2012 / 02</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2026 Microsoft Japan Windows Technology Support Team<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/blog/" class="mobile-nav-link">Home</a>
+  
+    <a href="/blog/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+<script src="/blog/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

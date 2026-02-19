@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-180187723-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-180187723-1');
+</script>
+<!-- End Google Analytics -->
+
+  
+  <title>2018 年 3 月の更新プログラムを適用すると無線 LAN,有線 LAN 利用時に問題が発生する (Windows 7 / Windows Server 2008 R2) | Microsoft Japan Windows Technology Support Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="本記事は 2018 年 3 月 19 日に公開された記事を本ブログに移行した記事になります。 こんにちは。Windows プラットフォーム サポートです。 Windows 7、Windows Server 2008 R2 で 2018 年 3 月公開の更新プログラム (KB4088875 または 4088878 または KB4088881 または KB4099467) のいずれかを適用すると、無線">
+<meta property="og:type" content="article">
+<meta property="og:title" content="2018 年 3 月の更新プログラムを適用すると無線 LAN,有線 LAN 利用時に問題が発生する (Windows 7 &#x2F; Windows Server 2008 R2)">
+<meta property="og:url" content="https://jpwinsup.github.io/blog/2021/06/03/Networking/NetworkInterface/updates-of-march-2018-cause-netowrk-issues-2008R2-and-Windows7/index.html">
+<meta property="og:site_name" content="Microsoft Japan Windows Technology Support Blog">
+<meta property="og:description" content="本記事は 2018 年 3 月 19 日に公開された記事を本ブログに移行した記事になります。 こんにちは。Windows プラットフォーム サポートです。 Windows 7、Windows Server 2008 R2 で 2018 年 3 月公開の更新プログラム (KB4088875 または 4088878 または KB4088881 または KB4099467) のいずれかを適用すると、無線">
+<meta property="og:locale" content="ja_JP">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2021/06/03/Networking/NetworkInterface/updates-of-march-2018-cause-netowrk-issues-2008R2-and-Windows7/01_OK-Version.png.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2021/06/03/Networking/NetworkInterface/updates-of-march-2018-cause-netowrk-issues-2008R2-and-Windows7/02_NG-Version.png.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2021/06/03/Networking/NetworkInterface/updates-of-march-2018-cause-netowrk-issues-2008R2-and-Windows7/03_NIC.png.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2021/06/03/Networking/NetworkInterface/updates-of-march-2018-cause-netowrk-issues-2008R2-and-Windows7/04_Dev.png.png">
+<meta property="article:published_time" content="2021-06-03T15:00:00.000Z">
+<meta property="article:modified_time" content="2026-02-19T02:53:58.412Z">
+<meta property="article:author" content="Microsoft Japan Windows Technology Support Team">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://jpwinsup.github.io/blog/2021/06/03/Networking/NetworkInterface/updates-of-march-2018-cause-netowrk-issues-2008R2-and-Windows7/01_OK-Version.png.png">
+  
+    <link rel="alternate" href="/blog/atom.xml" title="Microsoft Japan Windows Technology Support Blog" type="application/atom+xml">
+  
+
+  <link rel="icon" href="/blog/favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="/blog/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/blog/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/blog/favicon-16x16.png">
+  <link rel="manifest" href="/blog/site.webmanifest">
+  <link rel="mask-icon" href="/blog/safari-pinned-tab.svg" color="#5bbad5">
+  <meta name="msapplication-TileColor" content="#ffffff">
+  <meta name="theme-color" content="#ffffff">
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/blog/css/style.css">
+
+<meta name="generator" content="Hexo 5.2.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="site-header-logo"></div>
+  <div id="site-header-blog-wrapper"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        <div id="ms-logo"></div>
+        
+          <a class="main-nav-link" href="/blog/">Home</a>
+        
+          <a class="main-nav-link" href="/blog/archives">Archives</a>
+        
+        <a class="main-nav-link" target="_blank" rel="noopener" href="https://cssjpn.github.io/">サポート情報</a>
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/blog/atom.xml" title="RSSフィード"></a>
+        
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//www.bing.com/search" method="get" accept-charset="UTF-8" name="bing-search" onsubmit="var f=this;if(f['q'].value){var searchUrl =  'https://www.bing.com/search?q=' +  encodeURIComponent(f['q'].value + ' site:' + f['sitesearch'].value) ;window.open(searchUrl, 'blank') };return false;" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="検索"><button type="submit" id="nav-search-btn" class="search-form-submit"></button><input type="hidden" name="sitesearch" value="https://jpwinsup.github.io/blog"></form>
+      </div>
+    </div>
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/blog/" id="logo">Microsoft Japan Windows Technology Support Blog</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/blog/" id="subtitle">日本マイクロソフト Windows Support チームによる、サポート情報 Blog です。</a>
+        </h2>
+      
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-Networking/NetworkInterface/updates-of-march-2018-cause-netowrk-issues-2008R2-and-Windows7" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    
+    
+      <header class="article-header-single">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      2018 年 3 月の更新プログラムを適用すると無線 LAN,有線 LAN 利用時に問題が発生する (Windows 7 / Windows Server 2008 R2)
+    </h1>
+  
+
+      </header>
+      <div class="article-share">
+        Last Update: 
+        <a href="/blog/2021/06/03/Networking/NetworkInterface/updates-of-march-2018-cause-netowrk-issues-2008R2-and-Windows7/" class="article-date-single">
+  <time datetime="2021-06-03T15:00:00.000Z" itemprop="datePublished">2021-06-04</time>
+</a>
+        
+  <div class="article-category">
+    <a class="article-category-link" href="/blog/categories/Networking/">Networking</a>►<a class="article-category-link" href="/blog/categories/Networking/NetworkInterface/">NetworkInterface</a>
+  </div>
+
+        
+        <a href="https://github.com/jpwinsup/blog/issues/new?title=&body=%EF%BB%BF%0A%0A---%0A%0A%23%23%23%23+Document+Details%0A%0A*+Article+ID%3A+3b19e3ed-1c4e-5fdb-8249-982d41766b11%0A*+TITLE%3A+2018+%E5%B9%B4+3+%E6%9C%88%E3%81%AE%E6%9B%B4%E6%96%B0%E3%83%97%E3%83%AD%E3%82%B0%E3%83%A9%E3%83%A0%E3%82%92%E9%81%A9%E7%94%A8%E3%81%99%E3%82%8B%E3%81%A8%E7%84%A1%E7%B7%9A+LAN%2C%E6%9C%89%E7%B7%9A+LAN+%E5%88%A9%E7%94%A8%E6%99%82%E3%81%AB%E5%95%8F%E9%A1%8C%E3%81%8C%E7%99%BA%E7%94%9F%E3%81%99%E3%82%8B+%28Windows+7+%2F+Windows+Server+2008+R2%29%0A*+URL+https%3A%2F%2Fjpwinsup.github.io%2Fblog%2F2021%2F06%2F03%2FNetworking%2FNetworkInterface%2Fupdates-of-march-2018-cause-netowrk-issues-2008R2-and-Windows7%2F%0A*+SourceFileName%3A+source%2F_posts%2FNetworking%2FNetworkInterface%2Fupdates-of-march-2018-cause-netowrk-issues-2008R2-and-Windows7.md%0A" class="article-github-issue-link" target="_blank" rel="noopener noreferrer">feedback</a>
+        
+        <a data-url="https://jpwinsup.github.io/blog/2021/06/03/Networking/NetworkInterface/updates-of-march-2018-cause-netowrk-issues-2008R2-and-Windows7/" data-id="cmlsvjdcm00buru3y9wambubo" class="article-share-link">共有</a>
+      </div>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>本記事は 2018 年 3 月 19 日に公開された記事を本ブログに移行した記事になります。</p>
+<p>こんにちは。Windows プラットフォーム サポートです。</p>
+<p>Windows 7、Windows Server 2008 R2 で 2018 年 3 月公開の更新プログラム (KB4088875 または 4088878 または KB4088881 または KB4099467) のいずれかを適用すると、無線 LAN および有線 LAN 利用時において後述の問題が発生することが判明しましたので、本 Blog でご案内します。</p>
+<p>・March 13, 2018―KB4088875 (Monthly Rollup)</p>
+<p><a target="_blank" rel="noopener" href="https://support.microsoft.com/en-us/help/4088875">https://support.microsoft.com/en-us/help/4088875</a></p>
+<p>・March 13, 2018―KB4088878 (Security-only update)</p>
+<p><a target="_blank" rel="noopener" href="https://support.microsoft.com/en-us/help/4088878">https://support.microsoft.com/en-us/help/4088878</a></p>
+<p>・March 23, 2018—KB4088881 (Preview of Monthly Rollup)</p>
+<p><a target="_blank" rel="noopener" href="https://support.microsoft.com/en-us/help/4088881">https://support.microsoft.com/en-us/help/4088881</a></p>
+<p>・Stop error 0xAB when you log off a Windows 7 SP1 or Windows Server 2008 R2 SP1 session</p>
+<p><a target="_blank" rel="noopener" href="https://support.microsoft.com/en-us/help/4099467">https://support.microsoft.com/en-us/help/4099467</a></p>
+<p>また、Windows Server 2008 でも 2018 年 3 月 14 日公開の更新プログラム (KB4089229) を適用すると、有線 LAN 利用時に問題が発生することが判明しましたので、以下の Blog で別途ご案内します。</p>
+<p>3 月の更新プログラムを適用すると有線 LAN 利用時に問題が発生する (Windows Server 2008) <a target="_blank" rel="noopener" href="https://blogs.technet.microsoft.com/jpntsblog/2018/03/26/lan_problem_after_update_3b_2k8/">https://blogs.technet.microsoft.com/jpntsblog/2018/03/26/lan_problem_after_update_3b_2k8/</a></p>
+<br>
+
+<p>[ <strong>問題の概要</strong> ]</p>
+<p>Windows 7 / Windows Server 2008 R2 に KB4088875 または KB4088878 または KB4088881 または KB4099467 を適用すると、以下のような問題が発生することがあります。</p>
+<p>・ネットワーク インターフェースに静的に設定した IP アドレス情報が失われ、DHCP 設定に置き換わる。</p>
+<p>・ステルスモードの SSID への接続用の無線プロファイルが表示されなくなる。</p>
+<p>・無線 LAN アダプターが無効化される、利用できなくなる。</p>
+<p>本問題について、以下の技術情報と更新プログラム (KB4099950) を公開しました。</p>
+<p>・Network Interface Card settings can be replaced, or static IP address settings can be lost<br><a target="_blank" rel="noopener" href="https://support.microsoft.com/en-us/help/4099950">https://support.microsoft.com/en-us/help/4099950</a></p>
+<br>
+
+<p>[ <strong>対象 OS</strong> ]</p>
+<p>Windows 7 SP1</p>
+<p>Windows Server 2008 R2 SP1</p>
+<br>
+
+<p>[ <strong>原因</strong> ]</p>
+<p>3 月の更新プログラムを適用すると、OS の pci.sys ドライバーが更新され、pci.sys の過去の修正が累積して適用されます。</p>
+<p>pci.sys の過去の修正のうち、本問題は KB2550978 の更新プログラムが契機となって発生します。</p>
+<p>(KB2550978 以降のバージョンの pci.sys が既に適用されている場合は、本問題は発生しません)</p>
+<p>・”0x0000007B” Stop error after you replace an identical iSCSI network adapter in Windows Server 2008 R2 SP1 or in Windows 7 SP1</p>
+<p><a target="_blank" rel="noopener" href="https://support.microsoft.com/en-us/help/2550978">https://support.microsoft.com/en-us/help/2550978</a></p>
+<p>KB2550978 では、PCI Express Serial Number Capability をサポートしている NIC を使用している環境で、NIC を交換した (NIC の Serial Number が変化した) 場合にも、それまで使用していたネットワーク設定を利用できるようにするために pci.sys の動作を修正しています。</p>
+<p>この修正を適用することで、以前の古い NIC 用のネットワーク設定が再度利用され、本問題が発生することがあります。</p>
+<br>
+
+<p>[ <strong>発生条件</strong> ]</p>
+<p>以下の 2 つの条件を両方満たす場合に、本問題が発生することがあります。</p>
+<p>a. pci.sys のバージョンが  6.1.7601.17630 未満 (GDR 版の場合) または 6.1.7601.21744 未満 (LDR 版の場合) であること (*)</p>
+<p>b. NIC が PCI Express Serial Number Capability をサポートしていること</p>
+<p>(*) GDR 版の場合は 6.1.7601.1xxxx、LDR 版の場合は 6.1.7601.2xxxx となりますので、GDR 版か LDR 版のどちらであるかは、最後の 5 桁の先頭の数字 (1 か 2) で区別します。</p>
+<p>上記いずれかの条件を満たさない場合には、本問題は発生しません。</p>
+<p>また、Hyper-V の仮想マシンでは、“ネットワーク アダプター”、”レガシ ネットワーク アダプター” とも上記 b に該当しないため、本問題は発生しません。</p>
+<br>
+
+<p>[ <strong>今後の対処方法</strong> ]</p>
+<p>・Monthly Rollup を適用する場合</p>
+<p>4 月の Monthly Rollup <a target="_blank" rel="noopener" href="https://support.microsoft.com/en-us/topic/april-10-2018-kb4093118-monthly-rollup-12820398-c42d-c019-efc6-2db1e5204a54">KB4093118</a> には、本問題の対策が含まれますので、<a target="_blank" rel="noopener" href="https://support.microsoft.com/en-us/topic/april-10-2018-kb4093118-monthly-rollup-12820398-c42d-c019-efc6-2db1e5204a54">KB4093118</a> を適用することで本問題は発生しません。</p>
+<p>ただし、2018 年 4 月 10 日公開時点の <a target="_blank" rel="noopener" href="https://support.microsoft.com/en-us/topic/april-10-2018-kb4093118-monthly-rollup-12820398-c42d-c019-efc6-2db1e5204a54">KB4093118</a> のパッケージには問題が存在したため、WSUS / SCCM 環境の場合、2018 年 4 月 12 日公開のパッケージを配布ください。</p>
+<p>4 月以降の Monthly Rollup には、今後も本問題の対策が含まれます。</p>
+<p>・Security-only update を適用する場合</p>
+<p>3 月の Security-only update <a target="_blank" rel="noopener" href="https://support.microsoft.com/en-us/topic/march-13-2018-kb4088878-security-only-update-110d3a09-810a-c447-72a7-d52c561364cd">KB4088878</a> を適用する場合、その前提 KB となっている本問題の対策 KB4099950 を事前に適用する必要があります。</p>
+<p>また、WSUS / SCCM で更新プログラムを配信する環境では、予期せぬ適用を防ぐため、KB4099950 が適用されていない場合には  <a target="_blank" rel="noopener" href="https://support.microsoft.com/en-us/topic/march-13-2018-kb4088878-security-only-update-110d3a09-810a-c447-72a7-d52c561364cd">KB4088878</a> が検出されないように前提条件が付けられております。</p>
+<p>なお、WSUS / SCCM 環境において、<a target="_blank" rel="noopener" href="https://support.microsoft.com/en-us/topic/nic-settings-are-replaced-or-static-ip-address-settings-are-lost-after-you-install-kb4088875-or-kb4088878-b8a043e8-149d-68f7-28fe-6884d4145571">KB4099950</a> と <a target="_blank" rel="noopener" href="https://support.microsoft.com/en-us/topic/march-13-2018-kb4088878-security-only-update-110d3a09-810a-c447-72a7-d52c561364cd">KB4088878</a> をまとめて配布する場合は、自動的に <a target="_blank" rel="noopener" href="https://support.microsoft.com/en-us/topic/nic-settings-are-replaced-or-static-ip-address-settings-are-lost-after-you-install-kb4088875-or-kb4088878-b8a043e8-149d-68f7-28fe-6884d4145571">KB4099950</a> が先に適用されます。</p>
+<p>ただし、2018 年 4 月 2 日公開時点の <a target="_blank" rel="noopener" href="https://support.microsoft.com/en-us/topic/nic-settings-are-replaced-or-static-ip-address-settings-are-lost-after-you-install-kb4088875-or-kb4088878-b8a043e8-149d-68f7-28fe-6884d4145571">KB4099950</a> のパッケージには問題が存在したため、WSUS / SCCM 環境の場合、2018 年 4 月 17 日公開のパッケージを配布ください。</p>
+<p>また、4 月の Security-only update <a target="_blank" rel="noopener" href="https://support.microsoft.com/en-us/topic/april-10-2018-kb4093108-security-only-update-e000e5d8-f5f7-947e-3a2f-a8b9f56acdb9">KB4093108</a> には、pci.sys の更新が含まれないため、本問題は発生しません。</p>
+<p>4 月以降の Security-only update に pci.sys の更新が含まれた場合にも、本問題の対策 <a target="_blank" rel="noopener" href="https://support.microsoft.com/en-us/topic/nic-settings-are-replaced-or-static-ip-address-settings-are-lost-after-you-install-kb4088875-or-kb4088878-b8a043e8-149d-68f7-28fe-6884d4145571">KB4099950</a> を一度適用しておくことで、今後も本問題は発生しません。</p>
+<br>
+
+<p>[ <strong>復旧方法</strong> ]</p>
+<p>3 月の更新プログラム (KB4088875 または KB4088878 または KB4088881 または KB4099467) を適用後に既に問題が発生している場合、以下の手順で復旧します。</p>
+<p>・ネットワーク インターフェースに静的に設定した IP アドレス情報が失われ、DHCP 設定に置き換わった場合、</p>
+<p>新たに生成されたネットワークアダプターに必要なネットワーク設定を行います。</p>
+<p>・ステルスモードの SSID への接続用の無線プロファイルが表示されなくなった場合、</p>
+<p>無線プロファイルを構成し直します。</p>
+<p>・無線 LAN アダプターが無効化された場合、</p>
+<p>下記手順を実施します。</p>
+<p>1．コントロールパネルを表示します。</p>
+<p>2．[システムとセキュリティ] － [ハードウェアとサウンド] - [デバイス マネージャー] を選択します。</p>
+<p>3．[コンピュータ名]－[ネットワークアダプター]－[利用中の無線 LAN デバイス] を右クリックし、[有効] を選択します。</p>
+<p>[有効] と表示されない場合、[削除] を選択します。</p>
+<p>4．OS を再起動します。</p>
+<br>
+
+<p>[ <strong>参考情報</strong> ]</p>
+<p>本問題の発生条件に該当するかどうか確認する場合は、以下の手順を実施します。</p>
+<p>(1) pci.sys のバージョンを確認します。</p>
+<p>コマンドで確認する場合、以下を実行します。</p>
+<p>wmic datafile where name=”C:\Windows\system32\drivers\pci.sys” get version /value</p>
+<p>以下の例 (GDR 版の例) のように、pci.sys のバージョンが 6.1.7601.17630 以降である場合、本問題は発生しません。</p>
+<p>(LDR 版の場合には、pci.sys のバージョンが 6.1.7601.21744 以降である場合、本問題は発生しません。) </p>
+<p><img src="01_OK-Version.png.png"></p>
+<p>以下の例 (GDR 版の例) のように、pci.sys のバージョンが 6.1.7601.17630 未満である場合、本問題が発生し得ますので、(2) の確認に進みます。</p>
+<p>(LDR 版の場合には、pci.sys のバージョンが 6.1.7601.21744 未満である場合、本問題が発生し得ますので、(2) の確認に進みます。) </p>
+<img src="/blog/2021/06/03/Networking/NetworkInterface/updates-of-march-2018-cause-netowrk-issues-2008R2-and-Windows7/02_NG-Version.png.png" class="slug">
+
+
+
+<p>(2) NIC が PCI Express Serial Number に対応しているか、確認します。</p>
+<p>(2-1) コマンドで確認する場合、以下を実行します。</p>
+<p>wmic path win32_pnpentity where ClassGUID=”{4d36e972-e325-11ce-bfc1-08002be10318}” get DeviceID | find /i “PCI”</p>
+<p>以下の例では、2 つの NIC が搭載されています。</p>
+<p>上側は Serial Number に非対応の NIC で、デバイス インスタンス パスで最後の “\” の後に “&amp;” を含む形式となります。</p>
+<p>下側は Serial Number に対応の NIC で、デバイス インスタンス パスで最後の “\” の後に “&amp;” を含まず、Serial Number が付加される形式となります。</p>
+<p><img src="03_NIC.png.png"></p>
+<p>(2-2) デバイス マネージャーで確認する場合、NIC のデバイス インスタンス パスを確認します。</p>
+<p>以下の例では、NIC のデバイス インスタンス パスで最後の “\” の後に “&amp;” を含まず、Serial Number が付加される形式となっていますので、Serial Number に対応している NIC です。</p>
+<p><img src="04_Dev.png.png"></p>
+<p>Serial Number に非対応の NIC をご利用の場合、本問題は発生しません。</p>
+<p>Serial Number に対応している NIC をご利用の場合、本問題が発生し得ます。</p>
+<br>
+
+<p>[ <strong>FAQ</strong> ]</p>
+<p>Q1. Windows 7、Windows Server 2008 R2 以外の OS でも発生するか。</p>
+<p>A1. Windows Server 2008 で発生する事象については、以下の Blog を参照ください。</p>
+<p>3月の更新プログラムを適用すると有線 LAN 利用時に問題が発生する (Windows Server 2008) <a target="_blank" rel="noopener" href="https://blogs.technet.microsoft.com/jpntsblog/2018/03/26/lan_problem_after_update_3b_2k8/">https://blogs.technet.microsoft.com/jpntsblog/2018/03/26/lan_problem_after_update_3b_2k8/</a></p>
+<p>Q2. 既に KB4088875 または KB4088878 または KB4088881 または KB4099467 をインストールして問題が発生していない場合、アンインストールする必要があるか。</p>
+<p>A2. インストール後に問題が発生していない場合、問題発生条件を満たしていない環境であるため、アンインストールする必要はありません。</p>
+<p>Q3. DHCP を利用している環境の場合、本問題が発生するか。</p>
+<p>A3. 有線 LAN で DHCP を利用している環境の場合、実害は発生しません。</p>
+<br>
+
+<p>[ <strong>参考情報</strong> ]</p>
+<p>・Security update deployment information: March 13, 2018</p>
+<p><a target="_blank" rel="noopener" href="https://support.microsoft.com/en-us/help/20180313">https://support.microsoft.com/en-us/help/20180313</a></p>
+<p>・March 13, 2018―KB4088875 (Monthly Rollup)</p>
+<p><a target="_blank" rel="noopener" href="https://support.microsoft.com/en-us/help/4088875">https://support.microsoft.com/en-us/help/4088875</a></p>
+<p>・March 13, 2018―KB4088878 (Security-only update)</p>
+<p><a target="_blank" rel="noopener" href="https://support.microsoft.com/en-us/help/4088878">https://support.microsoft.com/en-us/help/4088878</a></p>
+<p>・March 23, 2018—KB4088881 (Preview of Monthly Rollup)<br><a target="_blank" rel="noopener" href="https://support.microsoft.com/en-us/help/4088881">https://support.microsoft.com/en-us/help/4088881</a></p>
+<p>・Stop error 0xAB when you log off a Windows 7 SP1 or Windows Server 2008 R2 SP1 session</p>
+<p><a target="_blank" rel="noopener" href="https://support.microsoft.com/en-us/help/4099467">https://support.microsoft.com/en-us/help/4099467</a></p>
+<p>・Network Interface Card settings can be replaced, or static IP address settings can be lost<br><a target="_blank" rel="noopener" href="https://support.microsoft.com/en-us/help/4099950">https://support.microsoft.com/en-us/help/4099950</a></p>
+<br>
+
+<p>[ <strong>関連情報</strong> ]</p>
+<p>3 月の更新プログラムを適用すると有線 LAN 利用時に問題が発生する (Windows Server 2008) <a target="_blank" rel="noopener" href="https://blogs.technet.microsoft.com/jpntsblog/2018/03/26/lan_problem_after_update_3b_2k8/">https://blogs.technet.microsoft.com/jpntsblog/2018/03/26/lan_problem_after_update_3b_2k8/</a></p>
+<br>
+
+<p>[ <strong>更新履歴</strong> ]</p>
+<p>2018/03/19 : 本 Blog の公開</p>
+<p>2018/03/26 : 本 Blog の更新</p>
+<p>2018/04/02 : 本 Blog の更新 (<a target="_blank" rel="noopener" href="https://support.microsoft.com/en-us/topic/nic-settings-are-replaced-or-static-ip-address-settings-are-lost-after-you-install-kb4088875-or-kb4088878-b8a043e8-149d-68f7-28fe-6884d4145571">KB4099950</a> について追記)</p>
+<p>2018/04/04 : 本 Blog の更新 ((<a target="_blank" rel="noopener" href="https://support.microsoft.com/en-us/topic/stop-error-0xab-when-you-log-off-a-windows-7-sp1-or-windows-server-2008-r2-sp1-session-dd906144-a9aa-87fc-ccb3-10e525c4a9be">KB4099467</a> について追記)</p>
+<p>2018/04/05 : 本 Blog の更新 (対処方法、FAQ を更新)</p>
+<p>2018/04/06 : 本 Blog の更新 (<a target="_blank" rel="noopener" href="https://support.microsoft.com/en-us/topic/nic-settings-are-replaced-or-static-ip-address-settings-are-lost-after-you-install-kb4088875-or-kb4088878-b8a043e8-149d-68f7-28fe-6884d4145571">KB4099950</a> が “オプション” から “重要” に変更)</p>
+<p>2018/04/13 : 本 Blog の更新 (対処方法を更新)</p>
+<p>2018/04/16 : 本 Blog の更新 (<a target="_blank" rel="noopener" href="https://support.microsoft.com/en-us/topic/nic-settings-are-replaced-or-static-ip-address-settings-are-lost-after-you-install-kb4088875-or-kb4088878-b8a043e8-149d-68f7-28fe-6884d4145571">KB4099950</a> の修正版の公開予定時期を更新)</p>
+<p>2018/04/19 : 本 Blog の更新 (対処方法、FAQ を更新)</p>
+<p>2018/10/18 : 本 Blog の更新 (対処方法について追記)</p>
+<br>
+
+<p>[ <strong>特記事項</strong> ]</p>
+<p>本情報の内容（添付文書、リンク先などを含む）は、作成日時点でのものであり、予告なく変更される場合があります。</p>
+<hr>
+
+      
+      
+    </div>
+    <footer class="article-footer">
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/blog/2021/06/07/Performance/SystemResource/PerformanceLogging/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">次の記事</strong>
+      <div class="article-nav-title">
+        
+          パフォーマンス ログ収集
+        
+      </div>
+    </a>
+  
+  
+    <a href="/blog/2021/05/29/UserInterfaceAndApps/WhatAppsDoYouWantToOpen/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">前の記事</strong>
+      <div class="article-nav-title">「どのアプリで開きますか？」 というメッセージについてと表示抑止方法のご案内</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">カテゴリ</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Activation/">Activation</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Activation/ESU/">ESU</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Activation/security-SPP/">security-SPP</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/">Active Directory</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Authentication/">Authentication</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/DFSR/">DFSR</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/FunctionalLevel/">FunctionalLevel</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Group-Policy/">Group Policy</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Promotion-and-Demotion/">Promotion and Demotion</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/User-Profile/">User Profile</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Windows-Hello/">Windows Hello</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Windows-Time-Service/">Windows Time Service</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/AppLocker/">AppLocker</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/AppLocker/Active-Directory/">Active Directory</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/AppLocker/Microsoft-Intune/">Microsoft Intune</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Deployment/">Deployment</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Deployment/Feature-on-demand/">Feature on demand</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Deployment/Sysprep/">Sysprep</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Failover-Clustering/">Failover Clustering</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Failover-Clustering/Configuration-and-Management/">Configuration and Management</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/FileServices/">FileServices</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/FileServices/FTP/">FTP</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/FileServices/SMB/">SMB</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Hyper-V/">Hyper-V</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Hyper-V/Configuration-and-Management/">Configuration and Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Hyper-V/Migration/">Migration</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Microsoft-Connected-Cache/">Microsoft Connected Cache</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/">Networking</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/BITS/">BITS</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/Bluetooth/">Bluetooth</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/DHCP/">DHCP</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/DNS/">DNS</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/Firewall/">Firewall</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/LBFO/">LBFO</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/NCSI/">NCSI</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/NetworkInterface/">NetworkInterface</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/Proxy/">Proxy</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/TCPIP/">TCPIP</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/OpenSSH/">OpenSSH</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/">Performance</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/Hang-up-BSoD/">Hang-up/BSoD</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/No-Boot/">No Boot</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/Slow-Response/">Slow Response</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/System-Resource/">System Resource</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/Tools/">Tools</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/">Public Key Infrastructure</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Certificate-Authority/">Certificate Authority</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Certificate-Management/">Certificate Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Code-Signing/">Code Signing</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/SSL-TLS-Communication/">SSL TLS Communication</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/SSL-TLS-Connection/">SSL TLS Connection</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Smart-Card-Logon/">Smart Card Logon</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/">Remote Desktop</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/Azure-Virtual-Desktop-AVD/">Azure Virtual Desktop (AVD)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/Remote-Desktop-Service-RDS/">Remote Desktop Service (RDS)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/Windows-Virtual-Desktop-WVD/">Windows Virtual Desktop (WVD)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/RemoteAccess/">RemoteAccess</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/RemoteAccess/%E3%83%80%E3%82%A4%E3%83%A4%E3%83%AB%E3%82%A2%E3%83%83%E3%83%97%E6%8E%A5%E7%B6%9A/">ダイヤルアップ接続</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Setup/">Setup</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Setup/Feature-Update-FU/">Feature Update (FU)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Shell/">Shell</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Shell/Explorer/">Explorer</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/">Storage</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/Backup/">Backup</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/FSRM/">FSRM</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/Management/">Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/StorageMigrationService/">StorageMigrationService</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/UEFI/">UEFI</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/UEFI/Secure-Boot/">Secure Boot</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/">User Interface and Apps</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Command-Prompt/">Command Prompt</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/EventLog/">EventLog</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Language-Support/">Language Support</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Microsoft-Store/">Microsoft Store</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Performance/">Performance</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/PowerShell/">PowerShell</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Printing-%E5%8D%B0%E5%88%B7/">Printing (印刷)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Server-Management/">Server Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Taskscheduler/">Taskscheduler</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Windows-Management-Instrumentation/">Windows Management Instrumentation</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps-Language-support/">User Interface and Apps - Language support</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-365/">Windows 365</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Admin-Center/">Windows Admin Center</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Search/">Windows Search</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/">Windows Update</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Delivery-Optimization-DO/">Delivery Optimization (DO)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Feature-Update-FU/">Feature Update (FU)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Quality-Update-QU/">Quality Update (QU)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Windows-Update-Agent/">Windows Update Agent</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Windows-Update-Agent-WUA/">Windows Update Agent (WUA)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/">WirelessNetwork</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/NPS/">NPS</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/Wi-Fi/">Wi-Fi</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/%E3%83%A2%E3%83%90%E3%82%A4%E3%83%AB-%E3%83%96%E3%83%AD%E3%83%BC%E3%83%89%E3%83%90%E3%83%B3%E3%83%89%E6%8E%A5%E7%B6%9A-LTE/">モバイル ブロードバンド接続 (LTE)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/%E7%B5%84%E7%B9%94%E7%B4%B9%E4%BB%8B%E3%83%96%E3%83%AD%E3%82%B0%EF%BC%88Windows-Commercial%EF%BC%89/">組織紹介ブログ（Windows Commercial）</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最近の投稿</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/blog/2026/02/16/ActiveDirectory/GroupPolicy/UacPolicyIsEnabled/">「ユーザー アカウント制御：ビルトイン Administrator アカウントのための管理者承認モード」ポリシーが有効になる動作ついて</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/02/15/UserInterfaceAndApps/Printing/printer-queue-app-preview/">印刷キューアプリのプレビュー機能について</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/02/02/ActiveDirectory/Authentication/kerberos-rc4-for-service-account-ticket-issuance-changes-related-to-cve-2026-20833/">CVE‑2026‑20833 への対応とその影響について [KB5073381]</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/01/12/Hyper-V/vmwp-does-not-save-the-RTC-value-of-a-virtual-machine-when-performing-Live-Migration/">ライブ マイグレーション後の再起動でゲスト OS の時刻がずれる場合がある</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/01/07/WindowsUpdate/FU/fublog-txt/">ISO メディア経由かつ動的更新無効な状態で Windows 11 バージョン 24H2 または 25H2 へのアップグレードが失敗 (0x8007042B 0x2000D) する事象と対策について</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">アーカイブ</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2026/02/">2026 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2026/01/">2026 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/12/">2025 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/11/">2025 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/10/">2025 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/09/">2025 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/08/">2025 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/07/">2025 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/06/">2025 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/05/">2025 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/04/">2025 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/03/">2025 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/02/">2025 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/01/">2025 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/12/">2024 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/11/">2024 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/10/">2024 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/09/">2024 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/08/">2024 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/07/">2024 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/06/">2024 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/05/">2024 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/04/">2024 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/03/">2024 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/02/">2024 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/01/">2024 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/12/">2023 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/11/">2023 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/10/">2023 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/09/">2023 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/08/">2023 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/07/">2023 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/06/">2023 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/05/">2023 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/04/">2023 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/03/">2023 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/02/">2023 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/01/">2023 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/12/">2022 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/11/">2022 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/10/">2022 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/09/">2022 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/08/">2022 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/07/">2022 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/06/">2022 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/05/">2022 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/04/">2022 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/03/">2022 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/02/">2022 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/01/">2022 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/12/">2021 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/11/">2021 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/10/">2021 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/09/">2021 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/08/">2021 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/07/">2021 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/06/">2021 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/05/">2021 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/04/">2021 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/03/">2021 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/02/">2021 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/01/">2021 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/12/">2020 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/11/">2020 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/10/">2020 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/07/">2020 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/03/">2020 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2019/03/">2019 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/11/">2018 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/10/">2018 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/09/">2018 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/08/">2018 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/07/">2018 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/06/">2018 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/04/">2018 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/02/">2018 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/12/">2017 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/11/">2017 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/09/">2017 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/05/">2017 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/03/">2017 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/02/">2017 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2016/08/">2016 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2016/05/">2016 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2014/03/">2014 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2012/02/">2012 / 02</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2026 Microsoft Japan Windows Technology Support Team<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/blog/" class="mobile-nav-link">Home</a>
+  
+    <a href="/blog/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+<script src="/blog/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

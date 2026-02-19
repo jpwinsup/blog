@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-180187723-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-180187723-1');
+</script>
+<!-- End Google Analytics -->
+
+  
+  <title>Microsoft Entra 参加の AVD セッション ホストの認証による接続不可事象と AVD の多要素認証に関して | Microsoft Japan Windows Technology Support Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="こんにちは。Azure Virtual Desktop (AVD) サポートの村井です。 昨今、 Microsoft Entra 参加の AVD をご利用頂いているユーザーから “お使いの資格情報は機能しませんでした” といったメッセージでログオンに失敗する事象のお問い合わせを頂戴しております。そこで、本ブログでは、 Microsoft Entra 参加の AVD セッション ホストにログイン時の">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Microsoft Entra 参加の AVD セッション ホストの認証による接続不可事象と AVD の多要素認証に関して">
+<meta property="og:url" content="https://jpwinsup.github.io/blog/2024/04/07/RemoteDesktopService/AVD/AVD-Microsoft-entra-ID-joined-connection-failed-and-conditional-access/index.html">
+<meta property="og:site_name" content="Microsoft Japan Windows Technology Support Blog">
+<meta property="og:description" content="こんにちは。Azure Virtual Desktop (AVD) サポートの村井です。 昨今、 Microsoft Entra 参加の AVD をご利用頂いているユーザーから “お使いの資格情報は機能しませんでした” といったメッセージでログオンに失敗する事象のお問い合わせを頂戴しております。そこで、本ブログでは、 Microsoft Entra 参加の AVD セッション ホストにログイン時の">
+<meta property="og:locale" content="ja_JP">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2024/04/07/RemoteDesktopService/AVD/AVD-Microsoft-entra-ID-joined-connection-failed-and-conditional-access/Not-connection.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2024/04/07/RemoteDesktopService/AVD/AVD-Microsoft-entra-ID-joined-connection-failed-and-conditional-access/Security-default.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2024/04/07/RemoteDesktopService/AVD/AVD-Microsoft-entra-ID-joined-connection-failed-and-conditional-access/Security-default-settings.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2024/04/07/RemoteDesktopService/AVD/AVD-Microsoft-entra-ID-joined-connection-failed-and-conditional-access/User-MFA.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2024/04/07/RemoteDesktopService/AVD/AVD-Microsoft-entra-ID-joined-connection-failed-and-conditional-access/User-MFA-settings.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2024/04/07/RemoteDesktopService/AVD/AVD-Microsoft-entra-ID-joined-connection-failed-and-conditional-access/User-MFA-prompt.png">
+<meta property="article:published_time" content="2024-04-07T22:15:04.000Z">
+<meta property="article:modified_time" content="2026-02-19T02:53:58.540Z">
+<meta property="article:author" content="Microsoft Japan Windows Technology Support Team">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://jpwinsup.github.io/blog/2024/04/07/RemoteDesktopService/AVD/AVD-Microsoft-entra-ID-joined-connection-failed-and-conditional-access/Not-connection.png">
+  
+    <link rel="alternate" href="/blog/atom.xml" title="Microsoft Japan Windows Technology Support Blog" type="application/atom+xml">
+  
+
+  <link rel="icon" href="/blog/favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="/blog/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/blog/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/blog/favicon-16x16.png">
+  <link rel="manifest" href="/blog/site.webmanifest">
+  <link rel="mask-icon" href="/blog/safari-pinned-tab.svg" color="#5bbad5">
+  <meta name="msapplication-TileColor" content="#ffffff">
+  <meta name="theme-color" content="#ffffff">
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/blog/css/style.css">
+
+<meta name="generator" content="Hexo 5.2.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="site-header-logo"></div>
+  <div id="site-header-blog-wrapper"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        <div id="ms-logo"></div>
+        
+          <a class="main-nav-link" href="/blog/">Home</a>
+        
+          <a class="main-nav-link" href="/blog/archives">Archives</a>
+        
+        <a class="main-nav-link" target="_blank" rel="noopener" href="https://cssjpn.github.io/">サポート情報</a>
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/blog/atom.xml" title="RSSフィード"></a>
+        
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//www.bing.com/search" method="get" accept-charset="UTF-8" name="bing-search" onsubmit="var f=this;if(f['q'].value){var searchUrl =  'https://www.bing.com/search?q=' +  encodeURIComponent(f['q'].value + ' site:' + f['sitesearch'].value) ;window.open(searchUrl, 'blank') };return false;" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="検索"><button type="submit" id="nav-search-btn" class="search-form-submit"></button><input type="hidden" name="sitesearch" value="https://jpwinsup.github.io/blog"></form>
+      </div>
+    </div>
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/blog/" id="logo">Microsoft Japan Windows Technology Support Blog</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/blog/" id="subtitle">日本マイクロソフト Windows Support チームによる、サポート情報 Blog です。</a>
+        </h2>
+      
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-RemoteDesktopService/AVD/AVD-Microsoft-entra-ID-joined-connection-failed-and-conditional-access" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    
+    
+      <header class="article-header-single">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Microsoft Entra 参加の AVD セッション ホストの認証による接続不可事象と AVD の多要素認証に関して
+    </h1>
+  
+
+      </header>
+      <div class="article-share">
+        Last Update: 
+        <a href="/blog/2024/04/07/RemoteDesktopService/AVD/AVD-Microsoft-entra-ID-joined-connection-failed-and-conditional-access/" class="article-date-single">
+  <time datetime="2024-04-07T22:15:04.000Z" itemprop="datePublished">2024-04-08</time>
+</a>
+        
+  <div class="article-category">
+    <a class="article-category-link" href="/blog/categories/Remote-Desktop/">Remote Desktop</a>►<a class="article-category-link" href="/blog/categories/Remote-Desktop/Azure-Virtual-Desktop-AVD/">Azure Virtual Desktop (AVD)</a>
+  </div>
+
+        
+        <a href="https://github.com/jpwinsup/blog/issues/new?title=&body=%EF%BB%BF%0A%0A---%0A%0A%23%23%23%23+Document+Details%0A%0A*+Article+ID%3A+b3bd46ef-f53a-5111-a981-586f8fe81ad8%0A*+TITLE%3A+Microsoft+Entra+%E5%8F%82%E5%8A%A0%E3%81%AE+AVD+%E3%82%BB%E3%83%83%E3%82%B7%E3%83%A7%E3%83%B3+%E3%83%9B%E3%82%B9%E3%83%88%E3%81%AE%E8%AA%8D%E8%A8%BC%E3%81%AB%E3%82%88%E3%82%8B%E6%8E%A5%E7%B6%9A%E4%B8%8D%E5%8F%AF%E4%BA%8B%E8%B1%A1%E3%81%A8+AVD+%E3%81%AE%E5%A4%9A%E8%A6%81%E7%B4%A0%E8%AA%8D%E8%A8%BC%E3%81%AB%E9%96%A2%E3%81%97%E3%81%A6%0A*+URL+https%3A%2F%2Fjpwinsup.github.io%2Fblog%2F2024%2F04%2F07%2FRemoteDesktopService%2FAVD%2FAVD-Microsoft-entra-ID-joined-connection-failed-and-conditional-access%2F%0A*+SourceFileName%3A+source%2F_posts%2FRemoteDesktopService%2FAVD%2FAVD-Microsoft-entra-ID-joined-connection-failed-and-conditional-access.md%0A" class="article-github-issue-link" target="_blank" rel="noopener noreferrer">feedback</a>
+        
+        <a data-url="https://jpwinsup.github.io/blog/2024/04/07/RemoteDesktopService/AVD/AVD-Microsoft-entra-ID-joined-connection-failed-and-conditional-access/" data-id="cmlsvjde700fsru3yerqgfuwn" class="article-share-link">共有</a>
+      </div>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>こんにちは。Azure Virtual Desktop (AVD) サポートの村井です。</p>
+<p>昨今、 Microsoft Entra 参加の AVD をご利用頂いているユーザーから “お使いの資格情報は機能しませんでした” といったメッセージでログオンに失敗する事象のお問い合わせを頂戴しております。そこで、本ブログでは、 Microsoft Entra 参加の AVD セッション ホストにログイン時のログオン失敗事象のトラブルシューティングと詳細な調査が必要になる際のご確認いただく設定等の情報をご案内いたします。</p>
+<h2 id="1-接続不可事象に関して"><a href="#1-接続不可事象に関して" class="headerlink" title="1. 接続不可事象に関して"></a>1. 接続不可事象に関して</h2><p>本ブログは、 Microsoft Entra 参加の AVD セッション ホスト接続時の場合を想定しております。<br>正しいユーザー名とパスワードを入力したにもかかわらず、下記の添付画像のように接続不可の事象が発生した場合のトラブルシューティングになります。</p>
+<img src="/blog/2024/04/07/RemoteDesktopService/AVD/AVD-Microsoft-entra-ID-joined-connection-failed-and-conditional-access/Not-connection.png" class="">
+
+<h2 id="2-RDP-プロパティとユーザーロールの設定による原因に関して"><a href="#2-RDP-プロパティとユーザーロールの設定による原因に関して" class="headerlink" title="2. RDP プロパティとユーザーロールの設定による原因に関して"></a>2. RDP プロパティとユーザーロールの設定による原因に関して</h2><p>Microsoft Entra 参加しているセッション ホストへの接続は、シナリオによっては RDP プロパティの設定が必須となっております。<br>具体的には、セッション ホストと接続元のクライアントが同じテナントに参加していない場合、下記の URL リンク先の技術文書の RDP プロパティの設定が必要となります。</p>
+<p>RDP プロパティ設定<br>&ensp;targetisaadjoined:i:1</p>
+<p><a target="_blank" rel="noopener" href="https://learn.microsoft.com/ja-jp/azure/virtual-desktop/azure-ad-joined-session-hosts#connect-using-legacy-authentication-protocols">https://learn.microsoft.com/ja-jp/azure/virtual-desktop/azure-ad-joined-session-hosts#connect-using-legacy-authentication-protocols</a></p>
+<p>—————–技術文書より抜粋開始<br>ローカル PC がこれらの条件のいずれかを満たしていない場合は、ホスト プールにカスタム RDP プロパティとして targetisaadjoined:i:1 を追加します。 これらの接続は、セッション ホストにサインインするときにユーザー名とパスワードの資格情報を入力するように制限されています。<br>—————–技術文書より抜粋終了</p>
+<p>また、ユーザーには、権限が必要になります。下記の URL リンク先の技術文書の権限をご確認ください。</p>
+<p><a target="_blank" rel="noopener" href="https://learn.microsoft.com/ja-jp/azure/virtual-desktop/azure-ad-joined-session-hosts?source=recommendations#assign-user-access-to-host-pools">https://learn.microsoft.com/ja-jp/azure/virtual-desktop/azure-ad-joined-session-hosts?source=recommendations#assign-user-access-to-host-pools</a></p>
+<p>—————–技術文書より抜粋開始<br>Microsoft Entra 参加済み VM の場合、Active Directory または Microsoft Entra Domain Services ベースのデプロイの要件に加えて、次の 2 つの追加作業を行う必要があります。<br>• ユーザーが VM にサインインできるよう、仮想マシン ユーザー ログイン ロールをユーザーに割り当てます。<br>• ローカル管理特権を必要とする管理者に仮想マシン管理者ログイン ロールを割り当てます。<br>—————–技術文書より抜粋終了</p>
+<p>“RDP プロパティの設定” と “ユーザーへの権限付与” が正しく行われているかをご確認ください。</p>
+<h2 id="3-多要素認証-MFA-設定による接続不可事象に関して"><a href="#3-多要素認証-MFA-設定による接続不可事象に関して" class="headerlink" title="3. 多要素認証 (MFA) 設定による接続不可事象に関して"></a>3. 多要素認証 (MFA) 設定による接続不可事象に関して</h2><p>Microsoft Entra 参加のセッション ホストのログイン時に、MFA サインイン方法が要求されると接続不可の事象が発生します。<br>MFA 設定は本ブログの 3.1 と 3.2 の設定が該当します。万が一 Microsoft Entra 参加のセッション ホストで、 接続不可事象が発生した場合は、3.1 あるいは 3.2 の設定を一時的に “無効” に頂き、接続が可能になるかをご確認ください。また、 3.1 と 3.2 の設定を併用し Microsoft Entra 参加の AVD を使用することは不可となっております。</p>
+<p>MFA サインイン方法ではなく、 AVD 使用時に MFA を要求させたい場合は 4. をご確認ください。</p>
+<h3 id="3-1-セキュリティ既定値群の設定に関して"><a href="#3-1-セキュリティ既定値群の設定に関して" class="headerlink" title="3.1 セキュリティ既定値群の設定に関して"></a>3.1 セキュリティ既定値群の設定に関して</h3><p>セキュリティの既定値群は、下記の設定から確認可能です。<br>-Azure Portal<br>   &ensp;-Microsoft Entra ID<br>    &ensp;&ensp;-プロパティ</p>
+<p>下記の画像の設定が表示されますため、 [有効] になっている場合、テナント全体で Azure サービスを利用時に MFA が要求される動作となります。 そのため、Microsoft Entra  参加のセッション ホストに接続できなくなります。[無効] に設定いただいた場合に AVD に接続できるかをご確認ください。設定変更は、下記の添付画像の青枠となります。</p>
+<img src="/blog/2024/04/07/RemoteDesktopService/AVD/AVD-Microsoft-entra-ID-joined-connection-failed-and-conditional-access/Security-default.png" class=""> <br> <br> <br> <br>
+
+
+
+<img src="/blog/2024/04/07/RemoteDesktopService/AVD/AVD-Microsoft-entra-ID-joined-connection-failed-and-conditional-access/Security-default-settings.png" class=""> <br> <br> <br>
+
+
+
+<h3 id="3-2-ユーザーごとの-MFA-の設定に関して"><a href="#3-2-ユーザーごとの-MFA-の設定に関して" class="headerlink" title="3.2 ユーザーごとの MFA の設定に関して"></a>3.2 ユーザーごとの MFA の設定に関して</h3><p>ユーザーごとの MFA は下記の設定で確認可能です。<br>-Azure Portal<br>  &ensp;-Microsoft Entra ID<br>   &ensp;&ensp;-ユーザー<br>     &ensp;&ensp;&ensp;-ユーザーごとの MFA</p>
+<p>対象のユーザーを選択し、下記の画像の設定になります。</p>
+<img src="/blog/2024/04/07/RemoteDesktopService/AVD/AVD-Microsoft-entra-ID-joined-connection-failed-and-conditional-access/User-MFA.png" class="">  <br> <br> <br> <br>
+
+
+<img src="/blog/2024/04/07/RemoteDesktopService/AVD/AVD-Microsoft-entra-ID-joined-connection-failed-and-conditional-access/User-MFA-settings.png" class=""> <br> <br> <br> <br>
+
+
+
+<img src="/blog/2024/04/07/RemoteDesktopService/AVD/AVD-Microsoft-entra-ID-joined-connection-failed-and-conditional-access/User-MFA-prompt.png" class=""> <br> <br> <br> 
+
+
+
+<p>設定が [有効] になっているユーザーは、 Azure サービスを利用時に MFA が要求される動作となります。<br>Microsoft Entra 参加のセッション ホストに接続時の認証時にも MFA が要求されてしまい、ログインができなくなります。<br>上記添付画像の青枠の設定から [無効] に設定いただき AVD に接続可能かをご確認ください。</p>
+<p>3.1 と 3.2 の設定が有効化されている場合は、一度無効化いただき、 AVD に接続できるかをご確認ください。</p>
+<h2 id="4-AVD-と-条件付きアクセスと-MFA-設定に関して"><a href="#4-AVD-と-条件付きアクセスと-MFA-設定に関して" class="headerlink" title="4. AVD と 条件付きアクセスと MFA 設定に関して"></a>4. AVD と 条件付きアクセスと MFA 設定に関して</h2><p>AVD では Windows リモート デスクトップ クライアントに対して条件付きアクセスの設定から Microsoft Entra ID 認証から MFA を要求させることが可能となっております。MFA が要求されるタイミングとしては、 Windows リモート デスクトップ クライアントを起動いただきデスクトップ等のアイコンをクリックし対象の AVD 環境に接続するタイミングで  Microsoft Entra ID 認証を要求することが可能となります。</p>
+<p>AVD の条件付きアクセスによる MFA の設定方法に関しては下記の URL リンク先の技術文書をご確認ください。</p>
+<p><a target="_blank" rel="noopener" href="https://learn.microsoft.com/ja-jp/azure/virtual-desktop/set-up-mfa">https://learn.microsoft.com/ja-jp/azure/virtual-desktop/set-up-mfa</a></p>
+<h3 id="サインイン頻度"><a href="#サインイン頻度" class="headerlink" title="サインイン頻度"></a>サインイン頻度</h3><p>Windows リモート デスクトップ クライアント上で、 一度 [登録] がされた Microsoft Entra ID 認証に対して、<br>“サインイン頻度”  を設定することで、ユーザーが設定した時間が経過すると再度 Microsoft Entra ID 認証を要求させることが可能となります。<br>設定の詳細は下記の URL リンク先の技術文書に記載がございます。</p>
+<p><a target="_blank" rel="noopener" href="https://learn.microsoft.com/ja-jp/azure/virtual-desktop/set-up-mfa#configure-sign-in-frequency">https://learn.microsoft.com/ja-jp/azure/virtual-desktop/set-up-mfa#configure-sign-in-frequency</a></p>
+<p>ユーザーが設定した時間が経過後の接続時に再度 Microsoft Entra ID が要求される動作となります。そのため、 AVD をご利用頂き、設定時間が経過しましても認証が要求されるや接続が切断されるといった動作にはなりません。すでに接続しており設定時間を経過した場合は、次回接続時にMicrosoft Entra ID 認証が要求されます。こちらも併せてご利用をご検討ください。</p>
+<h3 id="条件付きアクセスの-MFA-で除外いただくアプリに関して"><a href="#条件付きアクセスの-MFA-で除外いただくアプリに関して" class="headerlink" title="条件付きアクセスの MFA で除外いただくアプリに関して"></a>条件付きアクセスの MFA で除外いただくアプリに関して</h3><p>条件付きアクセスでの MFA 設定時の留意点<br>Azure VM Sigin-in 時に MFA を設定することにより、下記の URL リンク先の技術文書の接続不可の事象が発生する場合がございます。</p>
+<p><a target="_blank" rel="noopener" href="https://learn.microsoft.com/ja-jp/entra/identity/devices/howto-vm-sign-in-azure-ad-windows#mfa-sign-in-method-required">https://learn.microsoft.com/ja-jp/entra/identity/devices/howto-vm-sign-in-azure-ad-windows#mfa-sign-in-method-required</a></p>
+<p>—————–技術文書より抜粋開始<br>リソースにアクセスする前に MFA または従来のユーザー単位で有効化/適用された Microsoft Entra 多要素認証を求める条件付きアクセス ポリシーを構成している場合、VM へのリモート デスクトップ接続を開始する Windows 10 以降の PC が、Windows Hello などの強力な認証方法を使用して確実にサインインするようにする必要があります。 リモート デスクトップ接続に強力な認証方法を使用していない場合は、このエラーが表示されます。<br>—————–技術文書より抜粋終了</p>
+<p>AVD に接続するクライアントコンピューターに Windows Hello 等の強力な認証でログインできない環境の場合、<br>Azure Windows 仮想マシン サインイン アプリは、 MFA の “除外” にご設定ください。</p>
+<h2 id="5-本ブログで事象が解消しなかった場合の対応に関して"><a href="#5-本ブログで事象が解消しなかった場合の対応に関して" class="headerlink" title="5. 本ブログで事象が解消しなかった場合の対応に関して"></a>5. 本ブログで事象が解消しなかった場合の対応に関して</h2><p>本ブログの 2. 3. 4. の設定をご確認いただきましても、解消しなかった際の接続不可事象の対応をご案内いたします。</p>
+<h3 id="ご共有いただく情報に関して"><a href="#ご共有いただく情報に関して" class="headerlink" title="ご共有いただく情報に関して"></a>ご共有いただく情報に関して</h3><p>本ブログの内容をご確認いただき、事象が解消しません場合、本ブログの ア. から コ. の情報をご確認いただき弊社に情報をご共有ください。</p>
+<h4 id="切り分けの結果に関して"><a href="#切り分けの結果に関して" class="headerlink" title="切り分けの結果に関して"></a>切り分けの結果に関して</h4><p>  &ensp;ア. “資格情報が機能しませんでした。” のメッセージで接続不可事象が発生するセッション ホストが 1 台のみあるいは複数のセッションホストで発生しますでしょうか。</p>
+<p>  &ensp;イ. Windows リモート デスクトップ クライアントで接続している場合、 Web クライアントで接続した場合は接続可能でしょうか。</p>
+<p>  &ensp;ウ. 特定のユーザーのみで事象が発生しておりますでしょうか、あるいは複数のユーザーで事象が発生しておりますでしょうか。</p>
+<p>  &ensp;エ. AVD を構築いただいた当初から事象が発生しておりますでしょうか、あるいは何かの設定変更を契機に発生しましたでしょうか。</p>
+<p>  &ensp;オ. 可能な場合、 Windows Update をセッション ホスト上でご実施いただき、最新の更新プログラムを適用後も事象が発生しますでしょうか。</p>
+<p>  &ensp;カ. 条件付きアクセスを設定している場合 (例 特定のクライアントの IP のみを接続を許可する等) 、条件付きアクセスを無効化した場合も事象が発生しますでしょうか。</p>
+<h4 id="発生時の情報に関して"><a href="#発生時の情報に関して" class="headerlink" title="発生時の情報に関して"></a>発生時の情報に関して</h4><p>  &ensp;キ. 事象が発生する ”リソース グループ名”, “ホスト プール名”, “セッション ホスト名”, “事象が発生する UPN” をご共有ください。</p>
+<p>  &ensp;ク. 事象の発生 (資格情報が機能しませんでしたが発生)  を確認したおおよその日時をご教授ください。</p>
+<p>  &ensp;ケ. 本ブログの 2. と 3. の設定を変更した際の確認結果を弊社にご共有ください。</p>
+<p>  &ensp;コ. 下記のリンク先のブログをご確認いただき MSRD-Collect を取得ください。</p>
+<p>  <a href="https://jpwinsup.github.io/blog/2023/06/11/RemoteDesktopService/AVD/AVD-Collect-function-and-collect-log-method/#4-MSRD-Collect-%E3%81%AE%E5%8F%96%E5%BE%97%E6%89%8B%E9%A0%86%E3%81%AB%E9%96%A2%E3%81%97%E3%81%A6">https://jpwinsup.github.io/blog/2023/06/11/RemoteDesktopService/AVD/AVD-Collect-function-and-collect-log-method/#4-MSRD-Collect-%E3%81%AE%E5%8F%96%E5%BE%97%E6%89%8B%E9%A0%86%E3%81%AB%E9%96%A2%E3%81%97%E3%81%A6</a></p>
+<p>  上記 URL の MSRD-Collect は、セッション ホストとセッション ホストに接続する接続元のクライアント コンピューターの計 2 台で取得いただき結果をご共有ください。</p>
+<p>セッション ホストで取得する場合は “isTtarget” で取得ください。コマンドで実行する場合は下記のコマンドになります。</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">.\MSRD<span class="literal">-Collect</span>.ps1 <span class="literal">-Core</span> <span class="literal">-Machine</span> isAVD <span class="literal">-isTarget</span> </span><br></pre></td></tr></table></figure>
+
+<p>クライアントで取得する場合は “isSource” で取得ください。コマンドで実行する場合は下記のコマンドになります。</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">.\MSRD<span class="literal">-Collect</span>.ps1 <span class="literal">-Core</span> <span class="literal">-Machine</span> isAVD <span class="literal">-isSource</span> </span><br></pre></td></tr></table></figure>
+
+<h2 id="まとめ"><a href="#まとめ" class="headerlink" title="まとめ"></a>まとめ</h2><p>本ブログ記事では Microsoft Entra ID 参加の AVD セッション ホストの接続不可の事象に関してご案内いたしました。<br>接続不可の事象が発生した時に確認すべき設定をご案内いたしました。こちらのブログをご確認いただきましても、事象が解消しない場合は、事象発生時の状況のご確認と情報を採取いただき弊社にご共有頂けますと幸いでございます。</p>
+<blockquote>
+<p>本記事は、マイクロソフト社員によって公開されております。<br>ユーザー&gt;本記事は、マイクロソフト社員によって公開されております。</p>
+</blockquote>
+
+      
+      
+    </div>
+    <footer class="article-footer">
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/blog/2024/04/08/RemoteDesktopService/RDS/rdcbha-config/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">次の記事</strong>
+      <div class="article-nav-title">
+        
+          RD 接続ブローカー高可用性環境の標準的な構築手順について
+        
+      </div>
+    </a>
+  
+  
+    <a href="/blog/2024/04/03/UserInterfaceAndApps/Taskscheduler/startup-task-failed/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">前の記事</strong>
+      <div class="article-nav-title">スタートアップ時タスクの実行に失敗する問題について</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">カテゴリ</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Activation/">Activation</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Activation/ESU/">ESU</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Activation/security-SPP/">security-SPP</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/">Active Directory</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Authentication/">Authentication</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/DFSR/">DFSR</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/FunctionalLevel/">FunctionalLevel</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Group-Policy/">Group Policy</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Promotion-and-Demotion/">Promotion and Demotion</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/User-Profile/">User Profile</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Windows-Hello/">Windows Hello</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Windows-Time-Service/">Windows Time Service</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/AppLocker/">AppLocker</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/AppLocker/Active-Directory/">Active Directory</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/AppLocker/Microsoft-Intune/">Microsoft Intune</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Deployment/">Deployment</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Deployment/Feature-on-demand/">Feature on demand</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Deployment/Sysprep/">Sysprep</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Failover-Clustering/">Failover Clustering</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Failover-Clustering/Configuration-and-Management/">Configuration and Management</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/FileServices/">FileServices</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/FileServices/FTP/">FTP</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/FileServices/SMB/">SMB</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Hyper-V/">Hyper-V</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Hyper-V/Configuration-and-Management/">Configuration and Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Hyper-V/Migration/">Migration</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Microsoft-Connected-Cache/">Microsoft Connected Cache</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/">Networking</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/BITS/">BITS</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/Bluetooth/">Bluetooth</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/DHCP/">DHCP</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/DNS/">DNS</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/Firewall/">Firewall</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/LBFO/">LBFO</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/NCSI/">NCSI</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/NetworkInterface/">NetworkInterface</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/Proxy/">Proxy</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/TCPIP/">TCPIP</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/OpenSSH/">OpenSSH</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/">Performance</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/Hang-up-BSoD/">Hang-up/BSoD</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/No-Boot/">No Boot</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/Slow-Response/">Slow Response</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/System-Resource/">System Resource</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/Tools/">Tools</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/">Public Key Infrastructure</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Certificate-Authority/">Certificate Authority</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Certificate-Management/">Certificate Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Code-Signing/">Code Signing</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/SSL-TLS-Communication/">SSL TLS Communication</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/SSL-TLS-Connection/">SSL TLS Connection</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Smart-Card-Logon/">Smart Card Logon</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/">Remote Desktop</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/Azure-Virtual-Desktop-AVD/">Azure Virtual Desktop (AVD)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/Remote-Desktop-Service-RDS/">Remote Desktop Service (RDS)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/Windows-Virtual-Desktop-WVD/">Windows Virtual Desktop (WVD)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/RemoteAccess/">RemoteAccess</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/RemoteAccess/%E3%83%80%E3%82%A4%E3%83%A4%E3%83%AB%E3%82%A2%E3%83%83%E3%83%97%E6%8E%A5%E7%B6%9A/">ダイヤルアップ接続</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Setup/">Setup</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Setup/Feature-Update-FU/">Feature Update (FU)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Shell/">Shell</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Shell/Explorer/">Explorer</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/">Storage</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/Backup/">Backup</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/FSRM/">FSRM</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/Management/">Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/StorageMigrationService/">StorageMigrationService</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/UEFI/">UEFI</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/UEFI/Secure-Boot/">Secure Boot</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/">User Interface and Apps</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Command-Prompt/">Command Prompt</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/EventLog/">EventLog</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Language-Support/">Language Support</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Microsoft-Store/">Microsoft Store</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Performance/">Performance</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/PowerShell/">PowerShell</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Printing-%E5%8D%B0%E5%88%B7/">Printing (印刷)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Server-Management/">Server Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Taskscheduler/">Taskscheduler</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Windows-Management-Instrumentation/">Windows Management Instrumentation</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps-Language-support/">User Interface and Apps - Language support</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-365/">Windows 365</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Admin-Center/">Windows Admin Center</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Search/">Windows Search</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/">Windows Update</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Delivery-Optimization-DO/">Delivery Optimization (DO)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Feature-Update-FU/">Feature Update (FU)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Quality-Update-QU/">Quality Update (QU)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Windows-Update-Agent/">Windows Update Agent</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Windows-Update-Agent-WUA/">Windows Update Agent (WUA)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/">WirelessNetwork</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/NPS/">NPS</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/Wi-Fi/">Wi-Fi</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/%E3%83%A2%E3%83%90%E3%82%A4%E3%83%AB-%E3%83%96%E3%83%AD%E3%83%BC%E3%83%89%E3%83%90%E3%83%B3%E3%83%89%E6%8E%A5%E7%B6%9A-LTE/">モバイル ブロードバンド接続 (LTE)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/%E7%B5%84%E7%B9%94%E7%B4%B9%E4%BB%8B%E3%83%96%E3%83%AD%E3%82%B0%EF%BC%88Windows-Commercial%EF%BC%89/">組織紹介ブログ（Windows Commercial）</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最近の投稿</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/blog/2026/02/16/ActiveDirectory/GroupPolicy/UacPolicyIsEnabled/">「ユーザー アカウント制御：ビルトイン Administrator アカウントのための管理者承認モード」ポリシーが有効になる動作ついて</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/02/15/UserInterfaceAndApps/Printing/printer-queue-app-preview/">印刷キューアプリのプレビュー機能について</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/02/02/ActiveDirectory/Authentication/kerberos-rc4-for-service-account-ticket-issuance-changes-related-to-cve-2026-20833/">CVE‑2026‑20833 への対応とその影響について [KB5073381]</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/01/12/Hyper-V/vmwp-does-not-save-the-RTC-value-of-a-virtual-machine-when-performing-Live-Migration/">ライブ マイグレーション後の再起動でゲスト OS の時刻がずれる場合がある</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/01/07/WindowsUpdate/FU/fublog-txt/">ISO メディア経由かつ動的更新無効な状態で Windows 11 バージョン 24H2 または 25H2 へのアップグレードが失敗 (0x8007042B 0x2000D) する事象と対策について</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">アーカイブ</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2026/02/">2026 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2026/01/">2026 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/12/">2025 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/11/">2025 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/10/">2025 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/09/">2025 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/08/">2025 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/07/">2025 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/06/">2025 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/05/">2025 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/04/">2025 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/03/">2025 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/02/">2025 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/01/">2025 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/12/">2024 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/11/">2024 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/10/">2024 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/09/">2024 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/08/">2024 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/07/">2024 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/06/">2024 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/05/">2024 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/04/">2024 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/03/">2024 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/02/">2024 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/01/">2024 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/12/">2023 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/11/">2023 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/10/">2023 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/09/">2023 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/08/">2023 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/07/">2023 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/06/">2023 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/05/">2023 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/04/">2023 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/03/">2023 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/02/">2023 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/01/">2023 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/12/">2022 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/11/">2022 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/10/">2022 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/09/">2022 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/08/">2022 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/07/">2022 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/06/">2022 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/05/">2022 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/04/">2022 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/03/">2022 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/02/">2022 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/01/">2022 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/12/">2021 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/11/">2021 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/10/">2021 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/09/">2021 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/08/">2021 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/07/">2021 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/06/">2021 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/05/">2021 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/04/">2021 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/03/">2021 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/02/">2021 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/01/">2021 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/12/">2020 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/11/">2020 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/10/">2020 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/07/">2020 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/03/">2020 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2019/03/">2019 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/11/">2018 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/10/">2018 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/09/">2018 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/08/">2018 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/07/">2018 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/06/">2018 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/04/">2018 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/02/">2018 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/12/">2017 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/11/">2017 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/09/">2017 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/05/">2017 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/03/">2017 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/02/">2017 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2016/08/">2016 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2016/05/">2016 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2014/03/">2014 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2012/02/">2012 / 02</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2026 Microsoft Japan Windows Technology Support Team<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/blog/" class="mobile-nav-link">Home</a>
+  
+    <a href="/blog/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+<script src="/blog/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

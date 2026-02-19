@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-180187723-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-180187723-1');
+</script>
+<!-- End Google Analytics -->
+
+  
+  <title>Explorer より、Guest アカウントへのログオン失敗の監査ログが記録される動作について | Microsoft Japan Windows Technology Support Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="本記事はマイクロソフト社員によって公開されております。 Windows プラットフォームサポートの丸山です。 本日は、Windows 10 のセキュリティ ログに Guest アカウントのログオン失敗の監査が記録される事象について、ご紹介させていただきます。 Explorer より、Guest アカウントへのログオン失敗の監査ログが記録される動作についてWindows では、フォルダーの共有タブを">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Explorer より、Guest アカウントへのログオン失敗の監査ログが記録される動作について">
+<meta property="og:url" content="https://jpwinsup.github.io/blog/2022/01/20/UserInterfaceAndApps/guest-logon-failure-from-explorer/index.html">
+<meta property="og:site_name" content="Microsoft Japan Windows Technology Support Blog">
+<meta property="og:description" content="本記事はマイクロソフト社員によって公開されております。 Windows プラットフォームサポートの丸山です。 本日は、Windows 10 のセキュリティ ログに Guest アカウントのログオン失敗の監査が記録される事象について、ご紹介させていただきます。 Explorer より、Guest アカウントへのログオン失敗の監査ログが記録される動作についてWindows では、フォルダーの共有タブを">
+<meta property="og:locale" content="ja_JP">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2022/01/20/UserInterfaceAndApps/guest-logon-failure-from-explorer/network-access.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2022/01/20/UserInterfaceAndApps/guest-logon-failure-from-explorer/shared-with-non-domain.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2022/01/20/UserInterfaceAndApps/guest-logon-failure-from-explorer/shared-with-domain-guest-disabled.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2022/01/20/UserInterfaceAndApps/guest-logon-failure-from-explorer/shared-with-domain-guest-enabled.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2022/01/20/UserInterfaceAndApps/guest-logon-failure-from-explorer/password-protection-non-domain-guest-disabled.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2022/01/20/UserInterfaceAndApps/guest-logon-failure-from-explorer/password-protection-non-domain-guest-enabled.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2022/01/20/UserInterfaceAndApps/guest-logon-failure-from-explorer/password-protection-domain.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2022/01/20/UserInterfaceAndApps/guest-logon-failure-from-explorer/printed-share-non-domain-guest-disabled.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2022/01/20/UserInterfaceAndApps/guest-logon-failure-from-explorer/printed-share-non-domain-guest-enabled.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2022/01/20/UserInterfaceAndApps/guest-logon-failure-from-explorer/printed-share-domain.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2022/01/20/UserInterfaceAndApps/guest-logon-failure-from-explorer/password-protected-sharing.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2022/01/20/UserInterfaceAndApps/guest-logon-failure-from-explorer/auditpol-1803.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2022/01/20/UserInterfaceAndApps/guest-logon-failure-from-explorer/auditpol-1809.png">
+<meta property="article:published_time" content="2022-01-20T06:00:00.000Z">
+<meta property="article:modified_time" content="2026-02-19T02:53:58.946Z">
+<meta property="article:author" content="Microsoft Japan Windows Technology Support Team">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://jpwinsup.github.io/blog/2022/01/20/UserInterfaceAndApps/guest-logon-failure-from-explorer/network-access.png">
+  
+    <link rel="alternate" href="/blog/atom.xml" title="Microsoft Japan Windows Technology Support Blog" type="application/atom+xml">
+  
+
+  <link rel="icon" href="/blog/favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="/blog/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/blog/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/blog/favicon-16x16.png">
+  <link rel="manifest" href="/blog/site.webmanifest">
+  <link rel="mask-icon" href="/blog/safari-pinned-tab.svg" color="#5bbad5">
+  <meta name="msapplication-TileColor" content="#ffffff">
+  <meta name="theme-color" content="#ffffff">
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/blog/css/style.css">
+
+<meta name="generator" content="Hexo 5.2.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="site-header-logo"></div>
+  <div id="site-header-blog-wrapper"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        <div id="ms-logo"></div>
+        
+          <a class="main-nav-link" href="/blog/">Home</a>
+        
+          <a class="main-nav-link" href="/blog/archives">Archives</a>
+        
+        <a class="main-nav-link" target="_blank" rel="noopener" href="https://cssjpn.github.io/">サポート情報</a>
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/blog/atom.xml" title="RSSフィード"></a>
+        
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//www.bing.com/search" method="get" accept-charset="UTF-8" name="bing-search" onsubmit="var f=this;if(f['q'].value){var searchUrl =  'https://www.bing.com/search?q=' +  encodeURIComponent(f['q'].value + ' site:' + f['sitesearch'].value) ;window.open(searchUrl, 'blank') };return false;" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="検索"><button type="submit" id="nav-search-btn" class="search-form-submit"></button><input type="hidden" name="sitesearch" value="https://jpwinsup.github.io/blog"></form>
+      </div>
+    </div>
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/blog/" id="logo">Microsoft Japan Windows Technology Support Blog</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/blog/" id="subtitle">日本マイクロソフト Windows Support チームによる、サポート情報 Blog です。</a>
+        </h2>
+      
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-UserInterfaceAndApps/guest-logon-failure-from-explorer" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    
+    
+      <header class="article-header-single">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Explorer より、Guest アカウントへのログオン失敗の監査ログが記録される動作について
+    </h1>
+  
+
+      </header>
+      <div class="article-share">
+        Last Update: 
+        <a href="/blog/2022/01/20/UserInterfaceAndApps/guest-logon-failure-from-explorer/" class="article-date-single">
+  <time datetime="2022-01-20T06:00:00.000Z" itemprop="datePublished">2022-01-20</time>
+</a>
+        
+  <div class="article-category">
+    <a class="article-category-link" href="/blog/categories/User-Interface-and-Apps/">User Interface and Apps</a>
+  </div>
+
+        
+        <a href="https://github.com/jpwinsup/blog/issues/new?title=&body=%EF%BB%BF%0A%0A---%0A%0A%23%23%23%23+Document+Details%0A%0A*+Article+ID%3A+36e35ab7-9d44-5421-b81b-def09b7d7928%0A*+TITLE%3A+Explorer+%E3%82%88%E3%82%8A%E3%80%81Guest+%E3%82%A2%E3%82%AB%E3%82%A6%E3%83%B3%E3%83%88%E3%81%B8%E3%81%AE%E3%83%AD%E3%82%B0%E3%82%AA%E3%83%B3%E5%A4%B1%E6%95%97%E3%81%AE%E7%9B%A3%E6%9F%BB%E3%83%AD%E3%82%B0%E3%81%8C%E8%A8%98%E9%8C%B2%E3%81%95%E3%82%8C%E3%82%8B%E5%8B%95%E4%BD%9C%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6%0A*+URL+https%3A%2F%2Fjpwinsup.github.io%2Fblog%2F2022%2F01%2F20%2FUserInterfaceAndApps%2Fguest-logon-failure-from-explorer%2F%0A*+SourceFileName%3A+source%2F_posts%2FUserInterfaceAndApps%2Fguest-logon-failure-from-explorer.md%0A" class="article-github-issue-link" target="_blank" rel="noopener noreferrer">feedback</a>
+        
+        <a data-url="https://jpwinsup.github.io/blog/2022/01/20/UserInterfaceAndApps/guest-logon-failure-from-explorer/" data-id="cmlsvjd9t0044ru3y0at845ta" class="article-share-link">共有</a>
+      </div>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>本記事はマイクロソフト社員によって公開されております。</p>
+<p>Windows プラットフォームサポートの丸山です。</p>
+<p>本日は、Windows 10 のセキュリティ ログに Guest アカウントのログオン失敗の監査が記録される事象について、ご紹介させていただきます。</p>
+<h1 id="Explorer-より、Guest-アカウントへのログオン失敗の監査ログが記録される動作について"><a href="#Explorer-より、Guest-アカウントへのログオン失敗の監査ログが記録される動作について" class="headerlink" title="Explorer より、Guest アカウントへのログオン失敗の監査ログが記録される動作について"></a>Explorer より、Guest アカウントへのログオン失敗の監査ログが記録される動作について</h1><p>Windows では、フォルダーの共有タブを開いた際など、いくつかのシナリオにおいて Guest アカウントが有効であるかどうかをチェックして、画面の表示を変える動作がございます。</p>
+<p>また、Guest アカウントが有効であるかどうかをチェックする際には、実際に Guest アカウントにログオンすることにより、Guest アカウントが有効であるかどうかをチェックする動作となっております。</p>
+<p>このため、Guest アカウントが無効、かつ、ログオンの失敗の監査が有効な環境では、エクスプローラーの操作により、Guest アカウントに対するログオンの失敗の監査が記録されるようになります。</p>
+<ul>
+<li>記録されるログオン失敗の監査イベントの例<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line">ログの名前:         Security</span><br><span class="line">ソース:           Microsoft-Windows-Security-Auditing</span><br><span class="line">日付:            yyyy&#x2F;mm&#x2F;dd hh:mm:ss</span><br><span class="line">イベント ID:       4625</span><br><span class="line">タスクのカテゴリ:      Logon</span><br><span class="line">レベル:           情報</span><br><span class="line">キーワード:         失敗の監査</span><br><span class="line">説明:</span><br><span class="line">アカウントがログオンに失敗しました。</span><br><span class="line"></span><br><span class="line">サブジェクト:</span><br><span class="line">	セキュリティ ID:		xxxxx</span><br><span class="line">	アカウント名:		xxxxx</span><br><span class="line">	アカウント ドメイン:		xxxxx</span><br><span class="line">	ログオン ID:		0x12345678</span><br><span class="line"></span><br><span class="line">ログオン タイプ:			3 &lt;&lt; ネットワーク ログオンであることを示しております</span><br><span class="line"></span><br><span class="line">ログオンを失敗したアカウント:</span><br><span class="line">	セキュリティ ID:		NULL SID</span><br><span class="line">	アカウント名:		Guest &lt;&lt; Guest アカウントへのアクセスとなります</span><br><span class="line">    アカウント ドメイン:		xxxxxxxx</span><br><span class="line"></span><br><span class="line">エラー情報:</span><br><span class="line">	失敗の原因:		アカウントは現在無効に設定されています。</span><br><span class="line">	状態:			0xC000006E</span><br><span class="line">	サブ ステータス:		0xC0000072</span><br><span class="line"></span><br><span class="line">プロセス情報:</span><br><span class="line">	呼び出し側プロセス ID:	0x1234</span><br><span class="line">	呼び出し側プロセス名:	C:\Windows\explorer.exe &lt;&lt; explorer.exe からのログオンとして記録されます</span><br><span class="line"></span><br><span class="line">ネットワーク情報:</span><br><span class="line">	ワークステーション名:	xxxxxxxx</span><br><span class="line">	ソース ネットワーク アドレス:	-</span><br><span class="line">	ソース ポート:		-</span><br><span class="line"></span><br><span class="line">詳細な認証情報:</span><br><span class="line">	ログオン プロセス:		Advapi  &lt;&lt; LogonUser などの関数を用いたログオンであることを示しております</span><br><span class="line">	認証パッケージ:	Negotiate</span><br><span class="line">	移行されたサービス:	-</span><br><span class="line">	パッケージ名 (NTLM のみ):	-</span><br><span class="line">	キーの長さ:		0</span><br><span class="line"></span><br><span class="line">(以下略)</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h1 id="Guest-アカウントのログオン失敗の監査が記録される具体的な操作の例について"><a href="#Guest-アカウントのログオン失敗の監査が記録される具体的な操作の例について" class="headerlink" title="Guest アカウントのログオン失敗の監査が記録される具体的な操作の例について"></a>Guest アカウントのログオン失敗の監査が記録される具体的な操作の例について</h1><p>Guest アカウントのログオン失敗の監査が記録される具体的な操作ですが、以下の操作が該当することを確認しております。</p>
+<h2 id="1-ドメイン環境にて共有されたフィルダー配下のファイルのプロパティ画面における-共有ユーザー-の表記"><a href="#1-ドメイン環境にて共有されたフィルダー配下のファイルのプロパティ画面における-共有ユーザー-の表記" class="headerlink" title="1. ドメイン環境にて共有されたフィルダー配下のファイルのプロパティ画面における [共有ユーザー] の表記"></a>1. ドメイン環境にて共有されたフィルダー配下のファイルのプロパティ画面における [共有ユーザー] の表記</h2><p>Windows 10 にてフォルダーを右クリックして、[アクセスを許可する] メニューから特定のユーザーを選択しますと、当該フォルダーを共有するとともに、ユーザーごとに読み取り、書き込みなどのアクセス権が設定可能になります。</p>
+<img src="/blog/2022/01/20/UserInterfaceAndApps/guest-logon-failure-from-explorer/network-access.png" class="">
+
+<p>この画面で、アクセス権を付与する対象に [Everyone] を追加して、[読み取り] あるいは [読み取り/書き込み] など、カスタムではないアクセス権が設定されている場合、当該フォルダー配下に配置されたファイルのプロパティを開き、[詳細] タブを開きますと、[共有ユーザー] という項目が表示されます。</p>
+<p>このとき、非ドメイン環境の場合、Everyone に対してアクセス権が付与されている場合、共有ユーザーには [Everyone] と言う値が記載されますが、ドメイン環境ではGuest アカウントが有効であるかどうかをチェックしており、Guest アカウントが [無効] な場合には [すべてのドメイン ユーザー] と表記され、Guest アカウントが [有効] な場合には [すべてのユーザー] と表記される動作でございます。</p>
+<ul>
+<li><p>非ドメイン環境の場合</p>
+<img src="/blog/2022/01/20/UserInterfaceAndApps/guest-logon-failure-from-explorer/shared-with-non-domain.png" class="">
+</li>
+<li><p>ドメイン環境で Guest アカウントが [無効] な場合</p>
+<img src="/blog/2022/01/20/UserInterfaceAndApps/guest-logon-failure-from-explorer/shared-with-domain-guest-disabled.png" class="">
+</li>
+<li><p>ドメイン環境で Guest アカウントが [有効] な場合</p>
+<img src="/blog/2022/01/20/UserInterfaceAndApps/guest-logon-failure-from-explorer/shared-with-domain-guest-enabled.png" class="">
+
+</li>
+</ul>
+<h2 id="2-非ドメイン環境におけるフォルダーの-共有-タブの表記"><a href="#2-非ドメイン環境におけるフォルダーの-共有-タブの表記" class="headerlink" title="2. 非ドメイン環境におけるフォルダーの [共有] タブの表記"></a>2. 非ドメイン環境におけるフォルダーの [共有] タブの表記</h2><p>非ドメイン環境においてフォルダーのプロパティ画面を開き、[共有] タブを開いた際、[パスワード保護] の領域が表示されることがございます。この画面を開くとき、Guest アカウントが有効であるかどうかをチェックしており、Guest アカウントが [無効] な場合と [有効] な場合にメッセージの内容を変えております。ドメイン環境では [パスワード保護] の領域がなく、Guest アカウントが有効であるかどうかをチェックしておりません。</p>
+<ul>
+<li><p>非ドメイン環境で Guest アカウントが [無効] の場合</p>
+<img src="/blog/2022/01/20/UserInterfaceAndApps/guest-logon-failure-from-explorer/password-protection-non-domain-guest-disabled.png" class="">
+</li>
+<li><p>非ドメイン環境で Guest アカウントが [有効] な場合</p>
+<img src="/blog/2022/01/20/UserInterfaceAndApps/guest-logon-failure-from-explorer/password-protection-non-domain-guest-enabled.png" class="">
+</li>
+<li><p>ドメイン環境の場合 (パスワード保護の項目無し)</p>
+<img src="/blog/2022/01/20/UserInterfaceAndApps/guest-logon-failure-from-explorer/password-protection-domain.png" class="">
+
+</li>
+</ul>
+<h2 id="3-プリンターのプロパティ画面の-共有-タブの表記"><a href="#3-プリンターのプロパティ画面の-共有-タブの表記" class="headerlink" title="3. プリンターのプロパティ画面の [共有] タブの表記"></a>3. プリンターのプロパティ画面の [共有] タブの表記</h2><p>非ドメイン環境においてプリンターのプロパティ画面を開き、[共有] タブを開いたとき、Guest アカウントが有効であるかどうかをチェックしており、Guest アカウントが [無効] な場合と [有効] な場合にプリンターのアイコンの隣にあるメッセージの内容を変えております。ドメイン環境ではメッセージの内容は固定となっており、Guest アカウントが有効であるかどうかをチェックしておりません。</p>
+<ul>
+<li><p>非ドメイン環境で Guest アカウントが [無効] の場合</p>
+<img src="/blog/2022/01/20/UserInterfaceAndApps/guest-logon-failure-from-explorer/printed-share-non-domain-guest-disabled.png" class="">
+</li>
+<li><p>非ドメイン環境で Guest アカウントが [有効] の場合</p>
+<img src="/blog/2022/01/20/UserInterfaceAndApps/guest-logon-failure-from-explorer/printed-share-non-domain-guest-enabled.png" class="">
+</li>
+<li><p>ドメイン環境 (Guest アカウントが [有効] であるか [無効] であるかによる表記の変化はありません)</p>
+<img src="/blog/2022/01/20/UserInterfaceAndApps/guest-logon-failure-from-explorer/printed-share-domain.png" class="">
+
+</li>
+</ul>
+<h2 id="4-ネットワークと共有センター-の-パスワード保護共有"><a href="#4-ネットワークと共有センター-の-パスワード保護共有" class="headerlink" title="4. [ネットワークと共有センター] の [パスワード保護共有]"></a>4. [ネットワークと共有センター] の [パスワード保護共有]</h2><p>非ドメイン環境において [ネットワークと共有センター] の共有の詳細設定画面を開きますと、[パスワード保護共有] と言う項目が表示されます。</p>
+<p>この画面を開くとき、Guest アカウントが有効であるかどうかをチェックしており、Guest アカウントが [無効] な場合には、[パスワード保護共有を有効にする] がチェックされており、Guest アカウントが [有効] な場合には [パスワード保護共有を無効にする] がチェックされております。</p>
+<p>またこの画面において、[パスワード保護共有を有効にする] にチェックを入れて [変更の保存] を押下すると、Guest アカウントが [無効] になり、[パスワード保護共有を無効にする] にチェックを入れて [変更の保存] を押下すると、Guest アカウントが [有効] になります。</p>
+<img src="/blog/2022/01/20/UserInterfaceAndApps/guest-logon-failure-from-explorer/password-protected-sharing.png" class="">
+
+<h1 id="ログオン失敗の監査が既定で有効となる-OS-バージョンについて"><a href="#ログオン失敗の監査が既定で有効となる-OS-バージョンについて" class="headerlink" title="ログオン失敗の監査が既定で有効となる OS バージョンについて"></a>ログオン失敗の監査が既定で有効となる OS バージョンについて</h1><p>Windows Server 2008 以降、サーバー OS では以前より、ログオン失敗の監査が既定で [有効] になっていますが、Windows 10 バージョン 1803 以前のクライアント OS では、ログオン失敗の監査は既定で [無効] でした。Windows 10 バージョン 1809 以降のクライアントでは、ログオン失敗の監査が既定で [有効] になっています。</p>
+<ul>
+<li><p>Windows 10 バージョン 1803 以前</p>
+<img src="/blog/2022/01/20/UserInterfaceAndApps/guest-logon-failure-from-explorer/auditpol-1803.png" class="">
+</li>
+<li><p>Windows 10 バージョン 1809 以降</p>
+<img src="/blog/2022/01/20/UserInterfaceAndApps/guest-logon-failure-from-explorer/auditpol-1809.png" class="">
+
+</li>
+</ul>
+<p>Windows 10 バージョン 1809 以降の環境では、既定の構成で Guest アカウントが [無効] であり、ログオン失敗の監査が [有効] になっておりますことから、エクスプローラーの操作により、Guest アカウントに対するログオンの失敗の監査が記録される動作となっております。</p>
+<p>もし、ログオン失敗の監査が不要であれば、以下のコマンドを実行して、ログオンの失敗の監査を [無効] にしていただくことをご検討ください。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">auditpol &#x2F;set &#x2F;subcategory:ログオン &#x2F;failure:disable</span><br></pre></td></tr></table></figure>
+
+<p>本情報が、お役立ちできますと幸いです。</p>
+<h1 id="更新履歴-Update-History"><a href="#更新履歴-Update-History" class="headerlink" title="更新履歴 - Update History"></a>更新履歴 - Update History</h1><ul>
+<li>2022/01/20 : 本 Blog の公開</li>
+</ul>
+
+      
+      
+    </div>
+    <footer class="article-footer">
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/blog/2022/01/24/Setup/WindowsUpdate_AutoUpdate/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">次の記事</strong>
+      <div class="article-nav-title">
+        
+          Windows Update 自動更新で指定したインストールの開始時刻について
+        
+      </div>
+    </a>
+  
+  
+    <a href="/blog/2021/12/22/PublicKeyInfrastructure/SSLTLSConnection/cipher-suites-settings/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">前の記事</strong>
+      <div class="article-nav-title">暗号スイート (Cipher Suite) の設定方法</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">カテゴリ</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Activation/">Activation</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Activation/ESU/">ESU</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Activation/security-SPP/">security-SPP</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/">Active Directory</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Authentication/">Authentication</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/DFSR/">DFSR</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/FunctionalLevel/">FunctionalLevel</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Group-Policy/">Group Policy</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Promotion-and-Demotion/">Promotion and Demotion</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/User-Profile/">User Profile</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Windows-Hello/">Windows Hello</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Windows-Time-Service/">Windows Time Service</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/AppLocker/">AppLocker</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/AppLocker/Active-Directory/">Active Directory</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/AppLocker/Microsoft-Intune/">Microsoft Intune</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Deployment/">Deployment</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Deployment/Feature-on-demand/">Feature on demand</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Deployment/Sysprep/">Sysprep</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Failover-Clustering/">Failover Clustering</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Failover-Clustering/Configuration-and-Management/">Configuration and Management</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/FileServices/">FileServices</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/FileServices/FTP/">FTP</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/FileServices/SMB/">SMB</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Hyper-V/">Hyper-V</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Hyper-V/Configuration-and-Management/">Configuration and Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Hyper-V/Migration/">Migration</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Microsoft-Connected-Cache/">Microsoft Connected Cache</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/">Networking</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/BITS/">BITS</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/Bluetooth/">Bluetooth</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/DHCP/">DHCP</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/DNS/">DNS</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/Firewall/">Firewall</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/LBFO/">LBFO</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/NCSI/">NCSI</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/NetworkInterface/">NetworkInterface</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/Proxy/">Proxy</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/TCPIP/">TCPIP</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/OpenSSH/">OpenSSH</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/">Performance</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/Hang-up-BSoD/">Hang-up/BSoD</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/No-Boot/">No Boot</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/Slow-Response/">Slow Response</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/System-Resource/">System Resource</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/Tools/">Tools</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/">Public Key Infrastructure</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Certificate-Authority/">Certificate Authority</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Certificate-Management/">Certificate Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Code-Signing/">Code Signing</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/SSL-TLS-Communication/">SSL TLS Communication</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/SSL-TLS-Connection/">SSL TLS Connection</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Smart-Card-Logon/">Smart Card Logon</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/">Remote Desktop</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/Azure-Virtual-Desktop-AVD/">Azure Virtual Desktop (AVD)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/Remote-Desktop-Service-RDS/">Remote Desktop Service (RDS)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/Windows-Virtual-Desktop-WVD/">Windows Virtual Desktop (WVD)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/RemoteAccess/">RemoteAccess</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/RemoteAccess/%E3%83%80%E3%82%A4%E3%83%A4%E3%83%AB%E3%82%A2%E3%83%83%E3%83%97%E6%8E%A5%E7%B6%9A/">ダイヤルアップ接続</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Setup/">Setup</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Setup/Feature-Update-FU/">Feature Update (FU)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Shell/">Shell</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Shell/Explorer/">Explorer</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/">Storage</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/Backup/">Backup</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/FSRM/">FSRM</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/Management/">Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/StorageMigrationService/">StorageMigrationService</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/UEFI/">UEFI</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/UEFI/Secure-Boot/">Secure Boot</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/">User Interface and Apps</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Command-Prompt/">Command Prompt</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/EventLog/">EventLog</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Language-Support/">Language Support</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Microsoft-Store/">Microsoft Store</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Performance/">Performance</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/PowerShell/">PowerShell</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Printing-%E5%8D%B0%E5%88%B7/">Printing (印刷)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Server-Management/">Server Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Taskscheduler/">Taskscheduler</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Windows-Management-Instrumentation/">Windows Management Instrumentation</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps-Language-support/">User Interface and Apps - Language support</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-365/">Windows 365</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Admin-Center/">Windows Admin Center</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Search/">Windows Search</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/">Windows Update</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Delivery-Optimization-DO/">Delivery Optimization (DO)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Feature-Update-FU/">Feature Update (FU)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Quality-Update-QU/">Quality Update (QU)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Windows-Update-Agent/">Windows Update Agent</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Windows-Update-Agent-WUA/">Windows Update Agent (WUA)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/">WirelessNetwork</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/NPS/">NPS</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/Wi-Fi/">Wi-Fi</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/%E3%83%A2%E3%83%90%E3%82%A4%E3%83%AB-%E3%83%96%E3%83%AD%E3%83%BC%E3%83%89%E3%83%90%E3%83%B3%E3%83%89%E6%8E%A5%E7%B6%9A-LTE/">モバイル ブロードバンド接続 (LTE)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/%E7%B5%84%E7%B9%94%E7%B4%B9%E4%BB%8B%E3%83%96%E3%83%AD%E3%82%B0%EF%BC%88Windows-Commercial%EF%BC%89/">組織紹介ブログ（Windows Commercial）</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最近の投稿</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/blog/2026/02/16/ActiveDirectory/GroupPolicy/UacPolicyIsEnabled/">「ユーザー アカウント制御：ビルトイン Administrator アカウントのための管理者承認モード」ポリシーが有効になる動作ついて</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/02/15/UserInterfaceAndApps/Printing/printer-queue-app-preview/">印刷キューアプリのプレビュー機能について</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/02/02/ActiveDirectory/Authentication/kerberos-rc4-for-service-account-ticket-issuance-changes-related-to-cve-2026-20833/">CVE‑2026‑20833 への対応とその影響について [KB5073381]</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/01/12/Hyper-V/vmwp-does-not-save-the-RTC-value-of-a-virtual-machine-when-performing-Live-Migration/">ライブ マイグレーション後の再起動でゲスト OS の時刻がずれる場合がある</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/01/07/WindowsUpdate/FU/fublog-txt/">ISO メディア経由かつ動的更新無効な状態で Windows 11 バージョン 24H2 または 25H2 へのアップグレードが失敗 (0x8007042B 0x2000D) する事象と対策について</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">アーカイブ</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2026/02/">2026 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2026/01/">2026 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/12/">2025 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/11/">2025 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/10/">2025 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/09/">2025 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/08/">2025 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/07/">2025 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/06/">2025 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/05/">2025 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/04/">2025 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/03/">2025 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/02/">2025 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/01/">2025 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/12/">2024 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/11/">2024 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/10/">2024 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/09/">2024 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/08/">2024 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/07/">2024 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/06/">2024 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/05/">2024 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/04/">2024 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/03/">2024 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/02/">2024 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/01/">2024 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/12/">2023 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/11/">2023 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/10/">2023 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/09/">2023 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/08/">2023 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/07/">2023 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/06/">2023 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/05/">2023 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/04/">2023 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/03/">2023 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/02/">2023 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/01/">2023 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/12/">2022 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/11/">2022 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/10/">2022 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/09/">2022 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/08/">2022 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/07/">2022 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/06/">2022 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/05/">2022 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/04/">2022 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/03/">2022 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/02/">2022 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/01/">2022 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/12/">2021 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/11/">2021 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/10/">2021 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/09/">2021 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/08/">2021 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/07/">2021 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/06/">2021 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/05/">2021 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/04/">2021 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/03/">2021 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/02/">2021 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/01/">2021 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/12/">2020 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/11/">2020 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/10/">2020 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/07/">2020 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/03/">2020 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2019/03/">2019 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/11/">2018 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/10/">2018 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/09/">2018 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/08/">2018 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/07/">2018 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/06/">2018 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/04/">2018 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/02/">2018 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/12/">2017 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/11/">2017 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/09/">2017 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/05/">2017 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/03/">2017 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/02/">2017 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2016/08/">2016 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2016/05/">2016 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2014/03/">2014 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2012/02/">2012 / 02</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2026 Microsoft Japan Windows Technology Support Team<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/blog/" class="mobile-nav-link">Home</a>
+  
+    <a href="/blog/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+<script src="/blog/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-180187723-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-180187723-1');
+</script>
+<!-- End Google Analytics -->
+
+  
+  <title>OS が起動しなくなる問題が発生した場合の対処方法について – 対処方法 | Microsoft Japan Windows Technology Support Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="※本記事はマイクロソフト社員によって公開されております。 こんにちは、日本マイクロソフトの Windows サポートチームです。 前回に続いて今回は OS が起動しなくなる事象の対処方法について紹介させていただきます。なお、前回も記載させていただいておりますが対処方法を実施しても必ず Windows OS が起動できるようになる保証はないことをご注意下さい。最も確実な方法はバックアップから復旧させ">
+<meta property="og:type" content="article">
+<meta property="og:title" content="OS が起動しなくなる問題が発生した場合の対処方法について – 対処方法">
+<meta property="og:url" content="https://jpwinsup.github.io/blog/2021/05/07/Performance/NoBoot/NoBoot-Solution/index.html">
+<meta property="og:site_name" content="Microsoft Japan Windows Technology Support Blog">
+<meta property="og:description" content="※本記事はマイクロソフト社員によって公開されております。 こんにちは、日本マイクロソフトの Windows サポートチームです。 前回に続いて今回は OS が起動しなくなる事象の対処方法について紹介させていただきます。なお、前回も記載させていただいておりますが対処方法を実施しても必ず Windows OS が起動できるようになる保証はないことをご注意下さい。最も確実な方法はバックアップから復旧させ">
+<meta property="og:locale" content="ja_JP">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2021/05/07/Performance/NoBoot/NoBoot-Solution/chk-win-folder.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2021/05/07/Performance/NoBoot/NoBoot-Solution/startup-config.png">
+<meta property="article:published_time" content="2021-05-07T03:00:00.000Z">
+<meta property="article:modified_time" content="2026-02-19T02:53:58.466Z">
+<meta property="article:author" content="Microsoft Japan Windows Technology Support Team">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://jpwinsup.github.io/blog/2021/05/07/Performance/NoBoot/NoBoot-Solution/chk-win-folder.png">
+  
+    <link rel="alternate" href="/blog/atom.xml" title="Microsoft Japan Windows Technology Support Blog" type="application/atom+xml">
+  
+
+  <link rel="icon" href="/blog/favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="/blog/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/blog/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/blog/favicon-16x16.png">
+  <link rel="manifest" href="/blog/site.webmanifest">
+  <link rel="mask-icon" href="/blog/safari-pinned-tab.svg" color="#5bbad5">
+  <meta name="msapplication-TileColor" content="#ffffff">
+  <meta name="theme-color" content="#ffffff">
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/blog/css/style.css">
+
+<meta name="generator" content="Hexo 5.2.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="site-header-logo"></div>
+  <div id="site-header-blog-wrapper"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        <div id="ms-logo"></div>
+        
+          <a class="main-nav-link" href="/blog/">Home</a>
+        
+          <a class="main-nav-link" href="/blog/archives">Archives</a>
+        
+        <a class="main-nav-link" target="_blank" rel="noopener" href="https://cssjpn.github.io/">サポート情報</a>
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/blog/atom.xml" title="RSSフィード"></a>
+        
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//www.bing.com/search" method="get" accept-charset="UTF-8" name="bing-search" onsubmit="var f=this;if(f['q'].value){var searchUrl =  'https://www.bing.com/search?q=' +  encodeURIComponent(f['q'].value + ' site:' + f['sitesearch'].value) ;window.open(searchUrl, 'blank') };return false;" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="検索"><button type="submit" id="nav-search-btn" class="search-form-submit"></button><input type="hidden" name="sitesearch" value="https://jpwinsup.github.io/blog"></form>
+      </div>
+    </div>
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/blog/" id="logo">Microsoft Japan Windows Technology Support Blog</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/blog/" id="subtitle">日本マイクロソフト Windows Support チームによる、サポート情報 Blog です。</a>
+        </h2>
+      
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-Performance/NoBoot/NoBoot-Solution" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    
+    
+      <header class="article-header-single">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      OS が起動しなくなる問題が発生した場合の対処方法について – 対処方法
+    </h1>
+  
+
+      </header>
+      <div class="article-share">
+        Last Update: 
+        <a href="/blog/2021/05/07/Performance/NoBoot/NoBoot-Solution/" class="article-date-single">
+  <time datetime="2021-05-07T03:00:00.000Z" itemprop="datePublished">2021-05-07</time>
+</a>
+        
+  <div class="article-category">
+    <a class="article-category-link" href="/blog/categories/Performance/">Performance</a>►<a class="article-category-link" href="/blog/categories/Performance/No-Boot/">No Boot</a>
+  </div>
+
+        
+        <a href="https://github.com/jpwinsup/blog/issues/new?title=&body=%EF%BB%BF%0A%0A---%0A%0A%23%23%23%23+Document+Details%0A%0A*+Article+ID%3A+0637cb16-5322-5f07-b376-051ffe8f438e%0A*+TITLE%3A+OS+%E3%81%8C%E8%B5%B7%E5%8B%95%E3%81%97%E3%81%AA%E3%81%8F%E3%81%AA%E3%82%8B%E5%95%8F%E9%A1%8C%E3%81%8C%E7%99%BA%E7%94%9F%E3%81%97%E3%81%9F%E5%A0%B4%E5%90%88%E3%81%AE%E5%AF%BE%E5%87%A6%E6%96%B9%E6%B3%95%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6+%E2%80%93+%E5%AF%BE%E5%87%A6%E6%96%B9%E6%B3%95%0A*+URL+https%3A%2F%2Fjpwinsup.github.io%2Fblog%2F2021%2F05%2F07%2FPerformance%2FNoBoot%2FNoBoot-Solution%2F%0A*+SourceFileName%3A+source%2F_posts%2FPerformance%2FNoBoot%2FNoBoot-Solution.md%0A" class="article-github-issue-link" target="_blank" rel="noopener noreferrer">feedback</a>
+        
+        <a data-url="https://jpwinsup.github.io/blog/2021/05/07/Performance/NoBoot/NoBoot-Solution/" data-id="cmlsvjdoa01i4ru3y5sofcwmq" class="article-share-link">共有</a>
+      </div>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>※本記事はマイクロソフト社員によって公開されております。</p>
+<p>こんにちは、日本マイクロソフトの Windows サポートチームです。</p>
+<p>前回に続いて今回は OS が起動しなくなる事象の対処方法について紹介させていただきます。なお、前回も記載させていただいておりますが対処方法を実施しても必ず Windows OS が起動できるようになる保証はないことをご注意下さい。最も確実な方法はバックアップから復旧させる方法になります。</p>
+<p>OS が起動しなくなる問題が発生した場合の対処方法について – 概要<br><a href="https://jpwinsup.github.io/blog/2021/05/07/Performance/NoBoot/NoBoot-OutLine/">https://jpwinsup.github.io/blog/2021/05/07/Performance/NoBoot/NoBoot-OutLine/</a></p>
+<p>実際に OS が起動しなくなる事象が発生してしまった場合、いつも使用している Windows OS は起動できないため Windows 回復環境から操作を行い各種の対処策を実施します。対処策はコマンド プロンプトよりコマンドにて実行するため、事前に Windows 回復環境からコマンド プロンプトを起動しておく必要があります。万が一 Windows 回復環境が起動していない場合は、インストール メディアから起動します。お手元にインストール メディアが無い場合は、以下のサイトを参考にインストールメディアの準備をお願いいたします。</p>
+<p>Windows 10 のダウンロード<br><a target="_blank" rel="noopener" href="https://www.microsoft.com/ja-jp/software-download/windows10">https://www.microsoft.com/ja-jp/software-download/windows10</a></p>
+<p>また、Azure 環境の仮想マシンで発生した場合には、Azure 観点での対処方法なども公開しております。以下につきましてもご参照いただければと存じます。</p>
+<p>Azure 上の Windows OS が起動しない場合の情報まとめ (2021 年 5 月 14 日更新版)<br><a target="_blank" rel="noopener" href="https://jpaztech.github.io/blog/vm/windows-noboot-summary/">https://jpaztech.github.io/blog/vm/windows-noboot-summary/</a></p>
+<br>
+
+<h2 id="コマンド-プロンプト起動手順"><a href="#コマンド-プロンプト起動手順" class="headerlink" title="コマンド プロンプト起動手順"></a>コマンド プロンプト起動手順</h2><hr>
+
+<p>— Windows 回復環境の場合 ——————–</p>
+<ol>
+<li>現象が発生した後、回復画面が表示されます。</li>
+<li>[オプションの選択] で [トラブルシューティング] を選択します。</li>
+<li>トラブルシューティングの画面で [詳細オプション] を選択します。</li>
+<li>詳細オプション画面で [コマンド プロンプト] を選択します。</li>
+<li>[コマンド プロンプト] で管理者のアカウントを選択します。</li>
+<li>管理者のパスワードを入力します。</li>
+<li>コマンドプロンプト（cmd.exe）が表示されます。</li>
+</ol>
+<p>— インストール メディアの場合 ——————–</p>
+<ol>
+<li>Windows 8 / Windows Server 2012 以降の OS メディアから起動します。</li>
+<li>[Windows セットアップ] の画面で言語関連の設定を指定し、[次へ] をクリックします。</li>
+<li>ウィンドウ内左下に表示される [コンピューターを修復する] をクリックします。</li>
+<li>[オプションの選択] で [トラブルシューティング] をクリックします。</li>
+<li>[詳細オプション] で [コマンド プロンプト] をクリックします。</li>
+</ol>
+<p>また、コマンドでは Windows フォルダーが存在するドライブを指定する場合があるため、以下の手順にて Windows フォルダーが存在するドライブを特定しておく必要があります。</p>
+<h2 id="Windows-フォルダーが存在するドライブの確認手順"><a href="#Windows-フォルダーが存在するドライブの確認手順" class="headerlink" title="Windows フォルダーが存在するドライブの確認手順"></a>Windows フォルダーが存在するドライブの確認手順</h2><hr>
+
+<ol>
+<li>起動したコマンド プロンプト上で notepad コマンドを実行し、メモ帳を起動します。</li>
+<li>メモ帳で [ファイル] – [開く…] を実行します。</li>
+<li>[開く] ダイアログで左側の [コンピューター] をクリックし、ドライブ一覧を表示させます。</li>
+<li>X: 以外の各ドライブの内容を確認し、Windows フォルダーが存在するドライブを確認します。</li>
+</ol>
+<img src="/blog/2021/05/07/Performance/NoBoot/NoBoot-Solution/chk-win-folder.png" class=""><br>
+
+<p>• 多くの場合は C もしくは D ドライブに Windows フォルダーが確認できると思います。下図では D:ドライブに Windows フォルダーが存在していることが確認できます。<br>• 万が一、Windows フォルダーが存在するドライブを確認できない場合は、ディスクが認識できない・読み取ることができない可能性が考えられます。ハードウェア障害もしくか暗号化ソフトウェアに起因する可能性も考えられるため、PC の製造元様へご確認下さい。</p>
+<p>これで対処策を実行するための環境が整いました。この後は以下のいずれかもしくは複数の対処策を実施し、復旧確認を行います。</p>
+<p>[1] スタートアップ修復<br>[2] Boot 構成情報の修正<br>[3] SFC (System File Checker)<br>[4] regback を用いたレジストリ復旧<br>[5] 更新プログラムのアンインストール<br>[6] ファイル システムの破損チェック</p>
+<p>どの対処方法を実施するかは実際の表示内容やエラー情報を参考に行うため一概には言えませんが、一般的にご確認いただく流れとして前回ご紹介しました NoBoot 画面を参考に言うと、大まかに以下のような流れで実施します。</p>
+<p>• 全パターン共通<br>[1] スタートアップ修復<br>[5] 更新プログラムのアンインストール ※ 更新プログラムのインストール直後に NoBoot になった場合<br>[6] ファイル システムの破損チェック</p>
+<p>• パターン 1 の画面が表示される<br>[2] Boot 構成情報の修正  ※ Bootmgr / Operating System が見つからない趣旨のメッセージが表示される場合<br>※ ハードウェア故障と思われるメッセージが表示される場合は PC の製造元様までお問合せ下さい</p>
+<p>• パターン 2 の画面が表示される<br>[2] Boot 構成情報の修正 ※ Boot 構成情報 (BCD : Boot Configuration Data) に問題がある趣旨のメッセージが表示される場合<br>[3] SFC (System File Checker)<br>[4] regback を用いたレジストリ復旧</p>
+<p>• パターン 3 の画面が表示される<br>[3] SFC (System File Checker)<br>[4] regback を用いたレジストリ復旧</p>
+<h2 id="1-スタートアップ修復"><a href="#1-スタートアップ修復" class="headerlink" title="[1] スタートアップ修復"></a>[1] スタートアップ修復</h2><hr>
+
+<p>[概要]<br>システム ファイルの欠落や損傷など、Windows の正常な起動を妨げる可能性のある特定の問題を修復します。</p>
+<p>[手順]</p>
+<ol>
+<li>コマンド プロンプトより以下のコマンドを実行します。コマンド実行後は、”PC を診断中” と表示されます。</li>
+</ol>
+<p>X:\Sources\Recovery\StartRep.exe</p>
+<p>&lt; 補足 &gt;<br>[オプションの選択] 画面から [トラブル シューティング] -&gt; [詳細オプション] -&gt; [スタートアップ修復] でも実行可能です。</p>
+<ol start="2">
+<li>スタートアップ修復完了後、[シャットダウン] を選択してコンピューターの電源を切り、再度電源を入れ、Windows OS が起動することを確認します。</li>
+</ol>
+<p>スタートアップ修復のログは以下に記録され、修復状況を確認することが可能です。<br>%WINDIR%\System32\LogFiles\Srt\SrtTrail.txt</p>
+<h2 id="2-Boot-構成情報の修正"><a href="#2-Boot-構成情報の修正" class="headerlink" title="[2] Boot 構成情報の修正"></a>[2] Boot 構成情報の修正</h2><hr>
+
+<p>[概要]<br>MBR (master boot record) やブートセクター、Boot 構成情報 (BCD:Boot Configuration Data) の破損を検知し修復します。</p>
+<p>[手順]</p>
+<ol>
+<li>コマンド プロンプトより以下のコマンドを実行します。</li>
+</ol>
+<p>Bootrec /RebuildBcd</p>
+<ol start="2">
+<li>コマンド完了後、コマンド プロンプトを終了し、[続行] を選択します。Windows OS が起動することを確認します。</li>
+</ol>
+<p>参考情報：<br>“Bootmgr is missing Press Ctrl+Alt+Del to restart” error when you start Windows<br><a target="_blank" rel="noopener" href="https://support.microsoft.com/en-us/help/2622803/bootmgr-is-missing-press-ctrl-alt-del-to-restart-error-when-you-start">https://support.microsoft.com/en-us/help/2622803/bootmgr-is-missing-press-ctrl-alt-del-to-restart-error-when-you-start</a></p>
+<p>Use Bootrec.exe in the Windows RE to troubleshoot startup issues<br><a target="_blank" rel="noopener" href="https://support.microsoft.com/en-us/help/927392/use-bootrec-exe-in-the-windows-re-to-troubleshoot-startup-issues">https://support.microsoft.com/en-us/help/927392/use-bootrec-exe-in-the-windows-re-to-troubleshoot-startup-issues</a></p>
+<h2 id="3-SFC-System-File-Checker"><a href="#3-SFC-System-File-Checker" class="headerlink" title="[3] SFC (System File Checker)"></a>[3] SFC (System File Checker)</h2><hr>
+
+<p>[概要]<br>SFC は System File の整合性をスキャンし、破損が見つかった場合は %WinDir%\WinSxS フォルダー配下の情報をコピーして修復します。</p>
+<p>[手順]<br>※ Windows フォルダーが存在するドライブを D: とします。</p>
+<ol>
+<li>コマンド プロンプトより以下のコマンドを実行します。</li>
+</ol>
+<p>set windows_tracing_logfile=D:\sfc.log<br>sfc /scannow /offbootdir=D:\ /offwindir=D:\Windows</p>
+<ol start="2">
+<li>コマンド完了後、コマンド プロンプトを終了し、[続行] を選択します。Windows OS が起動することを確認します。</li>
+</ol>
+<p>SFC のログは以下に記録され、修復状況を確認することが可能です。</p>
+<p>&lt; Windows フォルダーが存在するドライブ&gt;:\sfc.log</p>
+<p>参考情報：<br>Use the System File Checker tool to repair missing or corrupted system files<br><a target="_blank" rel="noopener" href="https://support.microsoft.com/en-us/help/929833/use-the-system-file-checker-tool-to-repair-missing-or-corrupted-system">https://support.microsoft.com/en-us/help/929833/use-the-system-file-checker-tool-to-repair-missing-or-corrupted-system</a></p>
+<h2 id="4-regback-を用いたレジストリ復旧"><a href="#4-regback-を用いたレジストリ復旧" class="headerlink" title="[4] regback を用いたレジストリ復旧"></a>[4] regback を用いたレジストリ復旧</h2><hr>
+
+<p>[概要]<br>Windows OS では 10 日おきにレジストリ情報 (レジストリ ハイブ) を以下のフォルダーにバックアップします。このため、正常に OS が起動していたレジストリのバックアップデータにて現在のレジストリ情報を上書きいただくことで、OS が起動できる可能性があります。</p>
+<p>%SystemRoot%\System32\config\RegBack</p>
+<p>[注意事項]<br>SYSTEM、Software レジストリ ハイブ全体を置き換えることになるため、レジストリ のバックアップが採取された以降に変更された情報（各種インストール情報や設定変更など）は破棄されます。</p>
+<p>また、システム レジストリは、Windows 10 Version 1803 より自動バックアップされなくなりました。</p>
+<p>参考情報：<br>The system registry is no longer backed up to the RegBack folder starting in Windows 10 version 1803<br><a target="_blank" rel="noopener" href="https://docs.microsoft.com/en-US/troubleshoot/windows-client/deployment/system-registry-no-backed-up-regback-folder">https://docs.microsoft.com/en-US/troubleshoot/windows-client/deployment/system-registry-no-backed-up-regback-folder</a></p>
+<p>[手順]<br>※ Windows 回復環境起動時、Windows フォルダーが存在するドライブを D: とします。</p>
+<ol>
+<li>コマンド プロンプトより以下のコマンドを実行し、現在のレジストリハイブのコピーを作ります。</li>
+</ol>
+<p>copy d:\Windows\System32\config\SYSTEM d:\Windows\System32\config\system.bak<br>copy d:\Windows\System32\config\SOFTWARE d:\Windows\System32\config\software.bak</p>
+<ol start="2">
+<li>コマンド プロンプトより以下のコマンドを実行し、レジストリ ハイブを Regback フォルダーから復元します。</li>
+</ol>
+<p>copy d:\Windows\System32\config\RegBack\SYSTEM d:\Windows\System32\config<br>copy d:\Windows\System32\config\RegBack\SOFTWARE d:\Windows\System32\config</p>
+<ol start="3">
+<li>コマンド完了後、コマンド プロンプトを終了し、[続行] を選択します。Windows OS が起動することを確認します。</li>
+</ol>
+<h2 id="5-更新プログラムのアンインストール"><a href="#5-更新プログラムのアンインストール" class="headerlink" title="[5] 更新プログラムのアンインストール"></a>[5] 更新プログラムのアンインストール</h2><hr>
+
+<p>[概要]<br>何らかの理由により更新プログラムが期待通りインストールされていない場合、直近でインストールした更新プログラムをアンインストールすることで復旧できる場合があります。</p>
+<p>[手順]<br>※ Windows 回復環境起動時、Windows フォルダーが存在するドライブを D: とします。</p>
+<p>コマンド プロンプトより以下のコマンドを実行し、更新プログラムのパッケージの一覧を表示します。</p>
+<p>dism /image:D:\ /get-packages</p>
+<p>各パッケージ情報が以下の書式で表示されます。パッケージ ID の KBxxxxxxx の部分で、直近にインストールした更新プログラムを特定します。またインストール時刻も参考にすることが可能です。</p>
+<p>– [表示例] ————-<br>パッケージ ID : Package_for_KB4343669~31bf3856ad364e35~amd64~~17134.165.1.1<br>状態 : インストール済み<br>リリースの種類 : Update<br>インストール時刻 : 2018/07/12 22:23<br>————————</p>
+<p>以下のコマンドを実行してパッケージを削除します。2 で確認したパッケージ ID 情報を PackageName オプションの引数として渡します。例えば、下記では KB4343669 をアン インストールしています。</p>
+<p>dism /image:D:\ /remove-package /PackageName:Package_for_KB4343669~31bf3856ad364e35~amd64~~17134.165.1.1</p>
+<p>&lt; 補足 &gt;<br>更新プログラム適用中に問題が発生していた場合、パッケージ情報の “状態” が “インストールの保留中” と表示される場合があります。この場合は以下のコマンドを実行してロールバックすることで保留状態を解除します。</p>
+<p>Dism /Image:D:\ /Cleanup-Image /RevertPendingActions</p>
+<p>コマンド完了後、コマンド プロンプトを終了し、[続行] を選択します。Windows OS が起動することを確認します。</p>
+<p>参考情報：<br>DISM オペレーティング システム パッケージ (.cab または .msu) サービスのコマンド ライン オプション<br><a target="_blank" rel="noopener" href="https://msdn.microsoft.com/ja-jp/library/windows/hardware/dn898551(v=vs.85).aspx">https://msdn.microsoft.com/ja-jp/library/windows/hardware/dn898551(v=vs.85).aspx</a></p>
+<h2 id="6-ファイル-システムの破損チェック"><a href="#6-ファイル-システムの破損チェック" class="headerlink" title="[6] ファイル システムの破損チェック"></a>[6] ファイル システムの破損チェック</h2><hr>
+
+<p>[概要]<br>ファイル システムが破損していることにより、OS のブートに必要なファイルを正常に読み込めていない可能性があります。そのため、chkdsk を実行して破損のチェックを行い、破損が見つかった場合には、chkdsk に /f オプションを付与して修復します。</p>
+<p>[手順]<br>※ Windows 回復環境起動時、Windows フォルダーが存在するドライブを D: とします。</p>
+<ol>
+<li>コマンド プロンプトより以下のコマンドを実行し、ファイル システムの破損をチェックします。</li>
+</ol>
+<p>chkdsk D:</p>
+<ol start="2">
+<li>問題が見つかった場合には、コマンド プロンプトより以下のコマンドを実行し、ファイル システムを修復します。</li>
+</ol>
+<p>chkdsk D: /f</p>
+<p>参考情報：<br>Chkdsk の動作について<br><a target="_blank" rel="noopener" href="https://social.technet.microsoft.com/Forums/windows/ja-JP/fcbe1747-6ee0-4614-bd53-b0bd94753efc/chkdsk-12398212052031612395123881235612390?forum=Wcsupportja">https://social.technet.microsoft.com/Forums/windows/ja-JP/fcbe1747-6ee0-4614-bd53-b0bd94753efc/chkdsk-12398212052031612395123881235612390?forum=Wcsupportja</a></p>
+<hr> 
+
+<p>上記対処策を実施しても復旧しない場合は、Windows OS の起動に必要なドライバ ファイルの破損や 3rd Party 製ドライバーの影響を受けて発生している可能性があります。切り分けとして [スタートアップ設定] 画面から以下の両方をお試しいただき、Windows OS が起動できるかをご確認下さい。なお、Windows OS 標準の設定から設定変更されている環境では [スタートアップ設定] 画面を表示できない場合があります。</p>
+<p>[A] セーフモード<br>[B] ドライバ署名の強制を無効<br>[c] 3rd Party 製ドライバーを無効</p>
+<h2 id="スタートアップ設定"><a href="#スタートアップ設定" class="headerlink" title="スタートアップ設定"></a>スタートアップ設定</h2><hr>
+
+<ol>
+<li>[オプションの選択] で [トラブルシューティング] を選択します。</li>
+<li>[トラブルシューティング] の画面で [詳細オプション] を選択します。</li>
+<li>[詳細オプション] の画面で [スタートアップ 設定] を選択します。</li>
+<li>[再起動] ボタンをクリックします</li>
+<li>[スタートアップ設定] 画面から、任意のボタンをクリックします。</li>
+</ol>
+<p>ボタンと項目の対応はお使いの環境によって異なる場合があります。例えば、以下の画面が表示された場合は下記ボタンを押下します。<br>F4 キー：セーフモード起動<br>F7 キー：ドライバ署名の強制を無効して起動</p>
+<img src="/blog/2021/05/07/Performance/NoBoot/NoBoot-Solution/startup-config.png" class=""><br>
+
+<p>参考情報：<br>Windows のスタートアップ設定 (セーフ モードなど)<br><a target="_blank" rel="noopener" href="https://support.microsoft.com/ja-jp/help/17076/windows-8-startup-settings-safe-mode">https://support.microsoft.com/ja-jp/help/17076/windows-8-startup-settings-safe-mode</a></p>
+<h3 id="A-セーフ-モード"><a href="#A-セーフ-モード" class="headerlink" title="[A] セーフ モード"></a>[A] セーフ モード</h3><p>ドライバーとサービスの最小のセットで Windows をセーフ モードで起動して、問題をトラブルシューティングすることができます。PC をセーフ モードで起動して問題が再現しなければ、既定の設定および基本的なデバイス ドライバーとサービスを、可能性のある原因から除外できます。直近でインストールしたソフトウェアがある場合は、そのソフトウェアをアンインストールします。</p>
+<h3 id="B-ドライバー署名の強制を無効にする"><a href="#B-ドライバー署名の強制を無効にする" class="headerlink" title="[B] ドライバー署名の強制を無効にする"></a>[B] ドライバー署名の強制を無効にする</h3><p>不適切な署名が含まれているドライバーのインストールを許可します。NoBoot 時の切り分けとして本設定の無効化により起動できる場合は、ドライバの署名情報が正しく取得できていない可能性が高く、その多くの場合はカタログ ファイルの破損によって引き起こされます。</p>
+<p>Windows OS 起動時に各ドライバから参照されるカタログ ファイルは以下の場所に保存されています。そのため、同様の構成の環境がある場合は正常な PC から上記フォルダをコピーいただくことで復旧できる可能性もあります。<br>&lt;Windows フォルダーが存在するドライブ&gt;:\Windows\System32\CatRoot{F750E6C3-38EE-11D1-85E5-00C04FC295EE}</p>
+<h3 id="C-3rd-Party-製ドライバーを無効"><a href="#C-3rd-Party-製ドライバーを無効" class="headerlink" title="[C] 3rd Party 製ドライバーを無効"></a>[C] 3rd Party 製ドライバーを無効</h3><p>3rd Party 製のフィルタードライバーによって起動が妨げられている可能性があります。そのため、OS 起動時にフィルタードライバーが動作しないようにレジストリを編集します。弊社過去事例におきましては、ウイルス対策ソフトのフィルタードライバーの影響を受けて発生した事例がありますので、ウイルス対策ソフトを導入されている場合には、以下の手順にて停止することをご検討ください。どのようなドライバーが<br>動作しているのかは各製品のベンダ様へご確認いただけますと幸いです。</p>
+<p>[手順]</p>
+<ol>
+<li><p>回復オプションより、[トラブルシューティング] - [コマンド プロンプト] を起動します。</p>
+</li>
+<li><p>コマンド プロンプトが起動しましたら、D:\Windows\System32\config の “SYSTEM” ファイル (拡張子なし) を copy コマンドでコピーして、バックアップを取っておきます。(例、SYSTEM.bak)</p>
+</li>
+</ol>
+<p>※ OS が格納されているドライブ (Window フォルダーが含まれるドライブ)がDドライブの例となります。適宜変更してください。</p>
+<ol start="3">
+<li><p>コマンドプロンプト上で regedit コマンドを実行し、[レジストリ エディター] を起動します。</p>
+</li>
+<li><p>[レジストリ エディター] の左ペインで、”HKEY_LOCAL_MACHINE” を選択した状態で、[ファイル] メニュー - [ハイブの読み込み] を選択します。</p>
+</li>
+<li><p>OS が格納されているドライブの中から、以下のファイルを選択し、[開く] をクリックします。</p>
+</li>
+</ol>
+<p>D:\Windows\System32\config フォルダー内 の “SYSTEM” ファイル (拡張子なし)</p>
+<ol start="6">
+<li><p>[ハイブの読み込み] にて、キー名 に “temp” と入力し [OK] をクリックします。</p>
+</li>
+<li><p>HKEY_LOCAL_MACHINE\temp 配下の Select キーの Current 値を確認します。</p>
+</li>
+<li><p>次のレジストリ キーまで移動します。</p>
+</li>
+</ol>
+<p>HKEY_LOCAL_MACHINE\tempSYSTEM\ControlSet00X (X は Current の値)\Services</p>
+<ol start="9">
+<li><p>Services 配下から起動を無効にするサービスおよびフィルター ドライバーを見つけます。</p>
+</li>
+<li><p>サービス名のキー直下に存在する Start 項目の値を 4 に変更します。作業が終わりましたら、”HKEY_LOCAL_MACHINE\temp” を選択した状態で、[ファイル] メニュー - [ハイブのアンロード] を選択してください。ハイブのアンロードの確認メッセージが表示されますので、[はい] をクリックします。</p>
+</li>
+</ol>
+<p>参考情報：<br>Windows でカーネル モード フィルター ドライバーを一時的に非アクティブ化する方法<br><a target="_blank" rel="noopener" href="https://docs.microsoft.com/ja-JP/troubleshoot/windows-server/performance/deactivate-kernel-mode-filter-driver">https://docs.microsoft.com/ja-JP/troubleshoot/windows-server/performance/deactivate-kernel-mode-filter-driver</a></p>
+<hr>
+
+<p>これまでの対応策でも復旧できない場合は、時間をかけて更に詳細な調査が必要となります。<br>なお、優先事項がデータの抽出であれば、(ディスクにアクセスできる場合は) コマンド プロンプトからコピー関連のコマンドをお使いいただくことで、データを異なるストレージ領域にコピーが可能です。</p>
+<p>参考情報：<br>copy<br><a target="_blank" rel="noopener" href="https://docs.microsoft.com/en-us/windows-server/administration/windows-commands/copy">https://docs.microsoft.com/en-us/windows-server/administration/windows-commands/copy</a><br>xcopy<br><a target="_blank" rel="noopener" href="https://docs.microsoft.com/en-us/windows-server/administration/windows-commands/xcopy">https://docs.microsoft.com/en-us/windows-server/administration/windows-commands/xcopy</a></p>
+<p>また、PC のリフレッシュ機能をご利用いただくことでもユーザー データをある程度残したまま Windows OS を復旧させることも可能です。更新プログラムや各種ソフトウェアの再インストールは必要となる場合がありますが、Windows OS をクリーン インストールするよりは少ないコストで Windows OS の再インストールが実現可能です。</p>
+<p>• 万が一に備え、重要なデータについては必ずバックアップをご採取ください。<br>• 各 PC 製造元様のアプリケーションの保持状況などは PC 製造元様までご確認下さい。<br>• 企業様によっては専用の Windows OS イメージをご利用いただいている場合もございますため、IT 管理者様にご確認下さい。<br>• 実行手順や保持されるデータなど、詳細につきましては下記サイトをご参考下さい。</p>
+<p>PC のリカバリー機能のしくみ<br><a target="_blank" rel="noopener" href="https://msdn.microsoft.com/ja-jp/library/windows/hardware/mt210509(v=vs.85).aspx">https://msdn.microsoft.com/ja-jp/library/windows/hardware/mt210509(v=vs.85).aspx</a></p>
+<p>ストレージがネットワーク上に配置されることが多くなった今日、ローカルで必要としているデータは意外と少ない場合もあります。また現在の Windows Update は累積更新のパッケージがあるため更新プログラムの適用もスムーズではないかと思います。現在お使いの環境が復旧できるのが理想ではありますが、復旧が困難な場合は環境を再構築した方が結果的に少ないコストで状況を復旧できる場合もありますため場合によっては有効な対処方法にもなり得ます。</p>
+<p>以上、2 回に渡り OS が起動しなくなる事象の概要および対処方法についてご紹介させていただきましたが、いかがでしたでしょうか。本ブログが少しでも皆様のお役に立てますと幸いです。</p>
+
+      
+      
+    </div>
+    <footer class="article-footer">
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/blog/2021/05/07/Performance/NoBoot/NoBoot-OutLine/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">次の記事</strong>
+      <div class="article-nav-title">
+        
+          OS が起動しなくなる問題が発生した場合の対処方法について – 概要
+        
+      </div>
+    </a>
+  
+  
+    <a href="/blog/2021/04/26/RemoteDesktopService/WVD/wvd-how-to-deploy-msix-app-attach/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">前の記事</strong>
+      <div class="article-nav-title">MSIX app attach の構築手順について</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">カテゴリ</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Activation/">Activation</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Activation/ESU/">ESU</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Activation/security-SPP/">security-SPP</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/">Active Directory</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Authentication/">Authentication</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/DFSR/">DFSR</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/FunctionalLevel/">FunctionalLevel</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Group-Policy/">Group Policy</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Promotion-and-Demotion/">Promotion and Demotion</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/User-Profile/">User Profile</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Windows-Hello/">Windows Hello</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Windows-Time-Service/">Windows Time Service</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/AppLocker/">AppLocker</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/AppLocker/Active-Directory/">Active Directory</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/AppLocker/Microsoft-Intune/">Microsoft Intune</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Deployment/">Deployment</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Deployment/Feature-on-demand/">Feature on demand</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Deployment/Sysprep/">Sysprep</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Failover-Clustering/">Failover Clustering</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Failover-Clustering/Configuration-and-Management/">Configuration and Management</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/FileServices/">FileServices</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/FileServices/FTP/">FTP</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/FileServices/SMB/">SMB</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Hyper-V/">Hyper-V</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Hyper-V/Configuration-and-Management/">Configuration and Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Hyper-V/Migration/">Migration</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Microsoft-Connected-Cache/">Microsoft Connected Cache</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/">Networking</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/BITS/">BITS</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/Bluetooth/">Bluetooth</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/DHCP/">DHCP</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/DNS/">DNS</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/Firewall/">Firewall</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/LBFO/">LBFO</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/NCSI/">NCSI</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/NetworkInterface/">NetworkInterface</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/Proxy/">Proxy</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/TCPIP/">TCPIP</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/OpenSSH/">OpenSSH</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/">Performance</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/Hang-up-BSoD/">Hang-up/BSoD</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/No-Boot/">No Boot</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/Slow-Response/">Slow Response</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/System-Resource/">System Resource</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/Tools/">Tools</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/">Public Key Infrastructure</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Certificate-Authority/">Certificate Authority</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Certificate-Management/">Certificate Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Code-Signing/">Code Signing</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/SSL-TLS-Communication/">SSL TLS Communication</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/SSL-TLS-Connection/">SSL TLS Connection</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Smart-Card-Logon/">Smart Card Logon</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/">Remote Desktop</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/Azure-Virtual-Desktop-AVD/">Azure Virtual Desktop (AVD)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/Remote-Desktop-Service-RDS/">Remote Desktop Service (RDS)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/Windows-Virtual-Desktop-WVD/">Windows Virtual Desktop (WVD)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/RemoteAccess/">RemoteAccess</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/RemoteAccess/%E3%83%80%E3%82%A4%E3%83%A4%E3%83%AB%E3%82%A2%E3%83%83%E3%83%97%E6%8E%A5%E7%B6%9A/">ダイヤルアップ接続</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Setup/">Setup</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Setup/Feature-Update-FU/">Feature Update (FU)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Shell/">Shell</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Shell/Explorer/">Explorer</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/">Storage</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/Backup/">Backup</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/FSRM/">FSRM</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/Management/">Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/StorageMigrationService/">StorageMigrationService</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/UEFI/">UEFI</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/UEFI/Secure-Boot/">Secure Boot</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/">User Interface and Apps</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Command-Prompt/">Command Prompt</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/EventLog/">EventLog</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Language-Support/">Language Support</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Microsoft-Store/">Microsoft Store</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Performance/">Performance</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/PowerShell/">PowerShell</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Printing-%E5%8D%B0%E5%88%B7/">Printing (印刷)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Server-Management/">Server Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Taskscheduler/">Taskscheduler</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Windows-Management-Instrumentation/">Windows Management Instrumentation</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps-Language-support/">User Interface and Apps - Language support</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-365/">Windows 365</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Admin-Center/">Windows Admin Center</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Search/">Windows Search</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/">Windows Update</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Delivery-Optimization-DO/">Delivery Optimization (DO)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Feature-Update-FU/">Feature Update (FU)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Quality-Update-QU/">Quality Update (QU)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Windows-Update-Agent/">Windows Update Agent</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Windows-Update-Agent-WUA/">Windows Update Agent (WUA)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/">WirelessNetwork</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/NPS/">NPS</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/Wi-Fi/">Wi-Fi</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/%E3%83%A2%E3%83%90%E3%82%A4%E3%83%AB-%E3%83%96%E3%83%AD%E3%83%BC%E3%83%89%E3%83%90%E3%83%B3%E3%83%89%E6%8E%A5%E7%B6%9A-LTE/">モバイル ブロードバンド接続 (LTE)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/%E7%B5%84%E7%B9%94%E7%B4%B9%E4%BB%8B%E3%83%96%E3%83%AD%E3%82%B0%EF%BC%88Windows-Commercial%EF%BC%89/">組織紹介ブログ（Windows Commercial）</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最近の投稿</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/blog/2026/02/16/ActiveDirectory/GroupPolicy/UacPolicyIsEnabled/">「ユーザー アカウント制御：ビルトイン Administrator アカウントのための管理者承認モード」ポリシーが有効になる動作ついて</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/02/15/UserInterfaceAndApps/Printing/printer-queue-app-preview/">印刷キューアプリのプレビュー機能について</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/02/02/ActiveDirectory/Authentication/kerberos-rc4-for-service-account-ticket-issuance-changes-related-to-cve-2026-20833/">CVE‑2026‑20833 への対応とその影響について [KB5073381]</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/01/12/Hyper-V/vmwp-does-not-save-the-RTC-value-of-a-virtual-machine-when-performing-Live-Migration/">ライブ マイグレーション後の再起動でゲスト OS の時刻がずれる場合がある</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/01/07/WindowsUpdate/FU/fublog-txt/">ISO メディア経由かつ動的更新無効な状態で Windows 11 バージョン 24H2 または 25H2 へのアップグレードが失敗 (0x8007042B 0x2000D) する事象と対策について</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">アーカイブ</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2026/02/">2026 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2026/01/">2026 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/12/">2025 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/11/">2025 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/10/">2025 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/09/">2025 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/08/">2025 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/07/">2025 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/06/">2025 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/05/">2025 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/04/">2025 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/03/">2025 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/02/">2025 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/01/">2025 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/12/">2024 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/11/">2024 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/10/">2024 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/09/">2024 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/08/">2024 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/07/">2024 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/06/">2024 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/05/">2024 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/04/">2024 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/03/">2024 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/02/">2024 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/01/">2024 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/12/">2023 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/11/">2023 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/10/">2023 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/09/">2023 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/08/">2023 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/07/">2023 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/06/">2023 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/05/">2023 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/04/">2023 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/03/">2023 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/02/">2023 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/01/">2023 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/12/">2022 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/11/">2022 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/10/">2022 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/09/">2022 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/08/">2022 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/07/">2022 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/06/">2022 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/05/">2022 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/04/">2022 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/03/">2022 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/02/">2022 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/01/">2022 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/12/">2021 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/11/">2021 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/10/">2021 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/09/">2021 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/08/">2021 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/07/">2021 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/06/">2021 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/05/">2021 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/04/">2021 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/03/">2021 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/02/">2021 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/01/">2021 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/12/">2020 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/11/">2020 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/10/">2020 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/07/">2020 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/03/">2020 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2019/03/">2019 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/11/">2018 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/10/">2018 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/09/">2018 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/08/">2018 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/07/">2018 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/06/">2018 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/04/">2018 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/02/">2018 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/12/">2017 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/11/">2017 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/09/">2017 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/05/">2017 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/03/">2017 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/02/">2017 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2016/08/">2016 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2016/05/">2016 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2014/03/">2014 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2012/02/">2012 / 02</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2026 Microsoft Japan Windows Technology Support Team<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/blog/" class="mobile-nav-link">Home</a>
+  
+    <a href="/blog/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+<script src="/blog/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

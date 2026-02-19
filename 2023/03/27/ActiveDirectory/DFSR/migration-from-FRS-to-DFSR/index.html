@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-180187723-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-180187723-1');
+</script>
+<!-- End Google Analytics -->
+
+  
+  <title>FRS から DFSR への移行 (SYSVOL) | Microsoft Japan Windows Technology Support Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="本記事は 2019 年 3 月 11 日に公開された記事を元に本ブログへ移行したものです。元の記事の最新の更新情報については、本内容をご参照ください。  こんにちは。Windows Commercial Support Directory Services チームです。 今回は Active Directory の SYSVOL の複製を従来の File Replication Service">
+<meta property="og:type" content="article">
+<meta property="og:title" content="FRS から DFSR への移行 (SYSVOL)">
+<meta property="og:url" content="https://jpwinsup.github.io/blog/2023/03/27/ActiveDirectory/DFSR/migration-from-FRS-to-DFSR/index.html">
+<meta property="og:site_name" content="Microsoft Japan Windows Technology Support Blog">
+<meta property="og:description" content="本記事は 2019 年 3 月 11 日に公開された記事を元に本ブログへ移行したものです。元の記事の最新の更新情報については、本内容をご参照ください。  こんにちは。Windows Commercial Support Directory Services チームです。 今回は Active Directory の SYSVOL の複製を従来の File Replication Service">
+<meta property="og:locale" content="ja_JP">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2023/03/27/ActiveDirectory/DFSR/migration-from-FRS-to-DFSR/image-1.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2023/03/27/ActiveDirectory/DFSR/migration-from-FRS-to-DFSR/image-2.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2023/03/27/ActiveDirectory/DFSR/migration-from-FRS-to-DFSR/image-3.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2023/03/27/ActiveDirectory/DFSR/migration-from-FRS-to-DFSR/image-4.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2023/03/27/ActiveDirectory/DFSR/migration-from-FRS-to-DFSR/image-5.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2023/03/27/ActiveDirectory/DFSR/migration-from-FRS-to-DFSR/image-6.png">
+<meta property="article:published_time" content="2023-03-27T04:00:00.000Z">
+<meta property="article:modified_time" content="2026-02-19T02:53:58.329Z">
+<meta property="article:author" content="Microsoft Japan Windows Technology Support Team">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://jpwinsup.github.io/blog/2023/03/27/ActiveDirectory/DFSR/migration-from-FRS-to-DFSR/image-1.png">
+  
+    <link rel="alternate" href="/blog/atom.xml" title="Microsoft Japan Windows Technology Support Blog" type="application/atom+xml">
+  
+
+  <link rel="icon" href="/blog/favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="/blog/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/blog/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/blog/favicon-16x16.png">
+  <link rel="manifest" href="/blog/site.webmanifest">
+  <link rel="mask-icon" href="/blog/safari-pinned-tab.svg" color="#5bbad5">
+  <meta name="msapplication-TileColor" content="#ffffff">
+  <meta name="theme-color" content="#ffffff">
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/blog/css/style.css">
+
+<meta name="generator" content="Hexo 5.2.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="site-header-logo"></div>
+  <div id="site-header-blog-wrapper"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        <div id="ms-logo"></div>
+        
+          <a class="main-nav-link" href="/blog/">Home</a>
+        
+          <a class="main-nav-link" href="/blog/archives">Archives</a>
+        
+        <a class="main-nav-link" target="_blank" rel="noopener" href="https://cssjpn.github.io/">サポート情報</a>
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/blog/atom.xml" title="RSSフィード"></a>
+        
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//www.bing.com/search" method="get" accept-charset="UTF-8" name="bing-search" onsubmit="var f=this;if(f['q'].value){var searchUrl =  'https://www.bing.com/search?q=' +  encodeURIComponent(f['q'].value + ' site:' + f['sitesearch'].value) ;window.open(searchUrl, 'blank') };return false;" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="検索"><button type="submit" id="nav-search-btn" class="search-form-submit"></button><input type="hidden" name="sitesearch" value="https://jpwinsup.github.io/blog"></form>
+      </div>
+    </div>
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/blog/" id="logo">Microsoft Japan Windows Technology Support Blog</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/blog/" id="subtitle">日本マイクロソフト Windows Support チームによる、サポート情報 Blog です。</a>
+        </h2>
+      
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-ActiveDirectory/DFSR/migration-from-FRS-to-DFSR" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    
+    
+      <header class="article-header-single">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      FRS から DFSR への移行 (SYSVOL)
+    </h1>
+  
+
+      </header>
+      <div class="article-share">
+        Last Update: 
+        <a href="/blog/2023/03/27/ActiveDirectory/DFSR/migration-from-FRS-to-DFSR/" class="article-date-single">
+  <time datetime="2023-03-27T04:00:00.000Z" itemprop="datePublished">2023-03-27</time>
+</a>
+        
+  <div class="article-category">
+    <a class="article-category-link" href="/blog/categories/Active-Directory/">Active Directory</a>►<a class="article-category-link" href="/blog/categories/Active-Directory/DFSR/">DFSR</a>
+  </div>
+
+        
+        <a href="https://github.com/jpwinsup/blog/issues/new?title=&body=%EF%BB%BF%0A%0A---%0A%0A%23%23%23%23+Document+Details%0A%0A*+Article+ID%3A+d3723506-e1fd-5468-8aa9-33ed088827d8%0A*+TITLE%3A+FRS+%E3%81%8B%E3%82%89+DFSR+%E3%81%B8%E3%81%AE%E7%A7%BB%E8%A1%8C+%28SYSVOL%29%0A*+URL+https%3A%2F%2Fjpwinsup.github.io%2Fblog%2F2023%2F03%2F27%2FActiveDirectory%2FDFSR%2Fmigration-from-FRS-to-DFSR%2F%0A*+SourceFileName%3A+source%2F_posts%2FActiveDirectory%2FDFSR%2Fmigration-from-FRS-to-DFSR.md%0A" class="article-github-issue-link" target="_blank" rel="noopener noreferrer">feedback</a>
+        
+        <a data-url="https://jpwinsup.github.io/blog/2023/03/27/ActiveDirectory/DFSR/migration-from-FRS-to-DFSR/" data-id="cmlsvjdo701hwru3yduht2305" class="article-share-link">共有</a>
+      </div>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<p>本記事は 2019 年 3 月 11 日に公開された記事を元に本ブログへ移行したものです。元の記事の最新の更新情報については、本内容をご参照ください。</p>
+</blockquote>
+<p>こんにちは。Windows Commercial Support Directory Services チームです。</p>
+<p>今回は Active Directory の SYSVOL の複製を従来の File Replication Service ( FRS ) から Distributed File System Replication ( DFSR ) に移行する手順についてお伝えします。また、各手順にて実施される内部処理についても詳細な部分まで可能な限り記載します。( 長くなります。手順だけが知りたい場合には <a href="#4-DFSR-%E3%81%AB%E5%AE%89%E5%85%A8%E3%81%AB%E7%A7%BB%E8%A1%8C%E3%81%99%E3%82%8B%E7%82%BA%E3%81%AE%E6%89%8B%E9%A0%86">4) DFSR に安全に移行する為の手順</a> を確認してください。 )<br><br></p>
+<h1 id="1-DFSR-を利用する条件と利点について"><a href="#1-DFSR-を利用する条件と利点について" class="headerlink" title="1) DFSR を利用する条件と利点について"></a>1) DFSR を利用する条件と利点について</h1><p>SYSVOL 複製に DFSR を利用するにはドメイン機能レベルが Windows Server 2008 以上である必要があります。その為、ドメイン内に Windows Server 2003 R2 など Windows Server 2008 よりも前の OS のドメイン コントローラーが存在する場合には利用できません。( DFSR 自体は Windows Server 2003 R2 から利用できますが、SYSVOL 複製には利用できません。 )</p>
+<h3 id="そもそもなぜ-FRS-ではなく-DFSR-に移行するのか？"><a href="#そもそもなぜ-FRS-ではなく-DFSR-に移行するのか？" class="headerlink" title="そもそもなぜ FRS ではなく DFSR に移行するのか？"></a>そもそもなぜ FRS ではなく DFSR に移行するのか？</h3><p>FRS は Windows 2000 Server から利用している複製サービスです。Windows Server 2003 R2 からこれの進化版の DFSR が利用でき、Windows Server 2008 から DFSR を Active Directory の SYSVOL 複製にも利用できるようになりました。DFSR は FRS の進化版なので、より安定した複製サービスを提供できるようになっていますが、特に大きな利点として主に以下があげられます。</p>
+<ul>
+<li><p>DFSR では差分のみを複製する為、ネットワークの負荷が削減されます。<br>ファイルに変更が加えられた場合、FRS はそのファイル全体を複製していました。</p>
+</li>
+<li><p>DFSR は Journal Wrap Error から自動復旧できます。<br>FRS では Journal Wrap Error が発生すると管理者が復旧するまで複製サービスは停止された状態となっていました。DFSR では自動復旧機能が組み込まれており、この問題による影響も最小限で抑えられます。Journal Wrap Error については以下の技術情報等に記載されています。</p>
+</li>
+</ul>
+<p><a target="_blank" rel="noopener" href="https://learn.microsoft.com/ja-JP/troubleshoot/windows-server/networking/how-frs-uses-usn-change-journal-ntfs-file-system"> Sysvol および DFS レプリカ セットの Journal_Wrap エラーのトラブルシューティング </a><br><br></p>
+<h1 id="2-今どっちを使っているのか？"><a href="#2-今どっちを使っているのか？" class="headerlink" title="2) 今どっちを使っているのか？"></a>2) 今どっちを使っているのか？</h1><p>手順を紹介する前に、現在 FRS もしくは DFSR のどちらを利用して SYSVOL を複製しているのかの確認方法を見ていきましょう。</p>
+<p>ドメイン機能レベルを Windows Server 2008 以上で新規構築した場合、SYSVOL の複製には既定で DFSR が利用されます。しかし Windows Server 2008 未満のドメイン機能レベルで構築されている環境では、たとえその後ドメイン機能レベルを Windows Server 2008 以上に変更しても、手動で DFSR を使用するよう、移行しない限りは FRS が利用され続けます。現在のドメイン環境でどちらを利用しているかがわからない場合には ADSIEdit で CN=Domain System Volume (SYSVOL share) コンテナがどこに格納されているかで判断します。以下のように CN=File Replication Services 配下にある場合には FRS が利用されています。CN=DFSR-GlobalSettings 配下に CN=Domain System Volume というコンテナが存在する場合には既に DFSR が利用されている為、今回紹介する手順を実行する必要はありません。( DFSR によるレプリケーションがまったく構成されていない環境では CN=DFSR-GlobalSettings は存在しません。移行処理を既に実施している場合には CN=File Replication Services 配下に CN=Domain System Volume が空の状態で残ります。両方にある場合は移行途中の状態である事が考えられます。 )</p>
+<h4 id="FRS-を利用している場合"><a href="#FRS-を利用している場合" class="headerlink" title="FRS を利用している場合"></a>FRS を利用している場合</h4><img src="/blog/2023/03/27/ActiveDirectory/DFSR/migration-from-FRS-to-DFSR/image-1.png" class="">
+<br>
+
+<h4 id="DFSR-を利用している場合-DFSR-に移行済みの場合には以下のように空のコンテナが残ります"><a href="#DFSR-を利用している場合-DFSR-に移行済みの場合には以下のように空のコンテナが残ります" class="headerlink" title="DFSR を利用している場合 ( DFSR に移行済みの場合には以下のように空のコンテナが残ります )"></a>DFSR を利用している場合 ( DFSR に移行済みの場合には以下のように空のコンテナが残ります )</h4><img src="/blog/2023/03/27/ActiveDirectory/DFSR/migration-from-FRS-to-DFSR/image-2.png" class="">
+<br>
+
+
+<h1 id="3-移行時の内部処理について"><a href="#3-移行時の内部処理について" class="headerlink" title="3) 移行時の内部処理について"></a>3) 移行時の内部処理について</h1><p>管理者は dfsrmig.exe のコマンドを数回実行するだけで移行処理は自動的に進む為、DFSR への移行手順は難しくありません。しかし、これではバックグラウンドでどういう処理がされているのかがわからない上、問題が発生してしまった場合にトラブルシュートができないので、内部的な処理も含めて移行手順について見ていきましょう。</p>
+<h2 id="Migration-State-について"><a href="#Migration-State-について" class="headerlink" title="Migration State について"></a>Migration State について</h2><p>DFSR への移行には dfsrmig.exe を利用して、移行したい状態 ( Migration state ) を指定します。 Migration State は格納される場所が 2 箇所 ( Local/Global ) あります。また、状態には 10 種類 ( 0-9 ) ありますが、4-9 まではローカルでのみ使用される Migration State になります。</p>
+<p>Dfsrmig.exe で Migration State を指定すると、この指定された値は AD データベースに格納されます。この AD に格納されている設定値を Global Migration State と呼び、各ドメイン コントローラーが目標とする状態を示します。各ドメイン コントローラーはローカルの状態も保持していて、この状態を Local Migration State と呼びます。DFSR への移行処理は、各ドメイン コントローラーにて自身の状態 ( Local Migration State ) が AD に格納されている目標とする状態 ( Global Migration State ) と異なる事が分かると、DFSR.exe により状態を移行するために必要な処理が実施されます。</p>
+<p>次に 10 種類の Migration State について。 Migration State は以下のように合計で 10 種類あります。</p>
+<p>0    Start    開始<br>1    Prepared    準備完了<br>2    Redirected    リダイレクト済み<br>3    Eliminated    削除済み<br>4    Preparing    準備中<br>5    Waiting For Initial Sync    初期同期の待機中<br>6    Redirecting    リダイレクト中<br>7    Eliminating    削除中<br>8    Undo Redirecting    リダイレクトの取り消し中<br>9    Undo Preparing    準備の取り消し中</p>
+<p>実際の移行の流れについては図の方が分かりやすいので、以下の図を基に説明します。</p>
+<img src="/blog/2023/03/27/ActiveDirectory/DFSR/migration-from-FRS-to-DFSR/image-3.png" class="">
+<p><a target="_blank" rel="noopener" href="https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-server-2008-R2-and-2008/dd641052(v=ws.10)?redirectedfrom=MSDN"> 引用 : SYSVOL Migration States </a></p>
+<p>dfsrmig.exe で Global Migration State として設定できる移行状態は 0, 1, 2, 3 の 4 つあり、0 が移行開始、 3 が DFSR への移行が完了した状態を意味します。他の 5 つ ( 4,5,6,7,8,9 ) の状態は移行中の状態を示し、各ドメイン コントローラーで処理が進むにつれて Local Migration State に設定されていきます。数字が飛びまわるので覚えにくいですが、管理者が Global Migration State を順番に 0 –&gt; 1 –&gt; 2 –&gt; 3 と設定する事により、各 DC ではこれを目標として処理が進み Local Migration State が 0 –&gt; 4 –&gt; 5 –&gt; 1 –&gt; 6 –&gt; 2 –&gt; 7 –&gt; 3 と進みます。残りの 2 つの移行状態 ( 8,9 ) はロールバックの際に利用されます。移行状態が 3 になっていなければ処理をロール バックでき、以下のように 2 -&gt; 8 -&gt; 1 -&gt; 9 -&gt; 0 と処理が戻されます。</p>
+<img src="/blog/2023/03/27/ActiveDirectory/DFSR/migration-from-FRS-to-DFSR/image-4.png" class="">
+<p><a target="_blank" rel="noopener" href="https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-server-2008-R2-and-2008/dd641052(v=ws.10)?redirectedfrom=MSDN"> 引用 : SYSVOL Migration States </a></p>
+<h2 id="各コマンドで実施される内部処理について"><a href="#各コマンドで実施される内部処理について" class="headerlink" title="各コマンドで実施される内部処理について"></a>各コマンドで実施される内部処理について</h2><p>DFSR への移行は管理者が 1 台の DC ( 可能な限り PDC ) で以下のコマンドを順に実行する事により実施されます。</p>
+<p>dfsrmig.exe /CreateGlobalObjects<br>dfsrmig.exe /SetGlobalState 1<br>dfsrmig.exe /SetGlobalState 2<br>dfsrmig.exe /SetGlobalState 3</p>
+<p>これらコマンドにより Global Migration State の値が 0-&gt;1-&gt;2-&gt;3 と変更されていきます。各ドメイン コントローラーは自身の状態 ( Local Migration State ) が Global Migration State と異なる場合には、各ドメインコントローラーのローカル処理として Local Migration State を Global Migration State と同じ状態にする為に必要な処理が実施されます。この時に発生する内部処理について説明します。</p>
+<h3 id="State-0-開始"><a href="#State-0-開始" class="headerlink" title="State 0 ( 開始 )"></a>State 0 ( 開始 )</h3><p>DFSR への移行にはまず管理者が dfsrmig.exe /CreateGlobalObjects を実行する事により開始されます。このコマンドを実行する事で以下の処理が実施されます。</p>
+<h5 id="内部処理"><a href="#内部処理" class="headerlink" title="内部処理"></a>内部処理</h5><ol>
+<li>Global Migration State を 0 に設定します。</li>
+<li>AD Database ( CN=DFSR-GlobalSettings,CN=System,DC=contoso,DC=com ) に DFSR が後で利用する情報を書き込みます。</li>
+<li>上記変更内容が各ドメイン コントローラーに AD の複製により反映され、各ドメイン コントローラーの Local Migration State が 0 になります。</li>
+</ol>
+<h3 id="State-1-準備完了"><a href="#State-1-準備完了" class="headerlink" title="State 1 ( 準備完了 )"></a>State 1 ( 準備完了 )</h3><p>次に管理者は dfsrmig.exe /setglobalstate 1 を実行し、Global Migration State を 1 に変更します。各ドメインコントローラーでは自身の状態 (Local Migration State) が 0 なので、これを Global Migration State と同じ 1 にする為に各ドメイン コントローラーでは以下の処理が実施されます。</p>
+<h5 id="内部処理-1"><a href="#内部処理-1" class="headerlink" title="内部処理"></a>内部処理</h5><ol>
+<li>SYSVOL のフォルダと同じディレクトリに SYSVOL_DFSR フォルダを作成します。この時、ACL の設定は SYSVOL と同じ設定になります。</li>
+<li>Robocopy を用いて SYSVOL の内容が SYSVOL_DFSR にコピーします。</li>
+<li>DFSR の複製に使用する情報を構成します。正確にはドメイン コントローラーが DFSR の複製をおこなうメンバとして追加され、複製のトポロジ情報が作成されます。</li>
+<li>DFSRによるドメイン コントローラーの SYSVOL_DFSR フォルダの初期複製を実施します。初期複製が終わるまでは Local Migration State が 5 ( 初期同期の待機中 ) になります。</li>
+<li>初期複製が完了すると Local Migration State が 1 ( 準備完了 ) になります。</li>
+<li>上記変更内容が完了すると、SYSVOL_DFSR が DFSR により同期されている状態となりますが、SYSVOL 共有はまだ FRS を利用しています。</li>
+</ol>
+<h3 id="State-2-リダイレクト済み"><a href="#State-2-リダイレクト済み" class="headerlink" title="State 2 ( リダイレクト済み )"></a>State 2 ( リダイレクト済み )</h3><p>次に管理者は dfsrmig.exe /setglobalstate 2 を実行し、Global Migration State を 2 に変更します。これまでの処理と同様、この情報が各ドメインコントローラーに複製され、 Local Migration State と比較されます。Local Migration State が 1 の場合にはこれを 2 にする為に必要な処理が実施されます。 ( まだ Local Migration State が 1 にもなっていない場合にはまず 0-&gt;1 の処理が実施された後 1-&gt;2 への処理が実施されまるので、最終的には同じ状態になります。 ) 1-&gt;2 への処理は以下の通りです。</p>
+<h5 id="内部処理-2"><a href="#内部処理-2" class="headerlink" title="内部処理"></a>内部処理</h5><p>ドメイン コントローラーの SYSVOL 共有をこれまでの FRS が同期している SYSVOL から DFSR が同期している SYSVOL_DFSR に切り替えます。<br>ここが FRS から DFSR への移行処理内で唯一ダウンタイムが発生する処理になります。可能な限りダウンタイムが最小限になるように実装されていますが、ここの処理で SYSVOL 共有を従来の SYSVOL から SYSVOL_DFSR に変更される為、どうしても一時的に SYSVOL 共有を参照できない状態になってしまいます。この処理が完了し Local Migration State が 2 になったドメイン コントローラーでは SYSVOL 共有が SYSVOL_DFSR を指すようになります。( net share の実行結果から確認できます。 )</p>
+<p>補足：この段階ではまだ後戻りができます。DFSR への移行をやめたい場合には dfsrmig.exe /setglobalstate 1 もしくは dfsrmig.exe /setglobalstate 0 を実行する事により、戻りたい状態にロールバックされます。</p>
+<h3 id="State-3-削除済み"><a href="#State-3-削除済み" class="headerlink" title="State 3 ( 削除済み )"></a>State 3 ( 削除済み )</h3><p>最後に管理者は dfsrmig.exe /setglobalstate 3 を実行し、Global Migration State を 3 にします。一度 Global Migration State が 3 に設定されると、ロールバックはできないので、ご注意ください。各ドメイン コントローラーでは Local Migration State を 2-&gt;3 にする為に以下の処理が実施されます。</p>
+<h5 id="内部処理-3"><a href="#内部処理-3" class="headerlink" title="内部処理"></a>内部処理</h5><p>FRS の複製情報が AD データベースから削除されます。これにより FRS による複製は実施されなくなります。古い SYSVOL フォルダが削除されます。この処理が完了することにより、無事 DFSR への移行が完了します。</p>
+<h1 id="4-DFSR-に安全に移行する為の手順"><a href="#4-DFSR-に安全に移行する為の手順" class="headerlink" title="4) DFSR に安全に移行する為の手順"></a>4) DFSR に安全に移行する為の手順</h1><p>これまでは記載していませんが、各コマンドを順に実行する必要は必ずしもありません。仮に管理者が dfsrmig.exe で順に Global Migration State を上げるのではなく、いきなり dfsrmig.exe /SetGlobalState 3 だけを実行した場合でも、各ドメインコントローラーは自身の状態 ( Local Migration State = なし ) を Global Migration State である 3 を目標として処理をする為、最終的には全ドメイン コントローラーの状態は更新されます。しかし、この場合、各 DC が個別に処理を実施し、ドメイン コントローラー間の状態がばらばらになる為、DC 複数台ある環境ではダウンタイムが発生してしまう可能性があります。サイトが分かれている場合等には複製のタイミングによりさらにダウンタイムが長くなってしまいます。また、 State 3 のところでも記述しましたが、いきなり State 3 を指定した場合には、何か問題が発生しても dfsrmig.exe を使用してロールバックをすることができません。</p>
+<p>その為、ここでは可能な限り安全に ( ダウンタイムを可能な限り短く、障害がないように ) FRS から DFSR に移行する為の手順をまとめます。基本的には dfsrmig.exe /GlobalMigrationState で状態を上げる度に dfsrmig.exe /GetMigrationState で全台の移行が完了したかを確認する事で十分ですが、より確実に確認したいという方の為に確認要件をさらに追加してあります。</p>
+<h2 id="0-サードパーティ製のドメイン-コントローラー-オブジェクトが存在しないことを確認"><a href="#0-サードパーティ製のドメイン-コントローラー-オブジェクトが存在しないことを確認" class="headerlink" title="0. サードパーティ製のドメイン コントローラー オブジェクトが存在しないことを確認"></a>0. サードパーティ製のドメイン コントローラー オブジェクトが存在しないことを確認</h2><p>ドメイン コントローラーとして稼働していないコンピューター オブジェクト ( サードパーティ製の WAN 高速化装置 ) が、読み取り専用ドメイン コントローラー ( RODC ) として認識されてしまい、DFSR の “移行待ち” が発生するという事例を確認しています。対象製品のコンピューター オブジェクトは、RODC として認識される属性値 ( userAccountControl 属性 = 0x5011000 ) を保持しており、DFSR への移行をおこなった際に、対象製品の DFSR への移行待ちが発生してしまいます。実際には対象製品は RODC ではないため、DFSR のフェーズが進行することはなく、結果としてドメイン全体の DFSR 移行が進まない状態になります。この場合、対象製品のコンピューター オブジェクトを削除していただくことで、DFSR への移行が可能になります。　</p>
+<p>一方で、対象製品のコンピューター オブジェクトを削除することで、対象製品の機能が正常に動作しなくなるなどの影響が考えられます。具体的に発生する影響や、オブジェクト削除後の復旧方法などにつきましては、製品の開発元様へご確認いただきますようお願い申し上げます。</p>
+<h2 id="1-現在正常に動作している事を確認"><a href="#1-現在正常に動作している事を確認" class="headerlink" title="1. 現在正常に動作している事を確認"></a>1. 現在正常に動作している事を確認</h2><p>まずは各種イベント ログに問題を示す警告やエラーがないか、DCDIAG /V の実行結果にエラーはないか等を確認し、各ドメイン コントローラーが正常に動作しているかを確認してください。DFSR への移行には AD としての複製が問題なく実施できている事が必須になります。( Global Migration State や DFSR の構成情報が AD のデータベース内に保持され、これらが複製により各ドメイン コントローラーに渡っていきます。 ) また、現在 FRS が複製している SYSVOL の情報も利用する為、各ドメイン コントローラー間で SYSVOL 内の情報が同期できている事も大事です。</p>
+<h2 id="２-全ドメイン-コントローラーの完全バックアップを採取"><a href="#２-全ドメイン-コントローラーの完全バックアップを採取" class="headerlink" title="２. 全ドメイン コントローラーの完全バックアップを採取"></a>２. 全ドメイン コントローラーの完全バックアップを採取</h2><p>どれだけ準備をしていても予期せぬ問題が発生する可能性は必ずあります。こういった場合の復旧作業ではバックアップがあるかないかで大きく障害復旧にかかる時間が変わります。ドメインコントローラーでバックアップからのリストアを実施する場合、必ず TombStone LifeTime ( 条件によりますが、既定では短くて 30 日 ) 以内のバックアップが必要になります。実際に多くのお問い合わせではバックアップがない事により障害復旧に必要以上に時間がかかったり、復旧できない事もありますので、作業前に最新の状態のバックアップを採取する事を強くお勧めいたします。</p>
+<h2 id="3-ドメイン機能レベルを-Windows-Server-2008-以上に更新"><a href="#3-ドメイン機能レベルを-Windows-Server-2008-以上に更新" class="headerlink" title="3. ドメイン機能レベルを Windows Server 2008 以上に更新"></a>3. ドメイン機能レベルを Windows Server 2008 以上に更新</h2><p>ここからの作業はすべて PDC の役割を保持しているドメインコントローラーのみで実行してください。( 正確には PDC で実行しなかった場合にも処理は成功しますが、他のドメイン コントローラーで作業した場合にも、最終的には PDC と通信し変更を加えます ) PDC の役割を保持しているドメイン コントローラーを特定するにはコマンド プロンプトから netdom query fsmo を実行します。</p>
+<p>ドメイン機能レベルは [Active Directory ユーザーとコンピューター] からドメイン名を右クリックし、[ドメインの機能レベルの昇格] から上げます。”現在のドメインの機能レベル” が Windows Server 2008 になっていない場合には Windows Server 2008 に上げて下さい。</p>
+<img src="/blog/2023/03/27/ActiveDirectory/DFSR/migration-from-FRS-to-DFSR/image-5.png" class="">
+<br>
+
+<h2 id="4-dfsrmig-exe-CreateGlobalObjects-を実行"><a href="#4-dfsrmig-exe-CreateGlobalObjects-を実行" class="headerlink" title="4. dfsrmig.exe /CreateGlobalObjects を実行"></a>4. dfsrmig.exe /CreateGlobalObjects を実行</h2><p>dfsrmig.exe /CreateGlobalObjects を実行し、DFSR への移行処理を開始します。この処理が完了すると AD データベース内にいくつかの情報が追加されます。</p>
+<pre><code>C:\&gt;dfsrmig.exe /CreateGlobalObjects
+
+DFSR の現在のグローバル状態: &#39;開始&#39;
+成功しました。</code></pre>
+<p>処理が完了したかどうかは以下のように確認します。</p>
+<h3 id="確認方法1-Global-Migration-State-の確認"><a href="#確認方法1-Global-Migration-State-の確認" class="headerlink" title="確認方法1: Global Migration State の確認"></a>確認方法1: Global Migration State の確認</h3><p>dfsrmig.exe /GetGlobalState を実行し、Global Migration State が正しく 0 ( 開始 ) になっているかを確認します。正常時には以下のように表示されます。</p>
+<pre><code>C:\&gt;dfsrmig.exe /GetGlobalState
+
+DFSR の現在のグローバル状態: &#39;開始&#39;
+成功しました。</code></pre>
+<h3 id="確認方法2-Local-Migration-State-の確認"><a href="#確認方法2-Local-Migration-State-の確認" class="headerlink" title="確認方法2: Local Migration State の確認"></a>確認方法2: Local Migration State の確認</h3><p>dfsrmig.exe /GetMigrationState を実行し、各ドメイン コントローラーの Local Migration State が 0 ( 開始 ) になっているかを確認します。以下のように同期が取られている旨が表示されれば、処理は完了しています。</p>
+<pre><code>c:\&gt;dfsrmig.exe /GetMigrationState
+
+すべてのドメイン コントローラーがグローバル状態 (&#39;開始&#39;) に移行しました。
+移行状態が、すべてのドメイン コントローラー上で整合性のとれた状態になりました。
+成功しました。</code></pre>
+<h3 id="確認方法3-AD-データベースの状態を確認"><a href="#確認方法3-AD-データベースの状態を確認" class="headerlink" title="確認方法3: AD データベースの状態を確認"></a>確認方法3: AD データベースの状態を確認</h3><p>adsiedit で CN=DFSR-GlobalSettings,CN=System,DC=contoso,DC=com が作成されている事を確認します。<br><br></p>
+<h2 id="5-dfsrmig-exe-SetGlobalState-1-を実行"><a href="#5-dfsrmig-exe-SetGlobalState-1-を実行" class="headerlink" title="5. dfsrmig.exe /SetGlobalState 1 を実行"></a>5. dfsrmig.exe /SetGlobalState 1 を実行</h2><p>dfsrmig /SetGlobalState 1 を実行し、状態 1 ( 準備完了 ) へ移行します。この処理では新しい SYSVOL フォルダ ( SYSVOL_DFSR ) が従来の SYSVOL フォルダの内容から作成された後、このフォルダを DFSR を使用して複製するように構成します。( DFSR の初期複製が実施されます。 )</p>
+<pre><code>C:\&gt;dfsrmig.exe /SetGlobalState 1
+
+DFSR の現在のグローバル状態: &#39;開始&#39;
+新しい DFSR のグローバル状態: &#39;準備完了&#39;
+
+&#39;準備完了&#39; 状態に移行します。DFSR サービスによって
+SYSVOL が SYSVOL_DFSR フォルダーにコピーされます。
+
+いずれかのドメイン コントローラーで移行を開始できない場合は、手動ポーリングを試行してください。
+または、/CreateGlobalObjects オプションを指定して実行してください。
+移行は 15 分から 1 時間までの任意の時点で開始されます。
+成功しました。</code></pre>
+<p>この処理が完了しても SYSVOL はまだ従来の FRS の SYSVOL を利用しているので、ユーザーへの影響はありません。SYSVOL 共有の参照先は次の処理で変更される為、この処理が完了するまでに次の処理に進んでしまうと DC 間で異なる状態になり、移行が進んでいる DC では DFSR、移行処理がまだ進んでいない DC では FRS を利用している状態になる可能性があります。これにより、移行処理が完了するまでの間、DC 間でSYSVOL の内容がうまく複製できない状況になる可能性があります。このような状況にならないためにも、次の処理に進む前に必ず以下の “確認方法2” の通り、全ドメイン コントローラーの Local Migration State が 1 (準備完了) になっている事を確認して下さい。</p>
+<p>(*1) 状態移行に時間がかかる場合にはサイト間の複製の強制、および Dfsrdiag PollAD を各ドメイン コントローラーにて実行して下さい。Local Migration State が 0 –&gt; 1 になるにはまず Global Migration State が 1 に変更された事が全ドメイン コントローラーに AD の複製により通知された後、その変更を各ローカルの DFSR が検出および処理する必要があります。その為、サイトが分かれている場合にはサイト間の複製を実施する事により、AD の複製を早く完了させる事ができます。AD 情報が複製された後、各ドメイン コントローラーにて dfsrdiag pollad を実行する事により DFSR が AD と同期を取り、最新の情報で更新されます。Local Migration State が 5 ( 初期同期の待機中 ) になっている場合には DFSR は既に処理を開始している為、後は DFSR の初期複製が完了するまで待ちます。( 通常はないと思いますが、SYSVOL 内に大量のファイルが存在する場合には 1 日以上時間がかかる可能性があります。 )</p>
+<h3 id="確認方法1-Global-Migration-State-の確認-1"><a href="#確認方法1-Global-Migration-State-の確認-1" class="headerlink" title="確認方法1: Global Migration State の確認"></a>確認方法1: Global Migration State の確認</h3><p>dfsrmig.exe /GetGlobalState を実行し、Global Migration State が正しく 1 ( 準備完了 ) になっているかを確認します。正常時には以下のように表示されます。</p>
+<pre><code>c:\&gt;dfsrmig.exe /GetGlobalState
+
+DFSR の現在のグローバル状態: &#39;準備完了&#39;
+成功しました。</code></pre>
+<h3 id="確認方法2-Local-Migration-State-の確認-1"><a href="#確認方法2-Local-Migration-State-の確認-1" class="headerlink" title="確認方法2: Local Migration State の確認"></a>確認方法2: Local Migration State の確認</h3><p>dfsrmig.exe /GetMigrationState を実行し、各ドメイン コントローラーの Local Migration State が 1 ( 準備完了 ) になっているかを確認します。以下のように同期が取られている旨が表示されれば、処理は完了しています。</p>
+<pre><code>C:\&gt;dfsrmig.exe /GetMigrationState
+
+すべてのドメイン コントローラーがグローバル状態 (&#39;準備完了&#39;) に移行しました。
+移行状態が、すべてのドメイン コントローラー上で整合性のとれた状態になりました。
+成功しました。</code></pre>
+<p>同期が取られていない場合には以下のようにその旨が通知されます。</p>
+<pre><code>C:\&gt;dfsrmig.exe /GetMigrationState
+
+次のドメイン コントローラーは、グローバル状態 (&#39;準備完了&#39;) と同期していません:
+ドメイン コントローラー (ローカル移行状態) - DC の種類
+
+==================================================
+FRDC001 (&#39;開始&#39;) - Writable DC
+FRDC002-NEW (&#39;初期同期の待機中&#39;) - Primary DC
+
+移行状態が、すべてのドメイン コントローラー上で整合性のとれた状態にまだなっていません。</code></pre>
+<p>AD の待ち時間が原因で状態の情報が最新になっていない可能性があります。<br>(*1) の通り、状態がまだ 0 ( 開始 ) になっているドメイン コントローラーでは AD の複製を実施後、dfsrdiag pollad を実行する事で待ち時間を短縮できます。状態が 5 ( 初期同期の待機中 ) になっている場合には DFSR の処理が完了するのを待つしかありません。</p>
+<h3 id="確認方法3-AD-データベースの状態を確認-1"><a href="#確認方法3-AD-データベースの状態を確認-1" class="headerlink" title="確認方法3: AD データベースの状態を確認"></a>確認方法3: AD データベースの状態を確認</h3><p>adsiedit で CN=Topology,CN=Domain System Volume, CN=DFSR-GlobalSettings,CN=System,DC=contoso, DC=com の中に各ドメイン コントローラーのコンテナが作成されている事を確認します。以前に比べ DC がレプリケーションパートナーとして追加されている事がわかります。</p>
+<h3 id="確認方法4-DFSR-SYSVOL-フォルダ"><a href="#確認方法4-DFSR-SYSVOL-フォルダ" class="headerlink" title="確認方法4: DFSR_SYSVOL フォルダ"></a>確認方法4: DFSR_SYSVOL フォルダ</h3><p>SYSVOL と同じディレクトリに SYSVOL_DFSR が作成されている事を確認します。 ( 既定では C:\WINDOWS\SYSVOL_DFSR )<br><br></p>
+<h2 id="6-dfsrmig-exe-SetGlobalState-2-を実行"><a href="#6-dfsrmig-exe-SetGlobalState-2-を実行" class="headerlink" title="6. dfsrmig.exe /SetGlobalState 2 を実行"></a>6. dfsrmig.exe /SetGlobalState 2 を実行</h2><p>dfsrmig.exe /SetGlobalState 2 を実行し、状態 2 (リダイレクト済み) に移行します。 ここでの処理により SYSVOL 共有がこれまでの SYSVOL から新しい SYSVOL_DFSR に切り替わります。その為、一時的なダウンタイムは発生してしまいます。基本的には各 SYSVOL 共有がダウンしている時間は最小限に抑えられるように構成されていますが、状況によってはユーザーの利用率が少ない時間帯に実施する事もご検討下さい。</p>
+<pre><code>C:\&gt;dfsrmig.exe /SetGlobalState 2
+15:57 2023/03/2615:57 2023/03/26
+DFSR の現在のグローバル状態: &#39;準備完了&#39;
+新しい DFSR のグローバル状態: &#39;リダイレクト済み&#39;
+
+&#39;リダイレクト済み&#39; 状態に移行します。SYSVOL 共有が、
+DFSR を使用してレプリケートされた SYSVOL_DFSR
+フォルダーに変更されます。
+
+成功しました。</code></pre>
+<p>この処理が正常に完了すると、従来の FRS の SYSVOL フォルダはまだ FRS により複製はされていますが、SYSVOL 共有としてはもう利用されていません。この状況でしばらく運用をして、問題がなければ次の処理 ( 最後のコマンド ) に進み、FRS の SYSVOL を削除します。</p>
+<h3 id="確認方法1-Global-Migration-State-の確認-2"><a href="#確認方法1-Global-Migration-State-の確認-2" class="headerlink" title="確認方法1: Global Migration State の確認"></a>確認方法1: Global Migration State の確認</h3><p>dfsrmig.exe /GetGlobalState を実行し、Global Migration State が正しく 2 (リダイレクト済み) になっているかを確認します。</p>
+<pre><code>C:\&gt;dfsrmig.exe /GetGlobalState
+
+DFSR の現在のグローバル状態: &#39;リダイレクト済み&#39;
+成功しました。</code></pre>
+<h3 id="確認方法2-Local-Migration-State-の確認-2"><a href="#確認方法2-Local-Migration-State-の確認-2" class="headerlink" title="確認方法2: Local Migration State の確認"></a>確認方法2: Local Migration State の確認</h3><p>dfsrmig.exe /GetMigrationState を実行し、各ドメイン コントローラーの Local Migration State が 2 ( リダイレクト済み ) になっているかを確認します。以下のように同期が取られている旨が表示されれば、処理は完了しています。</p>
+<pre><code>C:\&gt; dfsrmig.exe /GetMigrationState
+
+すべてのドメイン コントローラーがグローバル状態 (&#39;リダイレクト済み&#39;) に移行しました。
+移行状態が、すべてのドメイン コントローラー上で整合性のとれた状態になりました。
+成功しました。</code></pre>
+<h3 id="確認方法3-SYSVOL-共有が指す場所の確認"><a href="#確認方法3-SYSVOL-共有が指す場所の確認" class="headerlink" title="確認方法3: SYSVOL 共有が指す場所の確認"></a>確認方法3: SYSVOL 共有が指す場所の確認</h3><p>net share を実行して、SYSVOL 共有が SYSVOL フォルダではなく SYSVOL_DFSR に変更されている事を確認します。 ( net share コマンドの結果の、[リソース] の列から各共有フォルダーのパスを確認できます。 )<br><br></p>
+<h2 id="7-dfsrmig-exe-SetGlobalState-3-を実行"><a href="#7-dfsrmig-exe-SetGlobalState-3-を実行" class="headerlink" title="7. dfsrmig.exe /SetGlobalState 3 を実行"></a>7. dfsrmig.exe /SetGlobalState 3 を実行</h2><p>最後に dfsrmig.exe /SetGlobalState 3 を実行し、状態 3 ( 削除済み ) に移行します。これにより古い FRS の SYSVOL が削除されます。</p>
+<pre><code>C:\&gt; dfsrmig.exe /SetGlobalState 3
+
+DFSR の現在のグローバル状態: &#39;リダイレクト済み&#39;
+新しい DFSR のグローバル状態: &#39;削除済み&#39;
+
+&#39;削除済み&#39; 状態に移行します。このステップを元に戻すことは
+できません。
+
+いずれかの読み取り専用ドメイン コントローラーが長時間にわたって &#39;削除済み&#39; 状態
+になっている場合は、/DeleteRoNtfrsMember オプションを指定して実行してください。
+成功しました。</code></pre>
+<h3 id="確認方法1-Global-Migration-State-の確認-3"><a href="#確認方法1-Global-Migration-State-の確認-3" class="headerlink" title="確認方法1: Global Migration State の確認"></a>確認方法1: Global Migration State の確認</h3><p>dfsrmig.exe /GetGlobalState を実行し、Global Migration State が正しく 3 ( 削除済み ) になっているかを確認します。正常時には以下のように表示されます。</p>
+<pre><code>C:\&gt;dfsrmig.exe /GetGlobalState
+
+DFSR の現在のグローバル状態: &#39;削除済み&#39;
+成功しました。</code></pre>
+<h3 id="確認方法2-Local-Migration-State-の確認-3"><a href="#確認方法2-Local-Migration-State-の確認-3" class="headerlink" title="確認方法2: Local Migration State の確認"></a>確認方法2: Local Migration State の確認</h3><p>dfsrmig.exe /GetMigrationState を実行し、各ドメイン コントローラーの Local Migration State が3 ( 削除済み ) になっているかを確認します。以下のように同期が取られている旨が表示されれば、処理は完了しています。</p>
+<pre><code>C:\&gt; dfsrmig.exe /GetMigrationState
+
+すべてのドメイン コントローラーがグローバル状態 (&#39;削除済み&#39;) に移行しました。
+移行状態が、すべてのドメイン コントローラー上で整合性のとれた状態になりました。
+成功しました。</code></pre>
+<h3 id="確認方法3-SYSVOL-が削除されているかの確認"><a href="#確認方法3-SYSVOL-が削除されているかの確認" class="headerlink" title="確認方法3: SYSVOL が削除されているかの確認"></a>確認方法3: SYSVOL が削除されているかの確認</h3><p>従来の SYSVOL フォルダが削除されている事を確認します。</p>
+<h3 id="確認方法4-FRS-の複製対象から-SYSVOL-が外れていることを確認。"><a href="#確認方法4-FRS-の複製対象から-SYSVOL-が外れていることを確認。" class="headerlink" title="確認方法4: FRS の複製対象から SYSVOL が外れていることを確認。"></a>確認方法4: FRS の複製対象から SYSVOL が外れていることを確認。</h3><p>adsiedit.msc で CN=Domain System Volume (SYSVOL share),CN=File Replication Services, CN=SYSTEM, DC=contoso,DC=com 内に情報が含まれていない事を確認します。( CN=Domain System Volume (SYSVOL share) が空の状態で残ります。 )</p>
+<img src="/blog/2023/03/27/ActiveDirectory/DFSR/migration-from-FRS-to-DFSR/image-6.png" class="">
+<br>
+<br>
+
+<h2 id="更新履歴"><a href="#更新履歴" class="headerlink" title="更新履歴"></a>更新履歴</h2><p>2023/3/27 : 本ブログの公開</p>
+
+      
+      
+    </div>
+    <footer class="article-footer">
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/blog/2023/03/28/Storage/Backup/WSB-Generation-Management/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">次の記事</strong>
+      <div class="article-nav-title">
+        
+          Windows Server バックアップの世代管理について
+        
+      </div>
+    </a>
+  
+  
+    <a href="/blog/2023/03/27/RemoteDesktopService/AVD/AVD-scalingplan/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">前の記事</strong>
+      <div class="article-nav-title">AVD スケーリングプランの動作について</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">カテゴリ</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Activation/">Activation</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Activation/ESU/">ESU</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Activation/security-SPP/">security-SPP</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/">Active Directory</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Authentication/">Authentication</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/DFSR/">DFSR</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/FunctionalLevel/">FunctionalLevel</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Group-Policy/">Group Policy</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Promotion-and-Demotion/">Promotion and Demotion</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/User-Profile/">User Profile</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Windows-Hello/">Windows Hello</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Windows-Time-Service/">Windows Time Service</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/AppLocker/">AppLocker</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/AppLocker/Active-Directory/">Active Directory</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/AppLocker/Microsoft-Intune/">Microsoft Intune</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Deployment/">Deployment</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Deployment/Feature-on-demand/">Feature on demand</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Deployment/Sysprep/">Sysprep</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Failover-Clustering/">Failover Clustering</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Failover-Clustering/Configuration-and-Management/">Configuration and Management</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/FileServices/">FileServices</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/FileServices/FTP/">FTP</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/FileServices/SMB/">SMB</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Hyper-V/">Hyper-V</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Hyper-V/Configuration-and-Management/">Configuration and Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Hyper-V/Migration/">Migration</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Microsoft-Connected-Cache/">Microsoft Connected Cache</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/">Networking</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/BITS/">BITS</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/Bluetooth/">Bluetooth</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/DHCP/">DHCP</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/DNS/">DNS</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/Firewall/">Firewall</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/LBFO/">LBFO</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/NCSI/">NCSI</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/NetworkInterface/">NetworkInterface</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/Proxy/">Proxy</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/TCPIP/">TCPIP</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/OpenSSH/">OpenSSH</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/">Performance</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/Hang-up-BSoD/">Hang-up/BSoD</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/No-Boot/">No Boot</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/Slow-Response/">Slow Response</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/System-Resource/">System Resource</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/Tools/">Tools</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/">Public Key Infrastructure</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Certificate-Authority/">Certificate Authority</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Certificate-Management/">Certificate Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Code-Signing/">Code Signing</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/SSL-TLS-Communication/">SSL TLS Communication</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/SSL-TLS-Connection/">SSL TLS Connection</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Smart-Card-Logon/">Smart Card Logon</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/">Remote Desktop</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/Azure-Virtual-Desktop-AVD/">Azure Virtual Desktop (AVD)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/Remote-Desktop-Service-RDS/">Remote Desktop Service (RDS)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/Windows-Virtual-Desktop-WVD/">Windows Virtual Desktop (WVD)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/RemoteAccess/">RemoteAccess</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/RemoteAccess/%E3%83%80%E3%82%A4%E3%83%A4%E3%83%AB%E3%82%A2%E3%83%83%E3%83%97%E6%8E%A5%E7%B6%9A/">ダイヤルアップ接続</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Setup/">Setup</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Setup/Feature-Update-FU/">Feature Update (FU)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Shell/">Shell</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Shell/Explorer/">Explorer</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/">Storage</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/Backup/">Backup</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/FSRM/">FSRM</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/Management/">Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/StorageMigrationService/">StorageMigrationService</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/UEFI/">UEFI</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/UEFI/Secure-Boot/">Secure Boot</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/">User Interface and Apps</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Command-Prompt/">Command Prompt</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/EventLog/">EventLog</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Language-Support/">Language Support</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Microsoft-Store/">Microsoft Store</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Performance/">Performance</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/PowerShell/">PowerShell</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Printing-%E5%8D%B0%E5%88%B7/">Printing (印刷)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Server-Management/">Server Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Taskscheduler/">Taskscheduler</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Windows-Management-Instrumentation/">Windows Management Instrumentation</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps-Language-support/">User Interface and Apps - Language support</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-365/">Windows 365</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Admin-Center/">Windows Admin Center</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Search/">Windows Search</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/">Windows Update</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Delivery-Optimization-DO/">Delivery Optimization (DO)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Feature-Update-FU/">Feature Update (FU)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Quality-Update-QU/">Quality Update (QU)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Windows-Update-Agent/">Windows Update Agent</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Windows-Update-Agent-WUA/">Windows Update Agent (WUA)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/">WirelessNetwork</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/NPS/">NPS</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/Wi-Fi/">Wi-Fi</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/%E3%83%A2%E3%83%90%E3%82%A4%E3%83%AB-%E3%83%96%E3%83%AD%E3%83%BC%E3%83%89%E3%83%90%E3%83%B3%E3%83%89%E6%8E%A5%E7%B6%9A-LTE/">モバイル ブロードバンド接続 (LTE)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/%E7%B5%84%E7%B9%94%E7%B4%B9%E4%BB%8B%E3%83%96%E3%83%AD%E3%82%B0%EF%BC%88Windows-Commercial%EF%BC%89/">組織紹介ブログ（Windows Commercial）</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最近の投稿</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/blog/2026/02/16/ActiveDirectory/GroupPolicy/UacPolicyIsEnabled/">「ユーザー アカウント制御：ビルトイン Administrator アカウントのための管理者承認モード」ポリシーが有効になる動作ついて</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/02/15/UserInterfaceAndApps/Printing/printer-queue-app-preview/">印刷キューアプリのプレビュー機能について</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/02/02/ActiveDirectory/Authentication/kerberos-rc4-for-service-account-ticket-issuance-changes-related-to-cve-2026-20833/">CVE‑2026‑20833 への対応とその影響について [KB5073381]</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/01/12/Hyper-V/vmwp-does-not-save-the-RTC-value-of-a-virtual-machine-when-performing-Live-Migration/">ライブ マイグレーション後の再起動でゲスト OS の時刻がずれる場合がある</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/01/07/WindowsUpdate/FU/fublog-txt/">ISO メディア経由かつ動的更新無効な状態で Windows 11 バージョン 24H2 または 25H2 へのアップグレードが失敗 (0x8007042B 0x2000D) する事象と対策について</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">アーカイブ</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2026/02/">2026 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2026/01/">2026 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/12/">2025 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/11/">2025 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/10/">2025 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/09/">2025 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/08/">2025 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/07/">2025 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/06/">2025 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/05/">2025 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/04/">2025 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/03/">2025 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/02/">2025 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/01/">2025 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/12/">2024 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/11/">2024 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/10/">2024 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/09/">2024 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/08/">2024 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/07/">2024 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/06/">2024 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/05/">2024 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/04/">2024 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/03/">2024 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/02/">2024 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/01/">2024 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/12/">2023 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/11/">2023 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/10/">2023 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/09/">2023 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/08/">2023 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/07/">2023 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/06/">2023 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/05/">2023 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/04/">2023 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/03/">2023 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/02/">2023 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/01/">2023 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/12/">2022 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/11/">2022 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/10/">2022 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/09/">2022 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/08/">2022 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/07/">2022 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/06/">2022 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/05/">2022 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/04/">2022 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/03/">2022 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/02/">2022 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/01/">2022 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/12/">2021 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/11/">2021 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/10/">2021 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/09/">2021 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/08/">2021 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/07/">2021 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/06/">2021 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/05/">2021 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/04/">2021 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/03/">2021 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/02/">2021 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/01/">2021 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/12/">2020 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/11/">2020 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/10/">2020 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/07/">2020 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/03/">2020 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2019/03/">2019 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/11/">2018 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/10/">2018 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/09/">2018 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/08/">2018 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/07/">2018 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/06/">2018 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/04/">2018 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/02/">2018 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/12/">2017 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/11/">2017 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/09/">2017 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/05/">2017 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/03/">2017 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/02/">2017 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2016/08/">2016 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2016/05/">2016 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2014/03/">2014 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2012/02/">2012 / 02</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2026 Microsoft Japan Windows Technology Support Team<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/blog/" class="mobile-nav-link">Home</a>
+  
+    <a href="/blog/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+<script src="/blog/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>
