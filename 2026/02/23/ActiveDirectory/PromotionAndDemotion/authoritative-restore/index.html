@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-180187723-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-180187723-1');
+</script>
+<!-- End Google Analytics -->
+
+  
+  <title>Active Directory の権限のある復元について | Microsoft Japan Windows Technology Support Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="本記事はマイクロソフト社員によって公開されております。 こんにちは。Windows Commercial Support Directory Services チームです。 本記事では、Active Directory データベースに含まれる内容をバックアップを採取した時点に戻すことを目的とした、Active Directory の権限のある復元 (Authoritative Restore) の">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Active Directory の権限のある復元について">
+<meta property="og:url" content="https://jpwinsup.github.io/blog/2026/02/23/ActiveDirectory/PromotionAndDemotion/authoritative-restore/index.html">
+<meta property="og:site_name" content="Microsoft Japan Windows Technology Support Blog">
+<meta property="og:description" content="本記事はマイクロソフト社員によって公開されております。 こんにちは。Windows Commercial Support Directory Services チームです。 本記事では、Active Directory データベースに含まれる内容をバックアップを採取した時点に戻すことを目的とした、Active Directory の権限のある復元 (Authoritative Restore) の">
+<meta property="og:locale" content="ja_JP">
+<meta property="article:published_time" content="2026-02-23T22:24:48.000Z">
+<meta property="article:modified_time" content="2026-03-06T11:26:28.690Z">
+<meta property="article:author" content="Microsoft Japan Windows Technology Support Team">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/blog/atom.xml" title="Microsoft Japan Windows Technology Support Blog" type="application/atom+xml">
+  
+
+  <link rel="icon" href="/blog/favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="/blog/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/blog/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/blog/favicon-16x16.png">
+  <link rel="manifest" href="/blog/site.webmanifest">
+  <link rel="mask-icon" href="/blog/safari-pinned-tab.svg" color="#5bbad5">
+  <meta name="msapplication-TileColor" content="#ffffff">
+  <meta name="theme-color" content="#ffffff">
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/blog/css/style.css">
+
+<meta name="generator" content="Hexo 5.2.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="site-header-logo"></div>
+  <div id="site-header-blog-wrapper"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        <div id="ms-logo"></div>
+        
+          <a class="main-nav-link" href="/blog/">Home</a>
+        
+          <a class="main-nav-link" href="/blog/archives">Archives</a>
+        
+        <a class="main-nav-link" target="_blank" rel="noopener" href="https://cssjpn.github.io/">サポート情報</a>
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/blog/atom.xml" title="RSSフィード"></a>
+        
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//www.bing.com/search" method="get" accept-charset="UTF-8" name="bing-search" onsubmit="var f=this;if(f['q'].value){var searchUrl =  'https://www.bing.com/search?q=' +  encodeURIComponent(f['q'].value + ' site:' + f['sitesearch'].value) ;window.open(searchUrl, 'blank') };return false;" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="検索"><button type="submit" id="nav-search-btn" class="search-form-submit"></button><input type="hidden" name="sitesearch" value="https://jpwinsup.github.io/blog"></form>
+      </div>
+    </div>
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/blog/" id="logo">Microsoft Japan Windows Technology Support Blog</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/blog/" id="subtitle">日本マイクロソフト Windows Support チームによる、サポート情報 Blog です。</a>
+        </h2>
+      
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-ActiveDirectory/PromotionAndDemotion/authoritative-restore" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    
+    
+      <header class="article-header-single">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Active Directory の権限のある復元について
+    </h1>
+  
+
+      </header>
+      <div class="article-share">
+        Last Update: 
+        <a href="/blog/2026/02/23/ActiveDirectory/PromotionAndDemotion/authoritative-restore/" class="article-date-single">
+  <time datetime="2026-02-23T22:24:48.000Z" itemprop="datePublished">2026-02-24</time>
+</a>
+        
+  <div class="article-category">
+    <a class="article-category-link" href="/blog/categories/Active-Directory/">Active Directory</a>►<a class="article-category-link" href="/blog/categories/Active-Directory/Promotion-and-Demotion/">Promotion and Demotion</a>
+  </div>
+
+        
+        <a href="https://github.com/jpwinsup/blog/issues/new?title=&body=%EF%BB%BF%0A%0A---%0A%0A%23%23%23%23+Document+Details%0A%0A*+Article+ID%3A+c083e7cd-052a-5d52-96a6-a15162f1edd5%0A*+TITLE%3A+Active+Directory+%E3%81%AE%E6%A8%A9%E9%99%90%E3%81%AE%E3%81%82%E3%82%8B%E5%BE%A9%E5%85%83%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6%0A*+URL+https%3A%2F%2Fjpwinsup.github.io%2Fblog%2F2026%2F02%2F23%2FActiveDirectory%2FPromotionAndDemotion%2Fauthoritative-restore%2F%0A*+SourceFileName%3A+source%2F_posts%2FActiveDirectory%2FPromotionAndDemotion%2Fauthoritative-restore.md%0A" class="article-github-issue-link" target="_blank" rel="noopener noreferrer">feedback</a>
+        
+        <a data-url="https://jpwinsup.github.io/blog/2026/02/23/ActiveDirectory/PromotionAndDemotion/authoritative-restore/" data-id="cmmetg79u006rsw1o0buraz8z" class="article-share-link">共有</a>
+      </div>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>本記事はマイクロソフト社員によって公開されております。</p>
+<p>こんにちは。Windows Commercial Support Directory Services チームです。</p>
+<p>本記事では、Active Directory データベースに含まれる内容をバックアップを採取した時点に戻すことを目的とした、Active Directory の権限のある復元 (Authoritative Restore) の手順についてご案内します。</p>
+<hr>
+<h2 id="Active-Directory-のバックアップとリストアにあたり理解しておくべきこと"><a href="#Active-Directory-のバックアップとリストアにあたり理解しておくべきこと" class="headerlink" title="Active Directory のバックアップとリストアにあたり理解しておくべきこと"></a>Active Directory のバックアップとリストアにあたり理解しておくべきこと</h2><hr>
+<p>ドメインコントローラーをバックアップからリストアするにあたり、AD 特有のデータとして以下の 2 点が存在すること、それぞれ別々の仕組みで動作 (情報をドメイン コントローラー間で複製) していることを理解することが重要です。</p>
+<ul>
+<li><p><strong>AD データベース</strong><br>ユーザーやコンピューターなどのオブジェクトに関する情報が含まれるデータベースです。</p>
+</li>
+<li><p><strong>SYSVOL</strong><br>グループ ポリシーの設定情報などが含まれるフォルダーです。</p>
+</li>
+</ul>
+<p>リストアを実施するにあたり、<strong>権限のない復元 (Non-Authoritative Restore)</strong> と <strong>権限のある復元 (Authoritative Restore)</strong> と呼ばれる方法があります。<br>ややこしいことに、前述のとおり AD データベースと SYSVOL はそれぞれ異なる仕組みで動作しているため、AD データベースと SYSVOL のそれぞれに権限のない復元と権限のある復元が存在します。<br>つまり、”AD データベースの権限のない復元” と “AD データベースの権限のある復元”、”SYSVOL の権限のない復元”、”SYSVOL の権限のある復元” の 4 通りが存在します。</p>
+<p>さらにややこしいことに、同じ “権限のある復元” という呼び名でも、”AD データベースの権限のある復元” を実施する時の目的と、”SYSVOL の権限のある復元” を実施する時の目的は異なります。そのため、この 4 通りの復元方法の動作の違いやそれぞれの目的をしっかり理解することが重要です。</p>
+<h3 id="AD-データベースの権限のない復元を実施した際の複製動作"><a href="#AD-データベースの権限のない復元を実施した際の複製動作" class="headerlink" title="AD データベースの権限のない復元を実施した際の複製動作"></a>AD データベースの権限のない復元を実施した際の複製動作</h3><p>AD データベースの権限のない復元を実施した場合、復元後に他の DC と複製を行うと、更新情報が新しい側の情報が採用されます。そのため、復元によってバックアップ取得時点の状態に戻したとしても、他の DC が保持しているより新しい更新情報によって上書きされ、結果として復元前の状態に戻ってしまいます。</p>
+<p>以下に具体例を示します。DC01 と DC02 という 2 台の DC が存在しているとします。この時、あるユーザー A の [部署] 属性が “営業” であったとします。この状態で DC02 のバックアップを取得し、その後にユーザー A の [部署] 属性を “技術サポート” に変更したとします。この状態から DC02 をバックアップから復元すると、DC01 上の AD データベースに格納されているユーザー A の [部署] 属性は “技術サポート” になっていますが、DC02 の AD データベースに格納されているユーザー A の [部署] 属性は “営業” に戻ります。その上で DC01 と DC02 が複製を実施すると、DC01 の [部署] 属性が “技術サポート” であるという更新情報の方が新しいため、DC02 の [部署] 属性も “技術サポート” に変更されます。</p>
+<h3 id="SYSVOL-の権限のない復元を実施した際の複製動作"><a href="#SYSVOL-の権限のない復元を実施した際の複製動作" class="headerlink" title="SYSVOL の権限のない復元を実施した際の複製動作"></a>SYSVOL の権限のない復元を実施した際の複製動作</h3><p>一方で SYSVOL の複製の場合は、権限のない復元を実施すると、AD データベースの動作とは異なり、一旦自身が持っている情報をすべて破棄し、その他の DC が持っている SYSVOL の内容を複製してきた上で、それを自身の SYSVOL とします。つまり、DC01 と DC02 という 2 台の DC が存在し、DC02 の方を SYSVOL の権限のない復元を実施することを考えると、一旦 DC02 は自身が保持している SYSVOL の内容をすべて破棄し、DC01 の SYSVOL を DC02 の方へコピーしてきて、それを DC02 の SYSVOL とします。</p>
+<h3 id="AD-データベースの権限のある復元を実施した際の複製動作"><a href="#AD-データベースの権限のある復元を実施した際の複製動作" class="headerlink" title="AD データベースの権限のある復元を実施した際の複製動作"></a>AD データベースの権限のある復元を実施した際の複製動作</h3><p>AD データベースの権限のある復元は、あるオブジェクトの属性情報をバックアップを取得した時点の状態に戻すことを目的として実施されます。</p>
+<p>ここでも前述の [部署] 属性の例を用いて、AD データベースの権限のある復元の動作を説明します。前述の例と同様、あるユーザー A の [部署] 属性が “営業” である状態で DC02 のバックアップを取得します。<br>その後ユーザー A の [部署] 属性を “技術サポート” に変更した上で、DC02 をバックアップから “AD データベースの権限のある復元” を実施します。AD データベースの権限のある復元を実施する際は、”どのオブジェクトに対して権限のある復元をするのか” を指定しなければならないため、ここではユーザー A のオブジェクトに対して権限のある復元を実施するとします。</p>
+<p>すると、ユーザー A の属性のバージョン番号に非常に大きな値が加算されます。こうすることによって、本来であれば DC02 が保持しているユーザー A の情報の方が DC01 よりも古いにも関わらず、DC02 のユーザー A の情報の方が新しいという扱いにすることにより、復元後に DC01 と DC02 が複製すると、DC02 が持つユーザー A の情報で、DC01 の持つユーザー A の情報が上書きされます。<br>つまり、復元後に DC01 と DC02 が複製しあった後、ユーザー A の [部署] 属性は DC02 のバックアップ取得時点のものである “営業” に戻ります。AD データベースの権限のない復元と異なり、ユーザー A の [部署] 属性がバックアップ取得時点の状態に戻っていることがお分かりいただけると思います。</p>
+<h3 id="SYSVOL-の権限のある復元を実施した際の複製動作"><a href="#SYSVOL-の権限のある復元を実施した際の複製動作" class="headerlink" title="SYSVOL の権限のある復元を実施した際の複製動作"></a>SYSVOL の権限のある復元を実施した際の複製動作</h3><p>前述のとおり、SYSVOL で権限のない復元を実施した場合、一旦自身が保持している SYSVOL の内容は破棄する動作となります。一方で、SYSVOL で権限のある復元を実施した場合、自身の SYSVOL を破棄するのではなく、自身が保持する SYSVOL の内容が正として、他の DC と複製を開始するようになります。SYSVOL の権限のある復元を実施した DC が正とする代わりに、その他のすべての DC で SYSVOL の権限のない復元を実施する必要があります。</p>
+<hr>
+<h2 id="SYSVOL-の権限のある復元手順について"><a href="#SYSVOL-の権限のある復元手順について" class="headerlink" title="SYSVOL の権限のある復元手順について"></a>SYSVOL の権限のある復元手順について</h2><hr>
+<p><a href="https://jpwinsup.github.io/blog/2023/04/24/ActiveDirectory/PromotionAndDemotion/backup-and-restore/">ドメイン コントローラーのバックアップとリストアについて</a> でも記載がある <code>wbadmin start systemstaterecovery</code> 実行時における <code>-authsysvol</code> は SYSVOL の権限のある復元を実施するためのオプションであり、このオプションを付けない場合は SYSVOL の権限のない復元となります。</p>
+<hr>
+<h2 id="Active-Directory-の権限のある復元手順"><a href="#Active-Directory-の権限のある復元手順" class="headerlink" title="Active Directory の権限のある復元手順"></a>Active Directory の権限のある復元手順</h2><hr>
+<p><code>wbadmin start systemstaterecovery</code> 実行時の <code>-authsysvol</code> は <strong>SYSVOL に対してのみ</strong>「権限のある復元」を行うためのオプションです。<br>そのため、<code>-authsysvol</code> を付ける場合（SYSVOL の権限のある復元）でも、付けない場合（SYSVOL の権限のない復元）でも、<strong>AD データベースの復元としては権限のない復元（Non-Authoritative Restore）</strong> になります。</p>
+<p>これは、ドメイン コントローラーを <strong>1 台だけ</strong>バックアップから戻す場合でも、<strong>全台</strong>をバックアップから戻す場合でも同様です。<br>（権限のない復元のまま他の DC と複製が行われると、USN/更新番号の関係で「更新情報が新しい側」の内容が採用され、バックアップ時点に戻したつもりの内容が結果的に上書きされます。）</p>
+<p>そのため、バックアップ取得時点の内容を <strong>Active Directory 上でも正として反映させたい</strong>（= 他の DC 側を上書きしたい）場合は、システム状態の復元後に <strong>ntdsutil による Active Directory の権限のある復元</strong> を追加で実施する必要があります。</p>
+<p>Active Directory データベースに含まれる内容をバックアップを採取した時点に戻すためには、ドメインの 1 台のドメイン コントローラー (DC) で権限のある復元を実行します。</p>
+<h3 id="システム状態のリストア"><a href="#システム状態のリストア" class="headerlink" title="システム状態のリストア"></a>システム状態のリストア</h3><ol>
+<li><p>復元を実施する DC に管理者権限を持つユーザーでサインインします。</p>
+</li>
+<li><p>[ファイル名を指定して実行] から msconfig を実行します。</p>
+</li>
+<li><p>[ブート] タブの [セーフ ブート] をオンにします。</p>
+</li>
+<li><p>[Active Directory 修復] を選択し、[OK] をクリックします。</p>
+</li>
+<li><p>[再起動] をクリックします。</p>
+</li>
+<li><p>OS が起動してきたら、ディレクトリ サービス復元モードの Administrator でサインインします。</p>
+</li>
+<li><p>コマンド プロンプトを起動します。</p>
+</li>
+<li><p>以下のコマンドを実行し、対象のバックアップの “バージョン識別子” を確認します。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wbadmin get versions</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>以下のコマンドを実行し、システム状態の復元を実施します。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wbadmin start systemstaterecovery -version:&lt;バージョン識別子&gt; -quiet</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>復元が完了したら、次の “ntdsutil コマンドを使用した権限のある復元” を実施します。</p>
+</li>
+</ol>
+<h3 id="ntdsutil-コマンドを使用した権限のある復元"><a href="#ntdsutil-コマンドを使用した権限のある復元" class="headerlink" title="ntdsutil コマンドを使用した権限のある復元"></a>ntdsutil コマンドを使用した権限のある復元</h3><ol>
+<li><p>ntdsutil と入力し、Enter を押します。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ntdsutil</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><code>activate instance ntds</code> と入力し、Enter を押します。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">activate instance ntds</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><code>authoritative restore</code> と入力し、Enter を押します。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">authoritative restore</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>復元対象に応じて以下のコマンドを入力し、Enter を押します。</p>
+<ul>
+<li>OU を復元する場合は <code>restore subtree &lt;OU の DN&gt;</code> を実行します。<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">restore subtree OU&#x3D;Sales,DC&#x3D;contoso,DC&#x3D;com</span><br></pre></td></tr></table></figure></li>
+<li>特定のユーザーを復元する場合は <code>restore object &lt;ユーザーの DN&gt;</code> を実行します。<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">restore object CN&#x3D;user1,OU&#x3D;Sales,DC&#x3D;contoso,DC&#x3D;com</span><br></pre></td></tr></table></figure></li>
+<li>特定のグループを復元する場合は <code>restore object &lt;グループの DN&gt;</code> を実行します。<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">restore object CN&#x3D;SalesGroup,OU&#x3D;Sales,DC&#x3D;contoso,DC&#x3D;com</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>“この Authoritative Restore を実行しますか?” と表示されたら、[はい] をクリックします。</p>
+</li>
+<li><p>その他にも権限のある復元を実施したいオブジェクトがある場合には、対象のオブジェクトに対して手順 5 および 6 を実施します。</p>
+</li>
+<li><p><code>q</code> と入力して Enter を押すことを 2 回繰り返し、ntdsutil を終了します。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">q</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>[ファイル名を指定して実行] から msconfig を実行します。</p>
+</li>
+<li><p>[ブート] タブの [セーフ ブート] をオフにし、[OK] をクリックします。</p>
+</li>
+<li><p>[再起動] をクリックします。</p>
+</li>
+</ol>
+<hr>
+<h2 id="参考情報"><a href="#参考情報" class="headerlink" title="参考情報"></a>参考情報</h2><hr>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://learn.microsoft.com/ja-jp/troubleshoot/windows-server/active-directory/retore-deleted-accounts-and-groups-in-ad">AD でユーザー アカウントとグループを復元する - Windows Server | Microsoft Learn</a></li>
+</ul>
+<blockquote>
+<p><strong>補足: パーティションを丸ごと復元したい場合</strong><br>特定のオブジェクトではなく、パーティション全体をバックアップ取得時点の状態に戻したい場合は、すべてのドメイン コントローラーで権限のない復元を実施する（ドメイン コントローラーの全台リストア）方法をご検討ください。<br>詳細は <a href="https://jpwinsup.github.io/blog/2023/04/24/ActiveDirectory/PromotionAndDemotion/backup-and-restore/">ドメイン コントローラーのバックアップとリストアについて</a> を参照してください。</p>
+</blockquote>
+<hr>
+<h2 id="変更履歴"><a href="#変更履歴" class="headerlink" title="変更履歴"></a>変更履歴</h2><hr>
+<p>2026/2/24: 本記事の公開<br>2026/3/3: 復元対象に応じて実行するコマンドを修正しました。また、補足を追記しました。</p>
+<p>本情報の内容（添付文書、リンク先などを含む）は、作成日時点でのものであり、予告なく変更される場合があります。</p>
+
+      
+      
+    </div>
+    <footer class="article-footer">
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/blog/2026/02/25/ActiveDirectory/WindowsHello/whfb-registration-limit-and-deletion/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">次の記事</strong>
+      <div class="article-nav-title">
+        
+          Windows Hello for Business の登録上限と登録情報の削除方法について
+        
+      </div>
+    </a>
+  
+  
+    <a href="/blog/2026/02/16/ActiveDirectory/GroupPolicy/UacPolicyIsEnabled/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">前の記事</strong>
+      <div class="article-nav-title">「ユーザー アカウント制御：ビルトイン Administrator アカウントのための管理者承認モード」ポリシーが有効になる動作ついて</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">カテゴリ</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Activation/">Activation</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Activation/ESU/">ESU</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Activation/security-SPP/">security-SPP</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/">Active Directory</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Authentication/">Authentication</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/DFSR/">DFSR</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/FunctionalLevel/">FunctionalLevel</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Group-Policy/">Group Policy</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Promotion-and-Demotion/">Promotion and Demotion</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/User-Profile/">User Profile</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Windows-Hello/">Windows Hello</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Windows-Time-Service/">Windows Time Service</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/AppLocker/">AppLocker</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/AppLocker/Active-Directory/">Active Directory</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/AppLocker/Microsoft-Intune/">Microsoft Intune</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Deployment/">Deployment</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Deployment/Feature-on-demand/">Feature on demand</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Deployment/Sysprep/">Sysprep</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Failover-Clustering/">Failover Clustering</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Failover-Clustering/Configuration-and-Management/">Configuration and Management</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/FileServices/">FileServices</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/FileServices/FTP/">FTP</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/FileServices/SMB/">SMB</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Hyper-V/">Hyper-V</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Hyper-V/Configuration-and-Management/">Configuration and Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Hyper-V/Migration/">Migration</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Microsoft-Connected-Cache/">Microsoft Connected Cache</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/">Networking</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/BITS/">BITS</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/Bluetooth/">Bluetooth</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/DHCP/">DHCP</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/DNS/">DNS</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/Firewall/">Firewall</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/LBFO/">LBFO</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/NCSI/">NCSI</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/NetworkInterface/">NetworkInterface</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/Proxy/">Proxy</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/TCPIP/">TCPIP</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/OpenSSH/">OpenSSH</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/">Performance</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/Hang-up-BSoD/">Hang-up/BSoD</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/No-Boot/">No Boot</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/Slow-Response/">Slow Response</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/System-Resource/">System Resource</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/Tools/">Tools</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/">Public Key Infrastructure</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Certificate-Authority/">Certificate Authority</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Certificate-Management/">Certificate Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Code-Signing/">Code Signing</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/SSL-TLS-Communication/">SSL TLS Communication</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/SSL-TLS-Connection/">SSL TLS Connection</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Smart-Card-Logon/">Smart Card Logon</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/">Remote Desktop</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/Azure-Virtual-Desktop-AVD/">Azure Virtual Desktop (AVD)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/Remote-Desktop-Service-RDS/">Remote Desktop Service (RDS)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/Windows-Virtual-Desktop-WVD/">Windows Virtual Desktop (WVD)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/RemoteAccess/">RemoteAccess</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/RemoteAccess/%E3%83%80%E3%82%A4%E3%83%A4%E3%83%AB%E3%82%A2%E3%83%83%E3%83%97%E6%8E%A5%E7%B6%9A/">ダイヤルアップ接続</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Security/">Security</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Security/WDAC/">WDAC</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Setup/">Setup</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Setup/Feature-Update-FU/">Feature Update (FU)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Shell/">Shell</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Shell/Explorer/">Explorer</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/">Storage</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/Backup/">Backup</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/FSRM/">FSRM</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/Management/">Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/StorageMigrationService/">StorageMigrationService</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Support-Request/">Support Request</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/UEFI/">UEFI</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/UEFI/Secure-Boot/">Secure Boot</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/">User Interface and Apps</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Command-Prompt/">Command Prompt</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/EventLog/">EventLog</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Language-Support/">Language Support</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Microsoft-Store/">Microsoft Store</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Performance/">Performance</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/PowerShell/">PowerShell</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Printing-%E5%8D%B0%E5%88%B7/">Printing (印刷)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Server-Management/">Server Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Taskscheduler/">Taskscheduler</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Windows-Management-Instrumentation/">Windows Management Instrumentation</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps-Language-support/">User Interface and Apps - Language support</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-365/">Windows 365</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Admin-Center/">Windows Admin Center</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Search/">Windows Search</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/">Windows Update</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Delivery-Optimization-DO/">Delivery Optimization (DO)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Feature-Update-FU/">Feature Update (FU)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Quality-Update-QU/">Quality Update (QU)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Windows-Update-Agent/">Windows Update Agent</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Windows-Update-Agent-WUA/">Windows Update Agent (WUA)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/">WirelessNetwork</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/NPS/">NPS</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/Wi-Fi/">Wi-Fi</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/%E3%83%A2%E3%83%90%E3%82%A4%E3%83%AB-%E3%83%96%E3%83%AD%E3%83%BC%E3%83%89%E3%83%90%E3%83%B3%E3%83%89%E6%8E%A5%E7%B6%9A-LTE/">モバイル ブロードバンド接続 (LTE)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/%E7%B5%84%E7%B9%94%E7%B4%B9%E4%BB%8B%E3%83%96%E3%83%AD%E3%82%B0%EF%BC%88Windows-Commercial%EF%BC%89/">組織紹介ブログ（Windows Commercial）</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最近の投稿</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/blog/2026/03/06/SupportRequest/CritSit/">Windows Commercial が提供する [深刻度 A] の対応について</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/03/04/ActiveDirectory/PromotionAndDemotion/dc-bare-metal-backup-and-restore/">ドメイン コントローラーをベアメタル回復でバックアップ リストアする方法</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/03/02/Security/WDAC/WDAC101/">App Control for Business の構成方法</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/02/26/Hyper-V/Unable-to-assign-GPU-in-WAC-with-standard-edition/">Windows Server 2025 Standard Edition において Windows Admin Center の GPU 拡張機能が表示されない</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/02/25/ActiveDirectory/WindowsHello/whfb-registration-limit-and-deletion/">Windows Hello for Business の登録上限と登録情報の削除方法について</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">アーカイブ</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2026/03/">2026 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2026/02/">2026 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2026/01/">2026 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/12/">2025 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/11/">2025 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/10/">2025 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/09/">2025 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/08/">2025 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/07/">2025 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/06/">2025 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/05/">2025 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/04/">2025 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/03/">2025 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/02/">2025 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/01/">2025 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/12/">2024 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/11/">2024 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/10/">2024 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/09/">2024 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/08/">2024 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/07/">2024 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/06/">2024 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/05/">2024 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/04/">2024 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/03/">2024 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/02/">2024 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/01/">2024 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/12/">2023 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/11/">2023 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/10/">2023 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/09/">2023 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/08/">2023 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/07/">2023 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/06/">2023 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/05/">2023 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/04/">2023 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/03/">2023 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/02/">2023 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/01/">2023 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/12/">2022 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/11/">2022 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/10/">2022 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/09/">2022 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/08/">2022 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/07/">2022 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/06/">2022 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/05/">2022 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/04/">2022 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/03/">2022 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/02/">2022 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/01/">2022 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/12/">2021 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/11/">2021 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/10/">2021 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/09/">2021 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/08/">2021 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/07/">2021 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/06/">2021 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/05/">2021 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/04/">2021 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/03/">2021 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/02/">2021 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/01/">2021 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/12/">2020 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/11/">2020 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/10/">2020 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/07/">2020 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/03/">2020 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2019/03/">2019 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/11/">2018 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/10/">2018 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/09/">2018 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/08/">2018 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/07/">2018 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/06/">2018 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/04/">2018 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/02/">2018 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/12/">2017 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/11/">2017 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/09/">2017 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/05/">2017 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/03/">2017 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/02/">2017 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2016/08/">2016 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2016/05/">2016 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2014/03/">2014 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2012/02/">2012 / 02</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2026 Microsoft Japan Windows Technology Support Team<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/blog/" class="mobile-nav-link">Home</a>
+  
+    <a href="/blog/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+<script src="/blog/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>
