@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-180187723-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-180187723-1');
+</script>
+<!-- End Google Analytics -->
+
+  
+  <title>App Control for Business の構成方法 | Microsoft Japan Windows Technology Support Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="※本記事はマイクロソフト社員によって公開されています。 概要本ブログ記事では、App Control for Business (日本語名: ビジネス向けアプリ コントロール) の基本的な構成方法について、よくお問い合わせいただくご質問内容も踏まえてご紹介します。なお、App Control for Business についての詳細な情報は弊社公開情報に記載があるため、本ブログ記事では公開情報のご">
+<meta property="og:type" content="article">
+<meta property="og:title" content="App Control for Business の構成方法">
+<meta property="og:url" content="https://jpwinsup.github.io/blog/2026/03/02/Security/WDAC/WDAC101/index.html">
+<meta property="og:site_name" content="Microsoft Japan Windows Technology Support Blog">
+<meta property="og:description" content="※本記事はマイクロソフト社員によって公開されています。 概要本ブログ記事では、App Control for Business (日本語名: ビジネス向けアプリ コントロール) の基本的な構成方法について、よくお問い合わせいただくご質問内容も踏まえてご紹介します。なお、App Control for Business についての詳細な情報は弊社公開情報に記載があるため、本ブログ記事では公開情報のご">
+<meta property="og:locale" content="ja_JP">
+<meta property="article:published_time" content="2026-03-02T15:00:00.000Z">
+<meta property="article:modified_time" content="2026-03-13T00:32:29.661Z">
+<meta property="article:author" content="Microsoft Japan Windows Technology Support Team">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/blog/atom.xml" title="Microsoft Japan Windows Technology Support Blog" type="application/atom+xml">
+  
+
+  <link rel="icon" href="/blog/favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="/blog/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/blog/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/blog/favicon-16x16.png">
+  <link rel="manifest" href="/blog/site.webmanifest">
+  <link rel="mask-icon" href="/blog/safari-pinned-tab.svg" color="#5bbad5">
+  <meta name="msapplication-TileColor" content="#ffffff">
+  <meta name="theme-color" content="#ffffff">
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/blog/css/style.css">
+
+<meta name="generator" content="Hexo 5.2.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="site-header-logo"></div>
+  <div id="site-header-blog-wrapper"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        <div id="ms-logo"></div>
+        
+          <a class="main-nav-link" href="/blog/">Home</a>
+        
+          <a class="main-nav-link" href="/blog/archives">Archives</a>
+        
+        <a class="main-nav-link" target="_blank" rel="noopener" href="https://cssjpn.github.io/">サポート情報</a>
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/blog/atom.xml" title="RSSフィード"></a>
+        
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//www.bing.com/search" method="get" accept-charset="UTF-8" name="bing-search" onsubmit="var f=this;if(f['q'].value){var searchUrl =  'https://www.bing.com/search?q=' +  encodeURIComponent(f['q'].value + ' site:' + f['sitesearch'].value) ;window.open(searchUrl, 'blank') };return false;" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="検索"><button type="submit" id="nav-search-btn" class="search-form-submit"></button><input type="hidden" name="sitesearch" value="https://jpwinsup.github.io/blog"></form>
+      </div>
+    </div>
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/blog/" id="logo">Microsoft Japan Windows Technology Support Blog</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/blog/" id="subtitle">日本マイクロソフト Windows Support チームによる、サポート情報 Blog です。</a>
+        </h2>
+      
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-Security/WDAC/WDAC101" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    
+    
+      <header class="article-header-single">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      App Control for Business の構成方法
+    </h1>
+  
+
+      </header>
+      <div class="article-share">
+        Last Update: 
+        <a href="/blog/2026/03/02/Security/WDAC/WDAC101/" class="article-date-single">
+  <time datetime="2026-03-02T15:00:00.000Z" itemprop="datePublished">2026-03-03</time>
+</a>
+        
+  <div class="article-category">
+    <a class="article-category-link" href="/blog/categories/Security/">Security</a>►<a class="article-category-link" href="/blog/categories/Security/WDAC/">WDAC</a>
+  </div>
+
+        
+        <a href="https://github.com/jpwinsup/blog/issues/new?title=&body=%EF%BB%BF%0A%0A---%0A%0A%23%23%23%23+Document+Details%0A%0A*+Article+ID%3A+b374d93d-c4eb-5de7-b405-11283bcbcbcd%0A*+TITLE%3A+App+Control+for+Business+%E3%81%AE%E6%A7%8B%E6%88%90%E6%96%B9%E6%B3%95%0A*+URL+https%3A%2F%2Fjpwinsup.github.io%2Fblog%2F2026%2F03%2F02%2FSecurity%2FWDAC%2FWDAC101%2F%0A*+SourceFileName%3A+source%2F_posts%2FSecurity%2FWDAC%2FWDAC101.md%0A" class="article-github-issue-link" target="_blank" rel="noopener noreferrer">feedback</a>
+        
+        <a data-url="https://jpwinsup.github.io/blog/2026/03/02/Security/WDAC/WDAC101/" data-id="cmmo666ng01iwvg1o9wdtf4jf" class="article-share-link">共有</a>
+      </div>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>※本記事はマイクロソフト社員によって公開されています。</p>
+<h1 id="概要"><a href="#概要" class="headerlink" title="概要"></a>概要</h1><p>本ブログ記事では、App Control for Business (日本語名: ビジネス向けアプリ コントロール) の基本的な構成方法について、よくお問い合わせいただくご質問内容も踏まえてご紹介します。<br>なお、App Control for Business についての詳細な情報は弊社公開情報に記載があるため、本ブログ記事では公開情報のご紹介も交えながら App Control for Business の構成方法を説明します。</p>
+<p>※本ブログ記事では以下の条件を前提に説明をしますのであらかじめご了承ください。</p>
+<ul>
+<li>お問い合わせの比較的多い、ユーザーモードの実行可能ファイルの制御について言及します。</li>
+<li>App Control for Business は Windows Server でも利用可能ですが、本ブログ記事では Windows 11 のようなクライアント OS について言及します。</li>
+<li>本ブログ記事で紹介するスクリプトについてはあくまでサンプル コードであり、実運用を踏まえた実装や動作検証等を別途ご実施ください。</li>
+</ul>
+<h1 id="App-Control-for-Business-とは"><a href="#App-Control-for-Business-とは" class="headerlink" title="App Control for Business とは"></a>App Control for Business とは</h1><p>App Control for Business は、Windows 上でドライバーやアプリケーションなどの実行可能ファイル (例：.exe / .dll / .sys) の実行を制御する機能です。<br>制御可能なファイルの種類は以下の公開情報をご参照ください。</p>
+<p><a target="_blank" rel="noopener" href="https://learn.microsoft.com/ja-jp/windows/security/application-security/application-control/app-control-for-business/feature-availability">App Control for Business および AppLocker 機能の可用性</a></p>
+<p>以前は Windows Defender Application Control (WDAC) や Microsoft Defender Application Control と呼ばれていましたが、2026 年現在は App Control for Business に名称が統一されています。<br>設定は OS 全体に適用され、デバイス上のすべてのアプリケーションを制御できます。<br>App Control for Business についての機能概要につきましては、以下の公開情報が参考になりますので是非ご参考にしていただければと思います。</p>
+<p><a target="_blank" rel="noopener" href="https://learn.microsoft.com/ja-jp/windows/security/application-security/application-control/app-control-for-business/appcontrol-and-applocker-overview#app-control-for-business">App Control for Business と AppLocker の概要 - ビジネス向けアプリ コントロール</a></p>
+<p>Windows では同様にアプリケーションの実行を制御する機能として AppLocker があります。<br>AppLocker についても上記の公開情報の <code>AppLocker</code> の項目へ記載がありますので、併せてご確認いただければと思います。<br>加えて、App Control for Business と AppLocker について比較した表も以下の公開情報へ記載されています。</p>
+<p><a target="_blank" rel="noopener" href="https://learn.microsoft.com/ja-jp/windows/security/application-security/application-control/app-control-for-business/feature-availability">App Control for Business および AppLocker 機能の可用性</a></p>
+<p><a target="_blank" rel="noopener" href="https://learn.microsoft.com/ja-jp/windows/security/application-security/application-control/app-control-for-business/appcontrol-and-applocker-overview#choose-when-to-use-app-control-or-applocker">App Control for Business と AppLocker の概要 - App Control または AppLocker を使用するタイミングを選択する</a> にも記載がありますが、現在、AppLocker ではセキュリティ修正のみが行われており、新機能の追加については App Control for Business において継続的に行われているため、基本的には App Control for Business を利用して実行可能ファイルの実行制御を行うことをお勧めします。<br>ただし、AppLocker はユーザーやグループ単位での実行可能ファイルの実行制御ができますので、システム全体で実行可能ファイルの制御を希望しない場合は AppLocker を用いるなど、場合に応じて使い分けると良いです。<br>また、App Control for Business と AppLocker は共存して動作することができます。<br>App Control for Business と AppLocker が共存する場合、両方で許可されたときのみ実行可能ファイルは実行できます。<br>対して、App Control for Business と AppLocker のいずれかで実行可能ファイルの実行がブロックされる場合は、実行可能ファイルの実行はできません。<br>この動作を応用することで、App Control for Business で大まかなルールを作成し、AppLocker を用いて実行可能ファイルの実行制御を微調整していく、ということも可能です。</p>
+<h1 id="App-Control-for-Business-の設定について"><a href="#App-Control-for-Business-の設定について" class="headerlink" title="App Control for Business の設定について"></a>App Control for Business の設定について</h1><p>App Control for Business の設定は XML 形式のポリシー ファイルを作成したうえで、XML ファイルをバイナリ変換して端末へ適用する、という流れが一般的な手順です。<br>App Control for Business のポリシー作成において、よくある作成方法として以下の方法があります。</p>
+<ol>
+<li>Windows に既定で存在するサンプル ポリシーを拡張してポリシーを作成する</li>
+<li>ゴールデン コンピューターを用意してポリシーを作成する</li>
+</ol>
+<p>どちらの方法が良いか、ということは状況によって異なりますが「1. Windows に既定で存在するサンプル ポリシーを拡張してポリシーを作成する」でポリシーの構成を行うケースが多いものと考えています。<br>そのため、本ブログ記事では「1. Windows に既定で存在するサンプル ポリシーを拡張してポリシーを作成する」について集中的に説明します。<br>なお、「2. ゴールデン コンピューターを用意してポリシーを作成する」についての設定方法について簡単に説明をすると、マスターとなるゴールデン コンピューターを構築したうえで、<code>C:</code> 配下に含まれる実行可能ファイルを走査してポリシーを作成する方法です。<br>ただし、この方法は <code>C:</code> 配下のファイルをすべて走査するため、ポリシー ファイルの生成に時間を要することに加えて、<code>C:</code> 配下の実行可能ファイルの許可ルールがすべてポリシー ファイルへ記載されるため、ポリシーのファイル サイズがとても大きくなってしまいます。<br>特に Intune から App Control for Business のファイルを配信する場合は、Intune より配信可能なファイル サイズに制限があることから App Control for Business のポリシーを配信できなくなるようなケースもありますのでご留意いただければと思います。<br>ゴールデン コンピューターを用意したポリシーの作成方法については、英語の公開ブログではありますが、以下のブログが参考になりますので、ゴールデン コンピューターを用意したポリシーの作成を行う場合はぜひご参考ください。</p>
+<p><a target="_blank" rel="noopener" href="https://blogs.technet.microsoft.com/ukplatforms/2017/04/04/getting-started-with-windows-10-device-guard-part-1-of-2/">Getting Started with Windows 10 Device Guard – Part 1 of 2</a><br><a target="_blank" rel="noopener" href="https://blogs.technet.microsoft.com/ukplatforms/2017/05/04/getting-started-with-windows-10-device-guard-part-2-of-2/">Getting Started with Windows 10 Device Guard – Part 2 of 2</a></p>
+<p>それでは、以下より「1. Windows に既定で存在するサンプル ポリシーを拡張してポリシーを作成する」の方法でのポリシーの構成方法について説明します。<br>App Control for Business のポリシーの生成方法は大きく分けて以下の生成方法があります。</p>
+<ol>
+<li>PowerShell スクリプトを用いた生成方法</li>
+<li><a target="_blank" rel="noopener" href="https://learn.microsoft.com/en-us/windows/security/application-security/application-control/app-control-for-business/design/appcontrol-wizard">App Control for Business Wizard</a> を用いた生成方法</li>
+</ol>
+<p>ただし、App Control for Business Wizard につきましては、ライセンスの都合上現状有姿での提供となっており、ソフトウェア自体に対する技術サポートが提供されておりませんので、本ブログ記事では「1. PowerShell スクリプトを用いた生成方法」について説明します。</p>
+<h2 id="ポリシーの種類"><a href="#ポリシーの種類" class="headerlink" title="ポリシーの種類"></a>ポリシーの種類</h2><p>App Control for Business のポリシーには以下の種類があります。</p>
+<ol>
+<li>Single policy</li>
+<li>Multiple policy</li>
+</ol>
+<p>上記について、「1. Single policy」については App Control for Business のポリシーを単一のファイルで表現する際に利用され、主に Windows Server 2016, Windows Server 2019, Windows 10 Enterprise LTSC 2019 などの OS において利用されていました。<br>また、Single policy の App Control for Business のポリシーは <code>C:\Windows\System32\CodeIntegrity</code> 配下のフォルダーへ <code>SiPolicy.p7b</code> という名前で配置して動作させる特徴があります。<br>ただし、Windows 10 バージョン 1903 および Windows Server 2022 より新しい OS では「2. Multiple policy」が利用可能であり、特に制約がなければ、より柔軟なポリシーの構成や管理が可能な「2. Multiple policy」を使用することをお勧めします。<br>そのため、本ブログ記事でも Multiple policy を前提に説明します。<br>なお、Multiple policy のポリシー ファイルは <code>C:\Windows\System32\CodeIntegrity\CIPolicies\Active</code> 配下のフォルダーへ <code>&#123;&lt;PolicyID&gt;&#125;.cip</code> というファイル名で配置されますが、この先の説明で Multiple policy についてお伝えしますのでここでは詳細の説明はしません。<br>ところで、App Control for Business は実行可能ファイルの実行制御を行う機能ですが、例外的にアプリケーションの実行制御を目的としない <a target="_blank" rel="noopener" href="https://learn.microsoft.com/en-us/windows/security/application-security/application-control/app-control-for-business/appidtagging/appcontrol-appid-tagging-guide">AppId Tagging policy</a> というポリシーもあります。<br>このポリシーを使用すると、App Control for Business の設定に基づいてプロセスにタグを付与できます。<br>ただし、このポリシーはアプリケーションの実行を制御するものではなく、タグ付けのみを行います。<br>なぜこのようなポリシーがあるのかというと、Windows Firewall にはプロセスに付与されたタグを基にファイアウォールのルールを定義する機能があるためです。<br>例えば、特定のタグが付与されたプロセスからの HTTP 通信を許可または拒否する、といったシナリオを実現する際に、このポリシーを利用できます。(参考: <a target="_blank" rel="noopener" href="https://learn.microsoft.com/en-us/windows/security/operating-system-security/network-security/windows-firewall/rules#app-control-tagging-policies">App Control tagging policies</a>)。</p>
+<h2 id="Base-policy-と-Supplemental-Policy"><a href="#Base-policy-と-Supplemental-Policy" class="headerlink" title="Base policy と Supplemental Policy"></a>Base policy と Supplemental Policy</h2><p>App Control for Business のポリシーの説明を行いましたので、Base policy と Supplemental policy について説明を行います。<br>Multiple policy を構成するポリシーとして、さらに Base policy と Supplemental policy というポリシーがあります。<br>Base policy は文字通りベースとなるポリシーであり、Supplemental policy は Base policy を拡張するポリシーです。<br>特に複雑な制御を行わない場合は Base policy のみで十分であり、Supplemental policy の作成は必須ではありません。<br>どのような場合に Supplemental policy を必要とするかということについて例を挙げて考えてみます。<br>例えばある会社で、会社全体では kaisya.exe の実行を許可しており、総務部では kaisya.exe に加えて soumu.exe の実行許可をして、労務部でも同様に roumu.exe の実行を許可するというシナリオがあったとします。<br>この場合、Base policy として kaisya.exe を許可し、Supplemental policy として soumu.exe の実行許可をしている総務部専用の policy と roumu.exe の実行を許可している労務部専用のポリシーを作成したうえで、総務部では kaisya.exe を許可している Base policy + soumu.exe を許可している Supplemental policy を適用し、労務部では kaisya.exe を許可している Base policy + roumu.exe を許可している Supplemental policy を適用することで、会社全体で共通するポリシーは Base policy にまとめて各部署専用のポリシーは Supplemental policy へ切り出す、というような運用ができます。</p>
+<p>上記について詳細は <a target="_blank" rel="noopener" href="https://learn.microsoft.com/ja-jp/windows/security/application-security/application-control/app-control-for-business/design/deploy-multiple-appcontrol-policies">ビジネス ポリシーに複数のアプリ制御を使用する</a> へ記載がありますので、ぜひご参考にしていただければと思います。<br>今回は Supplemental Policy の作成については説明はしませんので、上記の公開情報を参考に構成していただければと思います。</p>
+<p>ポリシーの大まかな種類の説明は以上です。<br>以下では具体的なポリシーの設定について説明します。</p>
+<h2 id="App-Control-for-Business-の状態"><a href="#App-Control-for-Business-の状態" class="headerlink" title="App Control for Business の状態"></a>App Control for Business の状態</h2><p>App Control for Business のポリシーを適用する手順を説明する前に、App Control for Business が構成されているかを確認する方法についてお伝えします。<br>App Control for Business の状態はシステム情報 (msinfo32) の [システムの要約] のうち “ビジネス向けアプリコントロール ポリシー” および “ビジネス向けアプリコントロールのユーザー モード ポリシー” にて確認することができます。<br>“ビジネス向けアプリコントロール ポリシー” はカーネル モードで動作するドライバー等の実行可能ファイルを制御する際に利用し、”ビジネス向けアプリコントロールのユーザー モード ポリシー” はユーザー モードで動作する実行可能ファイルを制御する際に利用します。<br>“ビジネス向けアプリコントロール ポリシー” は Windows 11 において既定で “強制” となっており、”ビジネス向けアプリコントロールのユーザー モード ポリシー” は既定で “監査” もしくは “無効” となっています。<br>このように App Control for Business の構成には “無効”, “監査”, “強制” の 3 つの状態が存在します。<br>“強制” の状態では、実行可能ファイルはブロックされます。<br>“監査” の状態では、実行可能ファイルは実際にはブロックされず、イベントログへ “もし強制状態であればこの実行可能ファイルは実行をブロックされていた” のような趣旨のイベントが発生します。<br>“無効” は文字通り App Control for Business の構成が行われていないことを示します。</p>
+<h2 id="とりあえずポリシーを適用してみる"><a href="#とりあえずポリシーを適用してみる" class="headerlink" title="とりあえずポリシーを適用してみる"></a>とりあえずポリシーを適用してみる</h2><p>ここでは Windows に既定で存在するサンプル ポリシーを利用して App Control for Business を構成する手順を紹介します。<br>今回は PowerShell コマンドで App Control for Business を構成します。<br>App Control for Business の構成自体は以下のコマンド レットを実行し、OS を再起動することで構成が完了します。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">$DefaultWindowsPolicy&#x3D;$env:windir+&quot;\schemas\CodeIntegrity\ExamplePolicies\DefaultWindows_Enforced.xml&quot;</span><br><span class="line">[xml]$PolicyXML &#x3D; Get-Content $DefaultWindowsPolicy</span><br><span class="line">$PolicyId &#x3D; $PolicyXML.SiPolicy.PolicyId</span><br><span class="line">$PolicyPath&#x3D;&quot;C:\Windows\System32\CodeIntegrity\CiPolicies\Active\&quot;</span><br><span class="line">$PolicyBin &#x3D; $PolicyPath+$PolicyId+&quot;.cip&quot;</span><br><span class="line">ConvertFrom-CIPolicy $DefaultWindowsPolicy $PolicyBin</span><br></pre></td></tr></table></figure>
+
+<p>上記について少し丁寧に説明をします。<br>上記の PowerShell コマンドでは Windows に既定で存在するサンプル ポリシーを利用して App Control for Business を構成しているわけですが、サンプル ポリシーは <code>%OSDrive%\Windows\schemas\CodeIntegrity\ExamplePolicies</code> 配下に存在します。<br><code>%OSDrive%\Windows\schemas\CodeIntegrity\ExamplePolicies</code> には様々なサンプル ポリシーが存在します。<br>各サンプル ポリシーの詳細な説明は以下の公開情報にありますのでぜひご参考にしていただければと思います。</p>
+<p><a target="_blank" rel="noopener" href="https://learn.microsoft.com/ja-jp/windows/security/application-security/application-control/app-control-for-business/design/example-appcontrol-base-policies">App Control for Business の基本ポリシーの例</a></p>
+<p>ここでは Windows に既定で存在する実行ファイルは実行を許可するポリシーである <code>DefaultWindows_Enforced.xml</code> を利用して App Control for Business を構成します。<br>なお、サンプル ポリシーとして <code>DefaultWindows_Enforced.xml</code> のほかに <code>DefaultWindows_Enforced.xml</code> もありますが、<code>_Enforced</code> を含むポリシーは “強制” のポリシーであり <code>_Audit</code> を含むポリシーは “監査” のポリシーです。</p>
+<p>App Control for Business の構成を行うためには、ポリシーファイルである xml ファイルをバイナリ変換したうえで所定の場所へ配置する必要があります。<br><code>ConvertFrom-CIPolicy</code> コマンドレットが App Control for Business の xml ファイルをバイナリ ファイルへ変換するコマンドとなっており、前述の計 6 行のコマンドを実行しますと <code>%OSDrive%\Windows\System32\CodeIntegrity\CIPolicies\Active</code> 配下へ <code>&#123;&lt;ポリシー ID&gt;&#125;.cip</code> というファイル名のファイルが作成されます。</p>
+<p>なお、<a target="_blank" rel="noopener" href="https://learn.microsoft.com/en-us/powershell/module/configci/convertfrom-cipolicy">ConvertFrom-CIPolicy</a> へコマンドの詳細の記載があります。</p>
+<p>OS を再起動しますと前述の通り msinfo32 にて App Control for Business が強制になっていることが確認できます。<br>この状態で利用の許可されていない 3rd パーティ製のアプリケーションの実行を行うと App Control for Business によってアプリケーションの実行が制御されます。</p>
+<h2 id="App-Control-for-Business-のオプションを追加してみる"><a href="#App-Control-for-Business-のオプションを追加してみる" class="headerlink" title="App Control for Business のオプションを追加してみる"></a>App Control for Business のオプションを追加してみる</h2><p>App Control for Business にはオプションという概念があります。<br>オプションを利用することで、App Control for Business のポリシーを強制モードにする、や、スクリプトに対する App Control for Business の制御が行われないようにする、といった、App Control for Business のポリシー全体の特性を決めるような設定ができます。<br>詳細は <a target="_blank" rel="noopener" href="https://learn.microsoft.com/ja-jp/windows/security/application-security/application-control/app-control-for-business/design/select-types-of-rules-to-create#table-1-app-control-for-business-policy---policy-rule-options">表 1. ビジネス 向けアプリ制御ポリシー - ポリシー ルール オプション</a> へ記載がありますのでぜひご参考にしてみてください。</p>
+<p>ここではスクリプトを用いて App Control for Business のポリシーへオプションを追加する方法について記載します。<br>以下にサンプル スクリプトを記載しますが <code>Set-RuleOption</code> コマンドにてオプションを追加しています。<br>オプション 3 というのがオプション <code>Audit mode</code> を示します。<br>オプションの番号と機能の対応も <a target="_blank" rel="noopener" href="https://learn.microsoft.com/ja-jp/windows/security/application-security/application-control/app-control-for-business/design/select-types-of-rules-to-create#table-1-app-control-for-business-policy---policy-rule-options">表 1. ビジネス 向けアプリ制御ポリシー - ポリシー ルール オプション</a> へ記載があります。<br>以下のコマンドでは、もともと強制モードのポリシーである <code>DefaultWindows_Enforced.xml</code> へ <code>Audit mode</code> のポリシーを追加したので、<code>DefaultWindows_Enforced.xml</code> のポリシーは <code>Audit mode</code> で動作するようになります。<br>ぜひコマンドを実行し、OS を再起動のうえ、App Control for Business が監査モードで動作することをご確認いただければと思います。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">$DefaultWindowsPolicy&#x3D;$env:windir+&quot;\schemas\CodeIntegrity\ExamplePolicies\DefaultWindows_Enforced.xml&quot;</span><br><span class="line">Set-RuleOption -FilePath $DefaultWindowsPolicy -Option 3 -Delete</span><br><span class="line">[xml]$PolicyXML &#x3D; Get-Content $DefaultWindowsPolicy</span><br><span class="line">$PolicyId &#x3D; $PolicyXML.SiPolicy.PolicyId</span><br><span class="line">$PolicyPath&#x3D;&quot;C:\Windows\System32\CodeIntegrity\CiPolicies\Active\&quot;</span><br><span class="line">$PolicyBin &#x3D; $PolicyPath+$PolicyId+&quot;.cip&quot;</span><br><span class="line">ConvertFrom-CIPolicy $DefaultWindowsPolicy $PolicyBin</span><br></pre></td></tr></table></figure>
+
+<p>なお、<a target="_blank" rel="noopener" href="https://learn.microsoft.com/en-us/powershell/module/configci/set-ruleoption">Set-RuleOption</a> へコマンドの詳細の記載があります。<br>上記ではオプションを追加するコマンドをご紹介しましたが、以下のように記載することでオプションを削除することもできます。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Set-RuleOption -FilePath $DefaultWindowsPolicy -Option 3 -Delete</span><br></pre></td></tr></table></figure>
+
+<h2 id="App-Control-for-Business-のルールを追加してみる"><a href="#App-Control-for-Business-のルールを追加してみる" class="headerlink" title="App Control for Business のルールを追加してみる"></a>App Control for Business のルールを追加してみる</h2><p>App Control for Business にはルールという概念があります。<br>ルールを利用することで、特定のパスのファイルの実行は許可するようにしたり、特定の署名を持ったアプリの実行を許可する、などの制御ができます。<br>詳細は <a target="_blank" rel="noopener" href="https://learn.microsoft.com/ja-jp/windows/security/application-security/application-control/app-control-for-business/design/select-types-of-rules-to-create#table-2-app-control-for-business-policy---file-rule-levels">表 2. App Control for Business ポリシー - ファイル ルール レベル</a> へ記載がありますのでぜひご参考にしてみてください。</p>
+<p>ここではスクリプトを用いて App Control for Business のポリシーへルールを追加する方法について記載します。<br>以下にサンプル スクリプトを記載しますが <code>Merge-CIPolicy</code> コマンドレットに対して <code>-Rules</code> オプションを指定してルールを追加しています。<br>例では <code>$Rules</code> 変数へ <code>FilePath</code> ルールで <code>C:\my\*</code> と <code>C:\my2\*</code> の実行許可を行っております。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">$DefaultWindowsPolicy&#x3D;$env:windir+&quot;\schemas\CodeIntegrity\ExamplePolicies\DefaultWindows_Enforced.xml&quot;</span><br><span class="line">$WDACPolicy&#x3D;&quot;C:\temp\DefaultWindows_Enforced.xml&quot;</span><br><span class="line"></span><br><span class="line">$Rules +&#x3D; New-CIPolicyRule -FilePathRule &#39;C:\my\*&#39;</span><br><span class="line">$Rules +&#x3D; New-CIPolicyRule -FilePathRule &#39;C:\my2\*&#39;</span><br><span class="line">Merge-CIPolicy -OutputFilePath $WDACPolicy -PolicyPaths $DefaultWindowsPolicy -Rules $Rules</span><br><span class="line"></span><br><span class="line">[xml]$PolicyXML &#x3D; Get-Content $WDACPolicy</span><br><span class="line">$PolicyId &#x3D; $PolicyXML.SiPolicy.PolicyId</span><br><span class="line">$PolicyPath&#x3D;&quot;C:\Windows\System32\CodeIntegrity\CiPolicies\Active\&quot;</span><br><span class="line">$PolicyBin &#x3D; $PolicyPath+$PolicyId+&quot;.cip&quot;</span><br><span class="line">ConvertFrom-CIPolicy $WDACPolicy $PolicyBin</span><br></pre></td></tr></table></figure>
+
+<p>なお、<a target="_blank" rel="noopener" href="https://learn.microsoft.com/en-us/powershell/module/configci/merge-cipolicy">Merge-CIPolicy</a> へコマンドの詳細の記載があります。<br>実行を拒否するポリシーは以下のように記載することで生成することができます。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$Rules +&#x3D; New-CIPolicyRule -FilePathRule &#39;C:\my\*&#39; -Deny</span><br></pre></td></tr></table></figure>
+
+<h1 id="おわり"><a href="#おわり" class="headerlink" title="おわり"></a>おわり</h1><p>今回のブログでは App Control for Business の構成のために必要な基本的な概念の説明と具体的な設定方法についてご説明をいたしましたがいかがでしたでしょうか。<br>本ブログ記事が皆様の理解に役立つことになれば幸いです。</p>
+
+      
+      
+    </div>
+    <footer class="article-footer">
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/blog/2026/03/04/ActiveDirectory/PromotionAndDemotion/dc-bare-metal-backup-and-restore/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">次の記事</strong>
+      <div class="article-nav-title">
+        
+          ドメイン コントローラーをベアメタル回復でバックアップ リストアする方法
+        
+      </div>
+    </a>
+  
+  
+    <a href="/blog/2026/02/26/Hyper-V/Unable-to-assign-GPU-in-WAC-with-standard-edition/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">前の記事</strong>
+      <div class="article-nav-title">Windows Server 2025 Standard Edition において Windows Admin Center の GPU 拡張機能が表示されない</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">カテゴリ</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Activation/">Activation</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Activation/ESU/">ESU</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Activation/security-SPP/">security-SPP</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/">Active Directory</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Authentication/">Authentication</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/DFSR/">DFSR</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/FunctionalLevel/">FunctionalLevel</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Group-Policy/">Group Policy</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Promotion-and-Demotion/">Promotion and Demotion</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/User-Profile/">User Profile</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Windows-Hello/">Windows Hello</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Windows-Time-Service/">Windows Time Service</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/AppLocker/">AppLocker</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/AppLocker/Active-Directory/">Active Directory</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/AppLocker/Microsoft-Intune/">Microsoft Intune</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Deployment/">Deployment</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Deployment/Feature-on-demand/">Feature on demand</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Deployment/Sysprep/">Sysprep</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Failover-Clustering/">Failover Clustering</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Failover-Clustering/Configuration-and-Management/">Configuration and Management</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/FileServices/">FileServices</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/FileServices/FTP/">FTP</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/FileServices/SMB/">SMB</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Hyper-V/">Hyper-V</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Hyper-V/Configuration-and-Management/">Configuration and Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Hyper-V/Migration/">Migration</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Microsoft-Connected-Cache/">Microsoft Connected Cache</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/">Networking</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/BITS/">BITS</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/Bluetooth/">Bluetooth</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/DHCP/">DHCP</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/DNS/">DNS</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/Firewall/">Firewall</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/LBFO/">LBFO</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/NCSI/">NCSI</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/NetworkInterface/">NetworkInterface</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/Proxy/">Proxy</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/TCPIP/">TCPIP</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/OpenSSH/">OpenSSH</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/">Performance</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/Hang-up-BSoD/">Hang-up/BSoD</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/No-Boot/">No Boot</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/Slow-Response/">Slow Response</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/System-Resource/">System Resource</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/Tools/">Tools</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/">Public Key Infrastructure</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Certificate-Authority/">Certificate Authority</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Certificate-Management/">Certificate Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Code-Signing/">Code Signing</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/SSL-TLS-Communication/">SSL TLS Communication</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/SSL-TLS-Connection/">SSL TLS Connection</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Smart-Card-Logon/">Smart Card Logon</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/">Remote Desktop</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/Azure-Virtual-Desktop-AVD/">Azure Virtual Desktop (AVD)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/Remote-Desktop-Service-RDS/">Remote Desktop Service (RDS)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/Windows-Virtual-Desktop-WVD/">Windows Virtual Desktop (WVD)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/RemoteAccess/">RemoteAccess</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/RemoteAccess/%E3%83%80%E3%82%A4%E3%83%A4%E3%83%AB%E3%82%A2%E3%83%83%E3%83%97%E6%8E%A5%E7%B6%9A/">ダイヤルアップ接続</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Security/">Security</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Security/WDAC/">WDAC</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Setup/">Setup</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Setup/Feature-Update-FU/">Feature Update (FU)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Shell/">Shell</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Shell/Explorer/">Explorer</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/">Storage</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/Backup/">Backup</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/FSRM/">FSRM</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/Management/">Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/StorageMigrationService/">StorageMigrationService</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Support-Request/">Support Request</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/UEFI/">UEFI</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/UEFI/Secure-Boot/">Secure Boot</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/">User Interface and Apps</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Command-Prompt/">Command Prompt</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/EventLog/">EventLog</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Language-Support/">Language Support</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Microsoft-Store/">Microsoft Store</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Performance/">Performance</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/PowerShell/">PowerShell</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Printing-%E5%8D%B0%E5%88%B7/">Printing (印刷)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Server-Management/">Server Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Taskscheduler/">Taskscheduler</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Windows-Management-Instrumentation/">Windows Management Instrumentation</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps-Language-support/">User Interface and Apps - Language support</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-365/">Windows 365</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Admin-Center/">Windows Admin Center</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Search/">Windows Search</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/">Windows Update</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Delivery-Optimization-DO/">Delivery Optimization (DO)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Feature-Update-FU/">Feature Update (FU)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Quality-Update-QU/">Quality Update (QU)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Windows-Update-Agent/">Windows Update Agent</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Windows-Update-Agent-WUA/">Windows Update Agent (WUA)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/">WirelessNetwork</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/NPS/">NPS</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/Wi-Fi/">Wi-Fi</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/%E3%83%A2%E3%83%90%E3%82%A4%E3%83%AB-%E3%83%96%E3%83%AD%E3%83%BC%E3%83%89%E3%83%90%E3%83%B3%E3%83%89%E6%8E%A5%E7%B6%9A-LTE/">モバイル ブロードバンド接続 (LTE)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/%E7%B5%84%E7%B9%94%E7%B4%B9%E4%BB%8B%E3%83%96%E3%83%AD%E3%82%B0%EF%BC%88Windows-Commercial%EF%BC%89/">組織紹介ブログ（Windows Commercial）</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最近の投稿</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/blog/2026/03/06/SupportRequest/CritSit/">Windows Commercial が提供する [深刻度 A] の対応について</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/03/04/ActiveDirectory/PromotionAndDemotion/dc-bare-metal-backup-and-restore/">ドメイン コントローラーをベアメタル回復でバックアップ リストアする方法</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/03/02/Security/WDAC/WDAC101/">App Control for Business の構成方法</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/02/26/Hyper-V/Unable-to-assign-GPU-in-WAC-with-standard-edition/">Windows Server 2025 Standard Edition において Windows Admin Center の GPU 拡張機能が表示されない</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/02/25/ActiveDirectory/WindowsHello/whfb-registration-limit-and-deletion/">Windows Hello for Business の登録上限と登録情報の削除方法について</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">アーカイブ</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2026/03/">2026 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2026/02/">2026 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2026/01/">2026 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/12/">2025 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/11/">2025 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/10/">2025 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/09/">2025 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/08/">2025 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/07/">2025 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/06/">2025 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/05/">2025 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/04/">2025 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/03/">2025 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/02/">2025 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/01/">2025 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/12/">2024 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/11/">2024 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/10/">2024 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/09/">2024 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/08/">2024 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/07/">2024 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/06/">2024 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/05/">2024 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/04/">2024 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/03/">2024 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/02/">2024 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/01/">2024 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/12/">2023 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/11/">2023 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/10/">2023 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/09/">2023 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/08/">2023 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/07/">2023 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/06/">2023 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/05/">2023 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/04/">2023 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/03/">2023 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/02/">2023 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/01/">2023 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/12/">2022 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/11/">2022 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/10/">2022 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/09/">2022 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/08/">2022 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/07/">2022 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/06/">2022 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/05/">2022 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/04/">2022 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/03/">2022 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/02/">2022 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/01/">2022 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/12/">2021 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/11/">2021 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/10/">2021 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/09/">2021 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/08/">2021 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/07/">2021 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/06/">2021 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/05/">2021 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/04/">2021 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/03/">2021 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/02/">2021 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/01/">2021 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/12/">2020 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/11/">2020 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/10/">2020 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/07/">2020 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/03/">2020 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2019/03/">2019 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/11/">2018 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/10/">2018 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/09/">2018 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/08/">2018 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/07/">2018 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/06/">2018 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/04/">2018 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/02/">2018 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/12/">2017 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/11/">2017 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/09/">2017 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/05/">2017 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/03/">2017 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/02/">2017 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2016/08/">2016 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2016/05/">2016 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2014/03/">2014 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2012/02/">2012 / 02</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2026 Microsoft Japan Windows Technology Support Team<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/blog/" class="mobile-nav-link">Home</a>
+  
+    <a href="/blog/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+<script src="/blog/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>
