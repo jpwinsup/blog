@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-180187723-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-180187723-1');
+</script>
+<!-- End Google Analytics -->
+
+  
+  <title>BitLocker に関するよくあるお問い合わせ | Microsoft Japan Windows Technology Support Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="※本記事はマイクロソフト社員によって公開されております。 みなさま、こんにちは。Windows サポート チーム 郭です。 以下の公開情報では、BitLocker 機能に関するよくあるお問い合わせを紹介しています。URL: https:&#x2F;&#x2F;learn.microsoft.com&#x2F;en-us&#x2F;windows&#x2F;security&#x2F;operating-system-security&#x2F;data-protec">
+<meta property="og:type" content="article">
+<meta property="og:title" content="BitLocker に関するよくあるお問い合わせ">
+<meta property="og:url" content="https://jpwinsup.github.io/blog/2026/03/31/BitLocker/BitLocker-QA/index.html">
+<meta property="og:site_name" content="Microsoft Japan Windows Technology Support Blog">
+<meta property="og:description" content="※本記事はマイクロソフト社員によって公開されております。 みなさま、こんにちは。Windows サポート チーム 郭です。 以下の公開情報では、BitLocker 機能に関するよくあるお問い合わせを紹介しています。URL: https:&#x2F;&#x2F;learn.microsoft.com&#x2F;en-us&#x2F;windows&#x2F;security&#x2F;operating-system-security&#x2F;data-protec">
+<meta property="og:locale" content="ja_JP">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2026/03/31/BitLocker/BitLocker-QA/BitLockerError.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2026/03/31/BitLocker/BitLocker-QA/BitLockerGPO.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2026/03/31/BitLocker/BitLocker-QA/Silent1.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2026/03/31/BitLocker/BitLocker-QA/Silent2.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2026/03/31/BitLocker/BitLocker-QA/Silent3.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2026/03/31/BitLocker/BitLocker-QA/msinfo1.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2026/03/31/BitLocker/BitLocker-QA/msinfo2.png">
+<meta property="article:published_time" content="2026-03-31T15:00:00.000Z">
+<meta property="article:modified_time" content="2026-05-01T02:22:15.527Z">
+<meta property="article:author" content="Microsoft Japan Windows Technology Support Team">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://jpwinsup.github.io/blog/2026/03/31/BitLocker/BitLocker-QA/BitLockerError.png">
+  
+    <link rel="alternate" href="/blog/atom.xml" title="Microsoft Japan Windows Technology Support Blog" type="application/atom+xml">
+  
+
+  <link rel="icon" href="/blog/favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="/blog/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/blog/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/blog/favicon-16x16.png">
+  <link rel="manifest" href="/blog/site.webmanifest">
+  <link rel="mask-icon" href="/blog/safari-pinned-tab.svg" color="#5bbad5">
+  <meta name="msapplication-TileColor" content="#ffffff">
+  <meta name="theme-color" content="#ffffff">
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/blog/css/style.css">
+
+<meta name="generator" content="Hexo 5.2.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="site-header-logo"></div>
+  <div id="site-header-blog-wrapper"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        <div id="ms-logo"></div>
+        
+          <a class="main-nav-link" href="/blog/">Home</a>
+        
+          <a class="main-nav-link" href="/blog/archives">Archives</a>
+        
+        <a class="main-nav-link" target="_blank" rel="noopener" href="https://cssjpn.github.io/">サポート情報</a>
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/blog/atom.xml" title="RSSフィード"></a>
+        
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//www.bing.com/search" method="get" accept-charset="UTF-8" name="bing-search" onsubmit="var f=this;if(f['q'].value){var searchUrl =  'https://www.bing.com/search?q=' +  encodeURIComponent(f['q'].value + ' site:' + f['sitesearch'].value) ;window.open(searchUrl, 'blank') };return false;" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="検索"><button type="submit" id="nav-search-btn" class="search-form-submit"></button><input type="hidden" name="sitesearch" value="https://jpwinsup.github.io/blog"></form>
+      </div>
+    </div>
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/blog/" id="logo">Microsoft Japan Windows Technology Support Blog</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/blog/" id="subtitle">日本マイクロソフト Windows Support チームによる、サポート情報 Blog です。</a>
+        </h2>
+      
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-BitLocker/BitLocker-QA" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    
+    
+      <header class="article-header-single">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      BitLocker に関するよくあるお問い合わせ
+    </h1>
+  
+
+      </header>
+      <div class="article-share">
+        Last Update: 
+        <a href="/blog/2026/03/31/BitLocker/BitLocker-QA/" class="article-date-single">
+  <time datetime="2026-03-31T15:00:00.000Z" itemprop="datePublished">2026-04-01</time>
+</a>
+        
+  <div class="article-category">
+    <a class="article-category-link" href="/blog/categories/BitLocker/">BitLocker</a>
+  </div>
+
+        
+        <a href="https://github.com/jpwinsup/blog/issues/new?title=&body=%EF%BB%BF%0A%0A---%0A%0A%23%23%23%23+Document+Details%0A%0A*+Article+ID%3A+86ab3ec7-4323-55fc-be0e-975243b0db27%0A*+TITLE%3A+BitLocker+%E3%81%AB%E9%96%A2%E3%81%99%E3%82%8B%E3%82%88%E3%81%8F%E3%81%82%E3%82%8B%E3%81%8A%E5%95%8F%E3%81%84%E5%90%88%E3%82%8F%E3%81%9B%0A*+URL+https%3A%2F%2Fjpwinsup.github.io%2Fblog%2F2026%2F03%2F31%2FBitLocker%2FBitLocker-QA%2F%0A*+SourceFileName%3A+source%2F_posts%2FBitLocker%2FBitLocker-QA.md%0A" class="article-github-issue-link" target="_blank" rel="noopener noreferrer">feedback</a>
+        
+        <a data-url="https://jpwinsup.github.io/blog/2026/03/31/BitLocker/BitLocker-QA/" data-id="cmomao0990003t93f7zsb5vfs" class="article-share-link">共有</a>
+      </div>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>※本記事はマイクロソフト社員によって公開されております。</p>
+<p>みなさま、こんにちは。Windows サポート チーム 郭です。</p>
+<p>以下の公開情報では、BitLocker 機能に関するよくあるお問い合わせを紹介しています。<br>URL: <a target="_blank" rel="noopener" href="https://learn.microsoft.com/en-us/windows/security/operating-system-security/data-protection/bitlocker/faq">https://learn.microsoft.com/en-us/windows/security/operating-system-security/data-protection/bitlocker/faq</a></p>
+<p>本ブログ記事では、公開情報には含まれていないものの、企業の IT 管理者様から特に多く寄せられる BitLocker の実際の運用に関する質問をご紹介いたします。BitLocker の運用にあたり、少しでも参考になれば幸いです。</p>
+<h1 id="目次"><a href="#目次" class="headerlink" title="目次"></a>目次</h1><h2 id="BitLocker-運用方法・設定関連"><a href="#BitLocker-運用方法・設定関連" class="headerlink" title="BitLocker 運用方法・設定関連"></a>BitLocker 運用方法・設定関連</h2><p>-<a href="#%E8%A4%87%E6%95%B0%E7%AB%AF%E6%9C%AB%E3%81%AB%E5%AF%BE%E3%81%97%E3%81%A6%E3%80%81%E4%B8%80%E6%84%8F%E3%81%AE-PIN-%E3%82%92%E8%A8%AD%E5%AE%9A%E3%81%97%E3%81%A6%E6%9C%89%E5%8A%B9%E5%8C%96%E3%81%99%E3%82%8B%E6%A9%9F%E8%83%BD%E3%81%AF%E3%81%82%E3%82%8A%E3%81%BE%E3%81%99%E3%81%8B%E3%80%82">複数端末に対して、一意の PIN を設定して有効化する機能はありますか。</a><br>-<a href="#Intune-%E3%81%A7%E3%82%B5%E3%82%A4%E3%83%AC%E3%83%B3%E3%83%88%E6%9A%97%E5%8F%B7%E5%8C%96%E3%82%92%E8%A8%AD%E5%AE%9A%E3%81%97%E3%81%9F%E3%81%84%E3%81%A7%E3%81%99%E3%81%8C%E3%80%81%E6%A7%8B%E6%88%90%E3%83%97%E3%83%AD%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB%E3%81%AE%E6%8E%A8%E5%A5%A8%E8%A8%AD%E5%AE%9A%E5%80%A4%E3%81%AF%E3%81%82%E3%82%8A%E3%81%BE%E3%81%99%E3%81%8B%E3%80%82">Intune でサイレント暗号化を設定したいですが、構成プロファイルの推奨設定値はありますか。</a><br>-<a href="#Hybrid-Entra-%E5%8F%82%E5%8A%A0%E3%81%AE%E7%92%B0%E5%A2%83%E3%81%A7%E3%80%81%E5%9B%9E%E5%BE%A9%E3%82%AD%E3%83%BC%E3%81%AF-Entra-ID%EF%BC%88%E3%81%BE%E3%81%9F%E3%81%AF%E3%82%AA%E3%83%B3%E3%83%97%E3%83%AC%E3%83%9F%E3%82%B9%EF%BC%89%E3%81%AB%E5%9B%BA%E5%AE%9A%E3%81%97%E3%81%A6%E4%BF%9D%E5%AD%98%E3%81%99%E3%82%8B%E3%82%88%E3%81%86%E3%81%AB%E6%8C%87%E5%AE%9A%E3%81%A7%E3%81%8D%E3%81%BE%E3%81%99%E3%81%8B%E3%80%82">Hybrid Entra 参加の環境で、回復キーは Entra ID（またはオンプレミス）に固定して保存するように指定できますか。</a><br>-<a href="#%E3%82%B5%E3%82%A4%E3%83%AC%E3%83%B3%E3%83%88%E6%9A%97%E5%8F%B7%E5%8C%96%E3%82%92%E8%A8%AD%E5%AE%9A%E3%81%97%E3%81%9F%E3%81%8C%E3%80%81%E9%96%8B%E5%A7%8B%E3%81%95%E3%82%8C%E3%81%BE%E3%81%9B%E3%82%93%E3%80%82%E3%81%A9%E3%81%93%E3%82%92%E7%A2%BA%E8%AA%8D%E3%81%99%E3%82%8C%E3%81%B0%E3%82%88%E3%81%84%E3%81%A7%E3%81%99%E3%81%8B%E3%80%82">サイレント暗号化を設定したが、開始されません。どこを確認すればよいですか。</a><br>-<a href="#%E8%A4%87%E6%95%B0%E3%81%AE%E7%AB%AF%E6%9C%AB%E3%81%AB%E5%AF%BE%E3%81%97%E3%81%A6%E3%80%81%E4%B8%80%E6%8B%AC%E3%81%A7%E3%82%AA%E3%83%B3%E3%83%97%E3%83%AC%E3%83%9F%E3%82%B9-AD-%E3%81%BE%E3%81%9F%E3%81%AF-Entra-ID-%E3%81%B8%E3%83%90%E3%83%83%E3%82%AF%E3%82%A2%E3%83%83%E3%83%97%E3%81%A7%E3%81%8D%E3%81%BE%E3%81%99%E3%81%8B%E3%80%82">複数の端末に対して、一括でオンプレミス AD または Entra ID へバックアップできますか。</a><br>-<a href="#BitLocker-%E3%82%92%E9%81%8B%E7%94%A8%E3%81%99%E3%82%8B%E3%81%AB%E3%81%AF%E3%81%A9%E3%82%93%E3%81%AA%E3%83%A9%E3%82%A4%E3%82%BB%E3%83%B3%E3%82%B9%E3%81%8C%E5%BF%85%E8%A6%81%E3%81%A7%E3%81%99%E3%81%8B%E3%80%82">BitLocker を運用するにはどんなライセンスが必要ですか。</a></p>
+<h2 id="BitLocker-回復キー関連"><a href="#BitLocker-回復キー関連" class="headerlink" title="BitLocker 回復キー関連"></a>BitLocker 回復キー関連</h2><p>-<a href="#%E5%9B%9E%E5%BE%A9%E3%82%AD%E3%83%BC%E3%81%AF%E3%81%A9%E3%81%93%E3%81%8B%E3%82%89%E7%A2%BA%E8%AA%8D%E3%81%A7%E3%81%8D%E3%81%BE%E3%81%99%E3%81%8B%E3%80%82">回復キーはどこから確認できますか。</a><br>-<a href="#%E5%9B%9E%E5%BE%A9%E3%82%AD%E3%83%BC%E3%82%92%E7%B4%9B%E5%A4%B1%E3%81%97%E3%81%A6%E3%81%97%E3%81%BE%E3%81%A3%E3%81%9F%E3%81%8C%E3%80%81Microsoft-%E3%81%AB%E7%A2%BA%E8%AA%8D%E3%81%99%E3%82%8B%E3%81%93%E3%81%A8%E3%81%A7%E5%BE%A9%E6%97%A7%E3%81%AF%E3%81%A7%E3%81%8D%E3%81%BE%E3%81%99%E3%81%8B%E3%80%82">回復キーを紛失してしまったが、Microsoft に確認することで復旧はできますか。</a><br>-<a href="#Hybrid-Entra-%E5%8F%82%E5%8A%A0%E3%81%AE%E7%92%B0%E5%A2%83%E3%81%A7%E3%81%99%E3%81%8C%E3%80%81%E5%9B%9E%E5%BE%A9%E3%82%AD%E3%83%BC%E3%81%AF%E3%82%AA%E3%83%B3%E3%83%97%E3%83%AC%E3%83%9F%E3%82%B9%E7%92%B0%E5%A2%83%E3%80%81Entra-ID-%E3%81%AE%E3%81%A9%E3%81%A1%E3%82%89%E3%81%AB%E4%BF%9D%E5%AD%98%E3%81%95%E3%82%8C%E3%81%BE%E3%81%99%E3%81%8B%E3%80%82">Hybrid Entra 参加の環境ですが、回復キーはオンプレミス環境、Entra ID のどちらに保存されますか。</a>  </p>
+<hr>
+<h3 id="複数端末に対して、一意の-PIN-を設定して有効化する機能はありますか。"><a href="#複数端末に対して、一意の-PIN-を設定して有効化する機能はありますか。" class="headerlink" title="複数端末に対して、一意の PIN を設定して有効化する機能はありますか。"></a>複数端末に対して、一意の PIN を設定して有効化する機能はありますか。</h3><p>セキュリティ観点において、一意の PIN を設定すると脆弱であるため、上記のシナリオを実現する既定の機能は BitLocker 側に特に用意がなく、各端末側で PIN つきで BitLocker を有効にする必要があります。</p>
+<p>その際に、以下のコマンドを実行することで、一意の PIN を作成し、BitLocker を有効にすることが可能ですので、サンプルとしてご参考ください。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Add-BitLockerKeyProtector -MountPoint C: -RecoveryPasswordProtector  </span><br><span class="line">$SecureString &#x3D; ConvertTo-SecureString &quot;123456&quot; -AsPlainText -Force  </span><br><span class="line">Enable-BitLocker -MountPoint C: -TpmAndPinProtector -Pin $SecureString -usedspaceonly -skiphardwareTest  </span><br></pre></td></tr></table></figure>
+<hr>
+<h3 id="回復キーはどこから確認できますか。"><a href="#回復キーはどこから確認できますか。" class="headerlink" title="回復キーはどこから確認できますか。"></a>回復キーはどこから確認できますか。</h3><p>回復キーは BitLocker 有効化する際に、設定によって保存先が異なることがございますが、主な保存先での確認方法は以下の公開情報に記載されておりますので、ご参考ください。</p>
+<p>タイトル：BitLocker 回復キーを見つける<br>URL: <a target="_blank" rel="noopener" href="https://support.microsoft.com/ja-jp/windows/6b71ad27-0b89-ea08-f143-056f5ab347d6">https://support.microsoft.com/ja-jp/windows/6b71ad27-0b89-ea08-f143-056f5ab347d6</a></p>
+<hr>
+<h3 id="回復キーを紛失してしまったが、Microsoft-に確認することで復旧はできますか。"><a href="#回復キーを紛失してしまったが、Microsoft-に確認することで復旧はできますか。" class="headerlink" title="回復キーを紛失してしまったが、Microsoft に確認することで復旧はできますか。"></a>回復キーを紛失してしまったが、Microsoft に確認することで復旧はできますか。</h3><p>弊社はお客様環境における回復キーを収集・管理していないため、残念ながら上記の場合は、弊社でも回復キーを突破する手段をご提供できかねます。<br>回復キーは複数の場所に保存できますので、まずは <a href="#%E5%9B%9E%E5%BE%A9%E3%82%AD%E3%83%BC%E3%81%AF%E3%81%A9%E3%81%93%E3%81%8B%E3%82%89%E7%A2%BA%E8%AA%8D%E3%81%A7%E3%81%8D%E3%81%BE%E3%81%99%E3%81%8B%E3%80%82">回復キーはどこから確認できますか。</a> で該当するすべての保存先をご確認ください。<br>また、Bitlocker を運用・管理するうえで、回復キーは非常に大事なものですので、定期的なバックアップを実施するようお願いいたします。<br>コマンドでのバックアップ方法に関しては、後述する <a href="#%E8%A4%87%E6%95%B0%E3%81%AE%E7%AB%AF%E6%9C%AB%E3%81%AB%E5%AF%BE%E3%81%97%E3%81%A6%E3%80%81%E4%B8%80%E6%8B%AC%E3%81%A7%E3%82%AA%E3%83%B3%E3%83%97%E3%83%AC%E3%83%9F%E3%82%B9-AD-%E3%81%BE%E3%81%9F%E3%81%AF-Entra-ID-%E3%81%B8%E3%83%90%E3%83%83%E3%82%AF%E3%82%A2%E3%83%83%E3%83%97%E3%81%A7%E3%81%8D%E3%81%BE%E3%81%99%E3%81%8B%E3%80%82">BackuptoAAD-BitLockerKeyProtector/Backup-BitLockerKeyProtector コマンド</a>をご参考ください。</p>
+<hr>
+<h3 id="Hybrid-Entra-参加の環境ですが、回復キーはオンプレミス環境、Entra-ID-のどちらに保存されますか。"><a href="#Hybrid-Entra-参加の環境ですが、回復キーはオンプレミス環境、Entra-ID-のどちらに保存されますか。" class="headerlink" title="Hybrid Entra 参加の環境ですが、回復キーはオンプレミス環境、Entra ID のどちらに保存されますか。"></a>Hybrid Entra 参加の環境ですが、回復キーはオンプレミス環境、Entra ID のどちらに保存されますか。</h3><p>結論：どちらか片方、またはその両方へバックアップされる可能性があります。</p>
+<p>回復キーの保存は、Bitlocker 有効化時またはドメイン参加・Entra 参加時に、一度のみ行われる処理となります。<br>Hybrid Entra 参加の際に、オンプレミス AD と Entra ID の両方へ試みる動作となりますが、どちらかあるいはその両方への保存が正常に完了すれば、回復キーの保存処理も正常完了とみなされます。そのため、何等かのネットワーク通信不良で、片方のみ通信可能な環境では片方しか回復キーが保存されていない場合があります。</p>
+<hr>
+<h3 id="Hybrid-Entra-参加の環境で、回復キーは-Entra-ID（またはオンプレミス）に固定して保存するように指定できますか。"><a href="#Hybrid-Entra-参加の環境で、回復キーは-Entra-ID（またはオンプレミス）に固定して保存するように指定できますか。" class="headerlink" title="Hybrid Entra 参加の環境で、回復キーは Entra ID（またはオンプレミス）に固定して保存するように指定できますか。"></a>Hybrid Entra 参加の環境で、回復キーは Entra ID（またはオンプレミス）に固定して保存するように指定できますか。</h3><p>回復キーの保存先を指定することが出来ないため、既定の動作では上記の指定ができません。<br>一方、後述する <a href="#%E8%A4%87%E6%95%B0%E3%81%AE%E7%AB%AF%E6%9C%AB%E3%81%AB%E5%AF%BE%E3%81%97%E3%81%A6%E3%80%81%E4%B8%80%E6%8B%AC%E3%81%A7%E3%82%AA%E3%83%B3%E3%83%97%E3%83%AC%E3%83%9F%E3%82%B9-AD-%E3%81%BE%E3%81%9F%E3%81%AF-Entra-ID-%E3%81%B8%E3%83%90%E3%83%83%E3%82%AF%E3%82%A2%E3%83%83%E3%83%97%E3%81%A7%E3%81%8D%E3%81%BE%E3%81%99%E3%81%8B%E3%80%82">BackuptoAAD-BitLockerKeyProtector/Backup-BitLockerKeyProtector コマンド</a>   に記載のコマンドを定期的に実行することで、指定する保存先へ明示的にバックアップすることが可能です。</p>
+<hr>
+<h3 id="複数の端末に対して、一括でオンプレミス-AD-または-Entra-ID-へバックアップできますか。"><a href="#複数の端末に対して、一括でオンプレミス-AD-または-Entra-ID-へバックアップできますか。" class="headerlink" title="複数の端末に対して、一括でオンプレミス AD または Entra ID へバックアップできますか。"></a>複数の端末に対して、一括でオンプレミス AD または Entra ID へバックアップできますか。</h3><p>Bitlocker 既定の機能としては特に用意されていませんが、以下の PowerShell コマンドをスクリプト化し、複数の端末へ配布することによって、実現することが可能です。</p>
+<p>タイトル：回復パスワードをリセットしてバックアップする<br>URL: <a target="_blank" rel="noopener" href="https://learn.microsoft.com/ja-jp/windows/security/operating-system-security/data-protection/bitlocker/operations-guide?tabs=powershell#reset-and-backup-a-recovery-password">https://learn.microsoft.com/ja-jp/windows/security/operating-system-security/data-protection/bitlocker/operations-guide?tabs=powershell#reset-and-backup-a-recovery-password</a><br>※ 上記の記事では、使用済みの回復キーを削除し、新たに回復キーを生成したうえ、Entra ID または オンプレミス AD へ保存する流れですが、削除・再作成する必要がなければ、以下のコマンドレットのみ実行すれば、該当する保存先にバックアップ可能です。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">BackuptoAAD-BitLockerKeyProtector -MountPoint $env:SystemDrive -KeyProtectorId &quot;&#123;ID&#125;&quot;</span><br><span class="line">Backup-BitLockerKeyProtector -MountPoint $env:SystemDrive -KeyProtectorId &quot;&#123;ID&#125;&quot;</span><br></pre></td></tr></table></figure>
+<h4 id="補足"><a href="#補足" class="headerlink" title="補足"></a>補足</h4><p>上記の “{ID}” は以下のコマンドで取得した “KeyProtectorId” に置き換えます。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(Get-BitLockerVolume -mountpoint $env:SystemDrive).KeyProtector | where-object &#123;$_.KeyProtectorType -eq &#39;RecoveryPassword&#39;&#125; | ft KeyProtectorId,RecoveryPassword</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h3 id="Bitlocker-関連の-GPO-構成プロファイルを設定して、端末側で-Bitlocker-を有効にしましたが、以下のエラーになりました。"><a href="#Bitlocker-関連の-GPO-構成プロファイルを設定して、端末側で-Bitlocker-を有効にしましたが、以下のエラーになりました。" class="headerlink" title="Bitlocker 関連の GPO / 構成プロファイルを設定して、端末側で Bitlocker を有効にしましたが、以下のエラーになりました。"></a>Bitlocker 関連の GPO / 構成プロファイルを設定して、端末側で Bitlocker を有効にしましたが、以下のエラーになりました。</h3><p>エラー メッセージ：BitLocker スタートアップ オプションのグループポリシー設定は競合しているため、適用できません。詳細については、システム管理者に問い合わせてください。<br> <img src="./BitLockerError.png"></p>
+<p>TPM が搭載されている PC に対して、以下の BitLocker スタートアップ オプションが用意されています。<br>・TPM スタートアップ の構成<br>・TPM スタートアップ PIN の構成<br>・TPM スタートアップ キー の構成<br>・TPM スタートアップ キーと PIN の構成<br> <img src="./BitLockerGPO.png"></p>
+<p>それぞれのオプションには、以下の指定方法が用意されています。<br>・許可する<br>・要求する<br>・許可しない  </p>
+<p>ただし、「要求する」と指定できるものは 1 つのみとなっており、ほかに「要求する」または「許可する」が同時に存在する場合は、上記のエラーとなります。従いまして、「要求する」と指定した項目以外は、すべて「許可しない」と指定してください。</p>
+<p>補足：BitLocker を有効にする際のみではなく、解除するときも上記のチェックが実施されるため、その際に、競合となるグループポリシーが検知されたら、同様にエラーとなりますので、ご留意ください。</p>
+<hr>
+<h3 id="Intune-でサイレント暗号化を設定したいですが、構成プロファイルの推奨設定値はありますか。"><a href="#Intune-でサイレント暗号化を設定したいですが、構成プロファイルの推奨設定値はありますか。" class="headerlink" title="Intune でサイレント暗号化を設定したいですが、構成プロファイルの推奨設定値はありますか。"></a>Intune でサイレント暗号化を設定したいですが、構成プロファイルの推奨設定値はありますか。</h3><p>多くの企業様では、サイレント暗号化をしつつ、回復キーを Entra ID に保存する運用をされております。<br>その際に、サイレント暗号化の必須設定に加え、回復キーの作成を許可し、そのバックアップが正常に Entra ID に保存されてから、暗号化を開始する設定をご案内しております。</p>
+<p>Intune の構成プロファイル一式を以下に記載しますので、ご参考ください。<br>（本記事掲載時点の画面表示となりますので、今後画面やレイアウトが変更される場合がございます）</p>
+<p>構成<br>-&gt; ポリシー<br>-&gt; 新しいポリシー<br>-&gt; プラットフォーム：Windows 10 以降。プロファイルの種類：テンプレート<br>-&gt; Endpoint Protection<br> <img src="./Silent1.png"><br> <img src="./Silent2.png"><br> <img src="./Silent3.png"></p>
+<hr>
+<h3 id="Intune-から一意の-PIN-をつけて、サイレント暗号化をかけることが可能ですか。"><a href="#Intune-から一意の-PIN-をつけて、サイレント暗号化をかけることが可能ですか。" class="headerlink" title="Intune から一意の PIN をつけて、サイレント暗号化をかけることが可能ですか。"></a>Intune から一意の PIN をつけて、サイレント暗号化をかけることが可能ですか。</h3><p>サイレント暗号化では、TPM スタートアップの構成のみサポートされているため、TPM スタートアップ PIN の構成を要求する場合は、サイレント暗号化は動作しなくなります。<br>そのため、PIN つきでサイレント暗号化をかけることができません。</p>
+<hr>
+<h3 id="サイレント暗号化を設定したが、開始されません。どこを確認すればよいですか。"><a href="#サイレント暗号化を設定したが、開始されません。どこを確認すればよいですか。" class="headerlink" title="サイレント暗号化を設定したが、開始されません。どこを確認すればよいですか。"></a>サイレント暗号化を設定したが、開始されません。どこを確認すればよいですか。</h3><p>弊社の過去事例において、以下の場合、サイレント暗号化が開始されないことがありますので、該当しないかご確認ください。</p>
+<p>(1) Intune からサイレント暗号化の設定を配布していない<br>サイレント暗号化として推奨される設定について、(Intune でサイレント暗号化を設定したいですが、推奨の設定はありますか。) をご確認ください。</p>
+<p>(2) BitLocker Drive Encryption Service （BDESVC）サービスが無効になっている<br>解決方法：BitLocker Drive Encryption Service （BDESVC）サービスのスタートアップ種類を手動に変更する<br>コマンド：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sc.exe config BDESVC start&#x3D; demand</span><br></pre></td></tr></table></figure>
+
+<p>(3) BitLocker MDM policy Refresh タスクが無効になっている、あるいは、削除されている</p>
+<p>(4) セキュアブート機能が対応されていない、または、UEFI モードになっていない<br>確認方法：<br>セキュリティで保護されたブート状態を確認するには、System Information アプリケーションを使用します。 これを行うには、次の手順を実行します。</p>
+<p>[スタート] を選択し、[検索] ボックスに「msinfo32」と入力します。<br>次のように、[ セキュア ブート状態] 設定が [オン] になっていることを確認します。<br> <img src="./msinfo1.png"></p>
+<p>セキュア ブート状態の設定がサポートされていない場合は、このデバイスで サイレント暗号化を使用することはできません。<br> <img src="./msinfo2.png"></p>
+<p>(5) WinRE （回復環境）が無効になっている<br>確認方法：<br>管理者権限で以下のコマンドを実行し、”Windows RE の状態:” が “Enabled” になっているか確認します。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">reagentc &#x2F;info</span><br></pre></td></tr></table></figure>
+
+<p>回復環境の有効化：<br>管理者権限で以下のコマンドを実行します。（何等か環境固有の理由でエラーとなった場合は、回復環境有効化のトラブルシューティングが必要です）</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">reagentc &#x2F;enable</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h3 id="BitLocker-を運用するにはどんなライセンスが必要ですか。"><a href="#BitLocker-を運用するにはどんなライセンスが必要ですか。" class="headerlink" title="BitLocker を運用するにはどんなライセンスが必要ですか。"></a>BitLocker を運用するにはどんなライセンスが必要ですか。</h3><p>端末側で BitLocker を有効にするには、Windows Pro / Enterprise / Pro Education / SE / Education のエディションが必要です。また、Intune で BitLocker CSP または構成プロファイルを配布して、BitLocker を管理する場合、Windows Enterprise E3/E5, Windows Education A3/A5 のライセンスが必要です。  </p>
+<p>タイトル：Windows エディションとライセンスに関する要件<br>URL: <a target="_blank" rel="noopener" href="https://learn.microsoft.com/ja-jp/windows/security/operating-system-security/data-protection/bitlocker/configure?tabs=common#windows-edition-and-licensing-requirements">https://learn.microsoft.com/ja-jp/windows/security/operating-system-security/data-protection/bitlocker/configure?tabs=common#windows-edition-and-licensing-requirements</a></p>
+<h3 id="特記事項"><a href="#特記事項" class="headerlink" title="[特記事項]"></a>[特記事項]</h3><p>本情報の内容（添付文書、リンク先などを含む）は、作成日時点でのものであり、予告なく変更される場合があります。</p>
+
+      
+      
+    </div>
+    <footer class="article-footer">
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/blog/2026/04/01/UserInterfaceAndApps/Printing/PrintDialogSettings/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">次の記事</strong>
+      <div class="article-nav-title">
+        
+          Windows 11 の新しい印刷ダイアログの動作について
+        
+      </div>
+    </a>
+  
+  
+    <a href="/blog/2026/03/25/UserInterfaceAndApps/EventLog/WindowsErrorReporting1001/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">前の記事</strong>
+      <div class="article-nav-title">ソース：Windows Error Reporting、イベントID：1001 のイベントログが記録される事象について</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">カテゴリ</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Activation/">Activation</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Activation/ESU/">ESU</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Activation/security-SPP/">security-SPP</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/">Active Directory</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Authentication/">Authentication</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/DFSR/">DFSR</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/FunctionalLevel/">FunctionalLevel</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Group-Policy/">Group Policy</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Promotion-and-Demotion/">Promotion and Demotion</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/User-Profile/">User Profile</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Windows-Hello/">Windows Hello</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Windows-Time-Service/">Windows Time Service</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/AppLocker/">AppLocker</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/AppLocker/Active-Directory/">Active Directory</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/AppLocker/Microsoft-Intune/">Microsoft Intune</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/BitLocker/">BitLocker</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Deployment/">Deployment</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Deployment/Feature-on-demand/">Feature on demand</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Deployment/Sysprep/">Sysprep</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Failover-Clustering/">Failover Clustering</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Failover-Clustering/Azure-Local/">Azure Local</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Failover-Clustering/Configuration-and-Management/">Configuration and Management</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/FileServices/">FileServices</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/FileServices/FTP/">FTP</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/FileServices/SMB/">SMB</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Hyper-V/">Hyper-V</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Hyper-V/Configuration-and-Management/">Configuration and Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Hyper-V/Migration/">Migration</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Microsoft-Connected-Cache/">Microsoft Connected Cache</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/">Networking</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/BITS/">BITS</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/Bluetooth/">Bluetooth</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/DHCP/">DHCP</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/DNS/">DNS</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/Firewall/">Firewall</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/LBFO/">LBFO</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/NCSI/">NCSI</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/NetworkInterface/">NetworkInterface</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/Proxy/">Proxy</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/TCPIP/">TCPIP</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/OpenSSH/">OpenSSH</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/">Performance</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/Hang-up-BSoD/">Hang-up/BSoD</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/No-Boot/">No Boot</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/Slow-Response/">Slow Response</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/System-Resource/">System Resource</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/Tools/">Tools</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/">Public Key Infrastructure</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Certificate-Authority/">Certificate Authority</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Certificate-Management/">Certificate Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Code-Signing/">Code Signing</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/SSL-TLS-Communication/">SSL TLS Communication</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/SSL-TLS-Connection/">SSL TLS Connection</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Smart-Card-Logon/">Smart Card Logon</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/">Remote Desktop</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/Azure-Virtual-Desktop-AVD/">Azure Virtual Desktop (AVD)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/Remote-Desktop-Service-RDS/">Remote Desktop Service (RDS)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/Windows-Virtual-Desktop-WVD/">Windows Virtual Desktop (WVD)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/RemoteAccess/">RemoteAccess</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/RemoteAccess/%E3%83%80%E3%82%A4%E3%83%A4%E3%83%AB%E3%82%A2%E3%83%83%E3%83%97%E6%8E%A5%E7%B6%9A/">ダイヤルアップ接続</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Security/">Security</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Security/WDAC/">WDAC</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Setup/">Setup</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Setup/Feature-Update-FU/">Feature Update (FU)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Shell/">Shell</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Shell/Explorer/">Explorer</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Shell/StartMenu/">StartMenu</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/">Storage</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/Backup/">Backup</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/FSRM/">FSRM</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/Management/">Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/StorageMigrationService/">StorageMigrationService</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Support-Request/">Support Request</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/UEFI/">UEFI</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/UEFI/Secure-Boot/">Secure Boot</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/">User Interface and Apps</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Command-Prompt/">Command Prompt</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/EventLog/">EventLog</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Language-Support/">Language Support</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Microsoft-Store/">Microsoft Store</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Performance/">Performance</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/PowerShell/">PowerShell</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Printing-%E5%8D%B0%E5%88%B7/">Printing (印刷)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Server-Management/">Server Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Taskscheduler/">Taskscheduler</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Windows-Management-Instrumentation/">Windows Management Instrumentation</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps-Language-support/">User Interface and Apps - Language support</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-365/">Windows 365</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Admin-Center/">Windows Admin Center</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Search/">Windows Search</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/">Windows Update</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Delivery-Optimization-DO/">Delivery Optimization (DO)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Feature-Update-FU/">Feature Update (FU)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Quality-Update-QU/">Quality Update (QU)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Windows-Update-Agent/">Windows Update Agent</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Windows-Update-Agent-WUA/">Windows Update Agent (WUA)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/">WirelessNetwork</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/NPS/">NPS</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/Wi-Fi/">Wi-Fi</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/%E3%83%A2%E3%83%90%E3%82%A4%E3%83%AB-%E3%83%96%E3%83%AD%E3%83%BC%E3%83%89%E3%83%90%E3%83%B3%E3%83%89%E6%8E%A5%E7%B6%9A-LTE/">モバイル ブロードバンド接続 (LTE)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/%E7%B5%84%E7%B9%94%E7%B4%B9%E4%BB%8B%E3%83%96%E3%83%AD%E3%82%B0%EF%BC%88Windows-Commercial%EF%BC%89/">組織紹介ブログ（Windows Commercial）</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最近の投稿</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/blog/2026/04/30/FailoverClustering/Cluster-IP-Address-and-Cluster-Name-may-not-come-online-after-full-cluster-restart-on-Azure-Local-24H2/">Azure Local 24H2 クラスター シャットダウン後の全ノード起動時に Cluster IP Address / Cluster Name が自動オンラインにならない場合がある</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/04/24/RemoteDesktopService/RDS/RDPSecurityWarnings/">2026 年 4 月の更新プログラム適用後の RDP ファイル (リモート デスクトップ) のセキュリティ警告について</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/04/22/RemoteDesktopService/RDS/ClearingHouse/">RDS (Remote Desktop Service) のライセンスに関するお問い合わせの留意点</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/04/16/ActiveDirectory/UserProfile/windows-folder-structure/">Windows のフォルダー構成を理解しよう — アプリはどこにインストールされるべき？</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/04/16/Shell/Explorer/installed-applications-dont-appear-in-new-StartMenu/">新しい [スタート メニュー] 利用時にインストールしたアプリケーションが一覧に表示されない事象について</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">アーカイブ</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2026/05/">2026 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2026/04/">2026 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2026/03/">2026 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2026/02/">2026 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2026/01/">2026 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/12/">2025 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/11/">2025 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/10/">2025 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/09/">2025 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/08/">2025 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/07/">2025 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/06/">2025 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/05/">2025 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/04/">2025 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/03/">2025 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/02/">2025 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/01/">2025 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/12/">2024 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/11/">2024 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/10/">2024 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/09/">2024 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/08/">2024 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/07/">2024 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/06/">2024 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/05/">2024 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/04/">2024 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/03/">2024 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/02/">2024 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/01/">2024 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/12/">2023 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/11/">2023 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/10/">2023 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/09/">2023 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/08/">2023 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/07/">2023 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/06/">2023 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/05/">2023 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/04/">2023 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/03/">2023 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/02/">2023 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/01/">2023 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/12/">2022 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/11/">2022 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/10/">2022 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/09/">2022 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/08/">2022 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/07/">2022 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/06/">2022 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/05/">2022 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/04/">2022 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/03/">2022 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/02/">2022 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/01/">2022 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/12/">2021 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/11/">2021 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/10/">2021 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/09/">2021 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/08/">2021 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/07/">2021 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/06/">2021 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/05/">2021 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/04/">2021 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/03/">2021 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/02/">2021 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/01/">2021 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/12/">2020 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/11/">2020 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/10/">2020 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/07/">2020 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/03/">2020 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2019/03/">2019 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/11/">2018 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/10/">2018 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/09/">2018 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/08/">2018 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/07/">2018 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/06/">2018 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/04/">2018 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/02/">2018 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/12/">2017 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/11/">2017 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/09/">2017 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/05/">2017 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/03/">2017 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/02/">2017 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2016/08/">2016 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2016/05/">2016 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2014/03/">2014 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2012/02/">2012 / 02</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2026 Microsoft Japan Windows Technology Support Team<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/blog/" class="mobile-nav-link">Home</a>
+  
+    <a href="/blog/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+<script src="/blog/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

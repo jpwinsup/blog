@@ -1,0 +1,808 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-180187723-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-180187723-1');
+</script>
+<!-- End Google Analytics -->
+
+  
+  <title>Microsoft Japan Windows Technology Support Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="日本マイクロソフト Windows Support チームによる、サポート情報 Blog です。">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Microsoft Japan Windows Technology Support Blog">
+<meta property="og:url" content="https://jpwinsup.github.io/blog/index.html">
+<meta property="og:site_name" content="Microsoft Japan Windows Technology Support Blog">
+<meta property="og:description" content="日本マイクロソフト Windows Support チームによる、サポート情報 Blog です。">
+<meta property="og:locale" content="ja_JP">
+<meta property="article:author" content="Microsoft Japan Windows Technology Support Team">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/blog/atom.xml" title="Microsoft Japan Windows Technology Support Blog" type="application/atom+xml">
+  
+
+  <link rel="icon" href="/blog/favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="/blog/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/blog/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/blog/favicon-16x16.png">
+  <link rel="manifest" href="/blog/site.webmanifest">
+  <link rel="mask-icon" href="/blog/safari-pinned-tab.svg" color="#5bbad5">
+  <meta name="msapplication-TileColor" content="#ffffff">
+  <meta name="theme-color" content="#ffffff">
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/blog/css/style.css">
+
+<meta name="generator" content="Hexo 5.2.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="site-header-logo"></div>
+  <div id="site-header-blog-wrapper"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        <div id="ms-logo"></div>
+        
+          <a class="main-nav-link" href="/blog/">Home</a>
+        
+          <a class="main-nav-link" href="/blog/archives">Archives</a>
+        
+        <a class="main-nav-link" target="_blank" rel="noopener" href="https://cssjpn.github.io/">サポート情報</a>
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/blog/atom.xml" title="RSSフィード"></a>
+        
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//www.bing.com/search" method="get" accept-charset="UTF-8" name="bing-search" onsubmit="var f=this;if(f['q'].value){var searchUrl =  'https://www.bing.com/search?q=' +  encodeURIComponent(f['q'].value + ' site:' + f['sitesearch'].value) ;window.open(searchUrl, 'blank') };return false;" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="検索"><button type="submit" id="nav-search-btn" class="search-form-submit"></button><input type="hidden" name="sitesearch" value="https://jpwinsup.github.io/blog"></form>
+      </div>
+    </div>
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/blog/" id="logo">Microsoft Japan Windows Technology Support Blog</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/blog/" id="subtitle">日本マイクロソフト Windows Support チームによる、サポート情報 Blog です。</a>
+        </h2>
+      
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main">
+  
+    <article id="post-FailoverClustering/Cluster-IP-Address-and-Cluster-Name-may-not-come-online-after-full-cluster-restart-on-Azure-Local-24H2" class="article article-type-post" itemscope itemprop="blogPost">
+
+  <div class="article-inner">
+    <!-- post date -->
+    <div class="article-meta">
+      <a href="/blog/2026/04/30/FailoverClustering/Cluster-IP-Address-and-Cluster-Name-may-not-come-online-after-full-cluster-restart-on-Azure-Local-24H2/" class="article-date">
+  <time datetime="2026-04-30T15:00:00.000Z" itemprop="datePublished">2026-05-01</time>
+</a>
+    </div>
+
+    <!-- category list -->
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/blog/categories/Failover-Clustering/">Failover Clustering</a>►<a class="article-category-link" href="/blog/categories/Failover-Clustering/Azure-Local/">Azure Local</a>
+  </div>
+
+
+    
+    <!-- post title -->
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/blog/2026/04/30/FailoverClustering/Cluster-IP-Address-and-Cluster-Name-may-not-come-online-after-full-cluster-restart-on-Azure-Local-24H2/">Azure Local 24H2 クラスター シャットダウン後の全ノード起動時に Cluster IP Address / Cluster Name が自動オンラインにならない場合がある</a>
+    </h1>
+  
+
+      </header>
+    
+
+    <!-- post caption -->
+    <div class="article-entry" itemprop="articleBody">
+      
+        本記事は、マイクロソフト社員によって公開されております。  
+こんにちは、Windows サポート チームです。今回は、Azure Local 24H2 環境においてクラスター シャットダウン後に全ノードを起動した際、Cluster IP Address および Cluster Name リソースが自動的にオンラインにならない場合がある事象についてお知らせします。
+対象以下の条件に該当する環境が対象です。
+
+Azure Local 24H2
+Network ATC を使用して仮想ネットワーク (vNIC) が構成されている環境
+クラスター シャットダウン後に全ノードを同時に起動する運用を行っている環境
+
+事象クラスター シャットダウンを実施し、全クラスター ノードの OS を停止した後に再起動すると、Cluster IP Address および Cluster Name リソースが自動的に...
+        <p class="article-readmore">
+          <a href="/blog/2026/04/30/FailoverClustering/Cluster-IP-Address-and-Cluster-Name-may-not-come-online-after-full-cluster-restart-on-Azure-Local-24H2/">Read more</a>
+        </p>
+      
+    </div>
+
+    <footer class="article-footer">
+      <!--a data-url="https://jpwinsup.github.io/blog/2026/04/30/FailoverClustering/Cluster-IP-Address-and-Cluster-Name-may-not-come-online-after-full-cluster-restart-on-Azure-Local-24H2/" data-id="cmomao09e0008t93ffg057tpz" class="article-share-link">共有</a-->
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-RemoteDesktopService/RDS/RDPSecurityWarnings" class="article article-type-post" itemscope itemprop="blogPost">
+
+  <div class="article-inner">
+    <!-- post date -->
+    <div class="article-meta">
+      <a href="/blog/2026/04/24/RemoteDesktopService/RDS/RDPSecurityWarnings/" class="article-date">
+  <time datetime="2026-04-24T08:00:00.000Z" itemprop="datePublished">2026-04-24</time>
+</a>
+    </div>
+
+    <!-- category list -->
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/blog/categories/Remote-Desktop/">Remote Desktop</a>►<a class="article-category-link" href="/blog/categories/Remote-Desktop/Remote-Desktop-Service-RDS/">Remote Desktop Service (RDS)</a>
+  </div>
+
+
+    
+    <!-- post title -->
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/blog/2026/04/24/RemoteDesktopService/RDS/RDPSecurityWarnings/">2026 年 4 月の更新プログラム適用後の RDP ファイル (リモート デスクトップ) のセキュリティ警告について</a>
+    </h1>
+  
+
+      </header>
+    
+
+    <!-- post caption -->
+    <div class="article-entry" itemprop="articleBody">
+      
+        本記事はマイクロソフト社員によって公開されております。
+Windows プラットフォーム サポートの亀井です。
+以下のバージョンの Windows において、2026 年 4 月のセキュリティ更新プログラム適用後より、RDP ファイル (.rdp) をダブル クリック等で開いた際の動作が変更され、リモート デスクトップ接続アプリに新しいセキュリティ警告ダイアログが表示されるようになりました。
+
+Windows 10
+Windows 11
+Windows Server 2016
+Windows Server 2019
+Windows Server 2022
+Windows Server 2025
+
+当該動作変更に関しまして、弊社サポート窓口にも多くのお問い合わせをいただいておりますので、動作変更の概要、ダイアログの動作、推奨される対処策、シナリオ別の対応方法、よくある質問をご紹介します。
+動...
+        <p class="article-readmore">
+          <a href="/blog/2026/04/24/RemoteDesktopService/RDS/RDPSecurityWarnings/">Read more</a>
+        </p>
+      
+    </div>
+
+    <footer class="article-footer">
+      <!--a data-url="https://jpwinsup.github.io/blog/2026/04/24/RemoteDesktopService/RDS/RDPSecurityWarnings/" data-id="cmomao0r401klt93fci266r1g" class="article-share-link">共有</a-->
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-RemoteDesktopService/RDS/ClearingHouse" class="article article-type-post" itemscope itemprop="blogPost">
+
+  <div class="article-inner">
+    <!-- post date -->
+    <div class="article-meta">
+      <a href="/blog/2026/04/22/RemoteDesktopService/RDS/ClearingHouse/" class="article-date">
+  <time datetime="2026-04-22T08:00:00.000Z" itemprop="datePublished">2026-04-22</time>
+</a>
+    </div>
+
+    <!-- category list -->
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/blog/categories/Remote-Desktop/">Remote Desktop</a>►<a class="article-category-link" href="/blog/categories/Remote-Desktop/Remote-Desktop-Service-RDS/">Remote Desktop Service (RDS)</a>
+  </div>
+
+
+    
+    <!-- post title -->
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/blog/2026/04/22/RemoteDesktopService/RDS/ClearingHouse/">RDS (Remote Desktop Service) のライセンスに関するお問い合わせの留意点</a>
+    </h1>
+  
+
+      </header>
+    
+
+    <!-- post caption -->
+    <div class="article-entry" itemprop="articleBody">
+      
+        本記事はマイクロソフト社員によって公開されております。  
+こんにちは。Windows プラットフォーム サポートの馬場です。今回は、Microsoft の技術サポートとライセンス専門窓口であるクリアリングハウスの対応範囲に関してご案内させていただきます。
+Microsoft 技術サポートに RDS (Remote Desktop Service) のライセンスに関するお問い合わせをいただくことがございますが、お問い合わせの内容によっては、ライセンス専用窓口である Microsoft クリアリングハウスが対応しているものがございます。
+リモート デスクトップ ライセンス Web サイトで問題が発生している場合、または RDS ライセンス サーバーのライセンス認証またはクライアント アクセス ライセンスのインストールに関するご支援が必要な場合は、Microsoft クリアリング ハウスのサポ...
+        <p class="article-readmore">
+          <a href="/blog/2026/04/22/RemoteDesktopService/RDS/ClearingHouse/">Read more</a>
+        </p>
+      
+    </div>
+
+    <footer class="article-footer">
+      <!--a data-url="https://jpwinsup.github.io/blog/2026/04/22/RemoteDesktopService/RDS/ClearingHouse/" data-id="cmomao0ge00hat93fd2pwgf09" class="article-share-link">共有</a-->
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-ActiveDirectory/UserProfile/windows-folder-structure" class="article article-type-post" itemscope itemprop="blogPost">
+
+  <div class="article-inner">
+    <!-- post date -->
+    <div class="article-meta">
+      <a href="/blog/2026/04/16/ActiveDirectory/UserProfile/windows-folder-structure/" class="article-date">
+  <time datetime="2026-04-16T15:00:00.000Z" itemprop="datePublished">2026-04-17</time>
+</a>
+    </div>
+
+    <!-- category list -->
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/blog/categories/Active-Directory/">Active Directory</a>►<a class="article-category-link" href="/blog/categories/Active-Directory/User-Profile/">User Profile</a>
+  </div>
+
+
+    
+    <!-- post title -->
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/blog/2026/04/16/ActiveDirectory/UserProfile/windows-folder-structure/">Windows のフォルダー構成を理解しよう — アプリはどこにインストールされるべき？</a>
+    </h1>
+  
+
+      </header>
+    
+
+    <!-- post caption -->
+    <div class="article-entry" itemprop="articleBody">
+      
+         本記事はマイクロソフト社員によって公開されております。
+こんにちは。Windows Commercial Support Directory Services チームです。
+Windows にソフトウェアをインストールするとき、「なぜこのフォルダーに入るの？」と疑問に思ったことはありませんか？この記事では、Windows のフォルダーにはそれぞれ決められた役割があること、そしてアプリケーションがどこにインストールされるのが推奨されるかを解説します。
+
+はじめに — よくある疑問Windows にアプリケーションをインストールすると、インストール先は大きく分けて以下の 3 パターンがあります。
+
+
+
+インストール先の例
+よくあるソフト
+
+
+
+C:\Program Files\
+Office、ブラウザーなど
+
+
+C:\Users\&lt;ユーザー名&gt;\AppData\Local\Pro...
+        <p class="article-readmore">
+          <a href="/blog/2026/04/16/ActiveDirectory/UserProfile/windows-folder-structure/">Read more</a>
+        </p>
+      
+    </div>
+
+    <footer class="article-footer">
+      <!--a data-url="https://jpwinsup.github.io/blog/2026/04/16/ActiveDirectory/UserProfile/windows-folder-structure/" data-id="cmomao0cu007rt93feffg9eww" class="article-share-link">共有</a-->
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-Shell/Explorer/installed-applications-dont-appear-in-new-StartMenu" class="article article-type-post" itemscope itemprop="blogPost">
+
+  <div class="article-inner">
+    <!-- post date -->
+    <div class="article-meta">
+      <a href="/blog/2026/04/16/Shell/Explorer/installed-applications-dont-appear-in-new-StartMenu/" class="article-date">
+  <time datetime="2026-04-16T00:00:00.000Z" itemprop="datePublished">2026-04-16</time>
+</a>
+    </div>
+
+    <!-- category list -->
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/blog/categories/Shell/">Shell</a>►<a class="article-category-link" href="/blog/categories/Shell/StartMenu/">StartMenu</a>
+  </div>
+
+
+    
+    <!-- post title -->
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/blog/2026/04/16/Shell/Explorer/installed-applications-dont-appear-in-new-StartMenu/">新しい [スタート メニュー] 利用時にインストールしたアプリケーションが一覧に表示されない事象について</a>
+    </h1>
+  
+
+      </header>
+    
+
+    <!-- post caption -->
+    <div class="article-entry" itemprop="articleBody">
+      
+        
+本記事はマイクロソフト社員によって公開されております。
+
+
+こんにちは、Windows サポートの相沢です。
+本記事では、Windows 11, versions 24H2 および 25H2 で順次有効化されている “新しいスタート メニュー” で発生する問題についてご報告させていただきます。
+対象バージョンWindows 11, version 24H2Windows 11, version 25H2
+事象Windows 11, versions 24H2 および 25H2 では 2025.10 D (KB5067036) のプレビュー更新プログラムを適用後、 新しいスタート メニュー (Start 5.0) が制御された機能ロールアウト (CFR) により段階的に有効化されています。
+新しいスタート メニューは、以下のような UI で表示されます。
+この新しいスタート メニューに切り...
+        <p class="article-readmore">
+          <a href="/blog/2026/04/16/Shell/Explorer/installed-applications-dont-appear-in-new-StartMenu/">Read more</a>
+        </p>
+      
+    </div>
+
+    <footer class="article-footer">
+      <!--a data-url="https://jpwinsup.github.io/blog/2026/04/16/Shell/Explorer/installed-applications-dont-appear-in-new-StartMenu/" data-id="cmomao0gw00iwt93fcjhzajlq" class="article-share-link">共有</a-->
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-Deployment/Sysprep/sysprep-masterimage" class="article article-type-post" itemscope itemprop="blogPost">
+
+  <div class="article-inner">
+    <!-- post date -->
+    <div class="article-meta">
+      <a href="/blog/2026/04/13/Deployment/Sysprep/sysprep-masterimage/" class="article-date">
+  <time datetime="2026-04-13T15:00:00.000Z" itemprop="datePublished">2026-04-14</time>
+</a>
+    </div>
+
+    <!-- category list -->
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/blog/categories/Deployment/">Deployment</a>►<a class="article-category-link" href="/blog/categories/Deployment/Sysprep/">Sysprep</a>
+  </div>
+
+
+    
+    <!-- post title -->
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/blog/2026/04/13/Deployment/Sysprep/sysprep-masterimage/">Sysprep を用いたマスター イメージの作成に関する注意点・推奨事項</a>
+    </h1>
+  
+
+      </header>
+    
+
+    <!-- post caption -->
+    <div class="article-entry" itemprop="articleBody">
+      
+        ※本記事はマイクロソフト社員によって公開されております。
+みなさま、こんにちは。Windows サポート チームです。本記事では、オンプレミス環境 における Windows OS のマスター イメージ作成を対象に、Sysprep を用いた際の一般的な注意点と、サポート部門としてお勧めする展開方法を整理してご紹介します。
+これから初めてマスター イメージを作成される方はもちろん、すでに運用中のイメージをお持ちの方にとっても、現在の構成や手順を見直すためのチェックリストとしてご活用いただければ幸いです。
+
+目次
+Sysprep の考え方
+マスター イメージの前提条件
+マスター イメージとして設定可能な範囲
+品質更新プログラムの適用
+アップグレード環境について
+複数ユーザー プロファイルが存在する環境
+ドメイン参加状態での Sysprep
+まとめ
+参考技術情報
+
+
+
+
+Sysprep の考え方
+...
+        <p class="article-readmore">
+          <a href="/blog/2026/04/13/Deployment/Sysprep/sysprep-masterimage/">Read more</a>
+        </p>
+      
+    </div>
+
+    <footer class="article-footer">
+      <!--a data-url="https://jpwinsup.github.io/blog/2026/04/13/Deployment/Sysprep/sysprep-masterimage/" data-id="cmomao0d0008ct93fen677zra" class="article-share-link">共有</a-->
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-UEFI/Secure Boot/about-secure-boot-expiration-2026" class="article article-type-post" itemscope itemprop="blogPost">
+
+  <div class="article-inner">
+    <!-- post date -->
+    <div class="article-meta">
+      <a href="/blog/2026/04/10/UEFI/Secure%20Boot/about-secure-boot-expiration-2026/" class="article-date">
+  <time datetime="2026-04-10T03:00:00.000Z" itemprop="datePublished">2026-04-10</time>
+</a>
+    </div>
+
+    <!-- category list -->
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/blog/categories/UEFI/">UEFI</a>►<a class="article-category-link" href="/blog/categories/UEFI/Secure-Boot/">Secure Boot</a>
+  </div>
+
+
+    
+    <!-- post title -->
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/blog/2026/04/10/UEFI/Secure%20Boot/about-secure-boot-expiration-2026/">2026 年に有効期限を迎える Secure Boot 証明書の更新について</a>
+    </h1>
+  
+
+      </header>
+    
+
+    <!-- post caption -->
+    <div class="article-entry" itemprop="articleBody">
+      
+        
+本記事はマイクロソフト社員によって公開されております。  
+
+こんにちは、Windows サポートの新井です。本記事では、2026 年に有効期限を迎える Secure Boot 証明書について、想定される影響やよくあるご質問をご案内いたします。
+■ 概要Microsoft が提供する Secure Boot 証明書は、2026 年 6 月から 10 月にかけて順次有効期限を迎えます。
+有効期限を迎えた場合でも、直ちに Windows OS の起動や機能に影響が生じるものではございませんが、Secure Boot の保護機能や一部のセキュリティ更新の適用に影響する可能性がございます。
+■ よくある質問 (FAQ)
+更新せずに期限が切れると、どうなりますか?
+期限が切れると証明書は失効しますか?
+オフライン環境でも更新できますか?
+Secure Boot が無効な場合も対応が必要ですか?
+I...
+        <p class="article-readmore">
+          <a href="/blog/2026/04/10/UEFI/Secure%20Boot/about-secure-boot-expiration-2026/">Read more</a>
+        </p>
+      
+    </div>
+
+    <footer class="article-footer">
+      <!--a data-url="https://jpwinsup.github.io/blog/2026/04/10/UEFI/Secure%20Boot/about-secure-boot-expiration-2026/" data-id="cmomao0im00lnt93f96ub93sm" class="article-share-link">共有</a-->
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-ActiveDirectory/Authentication/LSA_Protection_Events" class="article article-type-post" itemscope itemprop="blogPost">
+
+  <div class="article-inner">
+    <!-- post date -->
+    <div class="article-meta">
+      <a href="/blog/2026/04/09/ActiveDirectory/Authentication/LSA_Protection_Events/" class="article-date">
+  <time datetime="2026-04-09T15:00:00.000Z" itemprop="datePublished">2026-04-10</time>
+</a>
+    </div>
+
+    <!-- category list -->
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/blog/categories/Active-Directory/">Active Directory</a>►<a class="article-category-link" href="/blog/categories/Active-Directory/Authentication/">Authentication</a>
+  </div>
+
+
+    
+    <!-- post title -->
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/blog/2026/04/09/ActiveDirectory/Authentication/LSA_Protection_Events/">LSA 保護で記録されるイベントについて</a>
+    </h1>
+  
+
+      </header>
+    
+
+    <!-- post caption -->
+    <div class="article-entry" itemprop="articleBody">
+      
+        本記事はマイクロソフト社員によって公開されております。
+こんにちは。Windows Commercial Support Directory Services チームです。今回は以下のマイクロソフトの URL でご案内している LSA 保護について補足させていただきます。
+追加された LSA 保護を構成する
+LSA 保護とは、lsass.exe を「Protected Process Light (PPL)」として実行し、保護されていないプロセスによるメモリの読み取りやコード インジェクションを防ぐ仕組みです。また、Protected Process Light（PPL）は Windows の特別な保護プロセス モードで、重要プロセスを改ざん・停止・メモリ読み取りから守るための OS レベルの保護機構です。上記 URL では、LSA 保護が有効な状態、また、LSA 保護の監査モードとなって...
+        <p class="article-readmore">
+          <a href="/blog/2026/04/09/ActiveDirectory/Authentication/LSA_Protection_Events/">Read more</a>
+        </p>
+      
+    </div>
+
+    <footer class="article-footer">
+      <!--a data-url="https://jpwinsup.github.io/blog/2026/04/09/ActiveDirectory/Authentication/LSA_Protection_Events/" data-id="cmomao0c0005rt93fbtg9d1nv" class="article-share-link">共有</a-->
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-UserInterfaceAndApps/EventLog/EventLogMaxSizeAndArchive" class="article article-type-post" itemscope itemprop="blogPost">
+
+  <div class="article-inner">
+    <!-- post date -->
+    <div class="article-meta">
+      <a href="/blog/2026/04/02/UserInterfaceAndApps/EventLog/EventLogMaxSizeAndArchive/" class="article-date">
+  <time datetime="2026-04-02T00:22:40.000Z" itemprop="datePublished">2026-04-02</time>
+</a>
+    </div>
+
+    <!-- category list -->
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/blog/categories/User-Interface-and-Apps/">User Interface and Apps</a>►<a class="article-category-link" href="/blog/categories/User-Interface-and-Apps/EventLog/">EventLog</a>
+  </div>
+
+
+    
+    <!-- post title -->
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/blog/2026/04/02/UserInterfaceAndApps/EventLog/EventLogMaxSizeAndArchive/">イベントログ ファイルの最大サイズ増強よりもアーカイブが効果的</a>
+    </h1>
+  
+
+      </header>
+    
+
+    <!-- post caption -->
+    <div class="article-entry" itemprop="articleBody">
+      
+        本記事はマイクロソフト社員によって公開されております。
+こんにちは、Windows サポート チームの岩永です。本記事では、イベントログ ファイルの最大サイズを増強した際のパフォーマンスへの影響と、推奨される対処策についてご案内いたします。
+イベントログ ファイルの最大サイズとパフォーマンスの関係Windows のイベントログはより多くのイベントを記録するために最大サイズを拡張できますが、サイズを大きくするほどパフォーマンスが指数的に劣化する場合があります。その理由は、以下のイベントログの仕組みにあります。
+
+イベントログ ファイルはバイナリ形式で保存されている
+イベント ビューアーは、表示時にバイナリを XML 形式へ変換している
+ファイル サイズが大きいほど、この変換処理や表示に消費する (CPU 使用率が上がり、メモリの使用量が増大する)
+
+適切な最大サイズの目安最適なサイズは環境に...
+        <p class="article-readmore">
+          <a href="/blog/2026/04/02/UserInterfaceAndApps/EventLog/EventLogMaxSizeAndArchive/">Read more</a>
+        </p>
+      
+    </div>
+
+    <footer class="article-footer">
+      <!--a data-url="https://jpwinsup.github.io/blog/2026/04/02/UserInterfaceAndApps/EventLog/EventLogMaxSizeAndArchive/" data-id="cmomao0io00lst93f0ikrdweg" class="article-share-link">共有</a-->
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-UserInterfaceAndApps/Printing/PrintDialogSettings" class="article article-type-post" itemscope itemprop="blogPost">
+
+  <div class="article-inner">
+    <!-- post date -->
+    <div class="article-meta">
+      <a href="/blog/2026/04/01/UserInterfaceAndApps/Printing/PrintDialogSettings/" class="article-date">
+  <time datetime="2026-04-01T15:00:00.000Z" itemprop="datePublished">2026-04-02</time>
+</a>
+    </div>
+
+    <!-- category list -->
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/blog/categories/User-Interface-and-Apps/">User Interface and Apps</a>►<a class="article-category-link" href="/blog/categories/User-Interface-and-Apps/Printing-%E5%8D%B0%E5%88%B7/">Printing (印刷)</a>
+  </div>
+
+
+    
+    <!-- post title -->
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/blog/2026/04/01/UserInterfaceAndApps/Printing/PrintDialogSettings/">Windows 11 の新しい印刷ダイアログの動作について</a>
+    </h1>
+  
+
+      </header>
+    
+
+    <!-- post caption -->
+    <div class="article-entry" itemprop="articleBody">
+      
+        
+本記事はマイクロソフト社員によって公開されております。
+
+こんにちは、Windows サポート チームの浅野です。
+Windows 11 Version 22H2 より、印刷時に起動する印刷ダイアログの UI が刷新され、新しい印刷ダイアログへの変更が行われております。今回は、新しい印刷ダイアログの動作で、よくお問い合わせをいただく内容や、皆様にご認識いただきたい情報について本ブログにてご案内をさせていただきます。
+“アプリで印刷設定を変更できるようにする” 機能の動作Windows 11 にて採用されている新しい印刷ダイアログにつきましては、以下の画像の通り、”アプリで印刷設定を変更できるようにする” という機能がございます。
+
+本設定は、印刷ダイアログ上で印刷の向きなどの設定を変更することで、ユーザーごとのプリンターの既定の印刷設定も同時に変更される機能となります。
+ユーザーごとの既...
+        <p class="article-readmore">
+          <a href="/blog/2026/04/01/UserInterfaceAndApps/Printing/PrintDialogSettings/">Read more</a>
+        </p>
+      
+    </div>
+
+    <footer class="article-footer">
+      <!--a data-url="https://jpwinsup.github.io/blog/2026/04/01/UserInterfaceAndApps/Printing/PrintDialogSettings/" data-id="cmomao0j200mpt93f7j4n2i52" class="article-share-link">共有</a-->
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+
+
+  <nav id="page-nav">
+    
+    <span class="page-number current">1</span><a class="page-number" href="/blog/page/2/">2</a><a class="page-number" href="/blog/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/blog/page/50/">50</a><a class="extend next" rel="next" href="/blog/page/2/">次へ &raquo;</a>
+  </nav>
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">カテゴリ</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Activation/">Activation</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Activation/ESU/">ESU</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Activation/security-SPP/">security-SPP</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/">Active Directory</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Authentication/">Authentication</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/DFSR/">DFSR</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/FunctionalLevel/">FunctionalLevel</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Group-Policy/">Group Policy</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Promotion-and-Demotion/">Promotion and Demotion</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/User-Profile/">User Profile</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Windows-Hello/">Windows Hello</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Windows-Time-Service/">Windows Time Service</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/AppLocker/">AppLocker</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/AppLocker/Active-Directory/">Active Directory</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/AppLocker/Microsoft-Intune/">Microsoft Intune</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/BitLocker/">BitLocker</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Deployment/">Deployment</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Deployment/Feature-on-demand/">Feature on demand</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Deployment/Sysprep/">Sysprep</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Failover-Clustering/">Failover Clustering</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Failover-Clustering/Azure-Local/">Azure Local</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Failover-Clustering/Configuration-and-Management/">Configuration and Management</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/FileServices/">FileServices</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/FileServices/FTP/">FTP</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/FileServices/SMB/">SMB</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Hyper-V/">Hyper-V</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Hyper-V/Configuration-and-Management/">Configuration and Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Hyper-V/Migration/">Migration</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Microsoft-Connected-Cache/">Microsoft Connected Cache</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/">Networking</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/BITS/">BITS</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/Bluetooth/">Bluetooth</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/DHCP/">DHCP</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/DNS/">DNS</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/Firewall/">Firewall</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/LBFO/">LBFO</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/NCSI/">NCSI</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/NetworkInterface/">NetworkInterface</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/Proxy/">Proxy</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/TCPIP/">TCPIP</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/OpenSSH/">OpenSSH</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/">Performance</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/Hang-up-BSoD/">Hang-up/BSoD</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/No-Boot/">No Boot</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/Slow-Response/">Slow Response</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/System-Resource/">System Resource</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/Tools/">Tools</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/">Public Key Infrastructure</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Certificate-Authority/">Certificate Authority</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Certificate-Management/">Certificate Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Code-Signing/">Code Signing</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/SSL-TLS-Communication/">SSL TLS Communication</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/SSL-TLS-Connection/">SSL TLS Connection</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Smart-Card-Logon/">Smart Card Logon</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/">Remote Desktop</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/Azure-Virtual-Desktop-AVD/">Azure Virtual Desktop (AVD)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/Remote-Desktop-Service-RDS/">Remote Desktop Service (RDS)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/Windows-Virtual-Desktop-WVD/">Windows Virtual Desktop (WVD)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/RemoteAccess/">RemoteAccess</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/RemoteAccess/%E3%83%80%E3%82%A4%E3%83%A4%E3%83%AB%E3%82%A2%E3%83%83%E3%83%97%E6%8E%A5%E7%B6%9A/">ダイヤルアップ接続</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Security/">Security</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Security/WDAC/">WDAC</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Setup/">Setup</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Setup/Feature-Update-FU/">Feature Update (FU)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Shell/">Shell</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Shell/Explorer/">Explorer</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Shell/StartMenu/">StartMenu</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/">Storage</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/Backup/">Backup</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/FSRM/">FSRM</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/Management/">Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/StorageMigrationService/">StorageMigrationService</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Support-Request/">Support Request</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/UEFI/">UEFI</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/UEFI/Secure-Boot/">Secure Boot</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/">User Interface and Apps</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Command-Prompt/">Command Prompt</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/EventLog/">EventLog</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Language-Support/">Language Support</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Microsoft-Store/">Microsoft Store</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Performance/">Performance</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/PowerShell/">PowerShell</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Printing-%E5%8D%B0%E5%88%B7/">Printing (印刷)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Server-Management/">Server Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Taskscheduler/">Taskscheduler</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Windows-Management-Instrumentation/">Windows Management Instrumentation</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps-Language-support/">User Interface and Apps - Language support</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-365/">Windows 365</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Admin-Center/">Windows Admin Center</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Search/">Windows Search</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/">Windows Update</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Delivery-Optimization-DO/">Delivery Optimization (DO)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Feature-Update-FU/">Feature Update (FU)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Quality-Update-QU/">Quality Update (QU)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Windows-Update-Agent/">Windows Update Agent</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Windows-Update-Agent-WUA/">Windows Update Agent (WUA)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/">WirelessNetwork</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/NPS/">NPS</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/Wi-Fi/">Wi-Fi</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/%E3%83%A2%E3%83%90%E3%82%A4%E3%83%AB-%E3%83%96%E3%83%AD%E3%83%BC%E3%83%89%E3%83%90%E3%83%B3%E3%83%89%E6%8E%A5%E7%B6%9A-LTE/">モバイル ブロードバンド接続 (LTE)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/%E7%B5%84%E7%B9%94%E7%B4%B9%E4%BB%8B%E3%83%96%E3%83%AD%E3%82%B0%EF%BC%88Windows-Commercial%EF%BC%89/">組織紹介ブログ（Windows Commercial）</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最近の投稿</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/blog/2026/04/30/FailoverClustering/Cluster-IP-Address-and-Cluster-Name-may-not-come-online-after-full-cluster-restart-on-Azure-Local-24H2/">Azure Local 24H2 クラスター シャットダウン後の全ノード起動時に Cluster IP Address / Cluster Name が自動オンラインにならない場合がある</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/04/24/RemoteDesktopService/RDS/RDPSecurityWarnings/">2026 年 4 月の更新プログラム適用後の RDP ファイル (リモート デスクトップ) のセキュリティ警告について</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/04/22/RemoteDesktopService/RDS/ClearingHouse/">RDS (Remote Desktop Service) のライセンスに関するお問い合わせの留意点</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/04/16/ActiveDirectory/UserProfile/windows-folder-structure/">Windows のフォルダー構成を理解しよう — アプリはどこにインストールされるべき？</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/04/16/Shell/Explorer/installed-applications-dont-appear-in-new-StartMenu/">新しい [スタート メニュー] 利用時にインストールしたアプリケーションが一覧に表示されない事象について</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">アーカイブ</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2026/05/">2026 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2026/04/">2026 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2026/03/">2026 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2026/02/">2026 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2026/01/">2026 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/12/">2025 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/11/">2025 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/10/">2025 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/09/">2025 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/08/">2025 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/07/">2025 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/06/">2025 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/05/">2025 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/04/">2025 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/03/">2025 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/02/">2025 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/01/">2025 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/12/">2024 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/11/">2024 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/10/">2024 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/09/">2024 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/08/">2024 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/07/">2024 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/06/">2024 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/05/">2024 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/04/">2024 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/03/">2024 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/02/">2024 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/01/">2024 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/12/">2023 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/11/">2023 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/10/">2023 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/09/">2023 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/08/">2023 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/07/">2023 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/06/">2023 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/05/">2023 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/04/">2023 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/03/">2023 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/02/">2023 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/01/">2023 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/12/">2022 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/11/">2022 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/10/">2022 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/09/">2022 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/08/">2022 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/07/">2022 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/06/">2022 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/05/">2022 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/04/">2022 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/03/">2022 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/02/">2022 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/01/">2022 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/12/">2021 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/11/">2021 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/10/">2021 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/09/">2021 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/08/">2021 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/07/">2021 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/06/">2021 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/05/">2021 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/04/">2021 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/03/">2021 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/02/">2021 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/01/">2021 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/12/">2020 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/11/">2020 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/10/">2020 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/07/">2020 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/03/">2020 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2019/03/">2019 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/11/">2018 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/10/">2018 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/09/">2018 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/08/">2018 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/07/">2018 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/06/">2018 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/04/">2018 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/02/">2018 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/12/">2017 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/11/">2017 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/09/">2017 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/05/">2017 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/03/">2017 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/02/">2017 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2016/08/">2016 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2016/05/">2016 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2014/03/">2014 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2012/02/">2012 / 02</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2026 Microsoft Japan Windows Technology Support Team<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/blog/" class="mobile-nav-link">Home</a>
+  
+    <a href="/blog/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+<script src="/blog/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>
