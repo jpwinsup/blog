@@ -1,0 +1,64 @@
+\Processor(*)\*
+\Memory\*
+\LogicalDisk(*)\*
+\PhysicalDisk(*)\*
+\Cache\*
+\Process(*)\*
+\Process V2(*)\*
+\System\*
+\Server\*
+\Network Adapter(*)\*
+\Network Interface(*)\*
+\Paging File(*)\*
+\Processor Information(*)\*
+\Objects\*
+\Server Work Queues(*)\*
+\Cluster NetFt Heartbeats(*)\*
+\Cluster CSV Block Redirection(*)\*
+\Cluster CSV Coordinator(*)\*
+\Cluster CSV File System(*)\*
+\Cluster CSV Volume Cache(*)\*
+\Cluster CSV Volume Manager(*)\*
+\Cluster CSVFS(*)\*
+\RDMA Activity(*)\*
+\SMB Direct Connection(*)\*
+\SMB Client Shares(*)\*
+\SMB Server\*
+\SMB Server Sessions(*)\*
+\SMB Server Shares(*)\*
+\Storage Spaces Drt(*)\*
+\Storage Spaces Tier(*)\*
+\Storage Spaces Virtual Disk(*)\*
+\Storage Spaces Write Cache(*)\*
+\Hyper-V Configuration(*)\*
+\Hyper-V Dynamic Memory Balancer(*)\*
+\Hyper-V Dynamic Memory Integration Service\*
+\Hyper-V Dynamic Memory VM(*)\*
+\Hyper-V Hypervisor\*
+\Hyper-V Hypervisor Logical Processor(*)\*
+\Hyper-V Hypervisor Partition(*)\*
+\Hyper-V Hypervisor Root Partition(*)\*
+\Hyper-V Hypervisor Root Virtual Processor(*)\*
+\Hyper-V Hypervisor Virtual Processor(*)\*
+\Hyper-V Legacy Network Adapter\*
+\Hyper-V Replica VM\*
+\Hyper-V Virtual IDE Controller (Emulated)\*
+\Hyper-V Virtual Machine Bus\*
+\Hyper-V Virtual Machine Bus Pipes\*
+\Hyper-V Virtual Machine Bus Provider Pipes(*)\*
+\Hyper-V Virtual Machine Health Summary\*
+\Hyper-V Virtual Network Adapter(*)\*
+\Hyper-V Virtual Network Adapter Drop Reasons(*)\*
+\Hyper-V Virtual Network Adapter VRSS(*)\*
+\Hyper-V Virtual SMB\*
+\Hyper-V Virtual Storage Device(*)\*
+\Hyper-V Virtual Switch(*)\*
+\Hyper-V Virtual Switch Port(*)\*
+\Hyper-V Virtual Switch Processor(*)\*
+\Hyper-V VM Live Migration(*)\*
+\Hyper-V VM Remoting(*)\*
+\Hyper-V VM Save, Snapshot, and Restore(*)\*
+\Hyper-V VM Vid Numa Node(*)\*
+\Hyper-V VM Vid Partition(*)\*
+\Hyper-V VM Virtual Device Pipe IO(*)\*
+\Hyper-V Worker Virtual Processor(*)\*

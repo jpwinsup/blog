@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-180187723-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-180187723-1');
+</script>
+<!-- End Google Analytics -->
+
+  
+  <title>PKI の概要 | Microsoft Japan Windows Technology Support Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="こんにちは。Windows サポート チームです。  本記事では、PKI (Public Key Infrastructure &#x2F; 公開キー基盤) の概要について説明します。PKI は Windows Server の Active Directory 証明書サービス (AD CS) をはじめ、多くの Windows テクノロジの基盤となる重要な仕組みです。 身近なシナリオを例に挙げながら、PKI">
+<meta property="og:type" content="article">
+<meta property="og:title" content="PKI の概要">
+<meta property="og:url" content="https://jpwinsup.github.io/blog/2026/06/22/PublicKeyInfrastructure/Fundamental/pki-foundation-01/index.html">
+<meta property="og:site_name" content="Microsoft Japan Windows Technology Support Blog">
+<meta property="og:description" content="こんにちは。Windows サポート チームです。  本記事では、PKI (Public Key Infrastructure &#x2F; 公開キー基盤) の概要について説明します。PKI は Windows Server の Active Directory 証明書サービス (AD CS) をはじめ、多くの Windows テクノロジの基盤となる重要な仕組みです。 身近なシナリオを例に挙げながら、PKI">
+<meta property="og:locale" content="ja_JP">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2026/06/22/PublicKeyInfrastructure/Fundamental/pki-foundation-01/image1.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2026/06/22/PublicKeyInfrastructure/Fundamental/pki-foundation-01/image2.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2026/06/22/PublicKeyInfrastructure/Fundamental/pki-foundation-01/image3.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2026/06/22/PublicKeyInfrastructure/Fundamental/pki-foundation-01/image4.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2026/06/22/PublicKeyInfrastructure/Fundamental/pki-foundation-01/image5.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2026/06/22/PublicKeyInfrastructure/Fundamental/pki-foundation-01/image6.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2026/06/22/PublicKeyInfrastructure/Fundamental/pki-foundation-01/image7.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2026/06/22/PublicKeyInfrastructure/Fundamental/pki-foundation-01/image8.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2026/06/22/PublicKeyInfrastructure/Fundamental/pki-foundation-01/image9.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2026/06/22/PublicKeyInfrastructure/Fundamental/pki-foundation-01/image10.png">
+<meta property="article:published_time" content="2026-06-22T15:00:00.000Z">
+<meta property="article:modified_time" content="2026-06-26T05:55:01.957Z">
+<meta property="article:author" content="Microsoft Japan Windows Technology Support Team">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://jpwinsup.github.io/blog/2026/06/22/PublicKeyInfrastructure/Fundamental/pki-foundation-01/image1.png">
+  
+    <link rel="alternate" href="/blog/atom.xml" title="Microsoft Japan Windows Technology Support Blog" type="application/atom+xml">
+  
+
+  <link rel="icon" href="/blog/favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="/blog/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/blog/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/blog/favicon-16x16.png">
+  <link rel="manifest" href="/blog/site.webmanifest">
+  <link rel="mask-icon" href="/blog/safari-pinned-tab.svg" color="#5bbad5">
+  <meta name="msapplication-TileColor" content="#ffffff">
+  <meta name="theme-color" content="#ffffff">
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/blog/css/style.css">
+
+<meta name="generator" content="Hexo 5.2.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="site-header-logo"></div>
+  <div id="site-header-blog-wrapper"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        <div id="ms-logo"></div>
+        
+          <a class="main-nav-link" href="/blog/">Home</a>
+        
+          <a class="main-nav-link" href="/blog/archives">Archives</a>
+        
+        <a class="main-nav-link" target="_blank" rel="noopener" href="https://cssjpn.github.io/">サポート情報</a>
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/blog/atom.xml" title="RSSフィード"></a>
+        
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//www.bing.com/search" method="get" accept-charset="UTF-8" name="bing-search" onsubmit="var f=this;if(f['q'].value){var searchUrl =  'https://www.bing.com/search?q=' +  encodeURIComponent(f['q'].value + ' site:' + f['sitesearch'].value) ;window.open(searchUrl, 'blank') };return false;" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="検索"><button type="submit" id="nav-search-btn" class="search-form-submit"></button><input type="hidden" name="sitesearch" value="https://jpwinsup.github.io/blog"></form>
+      </div>
+    </div>
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/blog/" id="logo">Microsoft Japan Windows Technology Support Blog</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/blog/" id="subtitle">日本マイクロソフト Windows Support チームによる、サポート情報 Blog です。</a>
+        </h2>
+      
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-PublicKeyInfrastructure/Fundamental/pki-foundation-01" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    
+    
+      <header class="article-header-single">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      PKI の概要
+    </h1>
+  
+
+      </header>
+      <div class="article-share">
+        Published Date: 
+        <a href="/blog/2026/06/22/PublicKeyInfrastructure/Fundamental/pki-foundation-01/" class="article-date-single">
+  <time datetime="2026-06-22T15:00:00.000Z" itemprop="datePublished">2026-06-23</time>
+</a>
+        
+  <div class="article-category">
+    <a class="article-category-link" href="/blog/categories/Public-Key-Infrastructure/">Public Key Infrastructure</a>►<a class="article-category-link" href="/blog/categories/Public-Key-Infrastructure/Fundamental/">Fundamental</a>
+  </div>
+
+        
+        <a href="https://github.com/jpwinsup/blog/issues/new?title=&body=%EF%BB%BF%0A%0A---%0A%0A%23%23%23%23+Document+Details%0A%0A*+Article+ID%3A+2b4f8fdc-29ad-5e4b-89b9-e136ed553864%0A*+TITLE%3A+PKI+%E3%81%AE%E6%A6%82%E8%A6%81%0A*+URL+https%3A%2F%2Fjpwinsup.github.io%2Fblog%2F2026%2F06%2F22%2FPublicKeyInfrastructure%2FFundamental%2Fpki-foundation-01%2F%0A*+SourceFileName%3A+source%2F_posts%2FPublicKeyInfrastructure%2FFundamental%2Fpki-foundation-01.md%0A" class="article-github-issue-link" target="_blank" rel="noopener noreferrer">feedback</a>
+        
+        <a data-url="https://jpwinsup.github.io/blog/2026/06/22/PublicKeyInfrastructure/Fundamental/pki-foundation-01/" data-id="cmquixe0900gct05ne8724ojp" class="article-share-link">共有</a>
+      </div>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>こんにちは。Windows サポート チームです。 </p>
+<p>本記事では、PKI (Public Key Infrastructure / 公開キー基盤) の概要について説明します。<br>PKI は Windows Server の Active Directory 証明書サービス (AD CS) をはじめ、多くの Windows テクノロジの基盤となる重要な仕組みです。 身近なシナリオを例に挙げながら、PKI が解決する課題と、その基本的な仕組みについて紹介します。</p>
+<h2 id="PKI-が必要とされる背景"><a href="#PKI-が必要とされる背景" class="headerlink" title="PKI が必要とされる背景"></a>PKI が必要とされる背景</h2><p>はじめに、PKI がなぜ必要とされるのかを、身近な例を使って考えてみましょう。Surface  購入を例としてみます。</p>
+<p>私たちが販売店へ直接行って、 Surface を購入する場合、商品をレジに持っていき、クレジットカードなどを利用して支払いを行い購入する、といった形になると思います。販売店へ直接行く場合は、販売店の店員さんと直接顔を合わせ、値段を確認して、確かに信頼できるお店であることを私たちが自分の目で確認して購入することができます。</p>
+<p>一方、Microsoft Store の Web サイトで Surface を購入するシナリオでは、 購入の際に、氏名、住所、クレジットカード番号などの個人情報を Web サイト上で入力します。インターネット越しでのやりとりでは相手の姿が見えません。<br>入力した情報はインターネットを通じて相手に送られますが、通信経路上で通信相手以外の人に見られることはないでしょうか。また、入力した情報がどこかで書き換えられることはないでしょうか。そもそも、やり取りしている顔も見えない相手は、本当にやり取りしたい相手（Microsoft Store）なのでしょうか。<br>上記のような不安を簡単にまとめると、以下のような脅威に分類できるかと思います。</p>
+<ul>
+<li>盗聴 (暗号化されていない通信の傍受): 入力したクレジットカード番号や個人情報が、通信経路上の第三者に盗み見られる可能性があります。</li>
+<li>改ざん: 注文内容や支払い情報が、通信の途中で第三者によって書き換えられる可能性があります。</li>
+<li>なりすまし: アクセスしている Web サイトが、本物の Microsoft Store ではなく、悪意のある第三者が作成した偽のサイトであり情報が盗まれる可能性があります。</li>
+</ul>
+<p>PKI は、インターネット上で見知らぬ相手とやり取りを行うにあたって、このような脅威から守る（安全にやり取りを行う）ための仕組みを提供します。</p>
+<h2 id="暗号技術"><a href="#暗号技術" class="headerlink" title="暗号技術"></a>暗号技術</h2><p>インターネット上で、上記のような脅威から守るため、そして PKI について理解するうえで、暗号技術が不可欠です。ここでは最低限押さえておきたい暗号方式、そしてデジタル署名について説明します。</p>
+<h3 id="暗号方式"><a href="#暗号方式" class="headerlink" title="暗号方式"></a>暗号方式</h3><p>暗号化方式としては大きく、共通鍵暗号方式と公開鍵暗号方式(非対称暗号) があります。<br>押さえておきたいポイント：</p>
+<ul>
+<li><strong>共通鍵暗号</strong>：暗号化と復号に同じ鍵を使う</li>
+<li><strong>公開鍵暗号</strong>：暗号化と復号に異なる鍵（公開鍵と秘密鍵）を使う</li>
+</ul>
+<h4 id="共通鍵暗号方式"><a href="#共通鍵暗号方式" class="headerlink" title="共通鍵暗号方式:"></a>共通鍵暗号方式:</h4><p>データを暗号化する鍵と、データを復号する鍵が同一の暗号方式です。公開鍵暗号方式に比べて処理速度が速いというメリットがある一方で、鍵を事前に安全な方法で共有する必要があるというデメリットがあげられます。<br>また、共通鍵の鍵を通信相手に事前に共有する仕組みとしては鍵交換と呼ばれる仕組みがあり、鍵交換の仕組みの例としてはハイブリッド暗号などが挙げられます。<br>共通鍵暗号方式の代表的なアルゴリズム:AES, 3DES, DES 等</p>
+<p><img src="image1.png"></p>
+<h4 id="公開鍵暗号方式-非対称暗号"><a href="#公開鍵暗号方式-非対称暗号" class="headerlink" title="公開鍵暗号方式(非対称暗号):"></a>公開鍵暗号方式(非対称暗号):</h4><p>公開鍵(公開し誰でも使える鍵)とそのキーペアとなる秘密鍵(他の人には知られてはいけない鍵)の 2 つの鍵を利用する暗号化方式です。</p>
+<ul>
+<li>公開鍵：誰に見せてもよい鍵</li>
+<li>秘密鍵：持ち主だけが厳重に保管する鍵<br>公開鍵暗号方式は、暗号化に使用する鍵と、復号に使用する鍵が異なっていることが特徴であり、主に次の2つの目的で利用されます。</li>
+<li><strong>暗号化</strong>：公開鍵で暗号化し、対応する秘密鍵で復号する（内容を第三者に見せないため）</li>
+<li><strong>デジタル署名</strong>：秘密鍵で署名を作成し、公開鍵で検証する（送信者本人であることと改ざんされていないことを確認するため）</li>
+</ul>
+<p>公開鍵暗号方式の代表的なアルゴリズム:RSA, DSA, ECDSA 等</p>
+<p><img src="image2.png"></p>
+<h3 id="デジタル署名"><a href="#デジタル署名" class="headerlink" title="デジタル署名"></a>デジタル署名</h3><p>インターネット上でデータが改ざんされていないかを確認するために 、デジタル署名と呼ばれる仕組みによって実現しています。<br>デジタル署名は、ハッシュ アルゴリズム(ハッシュ関数) + 公開鍵の組み合わせで成り立っています。この仕組みにより、受信者は次の2点を確認できます。</p>
+<ul>
+<li>データが途中で改ざんされていないこと</li>
+<li>データが確かに送信者本人によって作成されたこと</li>
+</ul>
+<h4 id="ハッシュ関数"><a href="#ハッシュ関数" class="headerlink" title="ハッシュ関数"></a>ハッシュ関数</h4><p>ハッシュ関数とはデータの改ざん検知に使われるもので、ハッシュ関数では任意のデータから固定長のデータを生成する関数です。<br>ハッシュ関数で生成された値をハッシュ値と呼ばれます。(ダイジェストという呼び方もあります。同じものです)</p>
+<p>ハッシュ関数は不可逆関数で、ハッシュ値より元の値を算出することはできません。同じデータをハッシュ関数に入力すると同じハッシュ値が生成され、入力する文字列を1文字でも変更すると生成されるハッシュ値は全く違うものになります。<br>また、ハッシュ値は固定長なので、ハッシュ関数に入力する文字が “A” の一文字でも、数万行になる文字列を入力でも、同じデータサイズのハッシュ値を得られることができます。<br><img src="image3.png"></p>
+<h4 id="デジタル署名の流れ"><a href="#デジタル署名の流れ" class="headerlink" title="デジタル署名の流れ"></a>デジタル署名の流れ</h4><p>ハッシュ値と、公開鍵暗号方式の特性を生かし、デジタル署名は以下のような流れで作成と検証が行われます。</p>
+<p>送信者が送信するデータのハッシュ値を計算し、自分の秘密鍵でそのハッシュ値を暗号化します。これがデジタル署名です。<br><img src="image4.png"></p>
+<p>送信者は、送信するデータとデジタル署名をセットで受信者に送信します。<br><img src="image5.png"></p>
+<p>受信者は同じハッシュ アルゴリズムで送信されたデータのハッシュ値を計算します。<br><img src="image6.png"></p>
+<p>送信されたデータと一緒に送られたデジタル署名を送信者の公開鍵で復号します。<br><img src="image7.png"></p>
+<p>手順 3 と手順 4 でえられたハッシュ値を比較します。一致すれば改ざんなし、不一致なら改ざんありと判断できます。<br><img src="image8.png"></p>
+<p>ハッシュ関数はデータが 1 文字でも異なればハッシュ値が全く異なるという性質を持っています。これによって、データの改ざんを検出します。<br>※本記事では広く利用されているRSA方式を例に「秘密鍵で暗号化し、公開鍵で復号する」と 説明していますが、これは比喩的な表現です。実際には、デジタル署名は 暗号化・復号ではなく、数学的な署名・検証処理として実装されています。 ここでは理解しやすさを優先した便宜上の表現を用いています。</p>
+<h2 id="デジタル証明書"><a href="#デジタル証明書" class="headerlink" title="デジタル証明書"></a>デジタル証明書</h2><p>これまでの内容から、暗号技術によって、データを第三者に読み取られたり、改ざんされたりといった脅威から守ることができることは想像できるかと思います。<br>やり取りがみられないように、相手から送られてきた公開鍵を使ってデータを暗号化し、やり取りが改ざんされたものではないかどうかはデジタル署名を確認すればよいわけです。実際の通信では、性能や安全性を考慮して複数の仕組みが組み合わされています。</p>
+<p>ここで課題がまだ残っています。<br>この構図は、「受信者が受け取った公開鍵」 は、「本物の通信相手の公開鍵」 であることが前提に成り立ちます。見ず知らずの人が送ってきた公開鍵が、確かに本人のものであることをどのように確認すればよいでしょうか。この問題は、通信の途中に第三者が割り込んで、相手になりすまして情報を受け取ってしまうような攻撃につながります。</p>
+<p>現実世界で考えてみましょう。私たちが、自身がその本人であることを証明するとき、どんな手段を取れるでしょうか。<br>例えば、運転免許証やマイナンバー カードといった身分証を提示する、といった方法が挙げられるかと思います。<br>身分証を提示された相手は、それらの身分証は公的機関によって本人であることが審査されたうえで発行されている、つまり信頼できる第三者機関から発行されていることをもって、本人であると信用します。</p>
+<p>現実世界で利用される身分証明書と似た機能を持つ仕組みは、インターネットの世界でも存在します。<br>現在のインターネット上における PKI は、信頼のおける第三者機関を信頼する、というモデルとなっており、 「やり取りする相手の本物の公開鍵」であることを、証明機関 (CA: Certificate Authority) が発行するデジタル証明書が証明します。<br>※証明機関は、認証局、 CA など様々な呼び方があります。</p>
+<p>それではここで、冒頭で挙げたMicrosoft Store の Web サイトでのやり取りの例に戻りましょう。<br>運転免許証などの身分証明書を公的機関から発行してもらう際、本人確認書類など必要な申請書類等を提出し発行してもらうのと同様に、デジタル証明書を発行する場合も必要な申請書類を提出し審査が行われます。<br>CA は 「この公開鍵は確かに Microsoft Store の Web サイトのものである」 ことを審査の上、証明機関が持つ秘密鍵を用いてデジタル署名を施すことで、デジタル証明書として発行します。CA がデジタル証明書を発行する際に、証明書発行要求元から提出された情報に含まれる公開鍵も付与されます。<br>※ 実際の審査内容は、証明書の種類によって異なります。<br><img src="image9.png"><br>私たちがブラウザーから Microsoft Store の Web サイトにアクセスした際、Microsoft Store の Web サイトから公開鍵付きのデジタル証明書が送信されます。<br><img src="image10.png"></p>
+<p>ブラウザー側では、 受け取った公開鍵付きのデジタル証明書が信頼できるものなのか、つまり信頼できる第三者機関から発行されたものなのか検証（証明書検証) を行います。このようにして、やり取りする相手が本当のやり取り相手であることを確認しています。<br>証明検証についての詳細は次のブログでご紹介します。</p>
+<h2 id="まとめ"><a href="#まとめ" class="headerlink" title="まとめ"></a>まとめ</h2><p>インターネット上で見知らぬ相手とやり取りを行う際、盗聴や改ざん、なりすましなどの脅威が挙げられます。そのような脅威に対して、暗号化やデジタル署名、デジタル証明書などで安全な通信を実現しています。<br>PKI（公開鍵基盤）は、「公開鍵・証明書・認証局を組み合わせて、相手を安全に信頼するための仕組み」です。</p>
+<ul>
+<li>暗号化: 暗号化方式には主に共通鍵暗号方式と公開鍵暗号方式などが挙げられ、盗聴から保護する。</li>
+<li>デジタル署名: ハッシュ関数と公開鍵暗号方式を利用して、改ざんを検知する。</li>
+<li>デジタル証明書:信頼のおける第三者機関が発行したデジタル証明書を利用して、公開鍵が本人のものであると証明する。</li>
+</ul>
+
+      
+      
+    </div>
+    <footer class="article-footer">
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/blog/2026/06/23/Shell/Explorer/zipfldr-maxpath-japanese-encoding/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">次の記事</strong>
+      <div class="article-nav-title">
+        
+          エクスプローラーで ZIP ファイルを展開すると「圧縮 (zip 形式) フォルダーは無効です」エラーが発生する
+        
+      </div>
+    </a>
+  
+  
+    <a href="/blog/2026/06/15/Hyper-V/ConfigurationAndManagement/VSwitchType-Changes-on-Reboot/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">前の記事</strong>
+      <div class="article-nav-title">OS 再起動後に SET 仮想スイッチの種類が意図せず変更される (External → Internal / Private)</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">カテゴリ</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Activation/">Activation</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Activation/ESU/">ESU</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Activation/security-SPP/">security-SPP</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/">Active Directory</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Authentication/">Authentication</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/DFSR/">DFSR</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/FunctionalLevel/">FunctionalLevel</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Group-Policy/">Group Policy</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Promotion-and-Demotion/">Promotion and Demotion</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/User-Profile/">User Profile</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Windows-Hello/">Windows Hello</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Windows-Time-Service/">Windows Time Service</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/AppLocker/">AppLocker</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/AppLocker/Active-Directory/">Active Directory</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/AppLocker/Microsoft-Intune/">Microsoft Intune</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/BitLocker/">BitLocker</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Deployment/">Deployment</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Deployment/Feature-on-demand/">Feature on demand</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Deployment/Sysprep/">Sysprep</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Failover-Clustering/">Failover Clustering</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Failover-Clustering/Azure-Local/">Azure Local</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Failover-Clustering/Configuration-and-Management/">Configuration and Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Failover-Clustering/Windows-Server-2025/">Windows Server 2025</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/FileServices/">FileServices</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/FileServices/FTP/">FTP</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/FileServices/SMB/">SMB</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Hyper-V/">Hyper-V</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Hyper-V/Configuration-and-Management/">Configuration and Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Hyper-V/Migration/">Migration</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Microsoft-Connected-Cache/">Microsoft Connected Cache</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/">Networking</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/BITS/">BITS</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/Bluetooth/">Bluetooth</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/DHCP/">DHCP</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/DNS/">DNS</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/Firewall/">Firewall</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/LBFO/">LBFO</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/NCSI/">NCSI</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/NetworkInterface/">NetworkInterface</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/Proxy/">Proxy</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/TCPIP/">TCPIP</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/OpenSSH/">OpenSSH</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/">Performance</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/Hang-up-BSoD/">Hang-up/BSoD</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/No-Boot/">No Boot</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/Slow-Response/">Slow Response</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/System-Resource/">System Resource</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/Tools/">Tools</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/">Public Key Infrastructure</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Certificate-Authority/">Certificate Authority</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Certificate-Management/">Certificate Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Code-Signing/">Code Signing</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Fundamental/">Fundamental</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/SSL-TLS-Communication/">SSL TLS Communication</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/SSL-TLS-Connection/">SSL TLS Connection</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Smart-Card-Logon/">Smart Card Logon</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/">Remote Desktop</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/Azure-Virtual-Desktop-AVD/">Azure Virtual Desktop (AVD)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/Remote-Desktop-Service-RDS/">Remote Desktop Service (RDS)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/Windows-Virtual-Desktop-WVD/">Windows Virtual Desktop (WVD)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/RemoteAccess/">RemoteAccess</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/RemoteAccess/%E3%83%80%E3%82%A4%E3%83%A4%E3%83%AB%E3%82%A2%E3%83%83%E3%83%97%E6%8E%A5%E7%B6%9A/">ダイヤルアップ接続</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Security/">Security</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Security/WDAC/">WDAC</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Setup/">Setup</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Setup/Feature-Update-FU/">Feature Update (FU)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Shell/">Shell</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Shell/Explorer/">Explorer</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Shell/StartMenu/">StartMenu</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/">Storage</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/Backup/">Backup</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/FSRM/">FSRM</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/Management/">Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/StorageMigrationService/">StorageMigrationService</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Support-Request/">Support Request</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/UEFI/">UEFI</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/UEFI/Secure-Boot/">Secure Boot</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/">User Interface and Apps</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Command-Prompt/">Command Prompt</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/EventLog/">EventLog</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Language-Support/">Language Support</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Microsoft-Store/">Microsoft Store</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Performance/">Performance</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/PowerShell/">PowerShell</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Printing-%E5%8D%B0%E5%88%B7/">Printing (印刷)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Server-Management/">Server Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Taskscheduler/">Taskscheduler</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Windows-Management-Instrumentation/">Windows Management Instrumentation</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps-Language-support/">User Interface and Apps - Language support</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-365/">Windows 365</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Admin-Center/">Windows Admin Center</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Search/">Windows Search</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/">Windows Update</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Delivery-Optimization-DO/">Delivery Optimization (DO)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Feature-Update-FU/">Feature Update (FU)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Quality-Update-QU/">Quality Update (QU)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Windows-Update-Agent/">Windows Update Agent</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Windows-Update-Agent-WUA/">Windows Update Agent (WUA)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/">WirelessNetwork</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/NPS/">NPS</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/Wi-Fi/">Wi-Fi</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/%E3%83%A2%E3%83%90%E3%82%A4%E3%83%AB-%E3%83%96%E3%83%AD%E3%83%BC%E3%83%89%E3%83%90%E3%83%B3%E3%83%89%E6%8E%A5%E7%B6%9A-LTE/">モバイル ブロードバンド接続 (LTE)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/%E7%B5%84%E7%B9%94%E7%B4%B9%E4%BB%8B%E3%83%96%E3%83%AD%E3%82%B0%EF%BC%88Windows-Commercial%EF%BC%89/">組織紹介ブログ（Windows Commercial）</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最近の投稿</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/blog/2026/06/23/Shell/Explorer/zipfldr-maxpath-japanese-encoding/">エクスプローラーで ZIP ファイルを展開すると「圧縮 (zip 形式) フォルダーは無効です」エラーが発生する</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/06/22/PublicKeyInfrastructure/Fundamental/pki-foundation-01/">PKI の概要</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/06/15/Hyper-V/ConfigurationAndManagement/VSwitchType-Changes-on-Reboot/">OS 再起動後に SET 仮想スイッチの種類が意図せず変更される (External → Internal / Private)</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/06/12/Shell/Explorer/OneDriveIsNotAccessibleFromExplorerAfter202606Update/">2026 年 6 月の更新プログラム適用後にエクスプローラーから OneDrive にアクセスできなくなる問題について</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/06/10/FailoverClustering/User-Manager-Group-role-created-after-building-a-WSFC-cluster-on-Windows-Server-2025/">Windows Server 2025 でフェールオーバー クラスター構築後に作成される「ユーザー マネージャー グループ」役割について</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">アーカイブ</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2026/06/">2026 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2026/05/">2026 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2026/04/">2026 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2026/03/">2026 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2026/02/">2026 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2026/01/">2026 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/12/">2025 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/11/">2025 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/10/">2025 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/09/">2025 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/08/">2025 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/07/">2025 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/06/">2025 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/05/">2025 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/04/">2025 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/03/">2025 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/02/">2025 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/01/">2025 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/12/">2024 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/11/">2024 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/10/">2024 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/09/">2024 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/08/">2024 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/07/">2024 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/06/">2024 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/05/">2024 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/04/">2024 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/03/">2024 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/02/">2024 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/01/">2024 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/12/">2023 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/11/">2023 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/10/">2023 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/09/">2023 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/08/">2023 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/07/">2023 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/06/">2023 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/05/">2023 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/04/">2023 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/03/">2023 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/02/">2023 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/01/">2023 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/12/">2022 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/11/">2022 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/10/">2022 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/09/">2022 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/08/">2022 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/07/">2022 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/06/">2022 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/05/">2022 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/04/">2022 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/03/">2022 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/02/">2022 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/01/">2022 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/12/">2021 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/11/">2021 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/10/">2021 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/09/">2021 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/08/">2021 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/07/">2021 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/06/">2021 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/05/">2021 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/04/">2021 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/03/">2021 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/02/">2021 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/01/">2021 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/12/">2020 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/11/">2020 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/10/">2020 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/07/">2020 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/03/">2020 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2019/03/">2019 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/11/">2018 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/10/">2018 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/09/">2018 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/08/">2018 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/07/">2018 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/06/">2018 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/04/">2018 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/02/">2018 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/12/">2017 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/11/">2017 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/09/">2017 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/05/">2017 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/03/">2017 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/02/">2017 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2016/08/">2016 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2016/05/">2016 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2014/03/">2014 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2012/02/">2012 / 02</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2026 Microsoft Japan Windows Technology Support Team<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/blog/" class="mobile-nav-link">Home</a>
+  
+    <a href="/blog/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+<script src="/blog/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>
