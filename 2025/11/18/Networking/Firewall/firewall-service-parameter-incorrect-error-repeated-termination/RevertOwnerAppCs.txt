@@ -1,0 +1,25 @@
+$definition = @"
+using System;
+using System.Runtime.InteropServices;
+namespace Win32Api
+{
+public class NtDll
+{
+[DllImport("ntdll.dll", EntryPoint="RtlAdjustPrivilege")]
+public static extern int RtlAdjustPrivilege(ulong Privilege, bool Enable, bool CurrentThread, ref bool Enabled);
+}
+}
+"@
+Add-Type -TypeDefinition $definition -PassThru | Out-Null
+[Win32Api.NtDll]::RtlAdjustPrivilege(9, $true, $false, [ref]$false) | Out-Null
+
+# Get SID for "NT SERVICE\mpssvc"
+$mpssvcAccount = New-Object System.Security.Principal.NTAccount("NT SERVICE\mpssvc")
+$sid = $mpssvcAccount.Translate([System.Security.Principal.SecurityIdentifier]).Value
+$sddl = "O:SYG:SYD:PAI(A;OI;CCRP;;;SY)(A;OI;CCRP;;;BA)(A;CIIO;SDGWGR;;;$sid)(A;;CCDCLCSWRPSDRC;;;$sid)"
+$key = [Microsoft.Win32.Registry]::LocalMachine.OpenSubKey("SYSTEM\CurrentControlSet\Services\mpssvc\Parameters\AppCs",[Microsoft.Win32.RegistryKeyPermissionCheck]::ReadWriteSubTree,[System.Security.AccessControl.RegistryRights]::takeownership)
+# Convert SDDL string to ACL object
+$orgAcl = New-Object System.Security.AccessControl.RegistrySecurity
+$orgAcl.SetSecurityDescriptorSddlForm($sddl)
+# Revert to orginal ACL
+$key.SetAccessControl($orgAcl)
