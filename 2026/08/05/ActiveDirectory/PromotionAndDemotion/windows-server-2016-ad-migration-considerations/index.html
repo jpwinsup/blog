@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-180187723-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-180187723-1');
+</script>
+<!-- End Google Analytics -->
+
+  
+  <title>Windows Server 2016 からの Active Directory 移行、アップグレードにあたっての考慮事項 | Microsoft Japan Windows Technology Support Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="本記事はマイクロソフト社員によって公開されております。(作成にあたり Copilot の力を借りています) こんにちは。Windows Commercial Support Directory Services チームです。 Windows Server 2016 は 2027 年 1 月 12 日にサポート終了を迎えます。本記事は、Windows Server 2016 で稼働するドメイン コン">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Windows Server 2016 からの Active Directory 移行、アップグレードにあたっての考慮事項">
+<meta property="og:url" content="https://jpwinsup.github.io/blog/2026/08/05/ActiveDirectory/PromotionAndDemotion/windows-server-2016-ad-migration-considerations/index.html">
+<meta property="og:site_name" content="Microsoft Japan Windows Technology Support Blog">
+<meta property="og:description" content="本記事はマイクロソフト社員によって公開されております。(作成にあたり Copilot の力を借りています) こんにちは。Windows Commercial Support Directory Services チームです。 Windows Server 2016 は 2027 年 1 月 12 日にサポート終了を迎えます。本記事は、Windows Server 2016 で稼働するドメイン コン">
+<meta property="og:locale" content="ja_JP">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2026/08/05/ActiveDirectory/PromotionAndDemotion/windows-server-2016-ad-migration-considerations/security-update-phases.png">
+<meta property="article:published_time" content="2026-08-05T03:00:00.000Z">
+<meta property="article:modified_time" content="2026-08-06T10:57:22.316Z">
+<meta property="article:author" content="Microsoft Japan Windows Technology Support Team">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://jpwinsup.github.io/blog/2026/08/05/ActiveDirectory/PromotionAndDemotion/windows-server-2016-ad-migration-considerations/security-update-phases.png">
+  
+    <link rel="alternate" href="/blog/atom.xml" title="Microsoft Japan Windows Technology Support Blog" type="application/atom+xml">
+  
+
+  <link rel="icon" href="/blog/favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="/blog/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/blog/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/blog/favicon-16x16.png">
+  <link rel="manifest" href="/blog/site.webmanifest">
+  <link rel="mask-icon" href="/blog/safari-pinned-tab.svg" color="#5bbad5">
+  <meta name="msapplication-TileColor" content="#ffffff">
+  <meta name="theme-color" content="#ffffff">
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/blog/css/style.css">
+
+<meta name="generator" content="Hexo 5.2.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="site-header-logo"></div>
+  <div id="site-header-blog-wrapper"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        <div id="ms-logo"></div>
+        
+          <a class="main-nav-link" href="/blog/">Home</a>
+        
+          <a class="main-nav-link" href="/blog/archives">Archives</a>
+        
+        <a class="main-nav-link" target="_blank" rel="noopener" href="https://cssjpn.github.io/">サポート情報</a>
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/blog/atom.xml" title="RSSフィード"></a>
+        
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//www.bing.com/search" method="get" accept-charset="UTF-8" name="bing-search" onsubmit="var f=this;if(f['q'].value){var searchUrl =  'https://www.bing.com/search?q=' +  encodeURIComponent(f['q'].value + ' site:' + f['sitesearch'].value) ;window.open(searchUrl, 'blank') };return false;" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="検索"><button type="submit" id="nav-search-btn" class="search-form-submit"></button><input type="hidden" name="sitesearch" value="https://jpwinsup.github.io/blog"></form>
+      </div>
+    </div>
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/blog/" id="logo">Microsoft Japan Windows Technology Support Blog</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/blog/" id="subtitle">日本マイクロソフト Windows Support チームによる、サポート情報 Blog です。</a>
+        </h2>
+      
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-ActiveDirectory/PromotionAndDemotion/windows-server-2016-ad-migration-considerations" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    
+    
+      <header class="article-header-single">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Windows Server 2016 からの Active Directory 移行、アップグレードにあたっての考慮事項
+    </h1>
+  
+
+      </header>
+      <div class="article-share">
+        Published Date: 
+        <a href="/blog/2026/08/05/ActiveDirectory/PromotionAndDemotion/windows-server-2016-ad-migration-considerations/" class="article-date-single">
+  <time datetime="2026-08-05T03:00:00.000Z" itemprop="datePublished">2026-08-05</time>
+</a>
+        
+  <div class="article-category">
+    <a class="article-category-link" href="/blog/categories/Active-Directory/">Active Directory</a>►<a class="article-category-link" href="/blog/categories/Active-Directory/Promotion-and-Demotion/">Promotion and Demotion</a>
+  </div>
+
+        
+        <a href="https://github.com/jpwinsup/blog/issues/new?title=&body=%EF%BB%BF%0A%0A---%0A%0A%23%23%23%23+Document+Details%0A%0A*+Article+ID%3A+feb91612-5e6c-5285-9000-2568aa55535f%0A*+TITLE%3A+Windows+Server+2016+%E3%81%8B%E3%82%89%E3%81%AE+Active+Directory+%E7%A7%BB%E8%A1%8C%E3%80%81%E3%82%A2%E3%83%83%E3%83%97%E3%82%B0%E3%83%AC%E3%83%BC%E3%83%89%E3%81%AB%E3%81%82%E3%81%9F%E3%81%A3%E3%81%A6%E3%81%AE%E8%80%83%E6%85%AE%E4%BA%8B%E9%A0%85%0A*+URL+https%3A%2F%2Fjpwinsup.github.io%2Fblog%2F2026%2F08%2F05%2FActiveDirectory%2FPromotionAndDemotion%2Fwindows-server-2016-ad-migration-considerations%2F%0A*+SourceFileName%3A+source%2F_posts%2FActiveDirectory%2FPromotionAndDemotion%2Fwindows-server-2016-ad-migration-considerations.md%0A" class="article-github-issue-link" target="_blank" rel="noopener noreferrer">feedback</a>
+        
+        <a data-url="https://jpwinsup.github.io/blog/2026/08/05/ActiveDirectory/PromotionAndDemotion/windows-server-2016-ad-migration-considerations/" data-id="cmshes4gw01nnru4scetm2087" class="article-share-link">共有</a>
+      </div>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>本記事はマイクロソフト社員によって公開されております。<br>(作成にあたり Copilot の力を借りています)</p>
+<p>こんにちは。Windows Commercial Support Directory Services チームです。</p>
+<p>Windows Server 2016 は 2027 年 1 月 12 日にサポート終了を迎えます。本記事は、Windows Server 2016 で稼働するドメイン コントローラーを Windows Server 2022 または Windows Server 2025 へ移行、アップグレードする際の主な考慮事項や手順をまとめたものです。</p>
+<p>ドメイン コントローラーの移行にあたっては、移行先 OS の更新プログラムで有効になる脆弱性対応を確認し、移行元 OS にも同じ脆弱性へ対応する更新プログラムを適用しておくことが重要です。移行元と移行先で脆弱性対応の状態をそろえることで、新旧のドメイン コントローラーを並行稼働させる期間の認証動作の互換性を確保します。</p>
+<h2 id="移行方式について"><a href="#移行方式について" class="headerlink" title="移行方式について"></a>移行方式について</h2><p>ドメイン コントローラーを新しい Windows Server へ移行する方法には、主にインプレース アップグレードとローリング アップグレードがあります。</p>
+<p>インプレース アップグレードは、既存のドメイン コントローラー上で OS を新しいバージョンへ直接アップグレードする方式です。サーバー名や IP アドレスなどを維持できる一方、既存 OS の構成や問題を引き継ぐ可能性があり、問題が発生した場合の切り戻しにも制約があります。</p>
+<p>ローリング アップグレードは、新しい OS をクリーン インストールしたサーバーを既存ドメインへ追加し、ドメイン コントローラーへ昇格した後、既存のドメイン コントローラーを順次降格する方式です。新旧のドメイン コントローラーを一時的に並行稼働できるため、複製や認証の正常性を確認しながら段階的に移行できます。</p>
+<p>弊社では、既存環境への影響を抑え、問題発生時の切り分けや切り戻しを行いやすくするため、ローリング アップグレードをお勧めします。</p>
+<p>詳細は、以下の公開情報をご確認ください。</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://learn.microsoft.com/ja-jp/windows-server/identity/ad-ds/deploy/upgrade-domain-controllers">ドメイン コントローラーを新しいバージョンの Windows Server にアップグレードする</a></li>
+<li><a href="https://jpwinsup.github.io/blog/2025/08/05/ActiveDirectory/PromotionAndDemotion/migrate-DCs-with-OldIPandHostName/">ホスト名と IP アドレスを引き継ぐドメイン コントローラーの移行手順</a></li>
+</ul>
+<h2 id="更新プログラムについての考慮事項"><a href="#更新プログラムについての考慮事項" class="headerlink" title="更新プログラムについての考慮事項"></a>更新プログラムについての考慮事項</h2><h3 id="脆弱性対応の段階的な展開"><a href="#脆弱性対応の段階的な展開" class="headerlink" title="脆弱性対応の段階的な展開"></a>脆弱性対応の段階的な展開</h3><p>Active Directory、Kerberos、Netlogon、証明書ベース認証などに関する脆弱性対応では、認証への影響を抑えながら対処できるように、更新プログラムの動作が段階的に変更される場合があります。主な段階として、互換 (監査) モードと強制モードがあります。</p>
+<p>互換 (監査) モードでは、脆弱性への保護を導入しつつ、従来の動作や脆弱性対応が完了していない認証を一時的に許容します。強制モードへ移行した際に拒否される可能性があるクライアント、アカウント、機器、アプリなどは、監査イベントや警告イベントとして記録されます。この期間にイベントを監視し、影響対象を特定して必要な対処を行います。</p>
+<p>強制モードでは、脆弱性対応の要件を満たしていない認証や通信が拒否されます。また、互換 (監査) モードで使用できた一時的な回避設定が無効になり、互換動作へ戻せなくなる場合があります。</p>
+<p>すべての脆弱性対応が同じ名称や展開方法を使用するわけではありません。更新プログラムを適用する前に、対象となる脆弱性ごとの公開情報を確認し、現在のフェーズ、互換設定の有無、強制モードへの移行時期、拒否される条件を確認することが重要です。</p>
+<h3 id="移行元の脆弱性対応を先に完了する"><a href="#移行元の脆弱性対応を先に完了する" class="headerlink" title="移行元の脆弱性対応を先に完了する"></a>移行元の脆弱性対応を先に完了する</h3><p>Windows Server 2022 または Windows Server 2025 のドメイン コントローラーを既存ドメインへ追加する前に、移行先 OS の更新プログラムで有効になる Active Directory、Kerberos、Netlogon、証明書ベース認証などの脆弱性対応を確認します。そのうえで、同じ脆弱性へ対応する Windows Server 2016 向け更新プログラムを、既存のすべてのドメイン コントローラーへ先に適用します。</p>
+<p>移行元と移行先では OS ごとに KB 番号が異なりますが、同じ脆弱性への対応が有効であり、認証プロトコルの動作に互換性がある状態へそろえることが目的です。Windows Server 2016 側で必要な脆弱性対応、監査イベントへの対処、主要な認証シナリオの確認を完了し、認証および複製が安定していることを確認してから、Windows Server 2022 または Windows Server 2025 へのローリング アップグレードを開始します。</p>
+<p>この順序にすると、新しい OS のドメイン コントローラーを追加した時点で、既存の Windows Server 2016 ドメイン コントローラーとの間に脆弱性対応の差異が生じることを避けられます。また、Windows Server 2016 の更新による影響を確認してから OS 移行へ進むため、問題が発生した場合の切り分けも行いやすくなります。</p>
+<h3 id="新規サーバーへの更新プログラムの適用順序"><a href="#新規サーバーへの更新プログラムの適用順序" class="headerlink" title="新規サーバーへの更新プログラムの適用順序"></a>新規サーバーへの更新プログラムの適用順序</h3><p>新規サーバーに対する更新プログラムの適用は、AD DS の役割をインストールする前でも、ドメイン コントローラーへの昇格後でも実施できます。更新プログラムには OS コンポーネントの修正が含まれるため、役割の有効化前に適用した修正も、後から AD DS をインストールして昇格した際に使用されます。</p>
+<p>新しいサーバーには、移行計画で定めた Windows Server 2022 または Windows Server 2025 の累積更新プログラムを適用し、再起動を完了してからドメイン コントローラーへ昇格します。この時点では、既存の Windows Server 2016 ドメイン コントローラー側でも、同じ脆弱性への対応と認証への影響確認が完了している状態とします。</p>
+<h3 id="移行前に確認する段階的な脆弱性対応"><a href="#移行前に確認する段階的な脆弱性対応" class="headerlink" title="移行前に確認する段階的な脆弱性対応"></a>移行前に確認する段階的な脆弱性対応</h3><p>Active Directory、Kerberos、Netlogon、証明書ベース認証に関する脆弱性対応には、更新プログラムを適用するだけでなく、監査イベントの確認や環境側の修正が必要なものがあります。</p>
+<p>以下は、本記事の公開時点における Windows Server 2016 の更新履歴を基準に、移行前に確認する脆弱性対応を分類したものです。更新プログラムの <code>EXPIRED</code> 状態は今後変更される可能性があるため、実際の作業時には更新履歴と各脆弱性の最新情報を再確認してください。</p>
+<h4 id="互換-監査-モード用の更新候補を確認する"><a href="#互換-監査-モード用の更新候補を確認する" class="headerlink" title="互換 (監査) モード用の更新候補を確認する"></a>互換 (監査) モード用の更新候補を確認する</h4><p>各脆弱性対応について、互換 (監査) モードが導入された時期から完全強制フェーズまでに公開された、月例または帯域外 (Out-of-band: OOB) の累積更新プログラムを確認します。本記事の公開時点で <code>EXPIRED</code> と表示されていない更新プログラムがある場合は、段階適用の候補となります。</p>
+<table>
+<thead>
+<tr>
+<th>脆弱性対応</th>
+<th>候補を探す更新時期</th>
+<th>監査または事前確認の内容</th>
+<th>強制モードへの移行時期</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><a target="_blank" rel="noopener" href="https://msrc-blog.microsoft.com/2020/09/14/20200915_netlogon/">CVE-2020-1472 Netlogon</a></td>
+<td>2020 年 8 月から 2021 年 1 月の月例/OOB</td>
+<td>Secure RPC に対応していない非 Windows デバイス、信頼先、Netlogon イベント</td>
+<td>2021 年 2 月に強制</td>
+</tr>
+<tr>
+<td><a href="https://jpwinsup.github.io/blog/2021/11/30/ActiveDirectory/Authentication/audit-events-added-in-cve-2021-42287/">CVE-2021-42287 Kerberos PAC</a></td>
+<td>2021 年 11 月から 2022 年 9 月の月例/OOB</td>
+<td>KDC イベント ID 35、36、37、38、未更新 DC、古い TGT</td>
+<td>2022 年 10 月に強制</td>
+</tr>
+<tr>
+<td><a target="_blank" rel="noopener" href="https://support.microsoft.com/ja-jp/topic/kb5021131-cve-2022-37966-%E3%81%AB%E9%96%A2%E9%80%A3%E3%81%99%E3%82%8B-kerberos-%E3%83%97%E3%83%AD%E3%83%88%E3%82%B3%E3%83%AB%E3%81%AE%E5%A4%89%E6%9B%B4%E3%82%92%E7%AE%A1%E7%90%86%E3%81%99%E3%82%8B%E6%96%B9%E6%B3%95-fd837ac3-cdec-4e76-a6ec-86e67501407d">CVE-2022-37966 Kerberos 暗号化</a></td>
+<td>2022 年 11 月以降の月例/OOB</td>
+<td>KDC イベント ID 42、AES キーを保持していないアカウント、明示的に設定された暗号化方式</td>
+<td>2022 年 11 月に既定の暗号化方式を変更。段階的な強制フェーズなし</td>
+</tr>
+<tr>
+<td><a href="https://jpwinsup.github.io/blog/2023/01/04/ActiveDirectory/Authentication/cve-2022-37967-fullpacsignature/">CVE-2022-37967 完全な PAC 署名</a></td>
+<td>2022 年 12 月から 2023 年 6 月の月例/OOB</td>
+<td>KDC イベント ID 43、44、Kerberos 委任、サードパーティー実装</td>
+<td>2023 年 7 月に既定で強制、2023 年 10 月に完全強制</td>
+</tr>
+<tr>
+<td><a href="https://jpwinsup.github.io/blog/2023/01/22/ActiveDirectory/Authentication/netlogon-protocol-changes-related-to-cve-2022-38023/">CVE-2022-38023 Netlogon RPC シール</a></td>
+<td>2022 年 11 月から 2023 年 3 月の月例/OOB</td>
+<td>Netlogon イベント ID 5838、5839、非 Windows デバイス、信頼先</td>
+<td>2023 年 4 月に初期強制、2023 年 6 月に既定で強制、2023 年 7 月に完全強制</td>
+</tr>
+<tr>
+<td><a href="https://jpwinsup.github.io/blog/2023/04/11/PublicKeyInfrastructure/CertificateManagement/certificate-based-authentication-changes-on-may-2022/">KB5014754 証明書ベース認証</a></td>
+<td>2022 年 5 月から 2025 年 1 月の月例/OOB</td>
+<td>KDC イベント ID 39、40、41、弱い証明書マッピング</td>
+<td>2025 年 2 月に既定で完全適用、2025 年 9 月に完全強制</td>
+</tr>
+<tr>
+<td><a href="https://jpwinsup.github.io/blog/2024/08/13/ActiveDirectory/Authentication/CVE-2024-26248,%20CVE-2024-29056%20PAC%20Validation%20changes%20related/">CVE-2024-26248、CVE-2024-29056 PAC 検証</a></td>
+<td>2024 年 4 月から 12 月の月例/OOB</td>
+<td>Security-Kerberos イベント ID 23、未更新 DC、リソース サーバー、信頼先</td>
+<td>2025 年 1 月に既定で強制、2025 年 4 月に完全強制</td>
+</tr>
+<tr>
+<td><a href="https://jpwinsup.github.io/blog/2025/08/27/ActiveDirectory/Authentication/CVE-2025-26647%20Protections%20for%20Kerberos%20Authentication/">CVE-2025-26647 Kerberos 証明書認証</a></td>
+<td>2025 年 4 月から 6 月の月例/OOB</td>
+<td>KDC イベント ID 45、証明書の発行元 CA、NTAuth ストア</td>
+<td>2025 年 7 月に既定で強制、2025 年 10 月に完全強制</td>
+</tr>
+<tr>
+<td><a href="https://jpwinsup.github.io/blog/2026/02/02/ActiveDirectory/Authentication/kerberos-rc4-for-service-account-ticket-issuance-changes-related-to-cve-2026-20833/">CVE-2026-20833 Kerberos RC4</a></td>
+<td>2026 年 1 月から 6 月の月例/OOB</td>
+<td>KDC イベント ID 201、202、206、207、AES 非対応のクライアント、サービス アカウント、アクセス先</td>
+<td>2026 年 4 月に既定で強制、2026 年 7 月に完全強制</td>
+</tr>
+</tbody></table>
+<p>候補となる更新プログラムが見つかった場合は、個別の記事で目的の脆弱性対応と互換 (監査) モードが含まれることを確認します。その後、すべてのドメイン コントローラーおよび脆弱性対応に関与するサーバーへ適用し、監査イベントを一定期間収集します。検知した対象へ対処した後に、次の累積更新プログラムへ進みます。</p>
+<p>候補がすべて <code>EXPIRED</code> となっている場合、または候補に目的の互換 (監査) モードが含まれない場合は、強制モードへ直接移行するものとして扱います。OOB 更新プログラムの状態は今後変更される可能性があるため、本表は利用可能性を保証するものではありません。</p>
+<h3 id="長期間更新されていない環境での進め方"><a href="#長期間更新されていない環境での進め方" class="headerlink" title="長期間更新されていない環境での進め方"></a>長期間更新されていない環境での進め方</h3><p>長期間更新されていない Windows Server 2016 へ新しい累積更新プログラムを適用すると、過去に段階的に展開された複数のセキュリティ変更がまとめて有効になります。このため、最新の累積更新プログラムへ進む前に、上表を基に、現在利用できる更新プログラムで互換 (監査) モードを経由できる脆弱性対応と、強制モードへ直接移行する脆弱性対応を整理します。</p>
+<p><a target="_blank" rel="noopener" href="https://support.microsoft.com/en-US/servicing/os/windows-10/2020/11/windows-10-and-windows-server-2016-update-history">Windows 10 and Windows Server 2016 update history</a> で、月例と OOB の両方を確認します。<code>EXPIRED</code> と表示された更新プログラムは候補から除外し、設計時と実施直前に、候補の提供状態、修正内容、置き換え関係、前提条件、既知の問題を個別記事でご確認ください。</p>
+<p>互換 (監査) モードを利用できる場合は、監査イベントから影響対象を特定して対処した後、次の更新プログラムへ進みます。利用できない場合は、強制モードの拒否条件を基に、暗号化方式、サービス アカウント、委任、信頼、証明書ベース認証、Netlogon、非 Windows 機器などを更新前に確認します。</p>
+<p>各 Step の前には、Active Directory の正常性とバックアップ、主要な認証シナリオ、作業の中止基準を確認します。更新後は監査またはエラー イベントと認証結果を確認し、必要に応じてクライアントやサービスを再起動して新しい Kerberos チケットを取得します。</p>
+<h4 id="2020-年の更新状態から段階的に更新する例"><a href="#2020-年の更新状態から段階的に更新する例" class="headerlink" title="2020 年の更新状態から段階的に更新する例"></a>2020 年の更新状態から段階的に更新する例</h4><p>長期間更新プログラムを適用していない環境の一例として、すべての Windows Server 2016 ドメイン コントローラーが 2020 年 12 月の累積更新プログラムで止まっているパターンを取り上げます。</p>
+<p>以下は、このパターンから段階的な脆弱性対応を最短の手順で進めるシミュレーションです。本記事の公開時点で <code>EXPIRED</code> と表示されていない OOB 更新プログラムも候補に含めています。実際に使用する更新プログラムは、対象環境の現在の更新状態を起点として、作業時点の更新履歴、個別記事、既知の問題、置き換え関係を確認して決定してください。</p>
+<p>次の図は、各脆弱性対応の互換 (監査) モード、既定動作、強制モード、完全強制モード、および本例で適用する更新プログラムの位置関係を示しています。横軸が時間、縦軸が脆弱性対応です。青色の期間が互換 (監査) モード、橙色の期間が更新後の既定動作または完全強制前の強制段階、赤色の期間が完全強制モード、ひし形が更新プログラムの適用位置を示します。強制と完全強制が分かれていない脆弱性対応は、最終的な強制フェーズを赤色で示します。</p>
+<p><img src="security-update-phases.png" alt="脆弱性対応の展開フェーズと段階適用する更新プログラム"></p>
+<p>上記の図の通り、適用する更新プログラムが、次に確認する脆弱性対応の互換 (監査) モード内に収まっていることが確認できます。KB5022289 では 2022 年の 3 つの脆弱性対応を、KB5048671 では証明書ベース認証と 2024 年の PAC 検証を同時に監査し、少ない適用回数で複数の脆弱性対応となるようにしております。</p>
+<h5 id="Step-0-正常性を確認してバックアップを取得する"><a href="#Step-0-正常性を確認してバックアップを取得する" class="headerlink" title="Step 0: 正常性を確認してバックアップを取得する"></a>Step 0: 正常性を確認してバックアップを取得する</h5><p>この例では、2020 年 12 月の更新状態で確認できる Netlogon のイベント ID 5829 を基に、Secure RPC に対応していないデバイスの特定と対処が完了しており、CVE-2020-1472 への対応に問題がない状態を前提とします。</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://msrc-blog.microsoft.com/2020/09/14/20200915_netlogon/">CVE-2020-1472 Netlogon</a></li>
+</ul>
+<p>Step 0 は更新プログラムを適用する手順ではなく、段階更新を開始する前の事前準備です。後述の「ドメイン コントローラーの正常性確認」に従って現在の状態を確認し、後続の各 Step で比較する基準として結果を保存します。</p>
+<p>万が一の障害に備えて、すべてのドメイン コントローラーでシステム状態バックアップの取得をご検討ください。取得方法とリストア手順の詳細は、以下の記事をご確認ください。</p>
+<ul>
+<li><a href="https://jpwinsup.github.io/blog/2023/04/24/ActiveDirectory/PromotionAndDemotion/backup-and-restore/">ドメイン コントローラーのバックアップとリストアについて</a></li>
+</ul>
+<h5 id="Step-1-2021-年-11-月の-OOB-更新で-CVE-2021-42287-の監査を開始する"><a href="#Step-1-2021-年-11-月の-OOB-更新で-CVE-2021-42287-の監査を開始する" class="headerlink" title="Step 1: 2021 年 11 月の OOB 更新で CVE-2021-42287 の監査を開始する"></a>Step 1: 2021 年 11 月の OOB 更新で CVE-2021-42287 の監査を開始する</h5><p>本記事の公開時点では、2021 年 11 月 14 日の OOB 更新プログラム KB5008601 に <code>EXPIRED</code> の表示はありません。この OOB 更新プログラムを適用する目的は、CVE-2021-42287 の互換モードを有効にし、強制モードで拒否される可能性がある Kerberos チケットをイベント ID 35、36、37、38 で事前に監査することです。</p>
+<p>2021 年 11 月の月例累積更新プログラム KB5007192 は <code>EXPIRED</code> となっていますが、その修正を累積的に含む KB5008601 は本記事の公開時点で <code>EXPIRED</code> と表示されていないため、CVE-2021-42287 の互換モードへ移行する候補として使用します。また、KB5008601 には同月の既知の Kerberos 認証問題に対する修正も含まれます。</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://support.microsoft.com/en-US/servicing/os/windows-10/2021/11/november-14-2021-kb5008601-os-build-14393-4771-out-of-band">2021 年 11 月 14 日 - KB5008601 (OS ビルド 14393.4771) Out-of-band</a></li>
+<li><a href="https://jpwinsup.github.io/blog/2021/11/30/ActiveDirectory/Authentication/audit-events-added-in-cve-2021-42287/">CVE-2021-42287 で追加された監査イベントについて</a></li>
+</ul>
+<p>すべてのドメイン コントローラーへ適用した後、Kerberos チケットの有効期間を考慮して 1 週間以上運用し、KDC のイベント ID 35、36、37、38 を確認します。イベントが記録された場合は、未更新のドメイン コントローラー、古い TGT、サードパーティー実装など、イベントに対応する原因を解消します。</p>
+<h5 id="Step-2-2023-年-1-月の累積更新プログラムで-3-つの脆弱性対応をまとめて監査する"><a href="#Step-2-2023-年-1-月の累積更新プログラムで-3-つの脆弱性対応をまとめて監査する" class="headerlink" title="Step 2: 2023 年 1 月の累積更新プログラムで 3 つの脆弱性対応をまとめて監査する"></a>Step 2: 2023 年 1 月の累積更新プログラムで 3 つの脆弱性対応をまとめて監査する</h5><p>2023 年 1 月 10 日の累積更新プログラム KB5022289 を、ドメイン コントローラーと脆弱性対応に関係するメンバー サーバーへ適用します。本記事の公開時点では、KB5022289 に <code>EXPIRED</code> の表示はありません。</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://support.microsoft.com/en-US/servicing/os/windows-10/2023/01/january-10-2023-kb5022289-os-build-14393-5648">2023 年 1 月 10 日 - KB5022289 (OS ビルド 14393.5648)</a></li>
+</ul>
+<p>この更新プログラムを適用する目的は、次の 3 つの脆弱性対応を互換または監査フェーズでまとめて確認することです。</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://support.microsoft.com/ja-jp/topic/kb5021131-cve-2022-37966-%E3%81%AB%E9%96%A2%E9%80%A3%E3%81%99%E3%82%8B-kerberos-%E3%83%97%E3%83%AD%E3%83%88%E3%82%B3%E3%83%AB%E3%81%AE%E5%A4%89%E6%9B%B4%E3%82%92%E7%AE%A1%E7%90%86%E3%81%99%E3%82%8B%E6%96%B9%E6%B3%95-fd837ac3-cdec-4e76-a6ec-86e67501407d">CVE-2022-37966</a>: イベント ID 42 により Kerberos の暗号化方式に関する問題を確認する</li>
+<li><a href="https://jpwinsup.github.io/blog/2023/01/04/ActiveDirectory/Authentication/cve-2022-37967-fullpacsignature/">CVE-2022-37967</a>: 監査モードでイベント ID 43、44 を確認する</li>
+<li><a href="https://jpwinsup.github.io/blog/2023/01/22/ActiveDirectory/Authentication/netlogon-protocol-changes-related-to-cve-2022-38023/">CVE-2022-38023</a>: 互換モードでイベント ID 5838、5839 を確認する</li>
+</ul>
+<p>KB5021654 は 2022 年 11 月相当の修正を含みますが、CVE-2022-37967 のイベント ID 43、44 が記録される監査モードは 2022 年 12 月以降です。このため、本シミュレーションでは KB5021654 を Step 2 の候補とせず、3 つの確認を同時に実施できる KB5022289 を使用します。</p>
+<p>適用後は Kerberos チケットの有効期間を考慮して 1 週間以上監視し、検知した対象へ各脆弱性の記事に記載された対処を行います。</p>
+<h5 id="Step-3-2024-年-12-月の累積更新プログラムで証明書認証と-PAC-検証を監査する"><a href="#Step-3-2024-年-12-月の累積更新プログラムで証明書認証と-PAC-検証を監査する" class="headerlink" title="Step 3: 2024 年 12 月の累積更新プログラムで証明書認証と PAC 検証を監査する"></a>Step 3: 2024 年 12 月の累積更新プログラムで証明書認証と PAC 検証を監査する</h5><p>2024 年 12 月 10 日の累積更新プログラム KB5048671 を、ドメイン コントローラーと PAC 検証に関係するリソース サーバーへ適用します。</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://support.microsoft.com/en-US/servicing/os/windows-10/2024/12/december-10-2024-kb5048671-os-build-14393-7606">2024 年 12 月 10 日 - KB5048671 (OS ビルド 14393.7606)</a></li>
+</ul>
+<p>この Step では、KB5014754 の証明書ベース認証について KDC のイベント ID 39、40、41 を確認します。また、CVE-2024-26248 および CVE-2024-29056 の PAC 検証について、リソース サーバーの Security-Kerberos イベント ID 23 を確認します。弱い証明書マッピング、未更新のドメイン コントローラー、信頼先など、検知した対象を強制モードへ進む前に解消します。</p>
+<ul>
+<li><a href="https://jpwinsup.github.io/blog/2023/04/11/PublicKeyInfrastructure/CertificateManagement/certificate-based-authentication-changes-on-may-2022/">KB5014754 証明書ベース認証</a></li>
+<li><a href="https://jpwinsup.github.io/blog/2024/08/13/ActiveDirectory/Authentication/CVE-2024-26248,%20CVE-2024-29056%20PAC%20Validation%20changes%20related/">CVE-2024-26248、CVE-2024-29056 PAC 検証</a></li>
+</ul>
+<h5 id="Step-4-2025-年-6-月の累積更新プログラムで-CVE-2025-26647-を監査する"><a href="#Step-4-2025-年-6-月の累積更新プログラムで-CVE-2025-26647-を監査する" class="headerlink" title="Step 4: 2025 年 6 月の累積更新プログラムで CVE-2025-26647 を監査する"></a>Step 4: 2025 年 6 月の累積更新プログラムで CVE-2025-26647 を監査する</h5><p>2025 年 6 月 10 日の累積更新プログラム KB5061010 をドメイン コントローラーへ適用します。この時点で、前の Step までに監査した脆弱性対応は強制モードへ移行するため、各イベントへの対処が完了していることを事前に確認します。</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://support.microsoft.com/en-US/servicing/os/windows-10/2025/06/june-10-2025-kb5061010-os-build-14393-8148">2025 年 6 月 10 日 - KB5061010 (OS ビルド 14393.8148)</a></li>
+</ul>
+<p>適用後は CVE-2025-26647 の KDC イベント ID 45 を確認します。認証に使用する証明書の発行元 CA が NTAuth ストアに登録されているかを確認し、検知した対象へ対処します。</p>
+<ul>
+<li><a href="https://jpwinsup.github.io/blog/2025/08/27/ActiveDirectory/Authentication/CVE-2025-26647%20Protections%20for%20Kerberos%20Authentication/">CVE-2025-26647 Kerberos 証明書認証</a></li>
+</ul>
+<h5 id="Step-5-2026-年-3-月の累積更新プログラムで-CVE-2026-20833-を監査する"><a href="#Step-5-2026-年-3-月の累積更新プログラムで-CVE-2026-20833-を監査する" class="headerlink" title="Step 5: 2026 年 3 月の累積更新プログラムで CVE-2026-20833 を監査する"></a>Step 5: 2026 年 3 月の累積更新プログラムで CVE-2026-20833 を監査する</h5><p>2026 年 3 月 10 日の累積更新プログラム KB5078938 をドメイン コントローラーへ適用します。この更新時点では CVE-2026-20833 の初期展開フェーズで動作するため、KDC のイベント ID 201、202、206、207 を監査できます。</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://support.microsoft.com/en-US/servicing/os/windows-10/2026/03/march-10-2026-kb5078938-os-build-14393-8957">2026 年 3 月 10 日 - KB5078938 (OS ビルド 14393.8957)</a></li>
+</ul>
+<p>AES に対応していないクライアント、AES キーを保持していないサービス アカウント、AES で暗号化されたサービス チケットを処理できないアクセス先などを特定し、各イベントと公開情報に従って対処します。</p>
+<ul>
+<li><a href="https://jpwinsup.github.io/blog/2026/02/02/ActiveDirectory/Authentication/kerberos-rc4-for-service-account-ticket-issuance-changes-related-to-cve-2026-20833/">CVE-2026-20833 への対応とその影響について</a></li>
+</ul>
+<h5 id="Step-6-移行元と移行先の更新状態をそろえる"><a href="#Step-6-移行元と移行先の更新状態をそろえる" class="headerlink" title="Step 6: 移行元と移行先の更新状態をそろえる"></a>Step 6: 移行元と移行先の更新状態をそろえる</h5><p>Step 1 から Step 5 までの監査イベントへの対処が完了し、主要な認証、複製、DNS、SYSVOL に問題がないことを確認します。</p>
+<p>移行先となる Windows Server 2022 または Windows Server 2025 に、Windows Server 2016 へ適用した更新プログラムと同じリリース月の月例累積更新プログラムを適用します。OS ごとに KB 番号は異なるため、それぞれの更新履歴から同じ月に対応する KB を選びます。</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://support.microsoft.com/en-US/servicing/os/windows-10/2020/11/windows-10-and-windows-server-2016-update-history">Windows 10 and Windows Server 2016 update history</a></li>
+<li><a target="_blank" rel="noopener" href="https://support.microsoft.com/en-us/servicing/os/windows-server/2021/07/windows-server-2022-update-history">Windows Server 2022 update history</a></li>
+<li><a target="_blank" rel="noopener" href="https://support.microsoft.com/en-us/servicing/os/windows-server/2024/10/windows-server-2025-update-history">Windows Server 2025 update history</a></li>
+</ul>
+<p>移行先 OS の再起動を完了し、Windows Server 2016 と移行先 OS で脆弱性対応の状態がそろったことを確認します。その後、新しいサーバーをドメイン コントローラーとして追加し、主要な認証シナリオを確認しながらローリング アップグレードを進めます。</p>
+<h3 id="今後の更新プログラムの適用について"><a href="#今後の更新プログラムの適用について" class="headerlink" title="今後の更新プログラムの適用について"></a>今後の更新プログラムの適用について</h3><p>脆弱性対応の互換 (監査) モードを活用し、強制モードへ移行する前に影響対象を確認できるようにするため、ドメイン コントローラーには更新プログラムをタイムリーに適用することをお勧めします。OS の移行時にまとめて更新するのではなく、毎月公開される更新情報、既知の問題、段階的に展開されるセキュリティ変更を確認し、検証および変更管理を行ったうえで継続的に適用してください。</p>
+<p>更新プログラムの適用を長期間見送ると、互換 (監査) モードを利用できる期間を過ぎ、後から更新した際に強制モードへ直接移行する場合があります。その結果、事前に監査イベントから影響対象を確認する機会が得られず、認証への影響を予測しにくくなります。</p>
+<p>本ブログでも、Active Directory の認証動作に影響する更新プログラム、段階的な展開の予定、監査イベント、強制モードへ移行する前に必要な対処などについて、引き続き情報を発信してまいります。更新プログラムを適用する際は、Windows の更新履歴や Microsoft Learn とあわせて、本ブログの関連情報もご確認ください。</p>
+<h2 id="ドメイン-コントローラーの正常性確認"><a href="#ドメイン-コントローラーの正常性確認" class="headerlink" title="ドメイン コントローラーの正常性確認"></a>ドメイン コントローラーの正常性確認</h2><p>移行前の Active Directory に複製エラーや DNS の問題がある場合、新しいドメイン コントローラーを追加しても問題は解消せず、初回複製の失敗などにつながる可能性があります。移行の前後で、すべてのドメイン コントローラーの正常性を確認します。</p>
+<p>主な確認項目は以下のとおりです。</p>
+<ul>
+<li><code>dcdiag /e /c /v</code> の結果</li>
+<li><code>repadmin /replsummary</code> の結果</li>
+<li><code>repadmin /showrepl * /csv</code> の結果</li>
+<li>Directory Service、DFS Replication、DNS Server、System の各イベント ログ</li>
+<li>SYSVOL および NETLOGON 共有の状態</li>
+<li>DNS の名前解決とドメイン コントローラー ロケーターの動作</li>
+<li>FSMO 役割、グローバル カタログ、サイトおよびサブネットの構成</li>
+</ul>
+<p>確認方法の詳細は、以下の記事をご参照ください。</p>
+<ul>
+<li><a href="https://jpwinsup.github.io/blog/2023/03/30/ActiveDirectory/PromotionAndDemotion/domain-controller-health-check/">ドメインコントローラ (DC) の正常性の確認方法について</a></li>
+</ul>
+<h2 id="ドメインおよびフォレストの機能レベル"><a href="#ドメインおよびフォレストの機能レベル" class="headerlink" title="ドメインおよびフォレストの機能レベル"></a>ドメインおよびフォレストの機能レベル</h2><p>移行先 OS に必要な機能レベルは以下のとおりです。</p>
+<ul>
+<li>Windows Server 2022: フォレスト機能レベル Windows Server 2008 以上</li>
+<li>Windows Server 2025: ドメインおよびフォレスト機能レベル Windows Server 2016 以上</li>
+</ul>
+<p>移行前に現在のドメインおよびフォレスト機能レベルを確認し、必要な機能レベルに達していない場合は、新しいドメイン コントローラーを昇格する前に引き上げます。機能レベルは自動的には変更されません。</p>
+<p>機能レベルを変更する場合は、Active Directory の複製が正常であること、バックアップを取得済みであること、すべてのドメイン コントローラーが引き上げ先の機能レベルをサポートしていることを確認します。ドメイン機能レベルを先に引き上げ、その後にフォレスト機能レベルを引き上げます。</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://learn.microsoft.com/ja-jp/windows-server/identity/ad-ds/active-directory-functional-levels">Active Directory Domain Services の機能レベル</a></li>
+<li><a target="_blank" rel="noopener" href="https://learn.microsoft.com/ja-jp/windows-server/identity/ad-ds/plan/raise-domain-forest-functional-levels">Active Directory Domain Services でドメインおよびフォレストの機能レベルを上げる</a></li>
+</ul>
+<h2 id="Windows-Server-2022-へ移行する場合の追加注意事項"><a href="#Windows-Server-2022-へ移行する場合の追加注意事項" class="headerlink" title="Windows Server 2022 へ移行する場合の追加注意事項"></a>Windows Server 2022 へ移行する場合の追加注意事項</h2><p>本記事で整理した範囲では、Windows Server 2022 への移行について、後述する Windows Server 2025 固有の注意事項に相当する追加事項はありません。<br>ただし、更新プログラムと脆弱性対応の整合、Active Directory の正常性、機能レベル、SYSVOL の DFSR 移行、バックアップなど、本記事に記載した共通の要件は Windows Server 2022 への移行時にもご確認ください。</p>
+<h2 id="Windows-Server-2025-へ移行する場合の追加注意事項"><a href="#Windows-Server-2025-へ移行する場合の追加注意事項" class="headerlink" title="Windows Server 2025 へ移行する場合の追加注意事項"></a>Windows Server 2025 へ移行する場合の追加注意事項</h2><p>Windows Server 2025 では、Active Directory と認証に関する既定のセキュリティ設定や暗号化方式が強化されています。<br>Windows Server 2025 のドメイン コントローラーを追加する場合は、前述の機能レベルと更新プログラムの要件に加えて、以下の項目を昇格前にご確認ください。</p>
+<h3 id="参考-KRBTGT-アカウントと-AES-キー"><a href="#参考-KRBTGT-アカウントと-AES-キー" class="headerlink" title="参考: KRBTGT アカウントと AES キー"></a>参考: KRBTGT アカウントと AES キー</h3><p>Windows Server 2025 のドメイン コントローラーは RC4 で暗号化された TGT を発行しません。<br>既存ドメインで KRBTGT アカウントに AES キーがない場合は、Kerberos 認証やログオンに失敗する可能性があります。</p>
+<p>KRBTGT アカウントと AES キーの確認は、前述の「Step 2: 2023 年 1 月の累積更新プログラムで 3 つの脆弱性対応をまとめて監査する」に含まれています。<br>Windows Server 2025 のドメイン コントローラーを昇格する前に Step 2 を完了し、イベント ID 42 が記録された場合は、公開情報に従って KRBTGT アカウントのパスワード更新を計画してください。<br>パスワード更新は既に発行された TGT や認証済みセッションへ影響する可能性があるため、Active Directory の複製、システム状態バックアップ、メンテナンス時間、再認証方法を事前にご確認ください。</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://learn.microsoft.com/ja-jp/windows-server/identity/ad-ds/manage/understand-default-user-accounts#krbtgt-%E3%82%A2%E3%82%AB%E3%82%A6%E3%83%B3%E3%83%88">Active Directory アカウント</a></li>
+<li><a target="_blank" rel="noopener" href="https://learn.microsoft.com/ja-jp/windows-server/security/kerberos/detect-remediate-rc4-kerberos">Kerberos での RC4 使用状況の検出と修復</a></li>
+</ul>
+<h3 id="Linux-デバイスのドメイン参加を事前に検証する"><a href="#Linux-デバイスのドメイン参加を事前に検証する" class="headerlink" title="Linux デバイスのドメイン参加を事前に検証する"></a>Linux デバイスのドメイン参加を事前に検証する</h3><p>Windows Server 2025 のドメイン コントローラーに Linux デバイスを参加させる構成では、使用する Linux ディストリビューション、Samba、SSSD、<code>realmd</code> などのバージョンと、Kerberos、LDAP、DNS の設定をご確認ください。<br>Windows Server 2025 には 2025 年 9 月 9 日の KB5065426 以降で Active Directory とネットワークに関する複数の修正が含まれているため、最新の累積更新プログラムを適用した検証環境で、ドメイン参加、ログオン、グループ解決、Kerberos チケットの取得を事前にご確認ください。</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://support.microsoft.com/ja-jp/servicing/os/windows-server/2025/09/september-9-2025-kb5065426-os-build-26100-6584">2025 年 9 月 9 日 - KB5065426 (OS ビルド 26100.6584)</a></li>
+<li><a target="_blank" rel="noopener" href="https://support.microsoft.com/ja-jp/servicing/os/windows-server/2024/10/windows-server-2025-update-history">Windows Server 2025 update history</a></li>
+</ul>
+<h3 id="スキーマ拡張前に更新プログラムを適用する"><a href="#スキーマ拡張前に更新プログラムを適用する" class="headerlink" title="スキーマ拡張前に更新プログラムを適用する"></a>スキーマ拡張前に更新プログラムを適用する</h3><p>Windows Server 2025 のドメイン コントローラーが FSMO 役割を保持する環境では、一意の値が必要な複数値属性へ重複した値を追加でき、スキーマの不一致によって Active Directory のレプリケーション エラーが発生する問題がありました。<br>この問題は 2025 年 11 月 11 日の KB5068861 で修正されています。</p>
+<p>Exchange などの製品によるスキーマ拡張を行う前に、スキーマ マスターを含む Windows Server 2025 のドメイン コントローラーへ KB5068861 以降の累積更新プログラムを適用してください。<br>スキーマ拡張前後には、<code>repadmin /replsummary</code> と <code>repadmin /showrepl * /csv</code> を使用して、すべてのドメイン コントローラー間の複製が正常であることをご確認ください。</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://support.microsoft.com/ja-jp/servicing/os/windows-server/2025/11/november-11-2025-kb5068861-os-build-26100-7171">2025 年 11 月 11 日 - KB5068861 (OS ビルド 26100.7171)</a></li>
+</ul>
+<h3 id="LDAP-署名の既定値を確認する"><a href="#LDAP-署名の既定値を確認する" class="headerlink" title="LDAP 署名の既定値を確認する"></a>LDAP 署名の既定値を確認する</h3><p>Windows Server 2025 以降の新しい Active Directory 展開では、[ドメイン コントローラー: LDAP サーバー署名要件の適用] ポリシーによって LDAP 署名が既定で必要です。<br>Windows Server 2025 へのインプレース アップグレードでは既存の LDAP セキュリティ設定が保持されるため、展開方式によって適用される設定が異なります。</p>
+<p>ローリング アップグレードで Windows Server 2025 のドメイン コントローラーを追加する場合も、昇格前後にこのポリシーと [ドメイン コントローラー: LDAP サーバー署名必須] の実効設定をご確認ください。<br>イベント ID 2887 などを監視し、署名されていない LDAP バインドを行うクライアント、機器、アプリを特定して、署名付き LDAP または LDAPS へ移行します。<br>互換性のために署名要件を緩和する場合は、一時的な変更として期限と対象を定め、可能な限り早く署名を有効に戻すことをお勧めします。</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://learn.microsoft.com/ja-jp/windows-server/identity/ad-ds/ldap-signing#windows-server-2025-and-later">Windows Server での Active Directory Domain Services の LDAP 署名</a></li>
+</ul>
+<h3 id="参考-RC4-のみに依存するアカウントと機器"><a href="#参考-RC4-のみに依存するアカウントと機器" class="headerlink" title="参考: RC4 のみに依存するアカウントと機器"></a>参考: RC4 のみに依存するアカウントと機器</h3><p>2026 年 4 月の KB5082063 以降では、CVE-2026-20833 への対応として、Kerberos サービス チケットで使用する既定の暗号化方式が AES に変更されています。<br>RC4 のみに依存するアカウント、クライアント、機器への対応は、前述の「Step 5: 2026 年 3 月の累積更新プログラムで CVE-2026-20833 を監査する」に含まれています。</p>
+<p>Windows Server 2025 のドメイン コントローラーへ 2026 年 4 月以降の更新プログラムを適用する前に Step 5 を完了し、イベント ID 201、202、206、207 と、アクセス先の機器やサービスが AES に対応していることをご確認ください。<br>CVE-2026-20833 のサービス チケット変更は主に SPN が登録されたアカウントに影響しますが、Windows Server 2025 では RC4 で暗号化された TGT が発行されないため、SPN の有無だけでログオンへの影響を判断しないでください。<br>長期間パスワードを変更していない組み込み Administrator なども含め、ログオンに使用する重要なアカウントが AES キーを保持していることをご確認ください。</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://support.microsoft.com/ja-jp/servicing/os/windows-server/2026/04/april-14-2026-kb5082063-os-build-26100-32690">2026 年 4 月 14 日 - KB5082063 (OS ビルド 26100.32690)</a></li>
+<li><a href="https://jpwinsup.github.io/blog/2026/02/02/ActiveDirectory/Authentication/kerberos-rc4-for-service-account-ticket-issuance-changes-related-to-cve-2026-20833/">CVE-2026-20833 への対応とその影響について</a></li>
+</ul>
+<h3 id="NTLMv1-への依存がないことを確認する"><a href="#NTLMv1-への依存がないことを確認する" class="headerlink" title="NTLMv1 への依存がないことを確認する"></a>NTLMv1 への依存がないことを確認する</h3><p>Windows Server 2025 では NTLMv1 が削除されており、[ネットワーク セキュリティ: LAN Manager 認証レベル] ポリシーや <code>LmCompatibilityLevel</code> の設定にかかわらず、NTLMv1 の認証要求は行われません。<br>NTLMv2 は引き続き使用できますが、NTLM 自体も非推奨であり、将来の無効化に向けた準備が必要です。</p>
+<p>Windows Server 2025 への移行前に NTLM の監査を有効にし、サポートが終了した OS、ネットワーク機器、IP アドレスを指定した接続、SPN が登録されていないアプリなど、NTLM に依存する処理を特定します。<br>NTLMv1 を使用するシステムは、NTLMv2 または Kerberos へ移行してください。</p>
+<ul>
+<li><a href="https://jpwinsup.github.io/blog/2024/08/22/ActiveDirectory/Authentication/retireNTLM/">NTLM の廃止に向けた対応について</a></li>
+</ul>
+<h2 id="SYSVOL-複製方式の確認"><a href="#SYSVOL-複製方式の確認" class="headerlink" title="SYSVOL 複製方式の確認"></a>SYSVOL 複製方式の確認</h2><p>Windows Server 2016 は、FRS を使用した SYSVOL 複製をサポートする最後の Windows Server リリースです。Windows Server 2019、Windows Server 2022、Windows Server 2025 のドメイン コントローラーを追加するには、SYSVOL の複製方式が DFSR へ移行済みである必要があります。</p>
+<p>移行前に、以下のコマンドで現在の状態を確認します。</p>
+<figure class="highlight console"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">dfsrmig /getglobalstate</span><br><span class="line">dfsrmig /getmigrationstate</span><br></pre></td></tr></table></figure>
+
+<p><code>dfsrmig /getglobalstate</code> の結果が <code>Eliminated (3)</code>、日本語環境では「削除済み」であることを確認します。また、<code>dfsrmig /getmigrationstate</code> の結果で、すべてのドメイン コントローラーがグローバル状態 <code>Eliminated</code> へ正常に移行し、移行状態が一貫していることを確認します。</p>
+<p>いずれかのドメイン コントローラーが <code>Eliminated</code> に到達していない場合や、移行状態が一貫していない場合は、新しいドメイン コントローラーを追加する前に FRS から DFSR への移行を完了します。</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://learn.microsoft.com/ja-jp/troubleshoot/windows-server/networking/windows-server-version-1709-no-longer-supports-frs">Windows Server バージョン 1709 では FRS がサポートされなくなりました</a></li>
+<li><a href="https://jpwinsup.github.io/blog/2023/03/27/ActiveDirectory/DFSR/migration-from-FRS-to-DFSR/">FRS から DFSR への移行 (SYSVOL)</a></li>
+</ul>
+<h2 id="バックアップと復旧手順"><a href="#バックアップと復旧手順" class="headerlink" title="バックアップと復旧手順"></a>バックアップと復旧手順</h2><p>構成変更の前に、すべてのドメイン コントローラーでシステム状態バックアップの取得をご検討ください。取得方法とリストア手順の詳細は、以下の記事をご確認ください。</p>
+<p>バックアップの取得だけでなく、障害発生時にどの時点で作業を中止するか、追加したドメイン コントローラーをどのように切り離すか、Active Directory の権威のない復元または権威のある復元が必要となる条件も事前に整理します。</p>
+<ul>
+<li><a href="https://jpwinsup.github.io/blog/2023/04/24/ActiveDirectory/PromotionAndDemotion/backup-and-restore/">Active Directory のバックアップとリストア</a></li>
+</ul>
+<h2 id="新しいドメイン-コントローラーの昇格"><a href="#新しいドメイン-コントローラーの昇格" class="headerlink" title="新しいドメイン コントローラーの昇格"></a>新しいドメイン コントローラーの昇格</h2><p>新しいサーバーは、ワークグループの状態からドメイン参加とドメイン コントローラーへの昇格を同時に行うのではなく、いったん既存ドメインのメンバー サーバーとして参加させた後に昇格する方法をお勧めします。</p>
+<p>先にメンバー サーバーとして参加させると、名前解決、ドメイン参加、セキュア チャネル、時刻同期、必要な通信ポートなどの問題を昇格前に切り分けられます。ドメイン参加に関する問題と昇格処理の問題を分けて確認できるため、昇格時のトラブルを減らすことができます。</p>
+<p>最初の新しいバージョンのドメイン コントローラーを追加する際は、スキーマ マスターおよびインフラストラクチャ マスターへ接続できる必要があります。必要な <code>adprep /forestprep</code> および <code>adprep /domainprep</code> は、昇格処理中に自動的に実行されます。</p>
+<p>昇格後は、次の作業へ進む前に、初回複製、SYSVOL および NETLOGON 共有、DNS 登録、グローバル カタログ、イベント ログを確認します。一度に複数台を切り替えず、1 台ずつ正常性を確認しながら移行します。</p>
+<p>コンピューター アカウントを再利用する構成では、ドメイン参加に関するセキュリティ強化の影響も確認します。</p>
+<ul>
+<li><a href="https://jpwinsup.github.io/blog/2023/03/23/ActiveDirectory/Authentication/KB5020276-netjoin/">コンピューター アカウント再利用時のドメイン参加におけるセキュリティ強化について [KB5020276]</a></li>
+</ul>
+<h2 id="FSMO-役割とサービスの移行"><a href="#FSMO-役割とサービスの移行" class="headerlink" title="FSMO 役割とサービスの移行"></a>FSMO 役割とサービスの移行</h2><p>新しいドメイン コントローラーの正常性を確認した後、必要に応じて FSMO 役割を移行します。PDC エミュレーターを移行した場合は、外部時刻ソースを含む Windows Time サービスの構成を確認します。</p>
+<p>DNS、DHCP、証明機関、NPS、Microsoft Entra Connect などを既存のドメイン コントローラーへ同居させている場合、AD DS の移行とは別に各役割およびアプリの移行計画が必要です。ドメイン コントローラーを降格する前に、依存するサービスが残っていないことを確認します。</p>
+<h2 id="古いドメイン-コントローラーの降格"><a href="#古いドメイン-コントローラーの降格" class="headerlink" title="古いドメイン コントローラーの降格"></a>古いドメイン コントローラーの降格</h2><p>既存の Windows Server 2016 ドメイン コントローラーを降格する前に、以下を確認します。</p>
+<ul>
+<li>新しいドメイン コントローラー間の複製が正常である</li>
+<li>SYSVOL および NETLOGON 共有が存在する</li>
+<li>DNS の委任、フォワーダー、条件付きフォワーダー、逆引きゾーンが移行済みである</li>
+<li>DHCP、ネットワーク機器、アプリ、スクリプトなどの DNS 参照先が変更済みである</li>
+<li>FSMO 役割およびグローバル カタログの配置に問題がない</li>
+<li>降格対象を固定参照している LDAP、Kerberos、時刻同期などの設定がない</li>
+<li>有効なシステム状態バックアップがある</li>
+</ul>
+<p>正常なドメイン コントローラーは、サーバーを停止または削除するだけでなく、必ず通常の降格手順で AD DS を削除します。通常の降格ができない場合に限り、強制降格とメタデータ クリーンアップを検討します。</p>
+<ul>
+<li><a href="https://jpwinsup.github.io/blog/2023/04/02/ActiveDirectory/PromotionAndDemotion/Demotion/">ドメイン コントローラーの降格方法</a></li>
+</ul>
+<h2 id="まとめ"><a href="#まとめ" class="headerlink" title="まとめ"></a>まとめ</h2><p>Windows Server 2016 から新しい Windows Server へドメイン コントローラーを移行する際は、新しいサーバーだけを最新にするのではなく、移行元と移行先の各 OS に対して同じ脆弱性へ対応する更新プログラムを適用することが重要です。</p>
+<p>そのうえで、既存 Active Directory の正常性、SYSVOL の複製方式、機能レベル、バックアップを確認し、ローリング アップグレードで新しいドメイン コントローラーを 1 台ずつ追加して正常性を確認します。最後に古いドメイン コントローラーを通常の手順で降格することで、問題発生時の切り戻し余地を保ちながら移行できます。</p>
+<h2 id="更新履歴"><a href="#更新履歴" class="headerlink" title="更新履歴"></a>更新履歴</h2><ul>
+<li>2026/08/06: 記事を公開しました。</li>
+</ul>
+<h2 id="参考情報"><a href="#参考情報" class="headerlink" title="参考情報"></a>参考情報</h2><ul>
+<li><a href="https://jpwinsup.github.io/blog/2023/04/27/ActiveDirectory/PromotionAndDemotion/2012-migration-summary/">Windows Server 2012、2012 R2 からの移行、アップグレードにあたって考慮事項等まとめ</a></li>
+<li><a target="_blank" rel="noopener" href="https://learn.microsoft.com/ja-jp/windows-server/get-started/whats-new-in-windows-server-2016">Windows Server 2016 の新機能</a></li>
+<li><a target="_blank" rel="noopener" href="https://learn.microsoft.com/ja-jp/windows-server/identity/ad-ds/deploy/upgrade-domain-controllers">ドメイン コントローラーを新しいバージョンの Windows Server にアップグレードする</a></li>
+<li><a target="_blank" rel="noopener" href="https://learn.microsoft.com/ja-jp/windows-server/identity/ad-ds/active-directory-functional-levels">Active Directory Domain Services の機能レベル</a></li>
+</ul>
+
+      
+      
+    </div>
+    <footer class="article-footer">
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/blog/2026/07/21/UserInterfaceAndApps/Taskscheduler/TaskSched-RDP-config-on-EntraJoined/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">前の記事</strong>
+      <div class="article-nav-title">Entra 参加デバイスにおけるタスク スケジューラと RDP ユーザー設定の注意点について</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">カテゴリ</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Activation/">Activation</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Activation/ESU/">ESU</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Activation/security-SPP/">security-SPP</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/">Active Directory</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Authentication/">Authentication</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/DFSR/">DFSR</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/FunctionalLevel/">FunctionalLevel</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Group-Policy/">Group Policy</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Promotion-and-Demotion/">Promotion and Demotion</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/User-Profile/">User Profile</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Windows-Hello/">Windows Hello</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Windows-Time-Service/">Windows Time Service</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/AppLocker/">AppLocker</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/AppLocker/Active-Directory/">Active Directory</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/AppLocker/Microsoft-Intune/">Microsoft Intune</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/BitLocker/">BitLocker</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Deployment/">Deployment</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Deployment/Feature-on-demand/">Feature on demand</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Deployment/Sysprep/">Sysprep</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Failover-Clustering/">Failover Clustering</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Failover-Clustering/Azure-Local/">Azure Local</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Failover-Clustering/Configuration-and-Management/">Configuration and Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Failover-Clustering/Windows-Server-2025/">Windows Server 2025</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/FileServices/">FileServices</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/FileServices/FTP/">FTP</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/FileServices/SMB/">SMB</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Hyper-V/">Hyper-V</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Hyper-V/Configuration-and-Management/">Configuration and Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Hyper-V/Migration/">Migration</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Microsoft-Connected-Cache/">Microsoft Connected Cache</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/">Networking</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/BITS/">BITS</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/Bluetooth/">Bluetooth</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/DHCP/">DHCP</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/DNS/">DNS</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/Firewall/">Firewall</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/LBFO/">LBFO</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/NCSI/">NCSI</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/NetworkInterface/">NetworkInterface</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/Proxy/">Proxy</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/TCPIP/">TCPIP</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/OpenSSH/">OpenSSH</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/">Performance</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/Hang-up-BSoD/">Hang-up/BSoD</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/No-Boot/">No Boot</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/Slow-Response/">Slow Response</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/System-Resource/">System Resource</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/Tools/">Tools</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/">Public Key Infrastructure</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Certificate-Authority/">Certificate Authority</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Certificate-Management/">Certificate Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Code-Signing/">Code Signing</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Fundamental/">Fundamental</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/SSL-TLS-Communication/">SSL TLS Communication</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/SSL-TLS-Connection/">SSL TLS Connection</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Smart-Card-Logon/">Smart Card Logon</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/">Remote Desktop</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/Azure-Virtual-Desktop-AVD/">Azure Virtual Desktop (AVD)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/Remote-Desktop-Service-RDS/">Remote Desktop Service (RDS)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/Windows-Virtual-Desktop-WVD/">Windows Virtual Desktop (WVD)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/RemoteAccess/">RemoteAccess</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/RemoteAccess/%E3%83%80%E3%82%A4%E3%83%A4%E3%83%AB%E3%82%A2%E3%83%83%E3%83%97%E6%8E%A5%E7%B6%9A/">ダイヤルアップ接続</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Security/">Security</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Security/WDAC/">WDAC</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Setup/">Setup</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Setup/Feature-Update-FU/">Feature Update (FU)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Shell/">Shell</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Shell/Explorer/">Explorer</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Shell/StartMenu/">StartMenu</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/">Storage</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/Backup/">Backup</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/FSRM/">FSRM</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/Management/">Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/StorageMigrationService/">StorageMigrationService</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Support-Request/">Support Request</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/UEFI/">UEFI</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/UEFI/Secure-Boot/">Secure Boot</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/">User Interface and Apps</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Command-Prompt/">Command Prompt</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/EventLog/">EventLog</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Language-Support/">Language Support</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Microsoft-Store/">Microsoft Store</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Performance/">Performance</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/PowerShell/">PowerShell</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Printing-%E5%8D%B0%E5%88%B7/">Printing (印刷)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Server-Management/">Server Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Taskscheduler/">Taskscheduler</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Windows-Management-Instrumentation/">Windows Management Instrumentation</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps-Language-support/">User Interface and Apps - Language support</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-365/">Windows 365</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Admin-Center/">Windows Admin Center</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Search/">Windows Search</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/">Windows Update</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Delivery-Optimization-DO/">Delivery Optimization (DO)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Feature-Update-FU/">Feature Update (FU)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Quality-Update-QU/">Quality Update (QU)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Windows-Update-Agent/">Windows Update Agent</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Windows-Update-Agent-WUA/">Windows Update Agent (WUA)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/">WirelessNetwork</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/NPS/">NPS</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/Wi-Fi/">Wi-Fi</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/%E3%83%A2%E3%83%90%E3%82%A4%E3%83%AB-%E3%83%96%E3%83%AD%E3%83%BC%E3%83%89%E3%83%90%E3%83%B3%E3%83%89%E6%8E%A5%E7%B6%9A-LTE/">モバイル ブロードバンド接続 (LTE)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/%E7%B5%84%E7%B9%94%E7%B4%B9%E4%BB%8B%E3%83%96%E3%83%AD%E3%82%B0%EF%BC%88Windows-Commercial%EF%BC%89/">組織紹介ブログ（Windows Commercial）</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最近の投稿</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/blog/2026/08/05/ActiveDirectory/PromotionAndDemotion/windows-server-2016-ad-migration-considerations/">Windows Server 2016 からの Active Directory 移行、アップグレードにあたっての考慮事項</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/07/21/UserInterfaceAndApps/Taskscheduler/TaskSched-RDP-config-on-EntraJoined/">Entra 参加デバイスにおけるタスク スケジューラと RDP ユーザー設定の注意点について</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/07/02/ActiveDirectory/Authentication/kerberos-rc4-to-aes-migration/">Kerberos 認証のセキュリティ強化：RC4 から AES への移行ガイド</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/06/23/Shell/Explorer/zipfldr-maxpath-japanese-encoding/">エクスプローラーで ZIP ファイルを展開すると「圧縮 (zip 形式) フォルダーは無効です」エラーが発生する</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/06/22/PublicKeyInfrastructure/Fundamental/pki-foundation-01/">PKI の概要</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">アーカイブ</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2026/08/">2026 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2026/07/">2026 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2026/06/">2026 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2026/05/">2026 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2026/04/">2026 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2026/03/">2026 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2026/02/">2026 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2026/01/">2026 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/12/">2025 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/11/">2025 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/10/">2025 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/09/">2025 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/08/">2025 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/07/">2025 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/06/">2025 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/05/">2025 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/04/">2025 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/03/">2025 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/02/">2025 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/01/">2025 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/12/">2024 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/11/">2024 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/10/">2024 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/09/">2024 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/08/">2024 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/07/">2024 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/06/">2024 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/05/">2024 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/04/">2024 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/03/">2024 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/02/">2024 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/01/">2024 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/12/">2023 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/11/">2023 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/10/">2023 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/09/">2023 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/08/">2023 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/07/">2023 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/06/">2023 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/05/">2023 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/04/">2023 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/03/">2023 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/02/">2023 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/01/">2023 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/12/">2022 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/11/">2022 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/10/">2022 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/09/">2022 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/08/">2022 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/07/">2022 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/06/">2022 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/05/">2022 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/04/">2022 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/03/">2022 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/02/">2022 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/01/">2022 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/12/">2021 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/11/">2021 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/10/">2021 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/09/">2021 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/08/">2021 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/07/">2021 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/06/">2021 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/05/">2021 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/04/">2021 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/03/">2021 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/02/">2021 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/01/">2021 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/12/">2020 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/11/">2020 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/10/">2020 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/07/">2020 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/03/">2020 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2019/03/">2019 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/11/">2018 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/10/">2018 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/09/">2018 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/08/">2018 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/07/">2018 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/06/">2018 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/04/">2018 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/02/">2018 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/12/">2017 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/11/">2017 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/09/">2017 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/05/">2017 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/03/">2017 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/02/">2017 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2016/08/">2016 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2016/05/">2016 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2014/03/">2014 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2012/02/">2012 / 02</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2026 Microsoft Japan Windows Technology Support Team<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/blog/" class="mobile-nav-link">Home</a>
+  
+    <a href="/blog/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+<script src="/blog/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

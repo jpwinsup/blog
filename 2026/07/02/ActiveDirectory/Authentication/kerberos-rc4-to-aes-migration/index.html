@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-180187723-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-180187723-1');
+</script>
+<!-- End Google Analytics -->
+
+  
+  <title>Kerberos 認証のセキュリティ強化：RC4 から AES への移行ガイド | Microsoft Japan Windows Technology Support Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="本記事はマイクロソフト社員によって公開されております。 こんにちは。Windows Commercial Support Directory Services チームです。 Active Directory 環境のセキュリティ強化において、長年の課題となっているのが「古い暗号化方式の排除」です。特に Kerberos 認証における RC4 (RC4-HMAC, Rivest Cipher 4) の">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Kerberos 認証のセキュリティ強化：RC4 から AES への移行ガイド">
+<meta property="og:url" content="https://jpwinsup.github.io/blog/2026/07/02/ActiveDirectory/Authentication/kerberos-rc4-to-aes-migration/index.html">
+<meta property="og:site_name" content="Microsoft Japan Windows Technology Support Blog">
+<meta property="og:description" content="本記事はマイクロソフト社員によって公開されております。 こんにちは。Windows Commercial Support Directory Services チームです。 Active Directory 環境のセキュリティ強化において、長年の課題となっているのが「古い暗号化方式の排除」です。特に Kerberos 認証における RC4 (RC4-HMAC, Rivest Cipher 4) の">
+<meta property="og:locale" content="ja_JP">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2026/07/02/ActiveDirectory/Authentication/kerberos-rc4-to-aes-migration/Kerberos.png">
+<meta property="article:published_time" content="2026-07-02T15:00:00.000Z">
+<meta property="article:modified_time" content="2026-08-06T10:57:22.301Z">
+<meta property="article:author" content="Microsoft Japan Windows Technology Support Team">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://jpwinsup.github.io/blog/2026/07/02/ActiveDirectory/Authentication/kerberos-rc4-to-aes-migration/Kerberos.png">
+  
+    <link rel="alternate" href="/blog/atom.xml" title="Microsoft Japan Windows Technology Support Blog" type="application/atom+xml">
+  
+
+  <link rel="icon" href="/blog/favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="/blog/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/blog/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/blog/favicon-16x16.png">
+  <link rel="manifest" href="/blog/site.webmanifest">
+  <link rel="mask-icon" href="/blog/safari-pinned-tab.svg" color="#5bbad5">
+  <meta name="msapplication-TileColor" content="#ffffff">
+  <meta name="theme-color" content="#ffffff">
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/blog/css/style.css">
+
+<meta name="generator" content="Hexo 5.2.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="site-header-logo"></div>
+  <div id="site-header-blog-wrapper"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        <div id="ms-logo"></div>
+        
+          <a class="main-nav-link" href="/blog/">Home</a>
+        
+          <a class="main-nav-link" href="/blog/archives">Archives</a>
+        
+        <a class="main-nav-link" target="_blank" rel="noopener" href="https://cssjpn.github.io/">サポート情報</a>
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/blog/atom.xml" title="RSSフィード"></a>
+        
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//www.bing.com/search" method="get" accept-charset="UTF-8" name="bing-search" onsubmit="var f=this;if(f['q'].value){var searchUrl =  'https://www.bing.com/search?q=' +  encodeURIComponent(f['q'].value + ' site:' + f['sitesearch'].value) ;window.open(searchUrl, 'blank') };return false;" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="検索"><button type="submit" id="nav-search-btn" class="search-form-submit"></button><input type="hidden" name="sitesearch" value="https://jpwinsup.github.io/blog"></form>
+      </div>
+    </div>
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/blog/" id="logo">Microsoft Japan Windows Technology Support Blog</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/blog/" id="subtitle">日本マイクロソフト Windows Support チームによる、サポート情報 Blog です。</a>
+        </h2>
+      
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-ActiveDirectory/Authentication/kerberos-rc4-to-aes-migration" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    
+    
+      <header class="article-header-single">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Kerberos 認証のセキュリティ強化：RC4 から AES への移行ガイド
+    </h1>
+  
+
+      </header>
+      <div class="article-share">
+        Published Date: 
+        <a href="/blog/2026/07/02/ActiveDirectory/Authentication/kerberos-rc4-to-aes-migration/" class="article-date-single">
+  <time datetime="2026-07-02T15:00:00.000Z" itemprop="datePublished">2026-07-03</time>
+</a>
+        
+  <div class="article-category">
+    <a class="article-category-link" href="/blog/categories/Active-Directory/">Active Directory</a>►<a class="article-category-link" href="/blog/categories/Active-Directory/Authentication/">Authentication</a>
+  </div>
+
+        
+        <a href="https://github.com/jpwinsup/blog/issues/new?title=&body=%EF%BB%BF%0A%0A---%0A%0A%23%23%23%23+Document+Details%0A%0A*+Article+ID%3A+5b415e96-986c-5e7b-97f5-ef1bc74eb96b%0A*+TITLE%3A+Kerberos+%E8%AA%8D%E8%A8%BC%E3%81%AE%E3%82%BB%E3%82%AD%E3%83%A5%E3%83%AA%E3%83%86%E3%82%A3%E5%BC%B7%E5%8C%96%EF%BC%9ARC4+%E3%81%8B%E3%82%89+AES+%E3%81%B8%E3%81%AE%E7%A7%BB%E8%A1%8C%E3%82%AC%E3%82%A4%E3%83%89%0A*+URL+https%3A%2F%2Fjpwinsup.github.io%2Fblog%2F2026%2F07%2F02%2FActiveDirectory%2FAuthentication%2Fkerberos-rc4-to-aes-migration%2F%0A*+SourceFileName%3A+source%2F_posts%2FActiveDirectory%2FAuthentication%2Fkerberos-rc4-to-aes-migration.md%0A" class="article-github-issue-link" target="_blank" rel="noopener noreferrer">feedback</a>
+        
+        <a data-url="https://jpwinsup.github.io/blog/2026/07/02/ActiveDirectory/Authentication/kerberos-rc4-to-aes-migration/" data-id="cmshes4gq01nlru4s4hi92i73" class="article-share-link">共有</a>
+      </div>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>本記事はマイクロソフト社員によって公開されております。</p>
+<p>こんにちは。Windows Commercial Support Directory Services チームです。</p>
+<p>Active Directory 環境のセキュリティ強化において、長年の課題となっているのが「古い暗号化方式の排除」です。<br>特に Kerberos 認証における RC4 (RC4-HMAC, Rivest Cipher 4) の無効化は、攻撃者による悪用を防ぐために急務となっています。<br>Microsoft は将来的に、ドメイン コントローラーでの RC4 の既定使用を無効化する計画を発表しています。</p>
+<p>本記事では、Kerberos における RC4 のリスク、現状の監査方法、そして AES へ安全に移行するための手順について解説します。</p>
+<blockquote>
+<p>本記事は、弊チームのメンバーが LinkedIn に投稿した以下の記事をベースに、内容を整理・加筆したものです。<br><a target="_blank" rel="noopener" href="https://www.linkedin.com/pulse/kerberos-%E8%AA%8D%E8%A8%BC%E3%81%AE%E3%82%BB%E3%82%AD%E3%83%A5%E3%83%AA%E3%83%86%E3%82%A3%E5%BC%B7%E5%8C%96rc4-%E3%81%8B%E3%82%89-aes-%E3%81%B8%E3%81%AE%E7%A7%BB%E8%A1%8C%E3%82%AC%E3%82%A4%E3%83%89-shuman-zhu-poi4c/?trackingId=5Rc3Q9HUTk+50rB+bNsIOg==">Kerberos 認証のセキュリティ強化：RC4 から AES への移行ガイド</a></p>
+</blockquote>
+<hr>
+<h2 id="1-Kerberos-の紹介と-RC4-脆弱性"><a href="#1-Kerberos-の紹介と-RC4-脆弱性" class="headerlink" title="1. Kerberos の紹介と RC4 脆弱性"></a>1. Kerberos の紹介と RC4 脆弱性</h2><p>Kerberos は、Active Directory の中核となる認証プロトコルです。ユーザーが一度認証を受けると、チケットを利用してネットワーク上のリソースへアクセスします。</p>
+<p><img src="Kerberos.png"><br> <em>Kerberos 認証の流れ</em></p>
+<blockquote>
+<p>参考: <a target="_blank" rel="noopener" href="https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-server-2003/cc772815(v=ws.10)#kerberosv5-exchange-and-message-summary">How the Kerberos Version 5 Authentication Protocol Works</a></p>
+</blockquote>
+<h3 id="基本的な認証フロー"><a href="#基本的な認証フロー" class="headerlink" title="基本的な認証フロー"></a>基本的な認証フロー</h3><ol>
+<li><strong>AS-REQ/REP</strong>: クライアントが KDC（ドメイン コントローラー）に認証を要求し、TGT（Ticket Granting Ticket）を取得します。</li>
+<li><strong>TGS-REQ/REP</strong>: クライアントが TGT を提示して、特定のリソース サーバーへのアクセスに必要なサービス チケットを取得します。</li>
+<li><strong>AP-REQ/REP</strong>: 取得したサービス チケットを使って、ファイル サーバーや SQL サーバーなどのリソースにアクセスします。</li>
+</ol>
+<h3 id="なぜ-RC4-から-AES-へ移行する必要があるのか"><a href="#なぜ-RC4-から-AES-へ移行する必要があるのか" class="headerlink" title="なぜ RC4 から AES へ移行する必要があるのか"></a>なぜ RC4 から AES へ移行する必要があるのか</h3><p>Windows Kerberos における RC4 は Windows 2000 時代に導入されましたが、現代の計算能力から見ると脆弱性が顕著です。特に <strong>Kerberoasting 攻撃</strong> や <strong>AS-REP Roasting 攻撃</strong> の標的となりやすく、パスワードが特定されるリスクが高まっています。</p>
+<ul>
+<li><strong>ソルトの欠如</strong>: RC4 はパスワードを暗号化キーに変換する際、ソルト（Salt）を使用せず、パスワードの NTLM ハッシュをそのままキーとして使用します。</li>
+<li><strong>計算速度</strong>: パスワードを守るハッシュ関数の計算が 1 回しか行われないため、攻撃者は非常に高速に総当たり攻撃（ブルート フォース）を行うことが可能です。</li>
+</ul>
+<hr>
+<h2 id="2-Kerberos-における暗号方式既定値変更-（CVE-2022-37966-CVE‑2026‑20833）"><a href="#2-Kerberos-における暗号方式既定値変更-（CVE-2022-37966-CVE‑2026‑20833）" class="headerlink" title="2. Kerberos における暗号方式既定値変更 （CVE-2022-37966 / CVE‑2026‑20833）"></a>2. Kerberos における暗号方式既定値変更 （CVE-2022-37966 / CVE‑2026‑20833）</h2><p>Windows Server 2008 / Vista 以降の Windows OS では、より強固な AES 暗号化 (AES-SHA1) をサポートしています。Microsoft は RC4 から AES への移行を段階的に進めています。<br>本章では、その背景にある「Microsoft 側で進められている既定動作の変更」について、2 つのセキュリティ更新プログラムを軸に整理します。</p>
+<p>Kerberos 認証では、1 回の認証の中で複数の鍵・チケットが暗号化されます。<br>RC4 から AES への移行は一度に行われたわけではなく、<strong>暗号化の対象ごとに段階的に</strong>既定値が変更されてきました。</p>
+<blockquote>
+<p><strong>補足</strong>: これらはいずれも <strong>“既定値” の変更</strong>です。<br>レジストリや <code>msDS-SupportedEncryptionTypes</code> 属性で RC4 を明示的に指定している場合は、更新適用後も引き続き RC4 が使用されます（詳細は本章末尾「RC4 が継続利用される条件」を参照）。</p>
+</blockquote>
+<h3 id="2-1-CVE-2022-37966-—-セッション-キーの既定値変更"><a href="#2-1-CVE-2022-37966-—-セッション-キーの既定値変更" class="headerlink" title="2-1. CVE-2022-37966 — セッション キーの既定値変更"></a>2-1. CVE-2022-37966 — セッション キーの既定値変更</h3><p>2022 年 11 月のセキュリティ更新プログラム（CVE‑2022‑37966）では、Kerberos 認証における <strong>セッション キーの暗号化方式</strong> の既定値が変更されました。</p>
+<h4 id="変更対象"><a href="#変更対象" class="headerlink" title="変更対象"></a>変更対象</h4><ul>
+<li>Kerberos のセッション キー</li>
+</ul>
+<h4 id="変更内容"><a href="#変更内容" class="headerlink" title="変更内容"></a>変更内容</h4><p><code>msDS-SupportedEncryptionTypes</code> 属性が未設定、または <code>0</code> (既定の暗号化タイプが未指定) のアカウントに対して、以下のように動作が変更されます。</p>
+<ul>
+<li>従来：サービス チケットのセッション キーは RC4 で暗号化される</li>
+<li>更新後：<strong>AES が既定で利用される動作へ変更</strong></li>
+</ul>
+<p>具体的にはドメイン コントローラーの <code>DefaultDomainSupportedEncTypes</code> の既定値 <code>0x27</code> が利用され、セッションキー用途に AES が既定候補として追加されています。</p>
+<h4 id="ポイント"><a href="#ポイント" class="headerlink" title="ポイント"></a>ポイント</h4><p>この変更は、</p>
+<blockquote>
+<p>「暗号種別未定義アカウントのセッションキーの既定値を RC4 から AES へ変更する」</p>
+</blockquote>
+<p>というものです。</p>
+<p>詳細は <a href="https://jpwinsup.github.io/blog/2022/12/29/ActiveDirectory/Authentication/kerberos-protocol-changes-related-to-cve-2022-37966/">CVE-2022-37966 への対応とその影響について</a> をご確認ください。</p>
+<h3 id="2-2-CVE-2026-20833-—-サービス-チケットの既定値変更"><a href="#2-2-CVE-2026-20833-—-サービス-チケットの既定値変更" class="headerlink" title="2-2. CVE-2026-20833 — サービス チケットの既定値変更"></a>2-2. CVE-2026-20833 — サービス チケットの既定値変更</h3><p>2026 年の更新（CVE‑2026‑20833）では、さらに RC4 廃止が推進され、Kerberos の <strong>サービス チケット暗号化方式</strong> の既定値が変更されました。</p>
+<h4 id="変更対象-1"><a href="#変更対象-1" class="headerlink" title="変更対象"></a>変更対象</h4><ul>
+<li>Kerberos のサービス チケット</li>
+</ul>
+<h4 id="変更内容-1"><a href="#変更内容-1" class="headerlink" title="変更内容"></a>変更内容</h4><p><code>msDS-SupportedEncryptionTypes</code> 属性が未設定、または <code>0</code> (既定の暗号化タイプが未指定) のアカウントに対して、以下のように動作が変更されます。</p>
+<ul>
+<li>従来：サービス チケットは RC4 で暗号化される</li>
+<li>更新後：<strong>AES が既定で利用される動作へ変更</strong></li>
+</ul>
+<p>具体的にはドメイン コントローラーの <code>DefaultDomainSupportedEncTypes</code> の既定値 <code>0x18</code> が利用され、サービス チケットの既定の暗号化方式が AES に変更されました。 </p>
+<h4 id="ポイント-1"><a href="#ポイント-1" class="headerlink" title="ポイント"></a>ポイント</h4><p>この変更は、</p>
+<blockquote>
+<p>「サービス チケット発行時の既定暗号方式を RC4 から AES のみに変更する」</p>
+</blockquote>
+<p>というものです。</p>
+<h4 id="RC4-が継続利用される条件"><a href="#RC4-が継続利用される条件" class="headerlink" title="RC4 が継続利用される条件"></a>RC4 が継続利用される条件</h4><p>以下のようなケースでは、更新適用後も RC4 は継続利用されます。</p>
+<ul>
+<li><code>msDS-SupportedEncryptionTypes</code> に RC4 が明示的に設定されている場合</li>
+<li>レジストリやポリシーで RC4 を明示的に許可している場合</li>
+</ul>
+<p>この場合、KDC は明示設定を優先するため、自動的に AES へ切り替わることはありません。</p>
+<p>詳細は <a href="https://jpwinsup.github.io/blog/2026/02/02/ActiveDirectory/Authentication/kerberos-rc4-for-service-account-ticket-issuance-changes-related-to-cve-2026-20833/">CVE‑2026‑20833 への対応とその影響について [KB5073381]</a> をご確認ください。</p>
+<hr>
+<h2 id="3-イベント-ログによる暗号化タイプの監査-ID-4768-4769"><a href="#3-イベント-ログによる暗号化タイプの監査-ID-4768-4769" class="headerlink" title="3. イベント ログによる暗号化タイプの監査 (ID: 4768, 4769)"></a>3. イベント ログによる暗号化タイプの監査 (ID: 4768, 4769)</h2><p>環境内で RC4 が「どこで」「誰によって」使用されているかを特定するには、ドメイン コントローラーのセキュリティ イベント ログを監査します。</p>
+<h3 id="監視対象イベント"><a href="#監視対象イベント" class="headerlink" title="監視対象イベント"></a>監視対象イベント</h3><ul>
+<li><strong>イベント ID 4768</strong>: <a target="_blank" rel="noopener" href="https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-10/security/threat-protection/auditing/event-4768">Kerberos 認証チケット (TGT) の要求</a></li>
+<li><strong>イベント ID 4769</strong>: <a target="_blank" rel="noopener" href="https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-10/security/threat-protection/auditing/event-4769">Kerberos サービス チケットの要求</a></li>
+</ul>
+<blockquote>
+<p><strong>補足 1</strong>: ドメイン コントローラーに 2025 年 1 月以降の更新プログラムを適用することで、これらの ID:4768, 4769 イベントには詳細な暗号化情報が記録されるようになりました。監査の前に更新プログラムの確認や適用をお願いします。</p>
+<p><strong>補足 2</strong>: ID:4768/4769 はチケット要求時に記録され、失敗時も記録されるためトラブルシューティングに有用です。ただし、事前認証（Pre-authentication）段階で失敗した場合は、代わりに <a target="_blank" rel="noopener" href="https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-10/security/threat-protection/auditing/event-4771">ID:4771</a> が記録されることがあります。</p>
+</blockquote>
+<h3 id="3-1-ID-4768-TGT-要求-の監査ポイント"><a href="#3-1-ID-4768-TGT-要求-の監査ポイント" class="headerlink" title="3-1. ID: 4768 (TGT 要求) の監査ポイント"></a>3-1. ID: 4768 (TGT 要求) の監査ポイント</h3><p>TGT を正常に発行するには、「ユーザー アカウントのキー（User Key）」「クライアント端末のサポート暗号（Advertized Etypes）」「KDC の許可暗号 (GPO や Krbtgt キーなど）」の 3 者間で共通の暗号化タイプが必要です。なお、TGT 本体の暗号化は krbtgt アカウントのキーのみに依存します（クライアントは TGT 本体を復号しないため）。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line">Log Name:      Security</span><br><span class="line">Source:        Microsoft-Windows-Security-Auditing</span><br><span class="line">Event ID:      4768</span><br><span class="line">Task Category: Kerberos Authentication Service</span><br><span class="line">Level:         Information</span><br><span class="line">Keywords:      Audit Success</span><br><span class="line">Computer:      DC1</span><br><span class="line">Description:</span><br><span class="line">A Kerberos authentication ticket (TGT) was requested.</span><br><span class="line"></span><br><span class="line">Account Information: </span><br><span class="line">       Account Name:        user1</span><br><span class="line">       Supplied Realm Name:  Contoso.LOCAL</span><br><span class="line">       User ID:                    Contoso\user1</span><br><span class="line">       MSDS-SupportedEncryptionTypes:      0x27 (DES, RC4, AES-Sk)</span><br><span class="line">       Available Keys:      AES-SHA1, RC4</span><br><span class="line"></span><br><span class="line">Service Information: </span><br><span class="line">       Service Name:        krbtgt</span><br><span class="line">       Service ID:          Contoso\krbtgt</span><br><span class="line">       MSDS-SupportedEncryptionTypes:      0x1F (DES, RC4, AES128-SHA96, AES256-SHA96)</span><br><span class="line">       Available Keys:      AES-SHA1, RC4</span><br><span class="line"></span><br><span class="line">Domain Controller Information:</span><br><span class="line">       MSDS-SupportedEncryptionTypes:      0x1F (DES, RC4, AES128-SHA96, AES256-SHA96)</span><br><span class="line">       Available Keys:      AES-SHA1, RC4</span><br><span class="line"></span><br><span class="line">Network Information:</span><br><span class="line">       Client Address:             ::ffff:192.168.1.101</span><br><span class="line">       Client Port:         49770</span><br><span class="line">       Advertized Etypes:   </span><br><span class="line">              AES256-CTS-HMAC-SHA1-96</span><br><span class="line">              RC4-HMAC-NT</span><br><span class="line"></span><br><span class="line">Additional Information:</span><br><span class="line">       Ticket Options:             0x40810010</span><br><span class="line">       Result Code:         0x0</span><br><span class="line">       Ticket Encryption Type:      0x12</span><br><span class="line">       Session Encryption Type:     0x12</span><br><span class="line">       Pre-Authentication Type:     2</span><br><span class="line">       Pre-Authentication EncryptionType:  0x12</span><br></pre></td></tr></table></figure>
+
+<h4 id="確認項目"><a href="#確認項目" class="headerlink" title="確認項目"></a>確認項目</h4><p><strong>Account Information</strong>: TGT を要求しているアカウント名です。末尾に <code>$</code> がある場合はコンピューター アカウントです。</p>
+<p><strong>Available Keys (重要)</strong>: AD に保存されている、そのアカウントで利用可能なキーの一覧です。ここに AES-SHA1 が表示されない場合、そのアカウントは AES キーを持っていません。</p>
+<ul>
+<li>対処法: ドメイン機能レベルが 2008 以上であることを確認し、該当アカウントのパスワード変更（リセット） を実施してください。古いパスワードのままのアカウントは AES キーが生成されていないため、RC4 が使われ続けます。</li>
+</ul>
+<blockquote>
+<p><strong>補足</strong>: <code>msDS-SupportedEncryptionTypes</code> (msDS-SET) 属性は、AD がそのアカウントに対して「利用可能（サポート）」と認識している暗号化タイプを示す属性です。</p>
+<p>SPN を持たない通常のユーザー アカウントでは、<code>msDS-SupportedEncryptionTypes</code> 属性を設定する必要はありません。ユーザー アカウントの User Key は認証に使用されますが、この属性はチケット暗号化タイプの計算に影響しません。</p>
+<p>そのため属性値は既定で空欄となっており、2022 年 11 月更新 (CVE-2022-37966) 適用後のドメイン コントローラーでは <code>DefaultDomainSupportedEncTypes</code>（既定値 <code>0x27</code>）が適用されます。</p>
+<p>なお、その後の <a target="_blank" rel="noopener" href="https://support.microsoft.com/help/5073381">CVE-2026-20833</a> への対応により、この <code>DefaultDomainSupportedEncTypes</code> の既定値はさらに <code>0x18</code>（AES のみ）へ変更されます。</p>
+</blockquote>
+<p><strong>Service Information</strong>:</p>
+<p>TGT は Krbtgt アカウントのパスワード ハッシュで暗号化されるため、このフィールドには Krbtgt が表示されます。もし Available Keys に AES がない場合も、同様にドメイン機能レベルは 2008 以上であることを確認のうえ、Krbtgt アカウントのパスワード変更/リセットを一度実施してください。（手順：<a href="https://jpwinsup.github.io/blog/2022/12/29/ActiveDirectory/Authentication/kerberos-protocol-changes-related-to-cve-2022-37966/">イベント メッセージ ID 42 への対処方法について</a>）</p>
+<p><strong>Domain Controller Information</strong>:</p>
+<p>ドメイン コントローラーに関する情報です。</p>
+<ul>
+<li><code>msDS-SupportedEncryptionTypes</code>: AES が表示されない場合は、ドメイン コントローラーに適用されている、<a target="_blank" rel="noopener" href="https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-10/security/threat-protection/security-policy-settings/network-security-configure-encryption-types-allowed-for-kerberos">ネットワーク セキュリティ: Kerberos で許可する暗号化の種類を構成する（Network security: Configure encryption types allowed for Kerberos）</a> グループ ポリシーの設定を確認します。<ul>
+<li>※ポリシーの設定値は、再起動後に <code>msDS-SupportedEncryptionTypes</code> 属性に反映されます。</li>
+</ul>
+</li>
+<li>通常は発生しませんが、<code>msDS-SupportedEncryptionTypes</code> 属性が空欄の場合のみ、ドメイン コントローラー側の <code>DefaultDomainSupportedEncTypes</code> レジストリ値を確認します。<ul>
+<li>※他にも、DC で使用される暗号化タイプに影響を与えるレジストリは複数存在します。</li>
+</ul>
+</li>
+</ul>
+<p><strong>Network Information</strong>:</p>
+<p>TGT を要求したクライアント端末の情報です。</p>
+<ul>
+<li><strong>Advertized Etypes</strong>: クライアントが申告した「サポート可能な暗号化タイプ」です。ここに AES がない場合、クライアント OS が古い（Windows Server 2003 以前など）か、古い NAS などの可能性があります。</li>
+<li>また、Windows OS の場合は、該当コンピューターに適用されている、<strong>ネットワーク セキュリティ: Kerberos で許可する暗号化の種類を構成する</strong> グループ ポリシーの設定を確認します。<ul>
+<li>※ポリシーの設定値は、再起動後に <code>msDS-SupportedEncryptionTypes</code> 属性に反映されます。</li>
+</ul>
+</li>
+<li>通常は発生しませんが、<code>msDS-SupportedEncryptionTypes</code> 属性が空欄の場合のみ、ドメイン コントローラー側の <code>DefaultDomainSupportedEncTypes</code> レジストリ値を確認します。</li>
+</ul>
+<blockquote>
+<p><strong>補足</strong>: Windows デバイスについては、AES-SHA1 をサポートしていなかった最後のバージョンは Windows Server 2003 です。</p>
+</blockquote>
+<p><strong>Additional Information</strong>:</p>
+<ul>
+<li><code>Result Code</code> は <code>0x0</code> 以外であればエラーが発生しています。</li>
+<li><code>Ticket Encryption Type</code>: TGT の暗号化タイプ</li>
+<li><code>Session Encryption Type</code>: TGS セッション キーの暗号化タイプ</li>
+<li><code>Pre-Authentication EncryptionType</code>: Pre-Auth（Authenticator）の暗号化タイプ</li>
+<li>暗号化タイプの詳細はこちら（<a target="_blank" rel="noopener" href="https://techcommunity.microsoft.com/blog/coreinfrastructureandsecurityblog/decrypting-the-selection-of-supported-kerberos-encryption-types/1628797">Auditing for encryption type</a>）</li>
+</ul>
+<h3 id="3-2-ID-4769-サービス-チケット要求-の監査ポイント"><a href="#3-2-ID-4769-サービス-チケット要求-の監査ポイント" class="headerlink" title="3-2. ID: 4769 (サービス チケット要求) の監査ポイント"></a>3-2. ID: 4769 (サービス チケット要求) の監査ポイント</h3><p>サービス チケットを正常に発行・利用するためには、「サービス アカウントが持つ Service Key の暗号化タイプ（<code>msDS-SupportedEncryptionTypes</code>）」、「クライアント端末のサポート暗号（Advertized Etypes）」「KDC の許可暗号 (GPO や Krbtgt キーなど）」の 3 者間で共通の暗号化タイプが必要です。</p>
+<p>サービス チケット本体の暗号化方式は、サービス アカウントが持つ Service Key によってのみ決まります。（Service Key の暗号タイプは <code>msDS-SupportedEncryptionTypes</code> によって決めます。）クライアントはサービス チケット本体を復号しないため、クライアントとの共通暗号が影響するのは、TGS-REP のセッション キーの暗号方式のみです。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line">Log Name:      Security</span><br><span class="line">Source:        Microsoft-Windows-Security-Auditing</span><br><span class="line">Event ID:      4769</span><br><span class="line">Task Category: Kerberos Service Ticket Operations</span><br><span class="line">Level:         Information</span><br><span class="line">Keywords:      Audit Success</span><br><span class="line">Computer:      DC1</span><br><span class="line">A Kerberos service ticket was requested.</span><br><span class="line"></span><br><span class="line">Account Information:</span><br><span class="line">       Account Name:        user1</span><br><span class="line">       Account Domain:             Contoso.LOCAL</span><br><span class="line">       Logon GUID:          &#123;38ebe445-41a6-abc4-7436-555181f7722c&#125;</span><br><span class="line">       MSDS-SupportedEncryptionTypes:      N&#x2F;A</span><br><span class="line">       Available Keys:      N&#x2F;A</span><br><span class="line"></span><br><span class="line">Service Information:</span><br><span class="line">       Service Name:        DC2022</span><br><span class="line">       Service ID:          Contoso\DC2022</span><br><span class="line">       MSDS-SupportedEncryptionTypes:      0x1F (DES, RC4, AES128-SHA96, AES256-SHA96)</span><br><span class="line">       Available Keys:      AES-SHA1, RC4</span><br><span class="line"></span><br><span class="line">Domain Controller Information:</span><br><span class="line">       MSDS-SupportedEncryptionTypes:      0x1F (DES, RC4, AES128-SHA96, AES256-SHA96)</span><br><span class="line">       Available Keys:      AES-SHA1, RC4</span><br><span class="line"></span><br><span class="line">Network Information:</span><br><span class="line">       Client Address:             ::ffff:192.168.1.101</span><br><span class="line">       Client Port:         49771</span><br><span class="line">       Advertized Etypes:   </span><br><span class="line">              AES256-CTS-HMAC-SHA1-96</span><br><span class="line">              AES128-CTS-HMAC-SHA1-96</span><br><span class="line">              RC4-HMAC-NT</span><br><span class="line">              RC4-HMAC-NT-EXP</span><br><span class="line">              RC4-HMAC-OLD-EXP</span><br><span class="line"></span><br><span class="line">Additional Information:</span><br><span class="line">       Ticket Options:             0x40810000</span><br><span class="line">       Ticket Encryption Type:      0x12</span><br><span class="line">       Session Encryption Type:     0x17</span><br><span class="line">       Failure Code:        0x0</span><br><span class="line">       Transited Services:   </span><br></pre></td></tr></table></figure>
+
+<h4 id="確認項目-1"><a href="#確認項目-1" class="headerlink" title="確認項目"></a>確認項目</h4><p><strong>Service Information</strong>:</p>
+<p>アクセス先のサービス（SPN）の情報です。（厳密には、SPN が登録しているオブジェクトです）</p>
+<ul>
+<li><code>msDS-SupportedEncryptionTypes</code>:<ul>
+<li>ユーザーや gMSA アカウントで AES が表示されない場合、まず AD 側でアカウントの属性値を確認します。設定がない（空欄）の場合、DC のレジストリ <code>DefaultDomainSupportedEncTypes</code> の値に従います。2022/11 更新 (CVE-2022-37966) 適用後のドメイン コントローラーでは <code>DefaultDomainSupportedEncTypes</code>（既定値 <code>0x27</code>）が適用されます。なお、その後の <a target="_blank" rel="noopener" href="https://support.microsoft.com/help/5073381">CVE-2026-20833</a> への対応により、この <code>DefaultDomainSupportedEncTypes</code> の既定値はさらに <code>0x18</code>（AES のみ）へ変更されます。</li>
+<li>メンバー コンピューターで AES が表示されない場合は、コンピューターに適用されている、<strong>ネットワーク セキュリティ: Kerberos で許可する暗号化の種類を構成する</strong> グループ ポリシーの設定を確認します。<ul>
+<li>※ポリシーの設定値は、再起動後に <code>msDS-SupportedEncryptionTypes</code> 属性に反映されます。</li>
+</ul>
+</li>
+<li>通常は発生しませんが、<code>msDS-SupportedEncryptionTypes</code> 属性が空欄の場合のみ、ドメイン コントローラー側の <code>DefaultDomainSupportedEncTypes</code> レジストリ値を確認します。</li>
+<li>ドメイン コントローラーに AES が表示されない場合は、上記の ID:4768 <strong>Domain Controller Information</strong> の記載をご参照ください。</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p><strong>補足</strong>: 信頼（Trust Domain Object）に AES が表示されない場合は、まずオブジェクトの <code>msDS-SupportedEncryptionTypes</code> 属性を確認してみてください。</p>
+</blockquote>
+<p><strong>Domain Controller Information</strong> / <strong>Network Information</strong>:</p>
+<p>こちらも確認する必要がありますが、考え方は上記 ID:4768 と同じです。</p>
+<p><strong>Additional Information</strong>:</p>
+<ul>
+<li><code>Ticket Encryption Type</code>: サービス チケットに対して KDC が選択した暗号化方式です。対象サービス アカウントの <code>msDS-SupportedEncryptionTypes</code> に値が設定されていない場合、暗号化方式は既定で RC4 が使用されます。</li>
+<li><code>Session Encryption Type</code>: 2022 年 11 月の更新以降、クライアント側が AES をサポートしていることを KDC に通知している場合、セッション キーの暗号化方式は既定で AES が使用されるようになりました。（「2-1. CVE-2022-37966 — セッション キーの既定変更」にてお伝えした内容です。この制御は、<code>DefaultDomainSupportedEncTypes</code> レジストリにより実現しています。）</li>
+</ul>
+<h3 id="3-3-ドメイン内での-RC4-利用有無を判断するために最低限確認すべきポイント"><a href="#3-3-ドメイン内での-RC4-利用有無を判断するために最低限確認すべきポイント" class="headerlink" title="3-3. ドメイン内での RC4 利用有無を判断するために最低限確認すべきポイント"></a>3-3. ドメイン内での RC4 利用有無を判断するために最低限確認すべきポイント</h3><p>各イベントログには様々な情報が記録されますが、端的にドメイン環境において Kerberos 認証で RC4 の利用を判断するには、各イベントの以下のフィールドを確認します。<br>これらのフィールドのいずれかに RC4 を示す <code>0x17</code> または <code>0x18</code> が記録されている場合、当該認証要求において RC4 が利用されていることを意味します。</p>
+<p><strong>ID:4768 (TGT 要求) で確認するフィールド</strong></p>
+<ul>
+<li><code>Ticket Encryption Type</code></li>
+<li><code>Session Encryption Type</code></li>
+<li><code>Pre-Authentication EncryptionType</code></li>
+</ul>
+<p><strong>ID:4769 (サービス チケット要求) で確認するフィールド</strong></p>
+<ul>
+<li><code>Ticket Encryption Type</code></li>
+<li><code>Session Encryption Type</code></li>
+</ul>
+<p>RC4 の無効化を最終的なゴールとされる場合は、上記のすべてのフィールドが AES を示す値（<code>0x11</code> または <code>0x12</code>）で記録される状態とする必要があります。</p>
+<h4 id="参考-各暗号化タイプの-etype-値と説明"><a href="#参考-各暗号化タイプの-etype-値と説明" class="headerlink" title="参考:各暗号化タイプの etype 値と説明"></a>参考:各暗号化タイプの etype 値と説明</h4><p>各暗号化タイプの etype 値と意味は以下の通りです。</p>
+<table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Type Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>0x1</td>
+<td>DES-CBC-CRC</td>
+<td>Disabled by default starting from Windows 7 and Windows Server 2008 R2.</td>
+</tr>
+<tr>
+<td>0x3</td>
+<td>DES-CBC-MD5</td>
+<td>Disabled by default starting from Windows 7 and Windows Server 2008 R2.</td>
+</tr>
+<tr>
+<td>0x11</td>
+<td>AES128-CTS-HMAC-SHA1-96</td>
+<td>Supported starting from Windows Server 2008 and Windows Vista.</td>
+</tr>
+<tr>
+<td>0x12</td>
+<td>AES256-CTS-HMAC-SHA1-96</td>
+<td>Supported starting from Windows Server 2008 and Windows Vista.</td>
+</tr>
+<tr>
+<td>0x17</td>
+<td>RC4-HMAC</td>
+<td>Default suite for operating systems before Windows Server 2008 and Windows Vista.</td>
+</tr>
+<tr>
+<td>0x18</td>
+<td>RC4-HMAC-EXP</td>
+<td>Default suite for operating systems before Windows Server 2008 and Windows Vista.</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p><strong>補足 1</strong>: DES（<code>0x1</code> / <code>0x3</code>）は現在サポートされている OS では既定で無効化されているため、通常イベントに記録されることはありません。万一記録されている場合は、当該認証要求において DES が利用されていることを意味しますので、AES 化を進められる際には、これらの認証についても併せて AES への移行をご検討ください。<br><strong>補足 2</strong>: 本表のような <strong>etype 値（単一の暗号化方式を表す番号）</strong> としての <code>0x18</code> は RC4-HMAC-EXP を指します。一方、<code>msDS-SupportedEncryptionTypes</code> や <code>DefaultDomainSupportedEncTypes</code> で使う <code>0x18</code> は <strong>ビットフラグの合算値</strong>（<code>0x8</code> AES128 + <code>0x10</code> AES256）であり、「AES のみ」を意味します。両者は別の体系の値である点にご注意ください。同じ <code>0x18</code> でも文脈で意味が異なります。</p>
+</blockquote>
+<h3 id="3-4-AES-への対応方法について"><a href="#3-4-AES-への対応方法について" class="headerlink" title="3-4. AES への対応方法について"></a>3-4. AES への対応方法について</h3><p>ID: 4768 / 4769 のイベント ログを監査するだけで対応を進めることも可能ですが、<span style="color: red; "><strong>まずは 「<a href="#2-Kerberos-%E3%81%AB%E3%81%8A%E3%81%91%E3%82%8B%E6%9A%97%E5%8F%B7%E6%96%B9%E5%BC%8F%E6%97%A2%E5%AE%9A%E5%80%A4%E5%A4%89%E6%9B%B4-%EF%BC%88CVE-2022-37966-CVE%E2%80%912026%E2%80%9120833%EF%BC%89">2. Kerberos における暗号方式既定値変更 （CVE-2022-37966 / CVE‑2026‑20833）</a>」に記載の内容を進めていただくことを強くお勧めいたします。</strong></span><br>脆弱性対応の手順に沿って対応を進めることで、段階的かつ安全に、もれなく AES への移行を進めることができます。<br>一方、脆弱性対応を進めるだけでは、すべての認証要求で AES になるわけではありません。脆弱性対応が完了した後に、個別に ID: 4768 / 4769 のイベント ログを確認し、RC4 が利用されている認証要求に対して対応を行います。</p>
+<h4 id="ID-4768-TGT-要求-の場合"><a href="#ID-4768-TGT-要求-の場合" class="headerlink" title="ID:4768 (TGT 要求) の場合"></a><strong>ID:4768 (TGT 要求) の場合</strong></h4><h5 id="Ticket-Encryption-Type-で-RC4-が記録されている場合"><a href="#Ticket-Encryption-Type-で-RC4-が記録されている場合" class="headerlink" title="Ticket Encryption Type で RC4 が記録されている場合"></a><strong><code>Ticket Encryption Type</code> で RC4 が記録されている場合</strong></h5><p> 以下の可能性があります。</p>
+<ul>
+<li><p>Krbtgt アカウントのパスワードが長期間更新されておらず、AES 鍵が AD 上に保持されていない</p>
+</li>
+<li><p>ドメイン コントローラーに適用された GPO（<strong>ネットワーク セキュリティ: Kerberos で許可する暗号化の種類を構成する</strong>）で AES が許可されていない</p>
+</li>
+<li><p>クライアントが AES を通知していない（=Network Information のクライアントが RC4 のみを通知している）</p>
+<p>必要に応じて Krbtgt アカウントのパスワード更新による AES 鍵の生成を行います。手順は <a href="https://jpwinsup.github.io/blog/2022/12/29/ActiveDirectory/Authentication/kerberos-protocol-changes-related-to-cve-2022-37966/">イベント メッセージ ID 42 への対処方法について</a> をご参照ください。Krbtgt 側に問題がない場合は、Network Information に記載されているクライアントの AES 対応状況を確認します。</p>
+</li>
+</ul>
+<h5 id="Session-Encryption-Type-で-RC4-が記録されている場合"><a href="#Session-Encryption-Type-で-RC4-が記録されている場合" class="headerlink" title="Session Encryption Type で RC4 が記録されている場合"></a><strong><code>Session Encryption Type</code> で RC4 が記録されている場合</strong></h5><p>  本フィールドで RC4 が記録される場合、Network Information に記載されているクライアントが AES を通知できていない可能性が高いと考えられます。</p>
+<p>  クライアントの OS バージョンや、当該コンピューターに適用されている <strong>ネットワーク セキュリティ: Kerberos で許可する暗号化の種類を構成する</strong> グループ ポリシーの設定を確認し、必要に応じてクライアント側で AES を通知できるよう対応します。</p>
+<h5 id="Pre-Authentication-EncryptionType-で-RC4-が記録されている場合"><a href="#Pre-Authentication-EncryptionType-で-RC4-が記録されている場合" class="headerlink" title="Pre-Authentication EncryptionType で RC4 が記録されている場合"></a><strong><code>Pre-Authentication EncryptionType</code> で RC4 が記録されている場合</strong></h5><p>  本フィールドで RC4 が記録される場合、Account Information に記載されている認証アカウントが AES の長期鍵を AD 上に保持しておらず、RC4 鍵のみが利用可能である可能性が高いと考えられます。</p>
+<p>  該当する代表的なケースは、ドメイン機能レベルが Windows Server 2008 未満であった時代に作成され、その後パスワードが更新されていないアカウントです。当該アカウントのパスワード更新を実施し、AES 鍵を AD 上に生成してください。</p>
+<h4 id="ID-4769-サービス-チケット要求-の場合"><a href="#ID-4769-サービス-チケット要求-の場合" class="headerlink" title="ID:4769 (サービス チケット要求) の場合"></a><strong>ID:4769 (サービス チケット要求) の場合</strong></h4><h5 id="Ticket-Encryption-Type-で-RC4-が記録されている場合-1"><a href="#Ticket-Encryption-Type-で-RC4-が記録されている場合-1" class="headerlink" title="Ticket Encryption Type で RC4 が記録されている場合"></a><strong><code>Ticket Encryption Type</code> で RC4 が記録されている場合</strong></h5><p>  以下の可能性があります。</p>
+<ul>
+<li><p>サービス アカウントの <code>msDS-SupportedEncryptionTypes</code> に AES が含まれていない</p>
+</li>
+<li><p>サービス アカウントが AES の長期鍵を AD 上に保持していない（RC4 鍵のみ）</p>
+<p>対応としては、当該サービス アカウントのパスワード更新による AES 鍵の生成、もしくは <code>msDS-SupportedEncryptionTypes</code> に AES を含む値（AES に限定する場合は AES のみの値）への設定変更を実施します。</p>
+<p>なお、同じ ID:4769 イベント内の <strong>Service Information</strong> の <code>Available Keys</code>（サービス アカウントが実保持する鍵の etype 一覧）と <strong>Service Information</strong> の <code>MSDS-SupportedEncryptionTypes</code> を併用することで、必要な対処を判別できます。</p>
+</li>
+<li><p><strong>Service Information</strong> の <code>Available Keys</code> に AES が含まれない場合 → 当該アカウントのパスワード更新による AES 鍵の生成</p>
+</li>
+<li><p><strong>Service Information</strong> の <code>Available Keys</code> に AES が含まれるが <strong>Service Information</strong> の <code>MSDS-SupportedEncryptionTypes</code> に AES が含まれない場合 → <code>msDS-SupportedEncryptionTypes</code> に AES を含む値への設定変更</p>
+<blockquote>
+<p><strong>補足</strong>: ドメイン機能レベルが Windows Server 2003 以前の時代に作成されたアカウントについては、1 回のパスワード更新では AES 鍵が利用可能な状態にならず、2 回以上のパスワード更新が必要となるケースがあります。</p>
+</blockquote>
+</li>
+</ul>
+<h5 id="Session-Encryption-Type-で-RC4-が記録されている場合-1"><a href="#Session-Encryption-Type-で-RC4-が記録されている場合-1" class="headerlink" title="Session Encryption Type で RC4 が記録されている場合"></a><strong><code>Session Encryption Type</code> で RC4 が記録されている場合</strong></h5><p>  本フィールドで RC4 が記録される場合、Network Information に記載されているクライアントが AES を通知できていない可能性が高いと考えられます。</p>
+<p>  クライアントの OS バージョンや、当該コンピューターに適用されている <strong>ネットワーク セキュリティ: Kerberos で許可する暗号化の種類を構成する</strong> グループ ポリシーの設定を確認し、必要に応じてクライアント側で AES を通知できるよう対応します。</p>
+<h3 id="3-5-サード-パーティ製品については、イベント-ログだけでなくベンダーへの確認も推奨"><a href="#3-5-サード-パーティ製品については、イベント-ログだけでなくベンダーへの確認も推奨" class="headerlink" title="3-5. サード パーティ製品については、イベント ログだけでなくベンダーへの確認も推奨"></a>3-5. サード パーティ製品については、イベント ログだけでなくベンダーへの確認も推奨</h3><p>イベント ログからは「クライアント ↔ KDC 間で RC4 が利用されているか」までは判断できますが、「アクセス先が AES に対応しているか」は別観点での確認が必要です。もしクライアントやサービス アカウントを利用しているのがサード パーティ製品である場合は、AES のサポート状況や移行可否について、製品ベンダーへ個別にお問い合わせいただくことを推奨いたします。</p>
+<p>なお、ここでいう「サード パーティ製品」とは、サード パーティ OS や機器に限らず、<strong>Windows 上で動作する製品であっても Kerberos 認証の実装が Windows 標準実装と異なる可能性のある製品全般を指します。</strong> 具体例としては、NAS や独自実装のサーバー アプリケーションなどが該当します。</p>
+<p>ID:4768 / 4769 のイベント ログから把握できるのは、クライアントとドメイン コントローラー（KDC）間でやり取りされる AS / TGS 段階の暗号化タイプに限られます。<br>クライアントがサービスへ AP-REQ を送信する段階（下図 (5)）はドメイン コントローラーを経由しないため、ドメイン コントローラー側のイベント ログでは捕捉できません。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[クライアント]  --- AS-REQ  (1) ---&gt;  [KDC]       ← イベント 4768 が記録される段階</span><br><span class="line">[クライアント]  &lt;-- AS-REP  (2) ----  [KDC]</span><br><span class="line">[クライアント]  --- TGS-REQ (3) ---&gt;  [KDC]       ← イベント 4769 が記録される段階</span><br><span class="line">[クライアント]  &lt;-- TGS-REP (4) ----  [KDC]</span><br><span class="line">[クライアント]  --- AP-REQ  (5) ---&gt;  [サービス]   ← イベント ログでは捕捉されない段階</span><br></pre></td></tr></table></figure>
+
+<p>そのため、ドメイン コントローラー側で管理しているサービス アカウントの暗号化タイプ対応状況と、実際にサービス（サーバー側のアプリケーション）が受け入れ可能な暗号化タイプとが乖離するケースが存在します。<br>たとえば、サービス アカウント自体は AES 鍵を保持していても、サービス アプリケーションの実装上 RC4 のみを受け入れる、といった状況が代表的な例として挙げられます。</p>
+<h3 id="3-6-効率的な監査方法"><a href="#3-6-効率的な監査方法" class="headerlink" title="3-6. 効率的な監査方法"></a>3-6. 効率的な監査方法</h3><p>イベント ビューアーでの目視確認は手間がかかると感じられる場合は、XML フィルターを利用して、「ドメイン内での RC4 利用有無を判断するために最低限確認すべきポイント」でご紹介したフィールド（ID:4768 の <code>Ticket Encryption Type</code> / <code>Session Encryption Type</code> / <code>Pre-Authentication EncryptionType</code>、ID:4769 の <code>Ticket Encryption Type</code> / <code>Session Encryption Type</code>）のいずれかに RC4 を示す <code>0x17</code> または <code>0x18</code> が記録されているイベントを抽出することが可能です。</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">QueryList</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">Query</span> <span class="attr">Id</span>=<span class="string">&quot;0&quot;</span> <span class="attr">Path</span>=<span class="string">&quot;Security&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">Select</span> <span class="attr">Path</span>=<span class="string">&quot;Security&quot;</span>&gt;</span></span><br><span class="line">      *[System[(EventID=4768 or EventID=4769)]]</span><br><span class="line">      and</span><br><span class="line">      *[EventData[</span><br><span class="line">        Data[@Name=&#x27;TicketEncryptionType&#x27;]=&#x27;0x17&#x27;</span><br><span class="line">        or Data[@Name=&#x27;TicketEncryptionType&#x27;]=&#x27;0x18&#x27;</span><br><span class="line">        or Data[@Name=&#x27;SessionKeyEncryptionType&#x27;]=&#x27;0x17&#x27;</span><br><span class="line">        or Data[@Name=&#x27;SessionKeyEncryptionType&#x27;]=&#x27;0x18&#x27;</span><br><span class="line">        or Data[@Name=&#x27;PreAuthEncryptionType&#x27;]=&#x27;0x17&#x27;</span><br><span class="line">        or Data[@Name=&#x27;PreAuthEncryptionType&#x27;]=&#x27;0x18&#x27;</span><br><span class="line">      ]]</span><br><span class="line">    <span class="tag">&lt;/<span class="name">Select</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">Query</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">QueryList</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p><strong>補足</strong>: <code>Pre-Authentication EncryptionType</code> は ID:4768 のみに存在する項目です。そのため、クエリ内の <code>PreAuthEncryptionType</code> 条件は ID:4769 のイベントでは単に成立せず、フィルターの動作には影響しません。</p>
+</blockquote>
+<p>より多くの便利な方法を確認されたい方はこちらへ：<a target="_blank" rel="noopener" href="https://techcommunity.microsoft.com/blog/askds/so-you-think-you%E2%80%99re-ready-for-enforcing-aes-for-kerberos/4080124">So, you think you’re ready for enforcing AES for Kerberos? | Microsoft Community Hub</a></p>
+<p>または、<a target="_blank" rel="noopener" href="https://github.com/microsoft/Kerberos-Crypto">Microsoft’s Kerberos-Crypto GitHub repository</a> にて公開しているスクリプトを活用します。こちらは 3-7 節で説明します。</p>
+<h3 id="3-7-Kerberos-Crypto-スクリプトの活用"><a href="#3-7-Kerberos-Crypto-スクリプトの活用" class="headerlink" title="3-7. Kerberos-Crypto スクリプトの活用"></a>3-7. Kerberos-Crypto スクリプトの活用</h3><p><a target="_blank" rel="noopener" href="https://github.com/microsoft/Kerberos-Crypto">microsoft/Kerberos-Crypto</a> リポジトリでは、4768 / 4769 のイベント ログを解析するための 2 つのPowerShell スクリプトが、<strong>オープン ソース</strong> として公開されています。「2025 年 1 月以降の更新適用済みのドメイン コントローラー」であれば、そのまま利用することが可能です。</p>
+<table>
+<thead>
+<tr>
+<th>スクリプト</th>
+<th>対象</th>
+<th>主な用途</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><a target="_blank" rel="noopener" href="https://raw.githubusercontent.com/microsoft/Kerberos-Crypto/main/scripts/List-AccountKeys.ps1"><code>List-AccountKeys.ps1</code></a></td>
+<td>アカウント単位</td>
+<td>アカウントごとに観測された Kerberos キー (long-term key) の暗号化タイプを一覧化</td>
+</tr>
+<tr>
+<td><a target="_blank" rel="noopener" href="https://raw.githubusercontent.com/microsoft/Kerberos-Crypto/main/scripts/Get-KerbEncryptionUsage.ps1"><code>Get-KerbEncryptionUsage.ps1</code></a></td>
+<td>リクエスト単位</td>
+<td>AS-REQ / TGS-REQ ごとに、チケットとセッション キーの etype を一覧化</td>
+</tr>
+</tbody></table>
+<p>*スクリプトは継続的に更新されています。リポジトリの <a target="_blank" rel="noopener" href="https://github.com/microsoft/Kerberos-Crypto/tree/main/scripts"><code>scripts/</code> ディレクトリ</a> から都度最新版をご利用ください。</p>
+<h4 id="List-AccountKeys-ps1-—-アカウントで使用可能な暗号化キーを列挙する"><a href="#List-AccountKeys-ps1-—-アカウントで使用可能な暗号化キーを列挙する" class="headerlink" title="List-AccountKeys.ps1 — アカウントで使用可能な暗号化キーを列挙する"></a><code>List-AccountKeys.ps1</code> — アカウントで使用可能な暗号化キーを列挙する</h4><p>このスクリプトを利用することで直近期間 (既定: 30 日) の 4768 / 4769 を集計し、アカウントごとに保持・利用されているキーの etype を一覧化することが可能です。<strong>「AES キーを持たないアカウントの洗い出し」</strong> を目的とする場合に有用な方法となります。</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 過去 60 日で RC4 のキーがまだ観測されているアカウントのみを抽出</span></span><br><span class="line">.\List<span class="literal">-AccountKeys</span>.ps1 <span class="literal">-Since</span> (<span class="built_in">Get-Date</span>).AddDays(<span class="literal">-60</span>) <span class="literal">-ContainsKeyType</span> RC4</span><br><span class="line"></span><br><span class="line"><span class="comment"># AES-SHA1 がまだ観測されていないアカウントのみを抽出</span></span><br><span class="line">.\List<span class="literal">-AccountKeys</span>.ps1 <span class="literal">-NotContainsKeyType</span> AES<span class="literal">-SHA1</span></span><br></pre></td></tr></table></figure>
+
+<p>出力例:</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Time                  Name         Type  Keys</span><br><span class="line">----                  ----         ----  ----</span><br><span class="line">1/21/2025 2:00:10 PM  VM01$      Machine &#123;RC4, AES128-SHA96, AES256-SHA96, AES128-SHA256...&#125;</span><br><span class="line">1/21/2025 2:00:10 PM  AdminUser     User &#123;RC4, AES128-SHA96, AES256-SHA96, AES128-SHA256...&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>Keys</code> 列の表示は、<strong>処理済み (processed) 値</strong> です。Windows Server 2022 以前では、アカウントの実際の設定に関わらず <code>RC4</code> が常に表示されます。<strong>「表示されていること」 = 「実際に使用された」ではない</strong> 点にご注意ください。実利用の特定には次の <code>Get-KerbEncryptionUsage.ps1</code> を使います。</p>
+<h4 id="Get-KerbEncryptionUsage-ps1-—-使用中の-Kerberos-暗号化の種類を識別し、RC4-などの特定のアルゴリズムの使用を抽出する"><a href="#Get-KerbEncryptionUsage-ps1-—-使用中の-Kerberos-暗号化の種類を識別し、RC4-などの特定のアルゴリズムの使用を抽出する" class="headerlink" title="Get-KerbEncryptionUsage.ps1 — 使用中の Kerberos 暗号化の種類を識別し、RC4 などの特定のアルゴリズムの使用を抽出する"></a><code>Get-KerbEncryptionUsage.ps1</code> — 使用中の Kerberos 暗号化の種類を識別し、RC4 などの特定のアルゴリズムの使用を抽出する</h4><p>このスクリプトを利用することで 4768 / 4769 をリクエスト単位で抽出し、チケットの etype とセッション キーの etype をそれぞれ表示することが可能です。<strong>「実際に RC4 を要求しているクライアントの特定」</strong> を目的とした場合に有用な方法となります。<br>また、このスクリプトでは以下のような引数を指定することができ、特定の etype を要求しているリクエストのみを抽出するといったようなことも可能です。</p>
+<table>
+<thead>
+<tr>
+<th>主な引数</th>
+<th>既定</th>
+<th>用途</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>-Encryption</code></td>
+<td><code>All</code></td>
+<td>抽出対象の etype (<code>RC4</code> / <code>AES-SHA1</code> / <code>AES128-SHA96</code> / <code>AES256-SHA96</code> など)</td>
+</tr>
+<tr>
+<td><code>-EncryptionUsage</code></td>
+<td><code>Either</code></td>
+<td><code>Ticket</code> / <code>SessionKey</code> / <code>Either</code> / <code>Both</code></td>
+</tr>
+<tr>
+<td><code>-SearchScope</code></td>
+<td><code>This</code></td>
+<td><code>This</code> (ローカル KDC) / <code>AllKdcs</code> (ドメイン内全 DC)</td>
+</tr>
+</tbody></table>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># チケットの etype が RC4 のリクエストのみを抽出する場合の実行例</span></span><br><span class="line">.\<span class="built_in">Get-KerbEncryptionUsage</span>.ps1 <span class="literal">-Encryption</span> RC4 <span class="literal">-EncryptionUsage</span> Ticket</span><br></pre></td></tr></table></figure>
+
+<p>出力例 (既定の Format-List 形式):</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Time       : 1/21/2025 2:00:10 PM</span><br><span class="line">Requestor  : 192.168.1.10</span><br><span class="line">Source     : AdminUser@CONTOSO.COM</span><br><span class="line">Target     : VM01$</span><br><span class="line">Type       : TGS</span><br><span class="line">Ticket     : AES256-SHA96</span><br><span class="line">SessionKey : AES256-SHA96</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>Source</code> は要求元アカウント、<code>Target</code> はチケットの宛先 (SPN または <code>krbtgt</code>)。</li>
+<li><code>Ticket</code> がリソース側 (= ターゲット アカウント) のキー、<code>SessionKey</code> は要求元アカウントのキーに対応します。</li>
+<li><code>Ticket</code> が <strong>RC4</strong> のリクエストが残っている場合、対象 SPN の <code>msDS-SupportedEncryptionTypes</code> (またはドメインの <code>DefaultDomainSupportedEncTypes</code>) の見直し対象となります。</li>
+</ul>
+<h4 id="ご利用にあたっての注意事項-サポート対応について"><a href="#ご利用にあたっての注意事項-サポート対応について" class="headerlink" title="ご利用にあたっての注意事項 (サポート対応について)"></a>ご利用にあたっての注意事項 (サポート対応について)</h4><p>本セクションでご紹介する 2 つのスクリプトは、<a target="_blank" rel="noopener" href="https://github.com/microsoft/Kerberos-Crypto">microsoft/Kerberos-Crypto</a> リポジトリでオープン ソース として公開されているスクリプトであり、リポジトリの <a target="_blank" rel="noopener" href="https://github.com/microsoft/Kerberos-Crypto/blob/main/SUPPORT.md"><code>SUPPORT.md</code></a> に明記のとおり、サポート対象外となりお客様ご自身の責任で事前に十分な検証のうえご利用いただく必要があります。</p>
+<p>もし、スクリプト自体に関する機能要望やご質問がある場合には <a target="_blank" rel="noopener" href="https://github.com/microsoft/Kerberos-Crypto/issues">GitHub Issues</a> にてお知らせください。今後のスクリプトの改善に役立てさせていただきます。</p>
+<hr>
+<h2 id="4-RC4-を無効化する方法"><a href="#4-RC4-を無効化する方法" class="headerlink" title="4. RC4 を無効化する方法"></a>4. RC4 を無効化する方法</h2><p>監査により RC4 利用箇所を特定し、対処が完了した後、RC4 を無効化します。</p>
+<h3 id="4-1-コンピューター-オブジェクトに対して-GPO-設定"><a href="#4-1-コンピューター-オブジェクトに対して-GPO-設定" class="headerlink" title="4-1. コンピューター オブジェクトに対して GPO 設定"></a>4-1. コンピューター オブジェクトに対して GPO 設定</h3><ul>
+<li><strong>パス</strong>: コンピューターの構成 &gt; ポリシー &gt; Windows の設定 &gt; セキュリティの設定 &gt; ローカル ポリシー &gt; セキュリティ オプション</li>
+<li><strong>ポリシー名</strong>: 「ネットワーク セキュリティ: Kerberos で許可される暗号化の種類を構成する」 (<a target="_blank" rel="noopener" href="https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-10/security/threat-protection/security-policy-settings/network-security-configure-encryption-types-allowed-for-kerberos#possible-values">Network security: Configure encryption types allowed for Kerberos</a>)</li>
+<li><strong>設定</strong>: <code>RC4_HMAC_MD5</code> のチェックを外し、<code>AES128_HMAC_SHA1</code> と <code>AES256_HMAC_SHA1</code> のみを有効にします。</li>
+</ul>
+<h3 id="4-2-レジストリによるドメイン全体の既定値変更"><a href="#4-2-レジストリによるドメイン全体の既定値変更" class="headerlink" title="4-2. レジストリによるドメイン全体の既定値変更"></a>4-2. レジストリによるドメイン全体の既定値変更</h3><p>ドメイン コントローラー上で以下のレジストリを設定することで、ドメイン全体で RC4 を無効化可能です（影響が大きいため、十分な検証後に実施してください）。</p>
+<ul>
+<li><strong>キー</strong>: <code>HKEY_LOCAL_MACHINE\System\CurrentControlSet\services\KDC</code></li>
+<li><strong>値</strong>: <code>DefaultDomainSupportedEncTypes</code></li>
+<li><strong>データ</strong>: <code>0x18</code> (AES128 + AES256 のみ許可)</li>
+</ul>
+<h3 id="4-3-msDS-SupportedEncryptionTypes-を設定しているアカウントの設定変更"><a href="#4-3-msDS-SupportedEncryptionTypes-を設定しているアカウントの設定変更" class="headerlink" title="4-3. msDS-SupportedEncryptionTypes を設定しているアカウントの設定変更"></a>4-3. msDS-SupportedEncryptionTypes を設定しているアカウントの設定変更</h3><p>上記の <code>DefaultDomainSupportedEncTypes</code> レジストリは <code>msDS-SupportedEncryptionTypes</code> を設定していないアカウントに対して有効です。</p>
+<p>既定でユーザー アカウントに対して <code>msDS-SupportedEncryptionTypes</code> は設定していませんが、サービス アカウントなどで <code>msDS-SupportedEncryptionTypes</code> を手動で設定している場合は、個別に AES のみサポートするように変更します。（AES のみ：<code>0x18</code>）</p>
+<hr>
+<h2 id="5-参考文献"><a href="#5-参考文献" class="headerlink" title="5. 参考文献"></a>5. 参考文献</h2><p>環境内の Kerberos 認証における RC4 の無効化は大きなプロジェクトであり、段階を踏んで慎重に進める必要があります。</p>
+<p>また、Kerberos 認証で利用されるチケットの暗号化タイプは、さまざまな要素によって決定されるほか、チケット自体も複数種類存在するため、全体像を完全に把握するのは容易ではありません。</p>
+<p>そこで、本ブログを作成するにあたり参照した技術情報を、種類ごとに整理して共有いたします。少しでも皆さまの理解や検討の助けになれば幸いです。</p>
+<h3 id="Kerberos-認証フローについて"><a href="#Kerberos-認証フローについて" class="headerlink" title="Kerberos 認証フローについて"></a>Kerberos 認証フローについて</h3><ul>
+<li><a target="_blank" rel="noopener" href="https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-kile/b4af186e-b2ff-43f9-b18e-eedb366abf13">[MS-KILE]: Kerberos Network Authentication Service (V5) Synopsis | Microsoft Learn</a></li>
+<li><a target="_blank" rel="noopener" href="https://techcommunity.microsoft.com/blog/sqlserversupport/kerberos-authentication-flow/4387781">Kerberos Authentication flow | Microsoft Community Hub</a></li>
+</ul>
+<h3 id="Kerberos-暗号化タイプについて"><a href="#Kerberos-暗号化タイプについて" class="headerlink" title="Kerberos 暗号化タイプについて"></a>Kerberos 暗号化タイプについて</h3><ul>
+<li><a target="_blank" rel="noopener" href="https://techcommunity.microsoft.com/blog/coreinfrastructureandsecurityblog/decrypting-the-selection-of-supported-kerberos-encryption-types/1628797">Decrypting the Selection of Supported Kerberos Encryption Types | Microsoft Community Hub</a></li>
+<li><a target="_blank" rel="noopener" href="https://learn.microsoft.com/ja-jp/archive/blogs/openspecification/encryption-type-selection-in-kerberos-exchanges">Encryption Type Selection in Kerberos Exchanges | Microsoft Learn</a></li>
+<li><a target="_blank" rel="noopener" href="https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-kile/6cfc7b50-11ed-4b4d-846d-6f08f0812919">[MS-KILE]: Supported Encryption Types Bit Flags | Microsoft Learn</a></li>
+</ul>
+<h3 id="Kerberos-認証-RC4-無効化のガイダンスや注意事項"><a href="#Kerberos-認証-RC4-無効化のガイダンスや注意事項" class="headerlink" title="Kerberos 認証 RC4 無効化のガイダンスや注意事項"></a>Kerberos 認証 RC4 無効化のガイダンスや注意事項</h3><ul>
+<li><a target="_blank" rel="noopener" href="https://learn.microsoft.com/en-us/windows-server/security/kerberos/detect-remediate-rc4-kerberos">Detect and Remediate RC4 Usage in Kerberos | Microsoft Learn</a></li>
+<li><a target="_blank" rel="noopener" href="https://techcommunity.microsoft.com/blog/coreinfrastructureandsecurityblog/decrypting-the-selection-of-supported-kerberos-encryption-types/1628797">Decrypting the Selection of Supported Kerberos Encryption Types | Microsoft Community Hub</a></li>
+</ul>
+<h2 id="更新履歴"><a href="#更新履歴" class="headerlink" title="更新履歴"></a>更新履歴</h2><p>2026/07/03 : 本ブログの公開<br>2026/07/06 : 表記の微修正。公開日付の修正。</p>
+
+      
+      
+    </div>
+    <footer class="article-footer">
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/blog/2026/07/21/UserInterfaceAndApps/Taskscheduler/TaskSched-RDP-config-on-EntraJoined/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">次の記事</strong>
+      <div class="article-nav-title">
+        
+          Entra 参加デバイスにおけるタスク スケジューラと RDP ユーザー設定の注意点について
+        
+      </div>
+    </a>
+  
+  
+    <a href="/blog/2026/06/23/Shell/Explorer/zipfldr-maxpath-japanese-encoding/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">前の記事</strong>
+      <div class="article-nav-title">エクスプローラーで ZIP ファイルを展開すると「圧縮 (zip 形式) フォルダーは無効です」エラーが発生する</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">カテゴリ</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Activation/">Activation</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Activation/ESU/">ESU</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Activation/security-SPP/">security-SPP</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/">Active Directory</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Authentication/">Authentication</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/DFSR/">DFSR</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/FunctionalLevel/">FunctionalLevel</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Group-Policy/">Group Policy</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Promotion-and-Demotion/">Promotion and Demotion</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/User-Profile/">User Profile</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Windows-Hello/">Windows Hello</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Windows-Time-Service/">Windows Time Service</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/AppLocker/">AppLocker</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/AppLocker/Active-Directory/">Active Directory</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/AppLocker/Microsoft-Intune/">Microsoft Intune</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/BitLocker/">BitLocker</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Deployment/">Deployment</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Deployment/Feature-on-demand/">Feature on demand</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Deployment/Sysprep/">Sysprep</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Failover-Clustering/">Failover Clustering</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Failover-Clustering/Azure-Local/">Azure Local</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Failover-Clustering/Configuration-and-Management/">Configuration and Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Failover-Clustering/Windows-Server-2025/">Windows Server 2025</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/FileServices/">FileServices</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/FileServices/FTP/">FTP</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/FileServices/SMB/">SMB</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Hyper-V/">Hyper-V</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Hyper-V/Configuration-and-Management/">Configuration and Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Hyper-V/Migration/">Migration</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Microsoft-Connected-Cache/">Microsoft Connected Cache</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/">Networking</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/BITS/">BITS</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/Bluetooth/">Bluetooth</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/DHCP/">DHCP</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/DNS/">DNS</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/Firewall/">Firewall</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/LBFO/">LBFO</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/NCSI/">NCSI</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/NetworkInterface/">NetworkInterface</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/Proxy/">Proxy</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/TCPIP/">TCPIP</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/OpenSSH/">OpenSSH</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/">Performance</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/Hang-up-BSoD/">Hang-up/BSoD</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/No-Boot/">No Boot</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/Slow-Response/">Slow Response</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/System-Resource/">System Resource</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/Tools/">Tools</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/">Public Key Infrastructure</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Certificate-Authority/">Certificate Authority</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Certificate-Management/">Certificate Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Code-Signing/">Code Signing</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Fundamental/">Fundamental</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/SSL-TLS-Communication/">SSL TLS Communication</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/SSL-TLS-Connection/">SSL TLS Connection</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Smart-Card-Logon/">Smart Card Logon</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/">Remote Desktop</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/Azure-Virtual-Desktop-AVD/">Azure Virtual Desktop (AVD)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/Remote-Desktop-Service-RDS/">Remote Desktop Service (RDS)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/Windows-Virtual-Desktop-WVD/">Windows Virtual Desktop (WVD)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/RemoteAccess/">RemoteAccess</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/RemoteAccess/%E3%83%80%E3%82%A4%E3%83%A4%E3%83%AB%E3%82%A2%E3%83%83%E3%83%97%E6%8E%A5%E7%B6%9A/">ダイヤルアップ接続</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Security/">Security</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Security/WDAC/">WDAC</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Setup/">Setup</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Setup/Feature-Update-FU/">Feature Update (FU)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Shell/">Shell</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Shell/Explorer/">Explorer</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Shell/StartMenu/">StartMenu</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/">Storage</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/Backup/">Backup</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/FSRM/">FSRM</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/Management/">Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/StorageMigrationService/">StorageMigrationService</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Support-Request/">Support Request</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/UEFI/">UEFI</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/UEFI/Secure-Boot/">Secure Boot</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/">User Interface and Apps</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Command-Prompt/">Command Prompt</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/EventLog/">EventLog</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Language-Support/">Language Support</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Microsoft-Store/">Microsoft Store</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Performance/">Performance</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/PowerShell/">PowerShell</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Printing-%E5%8D%B0%E5%88%B7/">Printing (印刷)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Server-Management/">Server Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Taskscheduler/">Taskscheduler</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Windows-Management-Instrumentation/">Windows Management Instrumentation</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps-Language-support/">User Interface and Apps - Language support</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-365/">Windows 365</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Admin-Center/">Windows Admin Center</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Search/">Windows Search</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/">Windows Update</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Delivery-Optimization-DO/">Delivery Optimization (DO)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Feature-Update-FU/">Feature Update (FU)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Quality-Update-QU/">Quality Update (QU)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Windows-Update-Agent/">Windows Update Agent</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Windows-Update-Agent-WUA/">Windows Update Agent (WUA)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/">WirelessNetwork</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/NPS/">NPS</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/Wi-Fi/">Wi-Fi</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/%E3%83%A2%E3%83%90%E3%82%A4%E3%83%AB-%E3%83%96%E3%83%AD%E3%83%BC%E3%83%89%E3%83%90%E3%83%B3%E3%83%89%E6%8E%A5%E7%B6%9A-LTE/">モバイル ブロードバンド接続 (LTE)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/%E7%B5%84%E7%B9%94%E7%B4%B9%E4%BB%8B%E3%83%96%E3%83%AD%E3%82%B0%EF%BC%88Windows-Commercial%EF%BC%89/">組織紹介ブログ（Windows Commercial）</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最近の投稿</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/blog/2026/08/05/ActiveDirectory/PromotionAndDemotion/windows-server-2016-ad-migration-considerations/">Windows Server 2016 からの Active Directory 移行、アップグレードにあたっての考慮事項</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/07/21/UserInterfaceAndApps/Taskscheduler/TaskSched-RDP-config-on-EntraJoined/">Entra 参加デバイスにおけるタスク スケジューラと RDP ユーザー設定の注意点について</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/07/02/ActiveDirectory/Authentication/kerberos-rc4-to-aes-migration/">Kerberos 認証のセキュリティ強化：RC4 から AES への移行ガイド</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/06/23/Shell/Explorer/zipfldr-maxpath-japanese-encoding/">エクスプローラーで ZIP ファイルを展開すると「圧縮 (zip 形式) フォルダーは無効です」エラーが発生する</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/06/22/PublicKeyInfrastructure/Fundamental/pki-foundation-01/">PKI の概要</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">アーカイブ</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2026/08/">2026 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2026/07/">2026 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2026/06/">2026 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2026/05/">2026 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2026/04/">2026 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2026/03/">2026 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2026/02/">2026 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2026/01/">2026 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/12/">2025 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/11/">2025 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/10/">2025 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/09/">2025 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/08/">2025 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/07/">2025 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/06/">2025 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/05/">2025 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/04/">2025 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/03/">2025 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/02/">2025 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/01/">2025 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/12/">2024 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/11/">2024 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/10/">2024 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/09/">2024 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/08/">2024 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/07/">2024 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/06/">2024 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/05/">2024 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/04/">2024 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/03/">2024 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/02/">2024 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/01/">2024 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/12/">2023 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/11/">2023 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/10/">2023 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/09/">2023 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/08/">2023 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/07/">2023 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/06/">2023 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/05/">2023 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/04/">2023 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/03/">2023 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/02/">2023 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/01/">2023 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/12/">2022 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/11/">2022 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/10/">2022 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/09/">2022 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/08/">2022 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/07/">2022 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/06/">2022 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/05/">2022 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/04/">2022 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/03/">2022 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/02/">2022 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/01/">2022 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/12/">2021 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/11/">2021 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/10/">2021 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/09/">2021 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/08/">2021 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/07/">2021 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/06/">2021 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/05/">2021 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/04/">2021 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/03/">2021 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/02/">2021 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/01/">2021 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/12/">2020 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/11/">2020 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/10/">2020 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/07/">2020 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/03/">2020 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2019/03/">2019 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/11/">2018 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/10/">2018 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/09/">2018 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/08/">2018 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/07/">2018 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/06/">2018 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/04/">2018 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/02/">2018 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/12/">2017 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/11/">2017 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/09/">2017 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/05/">2017 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/03/">2017 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/02/">2017 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2016/08/">2016 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2016/05/">2016 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2014/03/">2014 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2012/02/">2012 / 02</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2026 Microsoft Japan Windows Technology Support Team<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/blog/" class="mobile-nav-link">Home</a>
+  
+    <a href="/blog/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+<script src="/blog/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>
