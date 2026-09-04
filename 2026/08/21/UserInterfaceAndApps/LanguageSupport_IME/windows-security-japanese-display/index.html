@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-180187723-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-180187723-1');
+</script>
+<!-- End Google Analytics -->
+
+  
+  <title>Windows 11 または Windows Server 2025 のクリーン インストール後に Windows セキュリティが英語表示になる場合の対処 | Microsoft Japan Windows Technology Support Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="本記事はマイクロソフト社員によって公開されております。  こんにちは、Windows プラットフォーム サポートの丸山です。 Windows 11 バージョン 24H2、25H2、26H1、または Windows Server 2025 の日本語版をクリーン インストールした後、エクスプローラーや設定アプリは日本語で表示されているのに、Windows セキュリティを開くと一部または全体が英語で表">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Windows 11 または Windows Server 2025 のクリーン インストール後に Windows セキュリティが英語表示になる場合の対処">
+<meta property="og:url" content="https://jpwinsup.github.io/blog/2026/08/21/UserInterfaceAndApps/LanguageSupport_IME/windows-security-japanese-display/index.html">
+<meta property="og:site_name" content="Microsoft Japan Windows Technology Support Blog">
+<meta property="og:description" content="本記事はマイクロソフト社員によって公開されております。  こんにちは、Windows プラットフォーム サポートの丸山です。 Windows 11 バージョン 24H2、25H2、26H1、または Windows Server 2025 の日本語版をクリーン インストールした後、エクスプローラーや設定アプリは日本語で表示されているのに、Windows セキュリティを開くと一部または全体が英語で表">
+<meta property="og:locale" content="ja_JP">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2026/08/21/UserInterfaceAndApps/LanguageSupport_IME/windows-security-japanese-display/01-overview.svg">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2026/08/21/UserInterfaceAndApps/LanguageSupport_IME/windows-security-japanese-display/02-update-paths.svg">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2026/08/21/UserInterfaceAndApps/LanguageSupport_IME/windows-security-japanese-display/03-troubleshooting-flow.svg">
+<meta property="article:published_time" content="2026-08-21T08:00:00.000Z">
+<meta property="article:modified_time" content="2026-09-04T04:12:39.497Z">
+<meta property="article:author" content="Microsoft Japan Windows Technology Support Team">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://jpwinsup.github.io/blog/2026/08/21/UserInterfaceAndApps/LanguageSupport_IME/windows-security-japanese-display/01-overview.svg">
+  
+    <link rel="alternate" href="/blog/atom.xml" title="Microsoft Japan Windows Technology Support Blog" type="application/atom+xml">
+  
+
+  <link rel="icon" href="/blog/favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="/blog/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/blog/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/blog/favicon-16x16.png">
+  <link rel="manifest" href="/blog/site.webmanifest">
+  <link rel="mask-icon" href="/blog/safari-pinned-tab.svg" color="#5bbad5">
+  <meta name="msapplication-TileColor" content="#ffffff">
+  <meta name="theme-color" content="#ffffff">
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/blog/css/style.css">
+
+<meta name="generator" content="Hexo 5.2.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="site-header-logo"></div>
+  <div id="site-header-blog-wrapper"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        <div id="ms-logo"></div>
+        
+          <a class="main-nav-link" href="/blog/">Home</a>
+        
+          <a class="main-nav-link" href="/blog/archives">Archives</a>
+        
+        <a class="main-nav-link" target="_blank" rel="noopener" href="https://cssjpn.github.io/">サポート情報</a>
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/blog/atom.xml" title="RSSフィード"></a>
+        
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//www.bing.com/search" method="get" accept-charset="UTF-8" name="bing-search" onsubmit="var f=this;if(f['q'].value){var searchUrl =  'https://www.bing.com/search?q=' +  encodeURIComponent(f['q'].value + ' site:' + f['sitesearch'].value) ;window.open(searchUrl, 'blank') };return false;" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="検索"><button type="submit" id="nav-search-btn" class="search-form-submit"></button><input type="hidden" name="sitesearch" value="https://jpwinsup.github.io/blog"></form>
+      </div>
+    </div>
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/blog/" id="logo">Microsoft Japan Windows Technology Support Blog</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/blog/" id="subtitle">日本マイクロソフト Windows Support チームによる、サポート情報 Blog です。</a>
+        </h2>
+      
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-UserInterfaceAndApps/LanguageSupport_IME/windows-security-japanese-display" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    
+    
+      <header class="article-header-single">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Windows 11 または Windows Server 2025 のクリーン インストール後に Windows セキュリティが英語表示になる場合の対処
+    </h1>
+  
+
+      </header>
+      <div class="article-share">
+        Published Date: 
+        <a href="/blog/2026/08/21/UserInterfaceAndApps/LanguageSupport_IME/windows-security-japanese-display/" class="article-date-single">
+  <time datetime="2026-08-21T08:00:00.000Z" itemprop="datePublished">2026-08-21</time>
+</a>
+        
+  <div class="article-category">
+    <a class="article-category-link" href="/blog/categories/User-Interface-and-Apps/">User Interface and Apps</a>►<a class="article-category-link" href="/blog/categories/User-Interface-and-Apps/Language-Support/">Language Support</a>
+  </div>
+
+        
+        <a href="https://github.com/jpwinsup/blog/issues/new?title=&body=%EF%BB%BF%0A%0A---%0A%0A%23%23%23%23+Document+Details%0A%0A*+Article+ID%3A+a35dc951-1a20-5190-a125-4cb463ca5a30%0A*+TITLE%3A+Windows+11+%E3%81%BE%E3%81%9F%E3%81%AF+Windows+Server+2025+%E3%81%AE%E3%82%AF%E3%83%AA%E3%83%BC%E3%83%B3+%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AB%E5%BE%8C%E3%81%AB+Windows+%E3%82%BB%E3%82%AD%E3%83%A5%E3%83%AA%E3%83%86%E3%82%A3%E3%81%8C%E8%8B%B1%E8%AA%9E%E8%A1%A8%E7%A4%BA%E3%81%AB%E3%81%AA%E3%82%8B%E5%A0%B4%E5%90%88%E3%81%AE%E5%AF%BE%E5%87%A6%0A*+URL+https%3A%2F%2Fjpwinsup.github.io%2Fblog%2F2026%2F08%2F21%2FUserInterfaceAndApps%2FLanguageSupport_IME%2Fwindows-security-japanese-display%2F%0A*+SourceFileName%3A+source%2F_posts%2FUserInterfaceAndApps%2FLanguageSupport_IME%2Fwindows-security-japanese-display.md%0A" class="article-github-issue-link" target="_blank" rel="noopener noreferrer">feedback</a>
+        
+        <a data-url="https://jpwinsup.github.io/blog/2026/08/21/UserInterfaceAndApps/LanguageSupport_IME/windows-security-japanese-display/" data-id="cmtmg3kr901mkrs2b7u9o0t96" class="article-share-link">共有</a>
+      </div>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<p>本記事はマイクロソフト社員によって公開されております。</p>
+</blockquote>
+<p>こんにちは、Windows プラットフォーム サポートの丸山です。</p>
+<p>Windows 11 バージョン 24H2、25H2、26H1、または Windows Server 2025 の日本語版をクリーン インストールした後、エクスプローラーや設定アプリは日本語で表示されているのに、Windows セキュリティを開くと一部または全体が英語で表示される場合があります。</p>
+<p>「日本語の言語パックが正しく入っていないのでは」と考え、言語設定をやり直したくなるところですが、Windows セキュリティだけが英語で、ほかの Windows の画面が日本語で表示されている場合は、まず Windows セキュリティ アプリの更新状態をご確認ください。</p>
+<blockquote>
+<p><strong>TL;DR</strong></p>
+<p>まず、Windows セキュリティ プラットフォームの更新プログラム <strong>KB5007651</strong> の適用をご検討ください。弊社に報告されております事例では、最新版の適用により事象が改善し、日本語で表示されるようになることがわかっております。Windows Update または組織で使用している更新管理の経路を通じて KB5007651 を適用するか、Microsoft Update カタログからパッケージをダウンロードして手動で適用してください。</p>
+</blockquote>
+<p><img src="01-overview.svg" alt="クリーン インストール直後は Windows セキュリティだけ英語表示となり、KB5007651 の適用後に日本語表示へ改善する流れ"></p>
+<p><em>図の内容は本文でも説明しています。小さい画面では、図を選択すると拡大表示できます。</em></p>
+<h2 id="目次"><a href="#目次" class="headerlink" title="目次"></a>目次</h2><ul>
+<li><a href="#%E3%81%A9%E3%81%AE%E3%82%88%E3%81%86%E3%81%AA%E4%BA%8B%E8%B1%A1%E3%81%8B">どのような事象か</a></li>
+<li><a href="#%E3%81%AA%E3%81%9C-Windows-%E3%82%BB%E3%82%AD%E3%83%A5%E3%83%AA%E3%83%86%E3%82%A3%E3%81%A0%E3%81%91%E8%8B%B1%E8%AA%9E%E3%81%AB%E3%81%AA%E3%82%8B%E3%81%AE%E3%81%8B">なぜ Windows セキュリティだけ英語になるのか</a></li>
+<li><a href="#%E5%AF%BE%E5%87%A6%E6%96%B9%E6%B3%95">対処方法</a></li>
+<li><a href="#%E9%81%A9%E7%94%A8%E5%BE%8C%E3%81%AE%E7%A2%BA%E8%AA%8D">適用後の確認</a></li>
+<li><a href="#%E6%94%B9%E5%96%84%E3%81%97%E3%81%AA%E3%81%84%E5%A0%B4%E5%90%88%E3%81%AB%E7%A2%BA%E8%AA%8D%E3%81%99%E3%82%8B%E3%81%93%E3%81%A8">改善しない場合に確認すること</a></li>
+<li><a href="#%E5%B1%95%E9%96%8B%E3%82%A4%E3%83%A1%E3%83%BC%E3%82%B8%E3%82%92%E9%81%8B%E7%94%A8%E3%81%99%E3%82%8B%E3%81%A8%E3%81%8D%E3%81%AE%E3%83%9D%E3%82%A4%E3%83%B3%E3%83%88">展開イメージを運用するときのポイント</a></li>
+<li><a href="#%E3%82%88%E3%81%8F%E3%81%82%E3%82%8B%E8%B3%AA%E5%95%8F">よくある質問</a></li>
+</ul>
+<h2 id="どのような事象か"><a href="#どのような事象か" class="headerlink" title="どのような事象か"></a>どのような事象か</h2><p>本記事で扱うのは、次の条件に該当する事象です。</p>
+<ul>
+<li>Windows 11 バージョン 24H2、25H2、26H1、または Windows Server 2025 をクリーン インストールした直後である</li>
+<li>Windows の表示言語は日本語に設定されている</li>
+<li>エクスプローラーや設定アプリなど、Windows のほかの画面は日本語で表示される</li>
+<li>Windows セキュリティを開いたときだけ、一部または全体が英語で表示される</li>
+</ul>
+<p>一方、サインイン画面や設定アプリを含む Windows 全体が英語で表示される場合は、Windows の表示言語や言語パックの構成を確認する必要があります。その場合は、本記事とは異なる事象として切り分けてお考えください。</p>
+<p>また、Windows セキュリティに警告やエラーが表示される、ウイルスと脅威の防止を開けない、保護機能が無効と表示されるといった症状は、表示言語の問題とは別に確認する必要があります。</p>
+<h2 id="なぜ-Windows-セキュリティだけ英語になるのか"><a href="#なぜ-Windows-セキュリティだけ英語になるのか" class="headerlink" title="なぜ Windows セキュリティだけ英語になるのか"></a>なぜ Windows セキュリティだけ英語になるのか</h2><p>Windows の画面は、すべてが 1 つの言語ファイルだけで表示されているわけではありません。Windows 本体の言語リソースに加え、個々のアプリがそれぞれの表示用リソースを持っています。</p>
+<p>Windows 11 や Windows Server 2025 のインストール メディア、展開イメージは、作成された時点のファイルを収録したスナップショットです。弊社で確認した Windows 11 の事例では、クリーン インストール直後の Windows セキュリティ アプリにおいて、日本語表示用リソースが含まれておらず、英語表示にフォールバックする動作でございました。また、Windows Server 2025 におきましても同様の事象が発生することが報告されております。</p>
+<p>Windows セキュリティ アプリと関連する Windows セキュリティ プラットフォームは、<a target="_blank" rel="noopener" href="https://support.microsoft.com/ja-jp/topic/a6ac7d2e-b1bf-44c0-a028-41720a242da3">Windows セキュリティ アプリの更新</a>として提供される KB5007651 で更新されます。弊社で確認した Windows 11 の事例では、KB5007651 の適用により Windows セキュリティ アプリが更新され、日本語表示用リソースが正しく反映されるようになりました。Windows Server 2025 におきましても Windows Update から同じ KB5007651 が提供されることを確認しています。このため、本記事に記載した条件に該当する場合は、言語パックを入れ直すのではなく、代わりに KB5007651 の適用をお試しください。</p>
+<p>なお、同じ英語表示となる場合でも、言語設定、更新の失敗、アプリの登録状態など、本記事に記載の事象とは別の要因で発生している場合があります。KB5007651 の最新版を適用しても改善しない場合は、後述の「改善しない場合に確認すること」へ進んでください。</p>
+<p>KB5007651 は同じ KB 番号のまま新しいバージョンが継続的に公開されます。Microsoft Update カタログに複数の検索結果が表示される場合は、古いバージョンではなく、更新日とバージョンが最も新しいものを選んでください。</p>
+<h2 id="対処方法"><a href="#対処方法" class="headerlink" title="対処方法"></a>対処方法</h2><p>KB5007651 は、Windows Update、Windows Server Update Services (WSUS)、Microsoft Update カタログから入手できます。Windows 11 と Windows Server 2025 で更新方法に違いはありません。</p>
+<p><img src="02-update-paths.svg" alt="Windows Update、WSUS、Microsoft Update カタログから KB5007651 を入手する 3 つの経路"></p>
+<p><em>図の内容は本文でも説明しています。小さい画面では、図を選択すると拡大表示できます。</em></p>
+<h3 id="方法-1-Windows-Update-または-WSUS-から適用する"><a href="#方法-1-Windows-Update-または-WSUS-から適用する" class="headerlink" title="方法 1: Windows Update または WSUS から適用する"></a>方法 1: Windows Update または WSUS から適用する</h3><p>インターネット上の Windows Update を利用している端末では、次の手順で更新します。組織で WSUS などの更新管理を行っている場合は、組織で定められた手順に従って KB5007651 を配布、適用してください。</p>
+<ol>
+<li>Windows セキュリティ アプリを終了します。</li>
+<li>[設定] - [Windows Update] を開きます。</li>
+<li>[更新プログラムのチェック] を選択します。</li>
+<li><code>Update for Windows Security platform - KB5007651</code> が検出された場合は、更新を適用します。</li>
+<li>再起動を求められた場合は、画面の案内に従って再起動します。</li>
+<li>Windows セキュリティ アプリを開き直し、日本語で表示されるか確認します。</li>
+</ol>
+<p>Windows セキュリティ アプリの更新はバックグラウンドで適用される場合があります。更新操作の直後に KB5007651 が一覧に表示されない場合でも、Windows セキュリティを開き直して表示をご確認ください。</p>
+<h3 id="方法-2-Microsoft-Update-カタログから手動で適用する"><a href="#方法-2-Microsoft-Update-カタログから手動で適用する" class="headerlink" title="方法 2: Microsoft Update カタログから手動で適用する"></a>方法 2: Microsoft Update カタログから手動で適用する</h3><p>Windows Update や WSUS から KB5007651 が提供されない場合は、Microsoft Update カタログから手動でダウンロードして適用できます。</p>
+<ol>
+<li>Windows セキュリティ アプリを終了します。</li>
+<li><a target="_blank" rel="noopener" href="https://www.catalog.update.microsoft.com/Search.aspx?q=KB5007651">Microsoft Update カタログ</a>を開きます。</li>
+<li>検索結果から、更新日とバージョンが最も新しい <code>Update for Windows Security platform - KB5007651</code> の [ダウンロード] を選択します。</li>
+<li>ダウンロード画面で、端末のアーキテクチャに対応するファイルを選択します。</li>
+<li>ダウンロードしたインストーラーを右クリックし、[管理者として実行] を選択します。</li>
+<li>Windows セキュリティ アプリを開き直し、日本語で表示されるか確認します。</li>
+</ol>
+<p>なお、2026 年 8 月 21 日時点で Microsoft Update カタログに掲載されている最新版は、<code>Version 10.0.29628.1000</code> です。今後、新しいバージョンへ置き換わるため、実施時点で更新日とバージョンを確認してください。</p>
+<p>ここで示す <code>Version 10.0.29628.1000</code> は、Microsoft Update カタログに掲載されている Windows セキュリティ プラットフォーム更新のバージョンです。Windows セキュリティの [バージョン情報] には複数の項目が表示され、すべてがこの値と同じになるわけではありません。</p>
+<p>インストーラーは画面を表示せずに終了する場合がありますが、画面が表示されなかったことだけでは適用完了と判断できません。実行後に Windows セキュリティを開き直し、日本語表示へ改善したか確認してください。改善しない場合は、[バージョン情報] 画面全体のスクリーンショットを保存し、ほかの確認情報とともに Microsoft サポートへご提示ください。[バージョン情報] 画面だけで適用完了を判定するものではありません。</p>
+<h2 id="適用後の確認"><a href="#適用後の確認" class="headerlink" title="適用後の確認"></a>適用後の確認</h2><p>更新後は、Windows セキュリティ アプリをいったん終了してから開き直し、次の点を確認します。</p>
+<ul>
+<li>ナビゲーションや各ページの見出しが日本語で表示されること</li>
+<li>[ウイルスと脅威の防止]、[アカウントの保護]、[ファイアウォールとネットワーク保護] などのページを開けること</li>
+<li>更新前に英語で表示されていた箇所が日本語に切り替わっていること</li>
+</ul>
+<p>Windows セキュリティの [設定] - [バージョン情報] では、アプリや関連コンポーネントのバージョンを確認できます。問題が残る場合には、更新前後の画面を記録しておくと切り分けに役立ちます。</p>
+<p><img src="03-troubleshooting-flow.svg" alt="KB5007651 の適用から日本語表示の確認、改善しない場合の情報収集までの判断フロー"></p>
+<p><em>図の内容は本文でも説明しています。小さい画面では、図を選択すると拡大表示できます。</em></p>
+<h2 id="改善しない場合に確認すること"><a href="#改善しない場合に確認すること" class="headerlink" title="改善しない場合に確認すること"></a>改善しない場合に確認すること</h2><p>最新版の KB5007651 を適用しても英語表示が残る場合は、次の点をご確認ください。</p>
+<ol>
+<li><p><strong>英語表示の範囲</strong><br>Windows セキュリティ全体が英語なのか、特定のページや項目だけが英語なのかを確認します。必要に応じて画面全体のスクリーンショットを保存してください。</p>
+</li>
+<li><p><strong>Windows のバージョンと OS ビルド</strong><br><code>winver</code> を実行し、表示された Windows のバージョンと OS ビルドを確認します。</p>
+</li>
+<li><p><strong>Windows セキュリティのバージョン情報</strong><br>Windows セキュリティの [設定] - [バージョン情報] 画面を確認します。複数のバージョンが表示されるため、画面全体のスクリーンショットを保存しておくことをお勧めします。</p>
+</li>
+<li><p><strong>Windows 全体の表示言語</strong><br>[設定] - [時刻と言語] - [言語と地域] を開き、Windows の表示言語が日本語であることを確認します。Windows セキュリティ以外のアプリにも英語表示がある場合は、言語パックや優先する言語の構成も確認します。</p>
+</li>
+</ol>
+<p>これらの情報を添えて Microsoft サポートへお問い合わせいただくと、更新プログラムが適用されていない状態なのか、特定の表示項目に限られた別の問題なのかを切り分けやすくなります。</p>
+<h2 id="展開イメージを運用するときのポイント"><a href="#展開イメージを運用するときのポイント" class="headerlink" title="展開イメージを運用するときのポイント"></a>展開イメージを運用するときのポイント</h2><p>多数の端末を展開する環境では、クリーン インストールやイメージ展開の完了だけでなく、Windows セキュリティ アプリを含む最新更新の適用までを初期構築手順に含めることをお勧めします。</p>
+<ul>
+<li>KB5007651 の適用を、イメージ展開後の初期構築手順へ含める</li>
+<li>WSUS を使用する場合は、Windows セキュリティ プラットフォームの更新を同期、承認できる構成か確認する</li>
+<li>インターネットへ接続できない端末では、展開時点の最新版を Microsoft Update カタログから入手し、事前に検証してから配布する</li>
+<li>基準イメージを長期間使う場合は、イメージの作成日だけでなく、展開後に適用するアプリ更新の手順も定期的に見直す</li>
+</ul>
+<p>KB5007651 は同じ KB 番号でバージョンが更新されるため、特定のファイル名やバージョンを長期間固定するより、展開時点の最新版を確認する運用をお勧めします。</p>
+<h2 id="よくある質問"><a href="#よくある質問" class="headerlink" title="よくある質問"></a>よくある質問</h2><h3 id="Q1-Windows-セキュリティが英語表示でも、保護機能に問題はありますか"><a href="#Q1-Windows-セキュリティが英語表示でも、保護機能に問題はありますか" class="headerlink" title="Q1. Windows セキュリティが英語表示でも、保護機能に問題はありますか?"></a>Q1. Windows セキュリティが英語表示でも、保護機能に問題はありますか?</h3><p>弊社で確認した事例は、Windows セキュリティ アプリの表示言語だけに生じる問題でした。Microsoft Defender ウイルス対策やファイアウォールなど、保護機能の動作には影響しないことを確認しています。</p>
+<p>ただし、Windows セキュリティに警告やエラーが表示される、各ページを開けない、あるいは保護機能が “無効” と表示される場合は、表示言語とは別の問題として確認してください。</p>
+<h3 id="Q2-日本語の言語パックを入れ直す必要はありますか"><a href="#Q2-日本語の言語パックを入れ直す必要はありますか" class="headerlink" title="Q2. 日本語の言語パックを入れ直す必要はありますか?"></a>Q2. 日本語の言語パックを入れ直す必要はありますか?</h3><p>Windows セキュリティ以外の画面が日本語で表示されている場合は、言語パックを入れ直す前に KB5007651 を適用し、Windows セキュリティ アプリを最新にしてください。Windows 全体が英語で表示される場合や、複数のアプリで日本語表示が不足している場合は、Windows の表示言語を確認し、必要に応じて言語パックのインストールをご検討ください。</p>
+<h3 id="Q3-Microsoft-Update-カタログに-KB5007651-が複数表示されます。どれを選べばよいですか"><a href="#Q3-Microsoft-Update-カタログに-KB5007651-が複数表示されます。どれを選べばよいですか" class="headerlink" title="Q3. Microsoft Update カタログに KB5007651 が複数表示されます。どれを選べばよいですか?"></a>Q3. Microsoft Update カタログに KB5007651 が複数表示されます。どれを選べばよいですか?</h3><p>KB5007651 は同じ KB 番号のまま新しいバージョンが公開されます。更新日とバージョンを比較し、端末のアーキテクチャに対応する最新版を選択してください。</p>
+<h3 id="Q4-手動インストーラーを実行しても画面が表示されません。"><a href="#Q4-手動インストーラーを実行しても画面が表示されません。" class="headerlink" title="Q4. 手動インストーラーを実行しても画面が表示されません。"></a>Q4. 手動インストーラーを実行しても画面が表示されません。</h3><p>インストーラーは画面を表示せずに終了する場合がありますが、それだけでは適用完了と判断できません。Windows セキュリティ アプリを開き直し、日本語表示へ改善したか確認してください。改善しない場合は、Windows セキュリティの [設定] - [バージョン情報] 画面全体のスクリーンショットを保存し、Microsoft サポートへご提示ください。</p>
+<h3 id="Q5-WSUS-から配布できますか"><a href="#Q5-WSUS-から配布できますか" class="headerlink" title="Q5. WSUS から配布できますか?"></a>Q5. WSUS から配布できますか?</h3><p>はい。KB5007651 の公開情報では、WSUS から利用できる更新プログラムとして案内されています。組織の同期対象と承認規則をご確認ください。</p>
+<h3 id="Q6-Windows-Server-2025-でも同じ対処を利用できますか"><a href="#Q6-Windows-Server-2025-でも同じ対処を利用できますか" class="headerlink" title="Q6. Windows Server 2025 でも同じ対処を利用できますか?"></a>Q6. Windows Server 2025 でも同じ対処を利用できますか?</h3><p>はい。KB5007651 の公開情報ではビルド 22000 以降が対象と案内されており、Windows Server 2025 でも Windows 11 と同じ方法で適用できます。Windows Update または WSUS から適用するか、Microsoft Update カタログからパッケージをダウンロードして手動で適用し、Windows セキュリティを開き直して表示をご確認ください。</p>
+<h2 id="参考情報"><a href="#参考情報" class="headerlink" title="参考情報"></a>参考情報</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://support.microsoft.com/ja-jp/topic/a6ac7d2e-b1bf-44c0-a028-41720a242da3">Windows セキュリティ アプリの更新 | Microsoft サポート</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.catalog.update.microsoft.com/Search.aspx?q=KB5007651">Microsoft Update カタログ: KB5007651</a></li>
+<li><a target="_blank" rel="noopener" href="https://learn.microsoft.com/ja-jp/windows/security/operating-system-security/system-security/windows-defender-security-center/windows-defender-security-center">Windows セキュリティ アプリ | Microsoft Learn</a></li>
+</ul>
+<p>本記事の内容が、Windows 11 または Windows Server 2025 の展開後に表示言語を確認する際の参考となれば幸いです。</p>
+<p>本情報の内容は作成日時点のものであり、予告なく変更される場合があります。</p>
+<hr>
+<p>更新履歴<br>2026/08/21 本 Blog の公開<br>2026/09/04 Windows Server 2025 を対象に追加</p>
+
+      
+      
+    </div>
+    <footer class="article-footer">
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/blog/2026/08/23/UserInterfaceAndApps/LanguageSupport_IME/unicode-pua-characters-not-displayed-or-printed-correctly/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">次の記事</strong>
+      <div class="article-nav-title">
+        
+          Unicode 私用領域 (PUA) に割り当てられた EUDC 文字（外字）が正しく表示・印刷されない場合がある
+        
+      </div>
+    </a>
+  
+  
+    <a href="/blog/2026/08/18/Shell/ConfigurationofKioskforWindows11/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">前の記事</strong>
+      <div class="article-nav-title">Windows 11 で Kiosk を構成する方法</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">カテゴリ</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Activation/">Activation</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Activation/ESU/">ESU</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Activation/security-SPP/">security-SPP</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/">Active Directory</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Authentication/">Authentication</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/DFSR/">DFSR</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/FunctionalLevel/">FunctionalLevel</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Group-Policy/">Group Policy</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Promotion-and-Demotion/">Promotion and Demotion</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/User-Profile/">User Profile</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Windows-Hello/">Windows Hello</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Windows-Time-Service/">Windows Time Service</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/AppLocker/">AppLocker</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/AppLocker/Active-Directory/">Active Directory</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/AppLocker/Microsoft-Intune/">Microsoft Intune</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/BitLocker/">BitLocker</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Deployment/">Deployment</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Deployment/Feature-on-demand/">Feature on demand</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Deployment/Sysprep/">Sysprep</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Failover-Clustering/">Failover Clustering</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Failover-Clustering/Azure-Local/">Azure Local</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Failover-Clustering/Configuration-and-Management/">Configuration and Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Failover-Clustering/Windows-Server-2025/">Windows Server 2025</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/FileServices/">FileServices</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/FileServices/FTP/">FTP</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/FileServices/SMB/">SMB</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Hyper-V/">Hyper-V</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Hyper-V/Configuration-and-Management/">Configuration and Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Hyper-V/Migration/">Migration</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Microsoft-Connected-Cache/">Microsoft Connected Cache</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/">Networking</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/BITS/">BITS</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/Bluetooth/">Bluetooth</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/DHCP/">DHCP</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/DNS/">DNS</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/Firewall/">Firewall</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/LBFO/">LBFO</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/NCSI/">NCSI</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/NetworkInterface/">NetworkInterface</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/Proxy/">Proxy</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/TCPIP/">TCPIP</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/OpenSSH/">OpenSSH</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/">Performance</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/Hang-up-BSoD/">Hang-up/BSoD</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/No-Boot/">No Boot</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/Slow-Response/">Slow Response</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/System-Resource/">System Resource</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/Tools/">Tools</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/">Public Key Infrastructure</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Certificate-Authority/">Certificate Authority</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Certificate-Management/">Certificate Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Code-Signing/">Code Signing</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Fundamental/">Fundamental</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/SSL-TLS-Communication/">SSL TLS Communication</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/SSL-TLS-Connection/">SSL TLS Connection</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Smart-Card-Logon/">Smart Card Logon</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/">Remote Desktop</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/Azure-Virtual-Desktop-AVD/">Azure Virtual Desktop (AVD)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/Remote-Desktop-Service-RDS/">Remote Desktop Service (RDS)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/Windows-Virtual-Desktop-WVD/">Windows Virtual Desktop (WVD)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/RemoteAccess/">RemoteAccess</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/RemoteAccess/%E3%83%80%E3%82%A4%E3%83%A4%E3%83%AB%E3%82%A2%E3%83%83%E3%83%97%E6%8E%A5%E7%B6%9A/">ダイヤルアップ接続</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Security/">Security</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Security/WDAC/">WDAC</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Setup/">Setup</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Setup/Feature-Update-FU/">Feature Update (FU)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Shell/">Shell</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Shell/Explorer/">Explorer</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Shell/StartMenu/">StartMenu</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/">Storage</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/Backup/">Backup</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/FSRM/">FSRM</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/Management/">Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/StorageMigrationService/">StorageMigrationService</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Support-Request/">Support Request</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/UEFI/">UEFI</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/UEFI/Secure-Boot/">Secure Boot</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/">User Interface and Apps</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Command-Prompt/">Command Prompt</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/EventLog/">EventLog</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Language-Support/">Language Support</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Microsoft-Store/">Microsoft Store</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Performance/">Performance</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/PowerShell/">PowerShell</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Printing-%E5%8D%B0%E5%88%B7/">Printing (印刷)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Server-Management/">Server Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Taskscheduler/">Taskscheduler</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Windows-Management-Instrumentation/">Windows Management Instrumentation</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps-Language-support/">User Interface and Apps - Language support</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-365/">Windows 365</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Admin-Center/">Windows Admin Center</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Search/">Windows Search</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/">Windows Update</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Delivery-Optimization-DO/">Delivery Optimization (DO)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Feature-Update-FU/">Feature Update (FU)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Quality-Update-QU/">Quality Update (QU)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Windows-Update-Agent/">Windows Update Agent</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Windows-Update-Agent-WUA/">Windows Update Agent (WUA)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/">WirelessNetwork</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/NPS/">NPS</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/Wi-Fi/">Wi-Fi</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/%E3%83%A2%E3%83%90%E3%82%A4%E3%83%AB-%E3%83%96%E3%83%AD%E3%83%BC%E3%83%89%E3%83%90%E3%83%B3%E3%83%89%E6%8E%A5%E7%B6%9A-LTE/">モバイル ブロードバンド接続 (LTE)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/%E7%B5%84%E7%B9%94%E7%B4%B9%E4%BB%8B%E3%83%96%E3%83%AD%E3%82%B0%EF%BC%88Windows-Commercial%EF%BC%89/">組織紹介ブログ（Windows Commercial）</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最近の投稿</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/blog/2026/08/27/Activation/FeatureUpdate-ActivationChanged/">機能更新プログラム (Feature Update) 適用後に OS のライセンス認証が外れる動作とその対処方法について</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/08/23/UserInterfaceAndApps/LanguageSupport_IME/unicode-pua-characters-not-displayed-or-printed-correctly/">Unicode 私用領域 (PUA) に割り当てられた EUDC 文字（外字）が正しく表示・印刷されない場合がある</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/08/21/UserInterfaceAndApps/LanguageSupport_IME/windows-security-japanese-display/">Windows 11 または Windows Server 2025 のクリーン インストール後に Windows セキュリティが英語表示になる場合の対処</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/08/18/Shell/ConfigurationofKioskforWindows11/">Windows 11 で Kiosk を構成する方法</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/08/05/ActiveDirectory/PromotionAndDemotion/windows-server-2016-ad-migration-considerations/">Windows Server 2016 からの Active Directory 移行、アップグレードにあたっての考慮事項</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">アーカイブ</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2026/08/">2026 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2026/07/">2026 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2026/06/">2026 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2026/05/">2026 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2026/04/">2026 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2026/03/">2026 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2026/02/">2026 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2026/01/">2026 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/12/">2025 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/11/">2025 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/10/">2025 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/09/">2025 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/08/">2025 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/07/">2025 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/06/">2025 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/05/">2025 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/04/">2025 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/03/">2025 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/02/">2025 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/01/">2025 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/12/">2024 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/11/">2024 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/10/">2024 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/09/">2024 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/08/">2024 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/07/">2024 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/06/">2024 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/05/">2024 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/04/">2024 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/03/">2024 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/02/">2024 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/01/">2024 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/12/">2023 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/11/">2023 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/10/">2023 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/09/">2023 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/08/">2023 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/07/">2023 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/06/">2023 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/05/">2023 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/04/">2023 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/03/">2023 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/02/">2023 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/01/">2023 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/12/">2022 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/11/">2022 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/10/">2022 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/09/">2022 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/08/">2022 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/07/">2022 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/06/">2022 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/05/">2022 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/04/">2022 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/03/">2022 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/02/">2022 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/01/">2022 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/12/">2021 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/11/">2021 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/10/">2021 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/09/">2021 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/08/">2021 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/07/">2021 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/06/">2021 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/05/">2021 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/04/">2021 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/03/">2021 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/02/">2021 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/01/">2021 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/12/">2020 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/11/">2020 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/10/">2020 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/07/">2020 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/03/">2020 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2019/03/">2019 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/11/">2018 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/10/">2018 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/09/">2018 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/08/">2018 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/07/">2018 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/06/">2018 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/04/">2018 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/02/">2018 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/12/">2017 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/11/">2017 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/09/">2017 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/05/">2017 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/03/">2017 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/02/">2017 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2016/08/">2016 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2016/05/">2016 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2014/03/">2014 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2012/02/">2012 / 02</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2026 Microsoft Japan Windows Technology Support Team<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/blog/" class="mobile-nav-link">Home</a>
+  
+    <a href="/blog/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+<script src="/blog/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

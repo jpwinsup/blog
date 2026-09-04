@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-180187723-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-180187723-1');
+</script>
+<!-- End Google Analytics -->
+
+  
+  <title>Windows 11 で Kiosk を構成する方法 | Microsoft Japan Windows Technology Support Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="本記事はマイクロソフト社員によって公開されております。 こんにちは、Windows サポートの新谷です。 今回は、Windows 11 でキオスクを構成する方法についてご案内します。 概要キオスクは、許可したアプリのみをユーザーから使用可能にし、メンテナンスや展開のコストを下げ、また画一的なサービスの提供を可能にすることを目的とした構成です。キオスクを実現する機能としては、Assigned Acc">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Windows 11 で Kiosk を構成する方法">
+<meta property="og:url" content="https://jpwinsup.github.io/blog/2026/08/18/Shell/ConfigurationofKioskforWindows11/index.html">
+<meta property="og:site_name" content="Microsoft Japan Windows Technology Support Blog">
+<meta property="og:description" content="本記事はマイクロソフト社員によって公開されております。 こんにちは、Windows サポートの新谷です。 今回は、Windows 11 でキオスクを構成する方法についてご案内します。 概要キオスクは、許可したアプリのみをユーザーから使用可能にし、メンテナンスや展開のコストを下げ、また画一的なサービスの提供を可能にすることを目的とした構成です。キオスクを実現する機能としては、Assigned Acc">
+<meta property="og:locale" content="ja_JP">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2026/08/18/Shell/ConfigurationofKioskforWindows11/UseCustomTemplate.png">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2026/08/18/Shell/ConfigurationofKioskforWindows11/CustomTemplate.png">
+<meta property="article:published_time" content="2026-08-18T07:28:00.000Z">
+<meta property="article:modified_time" content="2026-09-04T04:12:39.249Z">
+<meta property="article:author" content="Microsoft Japan Windows Technology Support Team">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://jpwinsup.github.io/blog/2026/08/18/Shell/ConfigurationofKioskforWindows11/UseCustomTemplate.png">
+  
+    <link rel="alternate" href="/blog/atom.xml" title="Microsoft Japan Windows Technology Support Blog" type="application/atom+xml">
+  
+
+  <link rel="icon" href="/blog/favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="/blog/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/blog/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/blog/favicon-16x16.png">
+  <link rel="manifest" href="/blog/site.webmanifest">
+  <link rel="mask-icon" href="/blog/safari-pinned-tab.svg" color="#5bbad5">
+  <meta name="msapplication-TileColor" content="#ffffff">
+  <meta name="theme-color" content="#ffffff">
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/blog/css/style.css">
+
+<meta name="generator" content="Hexo 5.2.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="site-header-logo"></div>
+  <div id="site-header-blog-wrapper"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        <div id="ms-logo"></div>
+        
+          <a class="main-nav-link" href="/blog/">Home</a>
+        
+          <a class="main-nav-link" href="/blog/archives">Archives</a>
+        
+        <a class="main-nav-link" target="_blank" rel="noopener" href="https://cssjpn.github.io/">サポート情報</a>
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/blog/atom.xml" title="RSSフィード"></a>
+        
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//www.bing.com/search" method="get" accept-charset="UTF-8" name="bing-search" onsubmit="var f=this;if(f['q'].value){var searchUrl =  'https://www.bing.com/search?q=' +  encodeURIComponent(f['q'].value + ' site:' + f['sitesearch'].value) ;window.open(searchUrl, 'blank') };return false;" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="検索"><button type="submit" id="nav-search-btn" class="search-form-submit"></button><input type="hidden" name="sitesearch" value="https://jpwinsup.github.io/blog"></form>
+      </div>
+    </div>
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/blog/" id="logo">Microsoft Japan Windows Technology Support Blog</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/blog/" id="subtitle">日本マイクロソフト Windows Support チームによる、サポート情報 Blog です。</a>
+        </h2>
+      
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-Shell/ConfigurationofKioskforWindows11" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    
+    
+      <header class="article-header-single">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Windows 11 で Kiosk を構成する方法
+    </h1>
+  
+
+      </header>
+      <div class="article-share">
+        Published Date: 
+        <a href="/blog/2026/08/18/Shell/ConfigurationofKioskforWindows11/" class="article-date-single">
+  <time datetime="2026-08-18T07:28:00.000Z" itemprop="datePublished">2026-08-18</time>
+</a>
+        
+  <div class="article-category">
+    <a class="article-category-link" href="/blog/categories/Shell/">Shell</a>
+  </div>
+
+        
+        <a href="https://github.com/jpwinsup/blog/issues/new?title=&body=%EF%BB%BF%0A%0A---%0A%0A%23%23%23%23+Document+Details%0A%0A*+Article+ID%3A+f78d5542-af5a-59b6-9e9a-9e5bc3c61068%0A*+TITLE%3A+Windows+11+%E3%81%A7+Kiosk+%E3%82%92%E6%A7%8B%E6%88%90%E3%81%99%E3%82%8B%E6%96%B9%E6%B3%95%0A*+URL+https%3A%2F%2Fjpwinsup.github.io%2Fblog%2F2026%2F08%2F18%2FShell%2FConfigurationofKioskforWindows11%2F%0A*+SourceFileName%3A+source%2F_posts%2FShell%2FConfigurationofKioskforWindows11.md%0A" class="article-github-issue-link" target="_blank" rel="noopener noreferrer">feedback</a>
+        
+        <a data-url="https://jpwinsup.github.io/blog/2026/08/18/Shell/ConfigurationofKioskforWindows11/" data-id="cmtmg3kqo01lcrs2be8l8b2hb" class="article-share-link">共有</a>
+      </div>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>本記事はマイクロソフト社員によって公開されております。</p>
+<p>こんにちは、Windows サポートの新谷です。</p>
+<p>今回は、Windows 11 でキオスクを構成する方法についてご案内します。</p>
+<h1 id="概要"><a href="#概要" class="headerlink" title="概要"></a>概要</h1><p>キオスクは、許可したアプリのみをユーザーから使用可能にし、メンテナンスや展開のコストを下げ、また画一的なサービスの提供を可能にすることを目的とした構成です。<br>キオスクを実現する機能としては、Assigned Access と Shell Launcher があります。それぞれ、主な利用シチュエーションは次のようになります。</p>
+<ul>
+<li>Assigned Access: UWP アプリや Edge を全画面で実行する場合や、許可した複数のアプリを利用する場合</li>
+<li>Shell Launcher: カスタムした Windows デスクトップアプリで Explorer を置き換えて利用する場合</li>
+</ul>
+<p>(参考)Windows kiosks configuration options overview<br><a target="_blank" rel="noopener" href="https://learn.microsoft.com/en-us/windows/configuration/kiosk/">https://learn.microsoft.com/en-us/windows/configuration/kiosk/</a></p>
+<p>シングルアプリ キオスクでは許可したアプリを全画面で利用可能で、マルチアプリ キオスクでは 1 つまたは複数のアプリをスタート メニューから利用可能です。<br>マルチアプリ キオスクは Windows 11 では Assigned Access で構成します。<br>カスタムしたデスクトップアプリをご利用の場合には Shell Launcher が選択肢となります。</p>
+<p>各機能を利用可能なエディションは以下の通りです。</p>
+<table>
+<thead>
+<tr>
+<th>機能</th>
+<th>Pro</th>
+<th>Enterprise / Education</th>
+<th>IoT Enterprise</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Assigned Access</td>
+<td>○</td>
+<td>○</td>
+<td>○</td>
+</tr>
+<tr>
+<td>Shell Launcher</td>
+<td>×</td>
+<td>○</td>
+<td>○</td>
+</tr>
+</tbody></table>
+<p>キオスクを Windows 11 で構成する手順としては次の流れとなります。</p>
+<ol>
+<li>Assigned Access または Shell Launcher を構成する XML ファイルを作成</li>
+<li>MDM Bridge WMI Provider 経由で XML ファイルをローカル端末に反映</li>
+<li>(Intune の場合) 2. で検証した XML ファイルをカスタムポリシーにて配布し、反映</li>
+</ol>
+<h2 id="注意"><a href="#注意" class="headerlink" title="注意"></a>注意</h2><h3 id="Intune-デバイス構成テンプレートについて"><a href="#Intune-デバイス構成テンプレートについて" class="headerlink" title="Intune デバイス構成テンプレートについて"></a>Intune デバイス構成テンプレートについて</h3><p>Intune には「デバイスの構成」テンプレート内にキオスク プロファイルのテンプレートが用意されていますが、Windows 11 では意図したとおりに動作しないことがあります。<br>Windows 11 でキオスクを構成する場合は、Intune のキオスク テンプレートは使用せず、本記事で紹介するカスタム構成プロファイル (OMA-URI) による XML の配布を行ってください。</p>
+<img src="/blog/2026/08/18/Shell/ConfigurationofKioskforWindows11/UseCustomTemplate.png" class="" title="「キオスク」ではなく「カスタム」をお使いください">
+
+
+<h1 id="展開方法"><a href="#展開方法" class="headerlink" title="展開方法"></a>展開方法</h1><p>下記に、XML のサンプルや各機能の注意点をご説明します。</p>
+<p>本記事のサンプルは、Windows 11 バージョン 22H2 以降を対象とします。</p>
+<ul>
+<li>Assigned Access: Windows 11 Pro、Enterprise、Education、IoT Enterprise</li>
+<li>Shell Launcher: Windows 11 Enterprise、Education、IoT Enterprise</li>
+<li>Assigned Access を使用する端末では、ユーザー アカウント制御 (UAC) を有効にしてください。</li>
+<li>キオスク ユーザーは端末のコンソールからサインインしてください。リモート デスクトップ接続ではキオスク エクスペリエンスを利用できません。</li>
+<li>検証中に端末を管理できるように、キオスク ユーザーとは別の管理者アカウントを用意してください。</li>
+</ul>
+<h2 id="シングルアプリ-キオスク-XML"><a href="#シングルアプリ-キオスク-XML" class="headerlink" title="シングルアプリ キオスク XML"></a>シングルアプリ キオスク XML</h2><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">AssignedAccessConfiguration</span></span></span><br><span class="line"><span class="tag">  <span class="attr">xmlns</span>=<span class="string">&quot;http://schemas.microsoft.com/AssignedAccess/2017/config&quot;</span></span></span><br><span class="line"><span class="tag">  <span class="attr">xmlns:rs5</span>=<span class="string">&quot;http://schemas.microsoft.com/AssignedAccess/201810/config&quot;</span></span></span><br><span class="line"><span class="tag">  <span class="attr">xmlns:v4</span>=<span class="string">&quot;http://schemas.microsoft.com/AssignedAccess/2021/config&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">Profiles</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">Profile</span> <span class="attr">Id</span>=<span class="string">&quot;&#123;EDB3036B-780D-487D-A375-69369D8A8F78&#125;&quot;</span> <span class="attr">Name</span>=<span class="string">&quot;Edge Kiosk&quot;</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">KioskModeApp</span></span></span><br><span class="line"><span class="tag">              <span class="attr">v4:ClassicAppPath</span>=<span class="string">&quot;%ProgramFiles(x86)%\Microsoft\Edge\Application\msedge.exe&quot;</span></span></span><br><span class="line"><span class="tag">              <span class="attr">v4:ClassicAppArguments</span>=<span class="string">&quot;--kiosk https://www.microsoft.com --edge-kiosk-type=public-browsing --kiosk-idle-timeout-minutes=2&quot;</span>/&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">Profile</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">Profiles</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">Configs</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">Config</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">AutoLogonAccount</span> <span class="attr">rs5:DisplayName</span>=<span class="string">&quot;Kiosk User&quot;</span>/&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">DefaultProfile</span> <span class="attr">Id</span>=<span class="string">&quot;&#123;EDB3036B-780D-487D-A375-69369D8A8F78&#125;&quot;</span>/&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">Config</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">Configs</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">AssignedAccessConfiguration</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>XML の各要素について補足します。</p>
+<ul>
+<li><code>KioskModeApp</code>: シングルアプリ キオスクで起動するアプリを指定する要素です。UWP アプリの場合は <code>AppUserModelId</code> 属性で AUMID を指定します。Edge 等のデスクトップアプリの場合は <code>v4:ClassicAppPath</code> で実行ファイルのパスを指定し、<code>v4:ClassicAppArguments</code> で起動引数を指定します。</li>
+<li><code>v4:ClassicAppPath</code>: デスクトップアプリの実行ファイルのパスを指定します。<code>%ProgramFiles(x86)%</code> 等の環境変数が使用できます。</li>
+<li><code>v4:ClassicAppArguments</code>: アプリに渡す起動引数を指定します。Edge の場合、以下のキオスク モード引数を指定します。<ul>
+<li><code>--kiosk &lt;URL&gt;</code>: キオスクモードで開く URL を指定します。</li>
+<li><code>--edge-kiosk-type=fullscreen</code>: 指定した URL を全画面表示します (デジタルサイネージ用途)。</li>
+<li><code>--edge-kiosk-type=public-browsing</code>: InPrivate モードの制限付きブラウザーとして動作します (公共端末用途)。</li>
+<li><code>--kiosk-idle-timeout-minutes=&lt;分&gt;</code>: 指定した時間無操作が続くとブラウザーをリセットします。</li>
+</ul>
+</li>
+<li><code>AutoLogonAccount</code>: Assigned Access が自動ログオン用のローカル標準ユーザー アカウントを作成し、管理します。<code>rs5:DisplayName</code> でサインイン画面に表示される表示名を設定できます。</li>
+<li><code>DefaultProfile</code>: Config 内でユーザーに割り当てるプロファイルを <code>Id</code> で指定します。</li>
+</ul>
+<h2 id="マルチアプリ-キオスク-XML"><a href="#マルチアプリ-キオスク-XML" class="headerlink" title="マルチアプリ キオスク XML"></a>マルチアプリ キオスク XML</h2><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot; ?&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">AssignedAccessConfiguration</span></span></span><br><span class="line"><span class="tag">  <span class="attr">xmlns</span>=<span class="string">&quot;http://schemas.microsoft.com/AssignedAccess/2017/config&quot;</span></span></span><br><span class="line"><span class="tag">  <span class="attr">xmlns:rs5</span>=<span class="string">&quot;http://schemas.microsoft.com/AssignedAccess/201810/config&quot;</span></span></span><br><span class="line"><span class="tag">  <span class="attr">xmlns:v5</span>=<span class="string">&quot;http://schemas.microsoft.com/AssignedAccess/2022/config&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">Profiles</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">Profile</span> <span class="attr">Id</span>=<span class="string">&quot;&#123;9A2A490F-10F6-4764-974A-43B19E722C23&#125;&quot;</span> <span class="attr">Name</span>=<span class="string">&quot;Edge Kiosk&quot;</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">AllAppsList</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">AllowedApps</span>&gt;</span></span><br><span class="line">          <span class="tag">&lt;<span class="name">App</span> <span class="attr">DesktopAppPath</span>=<span class="string">&quot;%ProgramFiles(x86)%\Microsoft\Edge\Application\msedge.exe&quot;</span> /&gt;</span></span><br><span class="line">          <span class="tag">&lt;<span class="name">App</span> <span class="attr">DesktopAppPath</span>=<span class="string">&quot;%ProgramFiles(x86)%\Microsoft\Edge\Application\msedge_proxy.exe&quot;</span> /&gt;</span></span><br><span class="line">          <span class="tag">&lt;<span class="name">App</span> <span class="attr">AppUserModelId</span>=<span class="string">&quot;Microsoft.MicrosoftEdge.Stable_8wekyb3d8bbwe!App&quot;</span> /&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">AllowedApps</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">AllAppsList</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">v5:StartPins</span>&gt;</span></span><br><span class="line">        &lt;![CDATA[</span><br><span class="line">          &#123; &quot;pinnedList&quot;: [</span><br><span class="line">            &#123; &quot;desktopAppLink&quot;: &quot;%ALLUSERSPROFILE%\\Microsoft\\Windows\\Start Menu\\Programs\\Microsoft Edge.lnk&quot; &#125;</span><br><span class="line">          ] &#125;</span><br><span class="line">        ]]&gt;</span><br><span class="line">      <span class="tag">&lt;/<span class="name">v5:StartPins</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">Taskbar</span> <span class="attr">ShowTaskbar</span>=<span class="string">&quot;false&quot;</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">Profile</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">Profiles</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">Configs</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">Config</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">AutoLogonAccount</span> <span class="attr">rs5:DisplayName</span>=<span class="string">&quot;Kiosk User&quot;</span> /&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">DefaultProfile</span> <span class="attr">Id</span>=<span class="string">&quot;&#123;9A2A490F-10F6-4764-974A-43B19E722C23&#125;&quot;</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">Config</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">Configs</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">AssignedAccessConfiguration</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>XML の各要素について補足します。</p>
+<ul>
+<li><code>AllowedApps</code>: キオスク ユーザーに許可するアプリを指定します。Edge にてセカンダリ タイルを利用する場合、<code>DesktopAppPath</code> で msedge.exe および msedge_proxy.exe のパスと、<code>AppUserModelId</code> (AUMID) の両方を指定する必要があります。</li>
+<li><code>StartPins</code>: Windows 11 のスタート メニューにピン留めするアプリを指定します。デスクトップアプリの場合は <code>desktopAppLink</code> でスタート メニューのショートカットパスを指定します。</li>
+<li><code>Taskbar</code>: タスクバーの表示/非表示を制御します。</li>
+<li><code>AutoLogonAccount</code>: Assigned Access が自動ログオン用のローカル標準ユーザー アカウントを作成し、管理します。<ul>
+<li><code>Account</code>: 既存のローカル、ドメイン、または Microsoft Entra ID ユーザーを割り当てる場合は、AutoLogonAccount ではなく Account を使用します。Microsoft Entra ID ユーザーは <code>&lt;Account&gt;AzureAD\user@domain&lt;/Account&gt;</code> の形式で指定します。複数の Config 要素を定義して、複数のユーザーに同じプロファイルを割り当てることもできます。</li>
+</ul>
+</li>
+</ul>
+<h2 id="Shell-Launcher-XML"><a href="#Shell-Launcher-XML" class="headerlink" title="Shell Launcher XML"></a>Shell Launcher XML</h2><p>Shell Launcher では、アプリをシェルとして起動します。以下は、自動ログインのキオスク ユーザーに対してメモ帳をシェルとして設定する例です。<br>Shell Launcher v1 では Win32 アプリに限られていましたが、v2 では UWP アプリを起動可能となりました。</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">ShellLauncherConfiguration</span></span></span><br><span class="line"><span class="tag">  <span class="attr">xmlns</span>=<span class="string">&quot;http://schemas.microsoft.com/ShellLauncher/2018/Configuration&quot;</span></span></span><br><span class="line"><span class="tag">  <span class="attr">xmlns:V2</span>=<span class="string">&quot;http://schemas.microsoft.com/ShellLauncher/2019/Configuration&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">Profiles</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">DefaultProfile</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">Shell</span> <span class="attr">Shell</span>=<span class="string">&quot;%SystemRoot%\explorer.exe&quot;</span>/&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">DefaultProfile</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">Profile</span> <span class="attr">Id</span>=<span class="string">&quot;&#123;EDB3036B-780D-487D-A375-69369D8A8F78&#125;&quot;</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">Shell</span> <span class="attr">Shell</span>=<span class="string">&quot;%SystemRoot%\System32\notepad.exe&quot;</span> <span class="attr">V2:AppType</span>=<span class="string">&quot;Desktop&quot;</span> <span class="attr">V2:AllAppsFullScreen</span>=<span class="string">&quot;true&quot;</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">DefaultAction</span> <span class="attr">Action</span>=<span class="string">&quot;RestartShell&quot;</span>/&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">Shell</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">Profile</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">Profiles</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">Configs</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">Config</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">AutoLogonAccount</span>/&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">Profile</span> <span class="attr">Id</span>=<span class="string">&quot;&#123;EDB3036B-780D-487D-A375-69369D8A8F78&#125;&quot;</span>/&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">Config</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">Configs</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">ShellLauncherConfiguration</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>XML の各要素について補足します。</p>
+<ul>
+<li><code>DefaultProfile</code>: どのプロファイルにも該当しないユーザーに対するシェルを指定します。通常は explorer.exe を指定して通常のデスクトップを維持します。</li>
+<li><code>Shell</code>: シェルとして起動する実行ファイルのパスを指定します。Win32 アプリの場合はフルパスまたは環境変数を含むパス、UWP アプリの場合は AUMID を指定します。</li>
+<li><code>V2:AppType</code>: アプリの種別を指定します。<code>Desktop</code> (Win32) または <code>UWP</code> を指定します。<code>UWP</code> を指定する場合、<code>Shell</code> 属性には実行ファイルのパスではなく AUMID を記述します (例: <code>Shell=&quot;Microsoft.BingWeather_8wekyb3d8bbwe!App&quot;</code>)。</li>
+<li><code>V2:AllAppsFullScreen</code>: <code>true</code> に設定すると、シェルアプリおよびそこから起動されるすべてのアプリが全画面 (またはデスクトップアプリの場合は最大化) で実行されます。</li>
+<li><code>DefaultAction</code>: シェルプロセスが終了した際の既定のアクションを定義します。<code>RestartShell</code>、<code>RestartDevice</code>、<code>ShutdownDevice</code> 、<code>DoNothing</code> から選択します。</li>
+<li><code>ReturnCodeActions</code>: シェルプロセスの特定の終了コードに対するアクションを個別に定義できます (省略可)。</li>
+</ul>
+<p>終了コードに対応するアクションがなく、DefaultAction も未定義の場合、Shell Launcher は何も実行せず、終了したカスタム シェルは再起動されません。</p>
+<h2 id="AUMID-の確認方法"><a href="#AUMID-の確認方法" class="headerlink" title="AUMID の確認方法"></a>AUMID の確認方法</h2><p>許可するアプリの AUMID は次のような PowerShell コマンドで確認できます。</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">Get-StartApps</span> | <span class="built_in">Where-Object</span> &#123; <span class="variable">$_</span>.Name <span class="operator">-like</span> <span class="string">&quot;*Edge*&quot;</span> &#125;</span><br></pre></td></tr></table></figure>
+
+<p>インストール済みのパッケージアプリ一覧から確認する場合:</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">Get-AppxPackage</span> | <span class="built_in">Select-Object</span> Name, PackageFamilyName</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="ローカル端末への適用"><a href="#ローカル端末への適用" class="headerlink" title="ローカル端末への適用"></a>ローカル端末への適用</h2><p>作成した XML ファイルをローカル端末に適用するには、MDM Bridge WMI Provider を使用します。<br>MDM Bridge WMI Provider へのアクセスにはシステム (SYSTEM) 権限が必要です。管理者権限の PowerShell では権限不足となりますのでご注意ください。</p>
+<ol>
+<li><a target="_blank" rel="noopener" href="https://learn.microsoft.com/ja-jp/sysinternals/downloads/psexec">PsExec</a> をダウンロードし、管理者権限のコマンドプロンプトから以下を実行して SYSTEM 権限の PowerShell を起動します。</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">psexec -i -s powershell.exe</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>以下のコマンドで XML を適用します。XML ファイルのパスは環境に合わせて変更してください。プロパティ名は Assigned Access の場合は <code>Configuration</code>、Shell Launcher の場合は <code>ShellLauncher</code> を使用します。</li>
+</ol>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$namespaceName</span> = <span class="string">&quot;root\cimv2\mdm\dmmap&quot;</span></span><br><span class="line"><span class="variable">$className</span> = <span class="string">&quot;MDM_AssignedAccess&quot;</span></span><br><span class="line"><span class="variable">$obj</span> = <span class="built_in">Get-CimInstance</span> <span class="literal">-Namespace</span> <span class="variable">$namespaceName</span> <span class="literal">-ClassName</span> <span class="variable">$className</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Assigned Access の場合</span></span><br><span class="line"><span class="variable">$obj</span>.Configuration = [<span class="type">System.Net.WebUtility</span>]::HtmlEncode((<span class="built_in">Get-Content</span> <span class="literal">-Path</span> <span class="string">&quot;.\kiosk.xml&quot;</span> <span class="literal">-Encoding</span> UTF8 <span class="literal">-Raw</span>))</span><br><span class="line"></span><br><span class="line"><span class="comment"># Shell Launcher の場合</span></span><br><span class="line"><span class="comment"># $obj.ShellLauncher = [System.Net.WebUtility]::HtmlEncode((Get-Content -Path &quot;.\kiosk.xml&quot; -Encoding UTF8 -Raw))</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">Set-CimInstance</span> <span class="literal">-CimInstance</span> <span class="variable">$obj</span></span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>適用後、端末を再起動するとキオスク構成が有効になります。</li>
+</ol>
+<h3 id="構成の解除"><a href="#構成の解除" class="headerlink" title="構成の解除"></a>構成の解除</h3><p>ローカル端末に適用したキオスク構成を解除する手順です。</p>
+<p>管理者アカウントでサインインし、手順 1 と同様に PsExec から SYSTEM 権限の PowerShell を起動します。<br>次のコマンドにより対象のプロパティを <code>$null</code> に設定します。</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$namespaceName</span> = <span class="string">&quot;root\cimv2\mdm\dmmap&quot;</span></span><br><span class="line"><span class="variable">$className</span> = <span class="string">&quot;MDM_AssignedAccess&quot;</span></span><br><span class="line"><span class="variable">$obj</span> = <span class="built_in">Get-CimInstance</span> <span class="literal">-Namespace</span> <span class="variable">$namespaceName</span> <span class="literal">-ClassName</span> <span class="variable">$className</span></span><br><span class="line"><span class="variable">$obj</span>.Configuration = <span class="variable">$null</span>   <span class="comment"># Shell Launcher の場合は $obj.ShellLauncher = $null</span></span><br><span class="line"><span class="built_in">Set-CimInstance</span> <span class="literal">-CimInstance</span> <span class="variable">$obj</span></span><br></pre></td></tr></table></figure>
+<p>再起動すると、構成が解除されます。<br>なお、Assigned Access の構成を解除した後も、スタート メニューの変更などが完全に元に戻らない場合があります。</p>
+<h3 id="Shell-Launcher-利用時の前提条件"><a href="#Shell-Launcher-利用時の前提条件" class="headerlink" title="Shell Launcher 利用時の前提条件"></a>Shell Launcher 利用時の前提条件</h3><p>Shell Launcher は Windows のオプション機能として提供されています。使用前に有効化が必要です。<br>Intune で配布する場合には、自動で有効化されるため、手動での有効化は必要ありません。</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">Enable-WindowsOptionalFeature</span> <span class="literal">-Online</span> <span class="literal">-FeatureName</span> <span class="string">&quot;Client-EmbeddedShellLauncher&quot;</span> <span class="literal">-All</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="Shell-Launcher-利用時の注意"><a href="#Shell-Launcher-利用時の注意" class="headerlink" title="Shell Launcher 利用時の注意"></a>Shell Launcher 利用時の注意</h3><p>Shell Launcher は指定したアプリをシェルとして起動する機能であり、指定したアプリ以外の実行を自動的に禁止するものではありません。キーボード ショートカットや「ファイルを開く」ダイアログ ボックス、子プロセスの起動などから、シェル以外の機能にアクセスできてしまう場合があります。<br>Shell Launcher を使用する際は、想定外のアクセスが発生しないことを事前に検証してください。必要に応じて、標準ユーザー アカウントの使用、AppLocker によるアプリの実行制御、グループ ポリシーによる機能制限などを併用することをお勧めします。</p>
+<h2 id="Intune-によるリモート展開"><a href="#Intune-によるリモート展開" class="headerlink" title="Intune によるリモート展開"></a>Intune によるリモート展開</h2><p>ローカルでの検証が完了したら、Intune のカスタム構成プロファイルを使用して複数端末に展開できます。</p>
+<ol>
+<li>Microsoft Intune 管理センター &gt; デバイス &gt; 構成プロファイル &gt; プロファイルの作成</li>
+<li>プラットフォーム: Windows 10 以降、プロファイルの種類: テンプレート を選択し、カスタム で作成</li>
+<li>構成設定にて OMA-URI 設定を追加:<ul>
+<li>Assigned Access の場合:<ul>
+<li>OMA-URI: <code>./Vendor/MSFT/AssignedAccess/Configuration</code></li>
+<li>データ型: 文字列 (XML ファイル)</li>
+<li>値: XML ファイルを指定</li>
+</ul>
+</li>
+<li>Shell Launcher の場合:<ul>
+<li>OMA-URI: <code>./Vendor/MSFT/AssignedAccess/ShellLauncher</code></li>
+<li>データ型: 文字列 (XML ファイル)</li>
+<li>値: XML ファイルを指定</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>構成プロファイルを保存</li>
+<li>対象デバイスを含むグループに、プロファイルを割り当て</li>
+<li>Intune 管理センターより、対象デバイスの状態を確認し、対象デバイスでも構成が変更されたことを確認</li>
+</ol>
+<img src="/blog/2026/08/18/Shell/ConfigurationofKioskforWindows11/CustomTemplate.png" class="" title="OMA-URI の指定">
+
+<h1 id="トラブルシューティング"><a href="#トラブルシューティング" class="headerlink" title="トラブルシューティング"></a>トラブルシューティング</h1><p>キオスク構成が期待通りに動作しない場合、次のポイントを確認してください。</p>
+<ul>
+<li>イベント ログ:<ul>
+<li><code>Microsoft-Windows-AssignedAccess/Admin</code> および <code>Microsoft-Windows-AssignedAccess/Operational</code> を確認します。<code>Operational</code> は既定で無効なため、XML を再適用する前に有効化してください。</li>
+<li>Intune から配布した場合は、<code>Microsoft-Windows-DeviceManagement-Enterprise-Diagnostics-Provider/Admin</code> を確認します。</li>
+<li>自動ログオンに失敗する場合は、<code>Microsoft-Windows-Authentication User Interface/Operational</code> を確認します。</li>
+</ul>
+</li>
+<li>XML の検証: XML のスキーマエラーがある場合、構成は適用されません。エラーの詳細はイベント ログに記録されます。</li>
+<li>AUMID の確認: 指定した AUMID が対象端末に存在しない場合、アプリは表示されません。</li>
+<li>アカウントの確認: 指定したユーザーアカウントが端末上に存在することを確認してください。Assigned Access は管理者アカウントには適用されません。Shell Launcher は管理者アカウントにも適用できますが、カスタム シェルはサインインしたアカウントと同じ権限で実行されるため、標準ユーザー アカウントの使用をお勧めします。</li>
+</ul>
+<h1 id="参考情報"><a href="#参考情報" class="headerlink" title="参考情報"></a>参考情報</h1><ul>
+<li><a target="_blank" rel="noopener" href="https://learn.microsoft.com/ja-jp/windows/configuration/assigned-access/">Windows クライアントでキオスクを構成する</a></li>
+<li><a target="_blank" rel="noopener" href="https://learn.microsoft.com/ja-jp/windows/configuration/assigned-access/shell-launcher/">Shell Launcher を使用して Windows クライアントのキオスクを作成する</a></li>
+<li><a target="_blank" rel="noopener" href="https://learn.microsoft.com/ja-jp/windows/client-management/mdm/assignedaccess-csp">AssignedAccess CSP</a></li>
+<li><a target="_blank" rel="noopener" href="https://learn.microsoft.com/ja-jp/windows/configuration/assigned-access/configuration-file?pivots=windows-11">割り当てられたアクセス構成 XML ファイルを作成する</a></li>
+<li><a target="_blank" rel="noopener" href="https://learn.microsoft.com/ja-jp/windows/configuration/shell-launcher/configuration-file">シェル起動ツール構成ファイルを作成する</a></li>
+</ul>
+<hr>
+<p>以上の内容がお役に立ちましたら幸いです。<br>本記事の内容は執筆時点の情報に基づいており、今後の更新で動作が変更される可能性がありますこと、ご了承ください。</p>
+
+      
+      
+    </div>
+    <footer class="article-footer">
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/blog/2026/08/21/UserInterfaceAndApps/LanguageSupport_IME/windows-security-japanese-display/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">次の記事</strong>
+      <div class="article-nav-title">
+        
+          Windows 11 または Windows Server 2025 のクリーン インストール後に Windows セキュリティが英語表示になる場合の対処
+        
+      </div>
+    </a>
+  
+  
+    <a href="/blog/2026/08/05/ActiveDirectory/PromotionAndDemotion/windows-server-2016-ad-migration-considerations/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">前の記事</strong>
+      <div class="article-nav-title">Windows Server 2016 からの Active Directory 移行、アップグレードにあたっての考慮事項</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">カテゴリ</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Activation/">Activation</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Activation/ESU/">ESU</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Activation/security-SPP/">security-SPP</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/">Active Directory</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Authentication/">Authentication</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/DFSR/">DFSR</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/FunctionalLevel/">FunctionalLevel</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Group-Policy/">Group Policy</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Promotion-and-Demotion/">Promotion and Demotion</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/User-Profile/">User Profile</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Windows-Hello/">Windows Hello</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Windows-Time-Service/">Windows Time Service</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/AppLocker/">AppLocker</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/AppLocker/Active-Directory/">Active Directory</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/AppLocker/Microsoft-Intune/">Microsoft Intune</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/BitLocker/">BitLocker</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Deployment/">Deployment</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Deployment/Feature-on-demand/">Feature on demand</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Deployment/Sysprep/">Sysprep</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Failover-Clustering/">Failover Clustering</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Failover-Clustering/Azure-Local/">Azure Local</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Failover-Clustering/Configuration-and-Management/">Configuration and Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Failover-Clustering/Windows-Server-2025/">Windows Server 2025</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/FileServices/">FileServices</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/FileServices/FTP/">FTP</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/FileServices/SMB/">SMB</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Hyper-V/">Hyper-V</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Hyper-V/Configuration-and-Management/">Configuration and Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Hyper-V/Migration/">Migration</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Microsoft-Connected-Cache/">Microsoft Connected Cache</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/">Networking</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/BITS/">BITS</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/Bluetooth/">Bluetooth</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/DHCP/">DHCP</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/DNS/">DNS</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/Firewall/">Firewall</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/LBFO/">LBFO</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/NCSI/">NCSI</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/NetworkInterface/">NetworkInterface</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/Proxy/">Proxy</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/TCPIP/">TCPIP</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/OpenSSH/">OpenSSH</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/">Performance</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/Hang-up-BSoD/">Hang-up/BSoD</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/No-Boot/">No Boot</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/Slow-Response/">Slow Response</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/System-Resource/">System Resource</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/Tools/">Tools</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/">Public Key Infrastructure</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Certificate-Authority/">Certificate Authority</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Certificate-Management/">Certificate Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Code-Signing/">Code Signing</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Fundamental/">Fundamental</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/SSL-TLS-Communication/">SSL TLS Communication</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/SSL-TLS-Connection/">SSL TLS Connection</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Smart-Card-Logon/">Smart Card Logon</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/">Remote Desktop</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/Azure-Virtual-Desktop-AVD/">Azure Virtual Desktop (AVD)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/Remote-Desktop-Service-RDS/">Remote Desktop Service (RDS)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/Windows-Virtual-Desktop-WVD/">Windows Virtual Desktop (WVD)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/RemoteAccess/">RemoteAccess</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/RemoteAccess/%E3%83%80%E3%82%A4%E3%83%A4%E3%83%AB%E3%82%A2%E3%83%83%E3%83%97%E6%8E%A5%E7%B6%9A/">ダイヤルアップ接続</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Security/">Security</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Security/WDAC/">WDAC</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Setup/">Setup</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Setup/Feature-Update-FU/">Feature Update (FU)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Shell/">Shell</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Shell/Explorer/">Explorer</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Shell/StartMenu/">StartMenu</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/">Storage</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/Backup/">Backup</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/FSRM/">FSRM</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/Management/">Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/StorageMigrationService/">StorageMigrationService</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Support-Request/">Support Request</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/UEFI/">UEFI</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/UEFI/Secure-Boot/">Secure Boot</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/">User Interface and Apps</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Command-Prompt/">Command Prompt</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/EventLog/">EventLog</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Language-Support/">Language Support</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Microsoft-Store/">Microsoft Store</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Performance/">Performance</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/PowerShell/">PowerShell</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Printing-%E5%8D%B0%E5%88%B7/">Printing (印刷)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Server-Management/">Server Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Taskscheduler/">Taskscheduler</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Windows-Management-Instrumentation/">Windows Management Instrumentation</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps-Language-support/">User Interface and Apps - Language support</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-365/">Windows 365</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Admin-Center/">Windows Admin Center</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Search/">Windows Search</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/">Windows Update</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Delivery-Optimization-DO/">Delivery Optimization (DO)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Feature-Update-FU/">Feature Update (FU)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Quality-Update-QU/">Quality Update (QU)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Windows-Update-Agent/">Windows Update Agent</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Windows-Update-Agent-WUA/">Windows Update Agent (WUA)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/">WirelessNetwork</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/NPS/">NPS</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/Wi-Fi/">Wi-Fi</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/%E3%83%A2%E3%83%90%E3%82%A4%E3%83%AB-%E3%83%96%E3%83%AD%E3%83%BC%E3%83%89%E3%83%90%E3%83%B3%E3%83%89%E6%8E%A5%E7%B6%9A-LTE/">モバイル ブロードバンド接続 (LTE)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/%E7%B5%84%E7%B9%94%E7%B4%B9%E4%BB%8B%E3%83%96%E3%83%AD%E3%82%B0%EF%BC%88Windows-Commercial%EF%BC%89/">組織紹介ブログ（Windows Commercial）</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最近の投稿</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/blog/2026/08/27/Activation/FeatureUpdate-ActivationChanged/">機能更新プログラム (Feature Update) 適用後に OS のライセンス認証が外れる動作とその対処方法について</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/08/23/UserInterfaceAndApps/LanguageSupport_IME/unicode-pua-characters-not-displayed-or-printed-correctly/">Unicode 私用領域 (PUA) に割り当てられた EUDC 文字（外字）が正しく表示・印刷されない場合がある</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/08/21/UserInterfaceAndApps/LanguageSupport_IME/windows-security-japanese-display/">Windows 11 または Windows Server 2025 のクリーン インストール後に Windows セキュリティが英語表示になる場合の対処</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/08/18/Shell/ConfigurationofKioskforWindows11/">Windows 11 で Kiosk を構成する方法</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/08/05/ActiveDirectory/PromotionAndDemotion/windows-server-2016-ad-migration-considerations/">Windows Server 2016 からの Active Directory 移行、アップグレードにあたっての考慮事項</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">アーカイブ</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2026/08/">2026 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2026/07/">2026 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2026/06/">2026 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2026/05/">2026 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2026/04/">2026 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2026/03/">2026 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2026/02/">2026 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2026/01/">2026 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/12/">2025 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/11/">2025 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/10/">2025 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/09/">2025 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/08/">2025 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/07/">2025 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/06/">2025 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/05/">2025 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/04/">2025 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/03/">2025 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/02/">2025 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/01/">2025 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/12/">2024 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/11/">2024 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/10/">2024 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/09/">2024 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/08/">2024 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/07/">2024 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/06/">2024 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/05/">2024 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/04/">2024 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/03/">2024 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/02/">2024 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/01/">2024 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/12/">2023 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/11/">2023 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/10/">2023 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/09/">2023 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/08/">2023 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/07/">2023 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/06/">2023 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/05/">2023 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/04/">2023 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/03/">2023 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/02/">2023 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/01/">2023 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/12/">2022 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/11/">2022 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/10/">2022 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/09/">2022 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/08/">2022 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/07/">2022 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/06/">2022 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/05/">2022 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/04/">2022 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/03/">2022 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/02/">2022 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/01/">2022 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/12/">2021 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/11/">2021 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/10/">2021 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/09/">2021 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/08/">2021 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/07/">2021 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/06/">2021 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/05/">2021 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/04/">2021 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/03/">2021 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/02/">2021 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/01/">2021 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/12/">2020 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/11/">2020 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/10/">2020 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/07/">2020 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/03/">2020 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2019/03/">2019 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/11/">2018 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/10/">2018 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/09/">2018 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/08/">2018 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/07/">2018 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/06/">2018 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/04/">2018 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/02/">2018 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/12/">2017 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/11/">2017 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/09/">2017 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/05/">2017 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/03/">2017 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/02/">2017 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2016/08/">2016 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2016/05/">2016 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2014/03/">2014 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2012/02/">2012 / 02</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2026 Microsoft Japan Windows Technology Support Team<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/blog/" class="mobile-nav-link">Home</a>
+  
+    <a href="/blog/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+<script src="/blog/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>
