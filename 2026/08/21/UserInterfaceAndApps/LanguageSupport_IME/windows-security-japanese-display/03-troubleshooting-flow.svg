@@ -1,0 +1,82 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720" role="img" aria-labelledby="title desc">
+  <title id="title">Windows セキュリティ英語表示の対処フロー</title>
+  <desc id="desc">Windows セキュリティを終了し、Windows Update または WSUS、必要に応じて Microsoft Update カタログから KB5007651 を適用し、改善しない場合に情報を記録する判断フローです。</desc>
+  <defs>
+    <pattern id="grid" width="36" height="36" patternUnits="userSpaceOnUse">
+      <path d="M36 0H0V36" fill="none" stroke="#d8e0e8" stroke-width="1" opacity="0.4"/>
+    </pattern>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+      <path d="M0,0 L10,5 L0,10 Z" fill="#53697a"/>
+    </marker>
+  </defs>
+  <rect width="1280" height="720" fill="#f7f9fc"/>
+  <rect width="1280" height="720" fill="url(#grid)"/>
+  <rect x="0" y="0" width="1280" height="10" fill="#40576d"/>
+  <text x="64" y="76" font-family="Segoe UI, Yu Gothic UI, sans-serif" font-size="43" font-weight="700" fill="#172a3a">日本語表示へ戻すための確認フロー</text>
+  <text x="66" y="116" font-family="Segoe UI, Yu Gothic UI, sans-serif" font-size="22" fill="#506577">通常の更新経路を優先し、未改善時だけ追加情報を確認します</text>
+
+  <rect x="63" y="170" width="255" height="82" rx="8" fill="#ffffff" stroke="#d49a27" stroke-width="3"/>
+  <circle cx="91" cy="211" r="19" fill="#d49a27"/>
+  <text x="91" y="219" text-anchor="middle" font-family="Segoe UI, sans-serif" font-size="22" font-weight="700" fill="#ffffff">!</text>
+  <text x="121" y="202" font-family="Segoe UI, Yu Gothic UI, sans-serif" font-size="14" font-weight="700" fill="#624817">Windows の主な画面は日本語</text>
+  <text x="121" y="224" font-family="Segoe UI, Yu Gothic UI, sans-serif" font-size="14" font-weight="700" fill="#624817">Windows セキュリティだけ英語</text>
+
+  <line x1="318" y1="211" x2="375" y2="211" stroke="#53697a" stroke-width="4" marker-end="url(#arrow)"/>
+  <rect x="388" y="170" width="255" height="82" rx="8" fill="#ffffff" stroke="#8ea2b2" stroke-width="3"/>
+  <rect x="420" y="190" width="46" height="42" rx="5" fill="#40576d"/>
+  <line x1="430" y1="202" x2="456" y2="202" stroke="#ffffff" stroke-width="4"/>
+  <line x1="430" y1="212" x2="456" y2="212" stroke="#ffffff" stroke-width="4"/>
+  <line x1="430" y1="222" x2="448" y2="222" stroke="#ffffff" stroke-width="4"/>
+  <text x="478" y="202" font-family="Segoe UI, Yu Gothic UI, sans-serif" font-size="16" font-weight="700" fill="#2b4355">Windows セキュリティ</text>
+  <text x="478" y="226" font-family="Segoe UI, Yu Gothic UI, sans-serif" font-size="16" font-weight="700" fill="#2b4355">アプリを終了</text>
+
+  <line x1="643" y1="211" x2="700" y2="211" stroke="#53697a" stroke-width="4" marker-end="url(#arrow)"/>
+  <polygon points="842,150 970,211 842,272 714,211" fill="#edf4f8" stroke="#176b87" stroke-width="3"/>
+  <text x="842" y="202" text-anchor="middle" font-family="Segoe UI, Yu Gothic UI, sans-serif" font-size="17" font-weight="700" fill="#234f62">Windows Update / WSUS で</text>
+  <text x="842" y="226" text-anchor="middle" font-family="Segoe UI, Yu Gothic UI, sans-serif" font-size="17" font-weight="700" fill="#234f62">KB5007651 が提供される?</text>
+
+  <line x1="970" y1="211" x2="1027" y2="211" stroke="#53697a" stroke-width="4" marker-end="url(#arrow)"/>
+  <text x="995" y="194" font-family="Segoe UI, Yu Gothic UI, sans-serif" font-size="16" font-weight="700" fill="#087f6b">はい</text>
+  <rect x="1040" y="170" width="177" height="82" rx="8" fill="#e8f5f1" stroke="#087f6b" stroke-width="3"/>
+  <text x="1129" y="202" text-anchor="middle" font-family="Segoe UI, Yu Gothic UI, sans-serif" font-size="18" font-weight="700" fill="#174d43">通常経路から</text>
+  <text x="1129" y="226" text-anchor="middle" font-family="Segoe UI, Yu Gothic UI, sans-serif" font-size="18" font-weight="700" fill="#174d43">最新版を適用</text>
+
+  <line x1="842" y1="272" x2="842" y2="336" stroke="#53697a" stroke-width="4" marker-end="url(#arrow)"/>
+  <text x="857" y="309" font-family="Segoe UI, Yu Gothic UI, sans-serif" font-size="16" font-weight="700" fill="#bd7300">いいえ</text>
+  <rect x="697" y="349" width="290" height="88" rx="8" fill="#fff6e4" stroke="#bd7300" stroke-width="3"/>
+  <text x="842" y="379" text-anchor="middle" font-family="Segoe UI, Yu Gothic UI, sans-serif" font-size="18" font-weight="700" fill="#6f490b">Microsoft Update カタログから</text>
+  <text x="842" y="405" text-anchor="middle" font-family="Segoe UI, Yu Gothic UI, sans-serif" font-size="18" font-weight="700" fill="#6f490b">最新版を管理者として実行</text>
+
+  <line x1="1129" y1="252" x2="1129" y2="468" stroke="#53697a" stroke-width="4"/>
+  <line x1="842" y1="437" x2="842" y2="468" stroke="#53697a" stroke-width="4"/>
+  <line x1="842" y1="468" x2="1129" y2="468" stroke="#53697a" stroke-width="4"/>
+  <line x1="985" y1="468" x2="985" y2="502" stroke="#53697a" stroke-width="4" marker-end="url(#arrow)"/>
+  <rect x="840" y="515" width="290" height="72" rx="8" fill="#ffffff" stroke="#8ea2b2" stroke-width="3"/>
+  <text x="985" y="545" text-anchor="middle" font-family="Segoe UI, Yu Gothic UI, sans-serif" font-size="18" font-weight="700" fill="#2b4355">Windows セキュリティを開き直す</text>
+  <text x="985" y="569" text-anchor="middle" font-family="Segoe UI, Yu Gothic UI, sans-serif" font-size="15" fill="#526a7b">再起動を求められた場合のみ再起動</text>
+
+  <line x1="840" y1="551" x2="749" y2="551" stroke="#53697a" stroke-width="4" marker-end="url(#arrow)"/>
+  <polygon points="621,490 749,551 621,612 493,551" fill="#edf4f8" stroke="#176b87" stroke-width="3"/>
+  <text x="621" y="542" text-anchor="middle" font-family="Segoe UI, Yu Gothic UI, sans-serif" font-size="19" font-weight="700" fill="#234f62">日本語表示へ</text>
+  <text x="621" y="567" text-anchor="middle" font-family="Segoe UI, Yu Gothic UI, sans-serif" font-size="19" font-weight="700" fill="#234f62">改善した?</text>
+
+  <line x1="493" y1="551" x2="404" y2="551" stroke="#53697a" stroke-width="4" marker-end="url(#arrow)"/>
+  <text x="439" y="533" font-family="Segoe UI, Yu Gothic UI, sans-serif" font-size="16" font-weight="700" fill="#087f6b">はい</text>
+  <rect x="222" y="510" width="169" height="82" rx="8" fill="#e8f5f1" stroke="#087f6b" stroke-width="3"/>
+  <circle cx="266" cy="551" r="22" fill="#087f6b"/>
+  <path d="M255 551 L264 560 L280 541" fill="none" stroke="#ffffff" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="329" y="544" text-anchor="middle" font-family="Segoe UI, Yu Gothic UI, sans-serif" font-size="20" font-weight="700" fill="#174d43">完了</text>
+  <text x="329" y="568" text-anchor="middle" font-family="Segoe UI, Yu Gothic UI, sans-serif" font-size="15" fill="#476b63">通常運用へ</text>
+
+  <line x1="621" y1="612" x2="621" y2="644" stroke="#53697a" stroke-width="4" marker-end="url(#arrow)"/>
+  <text x="636" y="635" font-family="Segoe UI, Yu Gothic UI, sans-serif" font-size="16" font-weight="700" fill="#b44a36">いいえ</text>
+  <rect x="420" y="656" width="402" height="48" rx="8" fill="#fff0ed" stroke="#b44a36" stroke-width="3"/>
+  <text x="621" y="687" text-anchor="middle" font-family="Segoe UI, Yu Gothic UI, sans-serif" font-size="17" font-weight="700" fill="#743326">画面、OS ビルド、バージョン情報を記録して追加確認</text>
+
+  <rect x="63" y="303" width="515" height="130" rx="8" fill="#263b4c"/>
+  <text x="91" y="339" font-family="Segoe UI, Yu Gothic UI, sans-serif" font-size="19" font-weight="700" fill="#ffffff">判断のポイント</text>
+  <circle cx="96" cy="369" r="5" fill="#67d2b5"/>
+  <text x="114" y="376" font-family="Segoe UI, Yu Gothic UI, sans-serif" font-size="17" fill="#dfeaf0">最初から言語パックを入れ直さない</text>
+  <circle cx="96" cy="400" r="5" fill="#e9b84a"/>
+  <text x="114" y="407" font-family="Segoe UI, Yu Gothic UI, sans-serif" font-size="17" fill="#dfeaf0">古い固定版ではなく、実施時点の最新版を選ぶ</text>
+</svg>
