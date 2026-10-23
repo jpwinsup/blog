@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-180187723-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-180187723-1');
+</script>
+<!-- End Google Analytics -->
+
+  
+  <title>Group Policy の強化 (2026.02) | Microsoft Japan Windows Technology Support Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="こんにちは。Windows Commercial Support Directory Services チームです。 本記事では、2026 年 2 月に公開されたグループ ポリシーの 6 つの強化点についてご案内いたします。いずれもトラブルシューティングに役立つ機能ですので、ぜひご活用ください。 対象 OS:  Windows 11 24H2&#x2F;25H2: 2026 年 2 月 24 日リリースの更">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Group Policy の強化 (2026.02)">
+<meta property="og:url" content="https://jpwinsup.github.io/blog/2026/10/23/ActiveDirectory/GroupPolicy/Enhancements-to-Group-Policy-2026-2/index.html">
+<meta property="og:site_name" content="Microsoft Japan Windows Technology Support Blog">
+<meta property="og:description" content="こんにちは。Windows Commercial Support Directory Services チームです。 本記事では、2026 年 2 月に公開されたグループ ポリシーの 6 つの強化点についてご案内いたします。いずれもトラブルシューティングに役立つ機能ですので、ぜひご活用ください。 対象 OS:  Windows 11 24H2&#x2F;25H2: 2026 年 2 月 24 日リリースの更">
+<meta property="og:locale" content="ja_JP">
+<meta property="og:image" content="https://jpwinsup.github.io/blog/2026/10/23/ActiveDirectory/GroupPolicy/Enhancements-to-Group-Policy-2026-2/image-4.png">
+<meta property="article:published_time" content="2026-10-23T11:59:46.000Z">
+<meta property="article:modified_time" content="2026-10-23T09:00:08.220Z">
+<meta property="article:author" content="Microsoft Japan Windows Technology Support Team">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://jpwinsup.github.io/blog/2026/10/23/ActiveDirectory/GroupPolicy/Enhancements-to-Group-Policy-2026-2/image-4.png">
+  
+    <link rel="alternate" href="/blog/atom.xml" title="Microsoft Japan Windows Technology Support Blog" type="application/atom+xml">
+  
+
+  <link rel="icon" href="/blog/favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="/blog/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/blog/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/blog/favicon-16x16.png">
+  <link rel="manifest" href="/blog/site.webmanifest">
+  <link rel="mask-icon" href="/blog/safari-pinned-tab.svg" color="#5bbad5">
+  <meta name="msapplication-TileColor" content="#ffffff">
+  <meta name="theme-color" content="#ffffff">
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/blog/css/style.css">
+
+<meta name="generator" content="Hexo 5.2.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="site-header-logo"></div>
+  <div id="site-header-blog-wrapper"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        <div id="ms-logo"></div>
+        
+          <a class="main-nav-link" href="/blog/">Home</a>
+        
+          <a class="main-nav-link" href="/blog/archives">Archives</a>
+        
+        <a class="main-nav-link" target="_blank" rel="noopener" href="https://cssjpn.github.io/">サポート情報</a>
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/blog/atom.xml" title="RSSフィード"></a>
+        
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//www.bing.com/search" method="get" accept-charset="UTF-8" name="bing-search" onsubmit="var f=this;if(f['q'].value){var searchUrl =  'https://www.bing.com/search?q=' +  encodeURIComponent(f['q'].value + ' site:' + f['sitesearch'].value) ;window.open(searchUrl, 'blank') };return false;" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="検索"><button type="submit" id="nav-search-btn" class="search-form-submit"></button><input type="hidden" name="sitesearch" value="https://jpwinsup.github.io/blog"></form>
+      </div>
+    </div>
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/blog/" id="logo">Microsoft Japan Windows Technology Support Blog</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/blog/" id="subtitle">日本マイクロソフト Windows Support チームによる、サポート情報 Blog です。</a>
+        </h2>
+      
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-ActiveDirectory/GroupPolicy/Enhancements-to-Group-Policy-2026-2" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    
+    
+      <header class="article-header-single">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Group Policy の強化 (2026.02)
+    </h1>
+  
+
+      </header>
+      <div class="article-share">
+        Published Date: 
+        <a href="/blog/2026/10/23/ActiveDirectory/GroupPolicy/Enhancements-to-Group-Policy-2026-2/" class="article-date-single">
+  <time datetime="2026-10-23T11:59:46.000Z" itemprop="datePublished">2026-10-23</time>
+</a>
+        
+  <div class="article-category">
+    <a class="article-category-link" href="/blog/categories/Active-Directory/">Active Directory</a>►<a class="article-category-link" href="/blog/categories/Active-Directory/Group-Policy/">Group Policy</a>
+  </div>
+
+        
+        <a href="https://github.com/jpwinsup/blog/issues/new?title=&body=%EF%BB%BF%0A%0A---%0A%0A%23%23%23%23+Document+Details%0A%0A*+Article+ID%3A+dc138bfa-8177-5800-9a06-906929a4164e%0A*+TITLE%3A+Group+Policy+%E3%81%AE%E5%BC%B7%E5%8C%96+%282026.02%29%0A*+URL+https%3A%2F%2Fjpwinsup.github.io%2Fblog%2F2026%2F10%2F23%2FActiveDirectory%2FGroupPolicy%2FEnhancements-to-Group-Policy-2026-2%2F%0A*+SourceFileName%3A+source%2F_posts%2FActiveDirectory%2FGroupPolicy%2FEnhancements-to-Group-Policy-2026-2.md%0A" class="article-github-issue-link" target="_blank" rel="noopener noreferrer">feedback</a>
+        
+        <a data-url="https://jpwinsup.github.io/blog/2026/10/23/ActiveDirectory/GroupPolicy/Enhancements-to-Group-Policy-2026-2/" data-id="cmvkqxq4601m3r20c1kcx2xg4" class="article-share-link">共有</a>
+      </div>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>こんにちは。Windows Commercial Support Directory Services チームです。</p>
+<p>本記事では、2026 年 2 月に公開されたグループ ポリシーの 6 つの強化点についてご案内いたします。<br>いずれもトラブルシューティングに役立つ機能ですので、ぜひご活用ください。</p>
+<p>対象 OS:</p>
+<ul>
+<li>Windows 11 24H2/25H2: 2026 年 2 月 24 日リリースの更新プログラムで既定で有効になります。</li>
+<li>Windows Server 2022/2025: 2026 年 6 月 9 日リリースの更新プログラムで既定で有効になります。</li>
+</ul>
+<h2 id="1-GPSVC-ログのタイムスタンプ強化"><a href="#1-GPSVC-ログのタイムスタンプ強化" class="headerlink" title="(1) GPSVC ログのタイムスタンプ強化"></a>(1) GPSVC ログのタイムスタンプ強化</h2><p>概要:</p>
+<ul>
+<li>従来の GPSVC ログには時刻のみが記録されていましたが、今回の機能強化により、日付を含むタイムスタンプが記録されるようになりました。</li>
+<li>元情報: <a target="_blank" rel="noopener" href="https://techcommunity.microsoft.com/blog/askds/reading-gpsvc-like-a-crime-novel/4497135">Reading GPSVC Like a Crime Novel | Microsoft Community Hub</a></li>
+</ul>
+<p>// 2 月 24 日リリースの更新プログラム適用前のログ</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">GPSVC(1898.16b0) hh:mm:ss:fff RefreshPolicyForPrincipal: Entering with bMachine &#x3D; 1, SID &#x3D; null, options: 0, dwTimeout &#x3D; 600000, currentProcessId &#x3D; 6296, processImageName &#x3D; C:\Windows\System32\gpupdate.exe</span><br><span class="line">GPSVC(1a4.2ad4) hh:mm:ss:fff Server_ProcessRefresh:: bMachine &#x3D; 1, SID &#x3D; null, bForceRefresh &#x3D; 0, bRefreshAllUsers &#x3D; 0, dwTimeout &#x3D; 600000</span><br></pre></td></tr></table></figure>
+
+<p>// 2 月 24 日リリースの更新プログラム適用後のログ</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">GPSVC(7f0.2150) 2026-mm-dd hh:mm:ss:fff RefreshPolicyForPrincipal: Entering with bMachine &#x3D; 0, SID &#x3D; null, options: 1, dwTimeout &#x3D; 600000, currentProcessId &#x3D; 2032, processImageName &#x3D; C:\Windows\System32\gpupdate.exe</span><br><span class="line">GPSVC(774.19ac) 2026-mm-dd hh:mm:ss:fff Server_ProcessRefresh:: bMachine &#x3D; 0, SID &#x3D; null, bForceRefresh &#x3D; 1, bRefreshAllUsers &#x3D; 0, dwTimeout &#x3D; 600000</span><br></pre></td></tr></table></figure>
+
+<h2 id="2-registry-pol-破損検出"><a href="#2-registry-pol-破損検出" class="headerlink" title="(2) registry.pol 破損検出"></a>(2) registry.pol 破損検出</h2><p>概要:</p>
+<ul>
+<li>グループ ポリシーのイベント ID 1096 のエラー内容がより具体的に出力されるようになりました。</li>
+<li>元情報: <a target="_blank" rel="noopener" href="https://techcommunity.microsoft.com/blog/askds/when-group-policy-goes-haywire-spotting-registry-pol-corruption-fast-and-other-p/4496127">When Group Policy Goes Haywire: Spotting registry.pol Corruption Fast (and other problems too) | Microsoft Community Hub</a></li>
+</ul>
+<p>例 1: registry.pol が破損している場合</p>
+<p>// これまでのメッセージ</p>
+<p>The data is invalid.</p>
+<p>// 更新プログラム適用後のメッセージ</p>
+<p>Error during registry file parsing: Invalid file signature</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line">ログの名前:         System</span><br><span class="line">ソース:           Microsoft-Windows-GroupPolicy</span><br><span class="line">日付:            2026&#x2F;mm&#x2F;dd hh:mm:ss</span><br><span class="line">イベント ID:       1096</span><br><span class="line">タスクのカテゴリ:      なし</span><br><span class="line">レベル:           エラー</span><br><span class="line">キーワード:         </span><br><span class="line">ユーザー:          SYSTEM</span><br><span class="line">コンピューター:       xxxxxxxx.xxxxx.xxx</span><br><span class="line">説明:</span><br><span class="line">グループ ポリシーの処理に失敗しました。グループ ポリシー オブジェクト LocalGPO のレジストリに基づいたポリシー設定を適用できませんでした。</span><br><span class="line">このイベントが解決されるまで、グループ ポリシー設定は解決されません。エラーの原因となったファイル名およびパスの情報についてはイベントの詳細を参照してください。</span><br><span class="line">イベント XML:</span><br><span class="line">&lt;Event xmlns&#x3D;&quot;http:&#x2F;&#x2F;schemas.microsoft.com&#x2F;win&#x2F;2004&#x2F;08&#x2F;events&#x2F;event&quot;&gt;</span><br><span class="line">  &lt;System&gt;</span><br><span class="line">    &lt;Provider Name&#x3D;&quot;Microsoft-Windows-GroupPolicy&quot; Guid&#x3D;&quot;&#123;aea1b4fa-97d1-45f2-a64c-4d69fffd92c9&#125;&quot; &#x2F;&gt;</span><br><span class="line">    &lt;EventID&gt;1096&lt;&#x2F;EventID&gt;</span><br><span class="line">    &lt;Version&gt;0&lt;&#x2F;Version&gt;</span><br><span class="line">    &lt;Level&gt;2&lt;&#x2F;Level&gt;</span><br><span class="line">    &lt;Task&gt;0&lt;&#x2F;Task&gt;</span><br><span class="line">    &lt;Opcode&gt;1&lt;&#x2F;Opcode&gt;</span><br><span class="line">    &lt;Keywords&gt;0x8000000000000000&lt;&#x2F;Keywords&gt;</span><br><span class="line">    &lt;TimeCreated SystemTime&#x3D;&quot;2026-mm-ddThh:mm:ss.fffffffZ&quot; &#x2F;&gt;</span><br><span class="line">    &lt;EventRecordID&gt;2457&lt;&#x2F;EventRecordID&gt;</span><br><span class="line">    &lt;Correlation ActivityID&#x3D;&quot;&#123;5cf4894d-699b-4c8b-ac87-382c18cacba3&#125;&quot; &#x2F;&gt;</span><br><span class="line">    &lt;Execution ProcessID&#x3D;&quot;7008&quot; ThreadID&#x3D;&quot;3164&quot; &#x2F;&gt;</span><br><span class="line">    &lt;Channel&gt;System&lt;&#x2F;Channel&gt;</span><br><span class="line">    &lt;Computer&gt;xxxxxxxx.xxxxx.xxx&lt;&#x2F;Computer&gt;</span><br><span class="line">    &lt;Security UserID&#x3D;&quot;S-1-5-18&quot; &#x2F;&gt;</span><br><span class="line">  &lt;&#x2F;System&gt;</span><br><span class="line">  &lt;EventData&gt;</span><br><span class="line">    &lt;Data Name&#x3D;&quot;SupportInfo1&quot;&gt;2&lt;&#x2F;Data&gt;</span><br><span class="line">    &lt;Data Name&#x3D;&quot;SupportInfo2&quot;&gt;1732&lt;&#x2F;Data&gt;</span><br><span class="line">    &lt;Data Name&#x3D;&quot;ProcessingMode&quot;&gt;0&lt;&#x2F;Data&gt;</span><br><span class="line">    &lt;Data Name&#x3D;&quot;ProcessingTimeInMilliseconds&quot;&gt;375&lt;&#x2F;Data&gt;</span><br><span class="line">    &lt;Data Name&#x3D;&quot;ErrorCode&quot;&gt;13&lt;&#x2F;Data&gt;</span><br><span class="line">    &lt;Data Name&#x3D;&quot;ErrorDescription&quot;&gt;Error during registry file parsing: Invalid file signature&lt;&#x2F;Data&gt;</span><br><span class="line">    &lt;Data Name&#x3D;&quot;DCName&quot;&gt;\\xxxxxxxx.xxxxx.xxx&lt;&#x2F;Data&gt;</span><br><span class="line">    &lt;Data Name&#x3D;&quot;GPOCNName&quot;&gt;LocalGPO&lt;&#x2F;Data&gt;</span><br><span class="line">    &lt;Data Name&#x3D;&quot;FilePath&quot;&gt;C:\WINDOWS\System32\GroupPolicy\Machine\registry.pol&lt;&#x2F;Data&gt;</span><br><span class="line">  &lt;&#x2F;EventData&gt;</span><br><span class="line">&lt;&#x2F;Event&gt;</span><br></pre></td></tr></table></figure>
+
+<p>例 2: SYSTEM アカウントに registry.pol へのアクセス権がない場合</p>
+<p>// これまでのメッセージ</p>
+<p>Access is denied. </p>
+<p>// 更新プログラム適用後のメッセージ</p>
+<p>Error during registry file parsing: CreateFile failed with 5</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line">ログの名前:         System</span><br><span class="line">ソース:           Microsoft-Windows-GroupPolicy</span><br><span class="line">日付:            2026&#x2F;mm&#x2F;dd hh:mm:ss</span><br><span class="line">イベント ID:       1096</span><br><span class="line">タスクのカテゴリ:      なし</span><br><span class="line">レベル:           エラー</span><br><span class="line">キーワード:         </span><br><span class="line">ユーザー:          SYSTEM</span><br><span class="line">コンピューター:       xxxxxxxx.xxxxx.xxx</span><br><span class="line">説明:</span><br><span class="line">グループ ポリシーの処理に失敗しました。グループ ポリシー オブジェクト LocalGPO のレジストリに基づいたポリシー設定を適用できませんでした。このイベントが解決されるまで、グループ ポリシー設定は解決されません。エラーの原因となったファイル名およびパスの情報についてはイベントの詳細を参照してください。</span><br><span class="line">イベント XML:</span><br><span class="line">&lt;Event xmlns&#x3D;&quot;http:&#x2F;&#x2F;schemas.microsoft.com&#x2F;win&#x2F;2004&#x2F;08&#x2F;events&#x2F;event&quot;&gt;</span><br><span class="line">  &lt;System&gt;</span><br><span class="line">    &lt;Provider Name&#x3D;&quot;Microsoft-Windows-GroupPolicy&quot; Guid&#x3D;&quot;&#123;aea1b4fa-97d1-45f2-a64c-4d69fffd92c9&#125;&quot; &#x2F;&gt;</span><br><span class="line">    &lt;EventID&gt;1096&lt;&#x2F;EventID&gt;</span><br><span class="line">    &lt;Version&gt;0&lt;&#x2F;Version&gt;</span><br><span class="line">    &lt;Level&gt;2&lt;&#x2F;Level&gt;</span><br><span class="line">    &lt;Task&gt;0&lt;&#x2F;Task&gt;</span><br><span class="line">    &lt;Opcode&gt;1&lt;&#x2F;Opcode&gt;</span><br><span class="line">    &lt;Keywords&gt;0x8000000000000000&lt;&#x2F;Keywords&gt;</span><br><span class="line">    &lt;TimeCreated SystemTime&#x3D;&quot;2026-mm-ddThh:mm:ss.fffffffZ&quot; &#x2F;&gt;</span><br><span class="line">    &lt;EventRecordID&gt;2460&lt;&#x2F;EventRecordID&gt;</span><br><span class="line">    &lt;Correlation ActivityID&#x3D;&quot;&#123;ed96b5f8-0908-4e74-afaf-5b44da98421a&#125;&quot; &#x2F;&gt;</span><br><span class="line">    &lt;Execution ProcessID&#x3D;&quot;7008&quot; ThreadID&#x3D;&quot;3164&quot; &#x2F;&gt;</span><br><span class="line">    &lt;Channel&gt;System&lt;&#x2F;Channel&gt;</span><br><span class="line">    &lt;Computer&gt;xxxxxxxx.xxxxx.xxx&lt;&#x2F;Computer&gt;</span><br><span class="line">    &lt;Security UserID&#x3D;&quot;S-1-5-18&quot; &#x2F;&gt;</span><br><span class="line">  &lt;&#x2F;System&gt;</span><br><span class="line">  &lt;EventData&gt;</span><br><span class="line">    &lt;Data Name&#x3D;&quot;SupportInfo1&quot;&gt;2&lt;&#x2F;Data&gt;</span><br><span class="line">    &lt;Data Name&#x3D;&quot;SupportInfo2&quot;&gt;1732&lt;&#x2F;Data&gt;</span><br><span class="line">    &lt;Data Name&#x3D;&quot;ProcessingMode&quot;&gt;0&lt;&#x2F;Data&gt;</span><br><span class="line">    &lt;Data Name&#x3D;&quot;ProcessingTimeInMilliseconds&quot;&gt;375&lt;&#x2F;Data&gt;</span><br><span class="line">    &lt;Data Name&#x3D;&quot;ErrorCode&quot;&gt;5&lt;&#x2F;Data&gt;</span><br><span class="line">    &lt;Data Name&#x3D;&quot;ErrorDescription&quot;&gt;Error during registry file parsing: CreateFile failed with 5&lt;&#x2F;Data&gt;</span><br><span class="line">    &lt;Data Name&#x3D;&quot;DCName&quot;&gt;\\xxxxxxxx.xxxxx.xxx&lt;&#x2F;Data&gt;</span><br><span class="line">    &lt;Data Name&#x3D;&quot;GPOCNName&quot;&gt;LocalGPO&lt;&#x2F;Data&gt;</span><br><span class="line">    &lt;Data Name&#x3D;&quot;FilePath&quot;&gt;C:\WINDOWS\System32\GroupPolicy\Machine\registry.pol&lt;&#x2F;Data&gt;</span><br><span class="line">  &lt;&#x2F;EventData&gt;</span><br><span class="line">&lt;&#x2F;Event&gt;</span><br></pre></td></tr></table></figure>
+
+<p>なお、これらのイベントが記録された際の GPSVC ログの出力内容には変更がなく、従来と同じ情報が記録されます。</p>
+<h2 id="3-より詳細なエラー情報"><a href="#3-より詳細なエラー情報" class="headerlink" title="(3) より詳細なエラー情報"></a>(3) より詳細なエラー情報</h2><p>概要:</p>
+<ul>
+<li>Group Policy Preferences (グループ ポリシーの基本設定、以下 GPP) の診断機能が大幅に改善されました。</li>
+<li>従来のイベント ID 4098 でも項目名やエラーコードは確認できましたが、詳細な原因の特定には追加のログ取得が必要となる場合がありました。新たに追加されたイベント ID 4117 では、原因の調査に役立つ、より詳細な情報を確認できます。</li>
+<li>元情報:<a target="_blank" rel="noopener" href="https://techcommunity.microsoft.com/blog/askds/from-guesswork-to-clarity-gpp-diagnostics-improve-in-windows-server-2025-and-win/4499474">From Guesswork to Clarity: GPP Diagnostics Improve in Windows Server 2025 and Windows 11 24H2 | Mic…</a></li>
+</ul>
+<p>// ID:4098</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">ログの名前:         Application</span><br><span class="line">ソース:           Group Policy Files</span><br><span class="line">日付:            2026&#x2F;mm&#x2F;dd hh:mm:ss</span><br><span class="line">イベント ID:       4098</span><br><span class="line">タスクのカテゴリ:      (2)</span><br><span class="line">レベル:           警告</span><br><span class="line">キーワード:         クラシック</span><br><span class="line">ユーザー:          SYSTEM</span><br><span class="line">コンピューター:       xxxxxxxx.xxxxx.xxx</span><br><span class="line">説明:</span><br><span class="line">&#39;GPP_File &#123;D3ED5948-E3FD-411A-AAB1-AD1DF283EBB7&#125;&#39; グループ ポリシー オブジェクトの コンピューター &#39;GPP_File.txt&#39; 基本設定項目は、エラー コード &#39;0x80070002 指定されたファイルが見つかりません。&#39; このエラーは非表示にされました。 で失敗したため適用されませんでした</span><br><span class="line">イベント XML:</span><br><span class="line">&lt;Event xmlns&#x3D;&quot;http:&#x2F;&#x2F;schemas.microsoft.com&#x2F;win&#x2F;2004&#x2F;08&#x2F;events&#x2F;event&quot;&gt;</span><br><span class="line">  &lt;System&gt;</span><br><span class="line">    &lt;Provider Name&#x3D;&quot;Group Policy Files&quot; &#x2F;&gt;</span><br><span class="line">    &lt;EventID Qualifiers&#x3D;&quot;34305&quot;&gt;4098&lt;&#x2F;EventID&gt;</span><br><span class="line">    &lt;Version&gt;0&lt;&#x2F;Version&gt;</span><br><span class="line">    &lt;Level&gt;3&lt;&#x2F;Level&gt;</span><br><span class="line">    &lt;Task&gt;2&lt;&#x2F;Task&gt;</span><br><span class="line">    &lt;Opcode&gt;0&lt;&#x2F;Opcode&gt;</span><br><span class="line">    &lt;Keywords&gt;0x80000000000000&lt;&#x2F;Keywords&gt;</span><br><span class="line">    &lt;TimeCreated SystemTime&#x3D;&quot;2026-mm-ddThh:mm:ss.fffffffZ&quot; &#x2F;&gt;</span><br><span class="line">    &lt;EventRecordID&gt;1214&lt;&#x2F;EventRecordID&gt;</span><br><span class="line">    &lt;Correlation &#x2F;&gt;</span><br><span class="line">    &lt;Execution ProcessID&#x3D;&quot;9488&quot; ThreadID&#x3D;&quot;0&quot; &#x2F;&gt;</span><br><span class="line">    &lt;Channel&gt;Application&lt;&#x2F;Channel&gt;</span><br><span class="line">    &lt;Computer&gt;xxxxxxxx.xxxxx.xxx&lt;&#x2F;Computer&gt;</span><br><span class="line">    &lt;Security UserID&#x3D;&quot;S-1-5-18&quot; &#x2F;&gt;</span><br><span class="line">  &lt;&#x2F;System&gt;</span><br><span class="line">  &lt;EventData&gt;</span><br><span class="line">    &lt;Data&gt;コンピューター&lt;&#x2F;Data&gt;</span><br><span class="line">    &lt;Data&gt;GPP_File.txt&lt;&#x2F;Data&gt;</span><br><span class="line">    &lt;Data&gt;GPP_File &#123;D3ED5948-E3FD-411A-AAB1-AD1DF283EBB7&#125;&lt;&#x2F;Data&gt;</span><br><span class="line">    &lt;Data&gt;0x80070002 指定されたファイルが見つかりません。&lt;&#x2F;Data&gt;</span><br><span class="line">  &lt;&#x2F;EventData&gt;</span><br><span class="line">&lt;&#x2F;Event&gt;</span><br></pre></td></tr></table></figure>
+
+<p>// ID:4117 (追加されたイベント)</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">ログの名前:         Application</span><br><span class="line">ソース:           Group Policy Files</span><br><span class="line">日付:            2026&#x2F;mm&#x2F;dd hh:mm:ss</span><br><span class="line">イベント ID:       4117</span><br><span class="line">タスクのカテゴリ:      (2)</span><br><span class="line">レベル:           警告</span><br><span class="line">キーワード:         クラシック</span><br><span class="line">ユーザー:          SYSTEM</span><br><span class="line">コンピューター:       xxxxxxxx.xxxxx.xxx</span><br><span class="line">説明:</span><br><span class="line">グループ ポリシーのユーザー設定診断データ: Source file &#39;C:\Users\xxxxx\Desktop\GPP_File.txt&#39; was not found when copying to &#39;C:\Users\xxxxxxxx$\Desktop\GPP_File.txt&#39;. Error: 0x00000002 (HRESULT: 0x80070002)。</span><br><span class="line">イベント XML:</span><br><span class="line">&lt;Event xmlns&#x3D;&quot;http:&#x2F;&#x2F;schemas.microsoft.com&#x2F;win&#x2F;2004&#x2F;08&#x2F;events&#x2F;event&quot;&gt;</span><br><span class="line">  &lt;System&gt;</span><br><span class="line">    &lt;Provider Name&#x3D;&quot;Group Policy Files&quot; &#x2F;&gt;</span><br><span class="line">    &lt;EventID Qualifiers&#x3D;&quot;34305&quot;&gt;4117&lt;&#x2F;EventID&gt;</span><br><span class="line">    &lt;Version&gt;0&lt;&#x2F;Version&gt;</span><br><span class="line">    &lt;Level&gt;3&lt;&#x2F;Level&gt;</span><br><span class="line">    &lt;Task&gt;2&lt;&#x2F;Task&gt;</span><br><span class="line">    &lt;Opcode&gt;0&lt;&#x2F;Opcode&gt;</span><br><span class="line">    &lt;Keywords&gt;0x80000000000000&lt;&#x2F;Keywords&gt;</span><br><span class="line">    &lt;TimeCreated SystemTime&#x3D;&quot;2026-mm-ddThh:mm:ss.fffffffZ&quot; &#x2F;&gt;</span><br><span class="line">    &lt;EventRecordID&gt;1213&lt;&#x2F;EventRecordID&gt;</span><br><span class="line">    &lt;Correlation &#x2F;&gt;</span><br><span class="line">    &lt;Execution ProcessID&#x3D;&quot;9488&quot; ThreadID&#x3D;&quot;0&quot; &#x2F;&gt;</span><br><span class="line">    &lt;Channel&gt;Application&lt;&#x2F;Channel&gt;</span><br><span class="line">    &lt;Computer&gt;xxxxxxxx.xxxxx.xxx&lt;&#x2F;Computer&gt;</span><br><span class="line">    &lt;Security UserID&#x3D;&quot;S-1-5-18&quot; &#x2F;&gt;</span><br><span class="line">  &lt;&#x2F;System&gt;</span><br><span class="line">  &lt;EventData&gt;</span><br><span class="line">    &lt;Data&gt;Source file &#39;C:\Users\xxxxx\Desktop\GPP_File.txt&#39; was not found when copying to &#39;C:\Users\xxxxxxxx$\Desktop\GPP_File.txt&#39;. Error: 0x00000002 (HRESULT: 0x80070002)&lt;&#x2F;Data&gt;</span><br><span class="line">  &lt;&#x2F;EventData&gt;</span><br><span class="line">&lt;&#x2F;Event&gt;</span><br></pre></td></tr></table></figure>
+<h2 id="4-更新処理の実行元の特定"><a href="#4-更新処理の実行元の特定" class="headerlink" title="(4) 更新処理の実行元の特定"></a>(4) 更新処理の実行元の特定</h2><p>概要:</p>
+<ul>
+<li>グループ ポリシーの更新処理の実行元を確認できるようになり、問題の特定が容易になりました。</li>
+<li>元情報:<a target="_blank" rel="noopener" href="https://techcommunity.microsoft.com/blog/askds/assigning-process-accountability-to-group-policy-refreshes/4500101">Assigning Process Accountability to Group Policy Refreshes | Microsoft Community Hub</a></li>
+</ul>
+<p>グループ ポリシーの更新処理を開始したユーザーやプロセスを確認できるようになりました。</p>
+<p>これまでは、グループ ポリシーを手動で更新すると、イベント ID 4004 が記録されていました。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">Log Name:      Microsoft-Windows-GroupPolicy&#x2F;Operational</span><br><span class="line">Source:        Microsoft-Windows-GroupPolicy</span><br><span class="line">Date:          mm&#x2F;dd&#x2F;2026 hh:mm:ss AM</span><br><span class="line">Event ID:      4004</span><br><span class="line">Task Category: None</span><br><span class="line">Level:         Information</span><br><span class="line">Keywords:     </span><br><span class="line">User:          SYSTEM</span><br><span class="line">Computer:      xxxxxxxx.xxxxx.xxx</span><br><span class="line">Description:</span><br><span class="line">Starting manual processing of policy for computer xxxxx\xxxxxxxx$</span><br></pre></td></tr></table></figure>
+
+<p>今回の機能強化により、グループ ポリシーのイベント ログ (イベント ID 5321) と GPSVC ログで、手動で更新処理を開始したユーザーやプロセスを確認できるようになりました。</p>
+<p>// gpsvc.log</p>
+<pre><code>
+GPSVC(13b8.acc) 2026-mm-dd hh:mm:ss:fff RefreshPolicyForPrincipal: Entering with bMachine = 0, SID = null, options: 1, dwTimeout = 600000, currentProcessId = 5048, processImageName = C:\Windows\System32\gpupdate.exe
+
+GPSVC(2078.340) 2026-mm-dd hh:mm:ss:fff Server_ProcessRefresh:: bMachine = 0, SID = null, bForceRefresh = 1, bRefreshAllUsers = 0, dwTimeout = 600000
+GPSVC(2078.1ea8) 2026-mm-dd hh:mm:ss:fff Machine Broadcast Sent successfully to session 0
+GPSVC(2078.24a4) 2026-mm-dd hh:mm:ss:fff StartTaskScheduler status: 0x0
+GPSVC(2078.24a4) 2026-mm-dd hh:mm:ss:fff UpdateWNFTrigger has 2 triggers to process.
+GPSVC(2078.340) 2026-mm-dd hh:mm:ss:fff GP Refresh Attribution: Target=User ParentProcess="C:\Windows\System32\cmd.exe" ParentPID=1596 
+GPUpdatePID=5048 SessionID=1 Account="xxxxx\xxxxx"
+</code></pre>
+
+<p>// グループ ポリシーのイベント ログ (イベント ID 5321)</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">ログの名前:         Microsoft-Windows-GroupPolicy&#x2F;Operational</span><br><span class="line">ソース:           Microsoft-Windows-GroupPolicy</span><br><span class="line">日付:            2026&#x2F;mm&#x2F;dd hh:mm:ss</span><br><span class="line">イベント ID:       5321</span><br><span class="line">タスクのカテゴリ:      なし</span><br><span class="line">レベル:           情報</span><br><span class="line">キーワード:         </span><br><span class="line">ユーザー:          SYSTEM</span><br><span class="line">コンピューター:       xxxxxxxx.xxxxx.xxx</span><br><span class="line">説明:</span><br><span class="line">GP Refresh Attribution パラメーター: Group Policy refresh. Target&#x3D;User ParentProcess&#x3D;&quot;C:\Windows\System32\cmd.exe&quot; ParentPID&#x3D;1596 GPUpdatePID&#x3D;5048 SessionID&#x3D;1 Account&#x3D;&quot;xxxxx\xxxxx&quot;</span><br></pre></td></tr></table></figure>
+
+<p>定期的な自動更新についても、実行元の情報がグループ ポリシーのイベント ログと GPSVC ログに記録されるようになりました。</p>
+<p>// gpsvc.log</p>
+<pre><code>
+GPSVC(12cc.151c) 2026-mm-dd hh:mm:ss:fff Server_ProcessRefresh:: bMachine = 1, SID = null, bForceRefresh = 0, bRefreshAllUsers = 0, dwTimeout = 600000
+GPSVC(12cc.151c) 2026-mm-dd hh:mm:ss:fff GP Refresh Attribution: Target=Machine ParentProcess="C:\Windows\System32\svchost.exe [Schedule]" ParentPID=2344 GPUpdatePID=2292 SessionID=0 Account="NT AUTHORITY\NETWORK SERVICE"
+GPSVC(12cc.151c) 2026-mm-dd hh:mm:ss:fff CGPApplicationService::RefreshEvent fired.
+</code></pre>
+
+<p>// グループ ポリシーのイベント ログ (イベント ID 5321)</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">ログの名前:         Microsoft-Windows-GroupPolicy&#x2F;Operational</span><br><span class="line">ソース:           Microsoft-Windows-GroupPolicy</span><br><span class="line">日付:            2026&#x2F;mm&#x2F;dd hh:mm:ss</span><br><span class="line">イベント ID:       5321</span><br><span class="line">タスクのカテゴリ:      なし</span><br><span class="line">レベル:           情報</span><br><span class="line">キーワード:         </span><br><span class="line">ユーザー:          SYSTEM</span><br><span class="line">コンピューター:       xxxxxxxx.xxxxx.xxx</span><br><span class="line">説明:</span><br><span class="line">GP Refresh Attribution パラメーター: Group Policy refresh. Target&#x3D;Machine ParentProcess&#x3D;&quot;C:\Windows\System32\svchost.exe [Schedule]&quot; ParentPID&#x3D;2344 GPUpdatePID&#x3D;2292 SessionID&#x3D;0 Account&#x3D;&quot;NT AUTHORITY\NETWORK SERVICE&quot;</span><br></pre></td></tr></table></figure>
+
+<p>API (RefreshPolicy / RefreshPolicyEx) を使用するプログラムから更新処理を実行した場合は、以下のように記録されます。</p>
+<p>// gpsvc.log</p>
+<pre><code>
+GPSVC(624.5c8) 2026-mm-dd hh:mm:ss:fff Server_ProcessRefresh:: bMachine = 1, SID = null, bForceRefresh = 1, bRefreshAllUsers = 0, dwTimeout = 0
+GPSVC(624.5c8) 2026-mm-dd hh:mm:ss:fff RPC Call Attribution: Target=Machine ParentProcess="C:\Windows\System32\cmd.exe" ParentPID=1436 RpcClient="C:\Windows\Temp\GPRefresh-bb92169da30a40948c2912b78d5f4ef6\gprefresh.exe" RpcClientPID=476 SessionID=0 Account="xxxxx\xxxxx"
+</code></pre>
+
+<p>// グループ ポリシーのイベント ログ (イベント ID 5321)</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">ログの名前:         Microsoft-Windows-GroupPolicy&#x2F;Operational</span><br><span class="line">ソース:           Microsoft-Windows-GroupPolicy</span><br><span class="line">日付:            2026&#x2F;mm&#x2F;dd hh:mm:ss</span><br><span class="line">イベント ID:       5321</span><br><span class="line">タスクのカテゴリ:      なし</span><br><span class="line">レベル:           情報</span><br><span class="line">キーワード:         </span><br><span class="line">ユーザー:          SYSTEM</span><br><span class="line">コンピューター:       xxxxxxxx.xxxxx.xxx</span><br><span class="line">説明:</span><br><span class="line">GP Refresh Attribution パラメーター: Group Policy refresh via RPC. Target&#x3D;Machine ParentProcess&#x3D;&quot;C:\Windows\System32\cmd.exe&quot; ParentPID&#x3D;1436 RpcClient&#x3D;&quot;C:\Windows\Temp\GPRefresh-bb92169da30a40948c2912b78d5f4ef6\gprefresh.exe&quot; RpcClientPID&#x3D;476 SessionID&#x3D;0 Account&#x3D;&quot;xxxxx\xxxxx&quot;</span><br></pre></td></tr></table></figure>
+
+<p>タスク スケジューラから更新処理を実行した場合は、以下のように記録されます。<br>(GPMC.msc からリモートで更新を実行した場合や、Invoke-GPUpdate コマンドレットを実行した場合も、タスク スケジューラが使用されます。)</p>
+<p>// gpsvc.log</p>
+<pre><code>
+GPSVC(624.156c) 2026-mm-dd hh:mm:ss:fff Server_ProcessRefresh:: bMachine = 1, SID = null, bForceRefresh = 1, bRefreshAllUsers = 0, dwTimeout = 600000
+GPSVC(624.156c) 2026-mm-dd hh:mm:ss:fff GP Refresh Attribution: Target=Machine ParentProcess="C:\Windows\System32\svchost.exe [Schedule]" ParentPID=1900 GPUpdatePID=5376 SessionID=0 Account="NT AUTHORITY\NETWORK SERVICE"
+</code></pre>
+
+<p>// グループ ポリシーのイベント ログ (イベント ID 5321)</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">ログの名前:         Microsoft-Windows-GroupPolicy&#x2F;Operational</span><br><span class="line">ソース:           Microsoft-Windows-GroupPolicy</span><br><span class="line">日付:            2026&#x2F;mm&#x2F;dd hh:mm:ss</span><br><span class="line">イベント ID:       5321</span><br><span class="line">タスクのカテゴリ:      なし</span><br><span class="line">レベル:           情報</span><br><span class="line">キーワード:         </span><br><span class="line">ユーザー:          SYSTEM</span><br><span class="line">コンピューター:       xxxxxxxx.xxxxx.xxx</span><br><span class="line">説明:</span><br><span class="line">GP Refresh Attribution パラメーター: Group Policy refresh. Target&#x3D;Machine ParentProcess&#x3D;&quot;C:\Windows\System32\svchost.exe [Schedule]&quot; ParentPID&#x3D;1900 GPUpdatePID&#x3D;5376 SessionID&#x3D;0 Account&#x3D;&quot;NT AUTHORITY\NETWORK SERVICE&quot;</span><br></pre></td></tr></table></figure>
+
+<p>// Microsoft-Windows-TaskScheduler/Operational イベント ログ (イベント ID 129)</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">ログの名前:         Microsoft-Windows-TaskScheduler&#x2F;Operational</span><br><span class="line">ソース:           Microsoft-Windows-TaskScheduler</span><br><span class="line">日付:            2026&#x2F;mm&#x2F;dd hh:mm:ss</span><br><span class="line">イベント ID:       129</span><br><span class="line">タスクのカテゴリ:      Created Task Process</span><br><span class="line">レベル:           情報</span><br><span class="line">キーワード:         </span><br><span class="line">ユーザー:          SYSTEM</span><br><span class="line">コンピューター:       xxxxxxxx.xxxxx.xxx</span><br><span class="line">説明:</span><br><span class="line">タスク スケジューラは、プロセス ID 5376 でタスク &quot;\Microsoft\Windows\GroupPolicy\GPUpdate&quot;、インスタンス &quot;C:\Windows\System32\gpupdate.exe&quot; を起動しました。</span><br></pre></td></tr></table></figure>
+
+<p>ローカル セキュリティ ポリシー (secpol.msc) で監査ポリシーの詳細な構成を変更した場合も、以下のように記録されます。</p>
+<p>// gpsvc.log</p>
+<pre><code>
+GPSVC(bd8.b68) 2026-mm-dd hh:mm:ss:fff RefreshPolicyForPrincipal: Entering with bMachine = 1, SID = null, options: 0, dwTimeout = 0, currentProcessId = 3032, processImageName = C:\Windows\System32\mmc.exe
+GPSVC(498.4fc) 2026-mm-dd hh:mm:ss:fff Server_ProcessRefresh:: bMachine = 1, SID = null, bForceRefresh = 0, bRefreshAllUsers = 0, dwTimeout = 0
+GPSVC(498.4fc) 2026-mm-dd hh:mm:ss:fff RPC Call Attribution: Target=Machine ParentProcess="C:\Windows\System32\cmd.exe" ParentPID=9864 RpcClient="C:\Windows\System32\mmc.exe [SECPOL.MSC]" RpcClientPID=3032 SessionID=1 Account="xxxxx\xxxxx"
+</code></pre>
+
+<p>// グループ ポリシーのイベント ログ (イベント ID 5321)</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">ログの名前:         Microsoft-Windows-GroupPolicy&#x2F;Operational</span><br><span class="line">ソース:           Microsoft-Windows-GroupPolicy</span><br><span class="line">日付:            2026&#x2F;mm&#x2F;dd hh:mm:ss</span><br><span class="line">イベント ID:       5321</span><br><span class="line">タスクのカテゴリ:      なし</span><br><span class="line">レベル:           情報</span><br><span class="line">キーワード:         </span><br><span class="line">ユーザー:          SYSTEM</span><br><span class="line">コンピューター:       xxxxxxxx.xxxxx.xxx</span><br><span class="line">説明:</span><br><span class="line">GP Refresh Attribution パラメーター: Group Policy refresh via RPC. Target&#x3D;Machine ParentProcess&#x3D;&quot;C:\Windows\System32\cmd.exe&quot; ParentPID&#x3D;9864 RpcClient&#x3D;&quot;C:\Windows\System32\mmc.exe [SECPOL.MSC]&quot; RpcClientPID&#x3D;3032 SessionID&#x3D;1 Account&#x3D;&quot;xxxxx\xxxxx&quot;</span><br></pre></td></tr></table></figure>
+
+<h2 id="5-GPP-デバッグ-ログの有効化"><a href="#5-GPP-デバッグ-ログの有効化" class="headerlink" title="(5) GPP デバッグ ログの有効化"></a>(5) GPP デバッグ ログの有効化</h2><p>概要:<br>GPP デバッグ ログを、ドメインの GPO だけでなく、ローカル グループ ポリシー エディターからも設定できるようになりました。<br>これまではクライアント OS の [コンピューターの構成] - [管理用テンプレート] - [システム] - [グループ ポリシー] 配下に [ログおよびトレース] がありませんでした。<br>この機能を利用するには、2026 年 2 月 24 日リリースの更新プログラム (プレビュー)、またはそれ以降の更新プログラムを適用する必要があります。</p>
+<ul>
+<li>ローカル グループ ポリシー エディター (gpedit.msc) から直接 GPP デバッグ ログを設定できます。</li>
+<li>管理用テンプレート (ADMX) を使用して、ローカルで設定できます。</li>
+<li>元情報: <a target="_blank" rel="noopener" href="https://techcommunity.microsoft.com/blog/askds/what%E2%80%99s-new-in-windows-group-policy-preferences-debug-logging/4497060">What’s New in Windows Group Policy Preferences Debug Logging | Microsoft Community Hub</a></li>
+</ul>
+<p>// 2 月 24 日リリースの更新プログラム適用後<br><img src="image-4.png" alt="alt text"></p>
+<h2 id="6-Critical-Section-ロック検出"><a href="#6-Critical-Section-ロック検出" class="headerlink" title="(6) Critical Section ロック検出"></a>(6) Critical Section ロック検出</h2><p>概要:<br>外部アプリケーションがグループ ポリシーのセクションのロックを保持し続ける問題を検出し、調査できるようになりました。</p>
+<ul>
+<li>例: グループ ポリシーの処理が 10 分間応答しなくなる場合などに、原因を特定できるようになりました。</li>
+</ul>
+<p>GPSVC ログを有効にすると、ロックを保持しているプロセスを特定できます。<br>以下に、調査に役立つログを抜粋してご紹介します。</p>
+<h4 id="①-gpupdate-force-開始"><a href="#①-gpupdate-force-開始" class="headerlink" title="① gpupdate /force 開始"></a>① gpupdate /force 開始</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">GPSVC(7f0.2440) 2026-mm-dd hh:mm:ss:fff RefreshPolicyForPrincipal: Entering with bMachine &#x3D; 1, SID &#x3D; null, options: 1, dwTimeout &#x3D; 600000, currentProcessId &#x3D; 2032, processImageName &#x3D; C:\Windows\System32\gpupdate.exe</span><br></pre></td></tr></table></figure>
+
+<h4 id="②-Writer-ロック競合の発生"><a href="#②-Writer-ロック競合の発生" class="headerlink" title="② Writer ロック競合の発生"></a>② Writer ロック競合の発生</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">GPSVC(774.1534) 2026-mm-dd hh:mm:ss:fff Global Sync Lock Called</span><br><span class="line">GPSVC(774.1534) 2026-mm-dd hh:mm:ss:fff Writer has to wait for lock. WriterID : 1.</span><br><span class="line">GPSVC(774.1534) 2026-mm-dd hh:mm:ss:fff Lock timeout changed to 10 minutes for external reader.</span><br></pre></td></tr></table></figure>
+
+<h4 id="③-gpupdate-exe-へのエラー返却"><a href="#③-gpupdate-exe-へのエラー返却" class="headerlink" title="③ gpupdate.exe へのエラー返却"></a>③ gpupdate.exe へのエラー返却</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">GPSVC(774.19ac) 2026-mm-dd hh:mm:ss:fff CGroupPolicySession::RefreshGroupPolicyForPrincipal: Failed WaitForSingleObject.</span><br><span class="line">GPSVC(7f0.2440) 2026-mm-dd hh:mm:ss:fff Client_ProcessRefresh: ProcessRefresh returned error 0x5b4</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p><code>0x5b4</code> は <code>ERROR_TIMEOUT</code> (1460) を示し、gpupdate.exe にタイムアウト エラーが返されています。</p>
+</blockquote>
+<h4 id="④-タイムアウト発生と強制解放"><a href="#④-タイムアウト発生と強制解放" class="headerlink" title="④ タイムアウト発生と強制解放"></a>④ タイムアウト発生と強制解放</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">GPSVC(774.1534) 2026-mm-dd hh:mm:ss:fff Wait Timed out</span><br><span class="line">GPSVC(774.1534) 2026-mm-dd hh:mm:ss:fff Global ForceUnLockReaders</span><br><span class="line">GPSVC(774.1534) 2026-mm-dd hh:mm:ss:fff ForceUnlockReader(0000029F3713CBE0): Held duration: 616821 milliseconds</span><br><span class="line">GPSVC(774.1534) 2026-mm-dd hh:mm:ss:fff ForceUnlockReader(0000029F3713CBE0): Held:0:10:16.821 dwFlags:0x30000000 PID:0x1674 - C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<ul>
+<li><strong>PID</strong>: ロックを保持していたプロセスの PID</li>
+<li><strong>プロセス パス</strong>: ロックを保持していたプロセスの実行ファイルのパス</li>
+</ul>
+</blockquote>
+<h4 id="⑤-ポリシー適用完了"><a href="#⑤-ポリシー適用完了" class="headerlink" title="⑤ ポリシー適用完了"></a>⑤ ポリシー適用完了</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">GPSVC(774.1534) 2026-mm-dd hh:mm:ss:fff ProcessGPOList:++ Entering for extension レジストリ</span><br><span class="line">GPSVC(774.1534) 2026-mm-dd hh:mm:ss:fff ProcessGPOList: Extension レジストリ was able to log data. RsopStatus &#x3D; 0x0, dwRet &#x3D; 0, Clearing the dirty bit</span><br><span class="line">GPSVC(774.1534) 2026-mm-dd hh:mm:ss:fff ProcessGPOList:++ Entering for extension Security</span><br><span class="line">GPSVC(774.1534) 2026-mm-dd hh:mm:ss:fff ProcessGPOList: Extension Security returned 0x0.</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>強制解放後、レジストリ拡張と Security 拡張が正常に処理されています。</p>
+</blockquote>
+<h2 id="補足-GPSVC-ログの取得方法"><a href="#補足-GPSVC-ログの取得方法" class="headerlink" title="補足: GPSVC ログの取得方法"></a>補足: GPSVC ログの取得方法</h2><p>本記事で紹介したログは、以下の方法で取得できます。</p>
+<h4 id="gpsvc-log"><a href="#gpsvc-log" class="headerlink" title="gpsvc.log"></a>gpsvc.log</h4><p>管理者権限のコマンド プロンプトで、次のコマンドを実行します。<br>出力先は %windir%\debug\usermode\gpsvc.log です (usermode フォルダーが存在しない場合は作成してください)。</p>
+<p>// 開始</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">reg add &quot;HKLM\Software\Microsoft\Windows NT\CurrentVersion\Diagnostics&quot; &#x2F;v &quot;GPSvcDebugLevel&quot; &#x2F;t REG_DWORD &#x2F;d 0x30002</span><br></pre></td></tr></table></figure>
+
+<p>// 停止</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">reg delete &quot;HKLM\Software\Microsoft\Windows NT\CurrentVersion\Diagnostics&quot; &#x2F;v &quot;GPSvcDebugLevel&quot; &#x2F;f</span><br></pre></td></tr></table></figure>
+
+<h2 id="更新履歴"><a href="#更新履歴" class="headerlink" title="更新履歴"></a>更新履歴</h2><p>2026/10/23 : 本ブログの公開</p>
+
+      
+      
+    </div>
+    <footer class="article-footer">
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/blog/2026/09/14/Shell/MistakesLaptopForTablet/MistakesLaptopForTablet/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">前の記事</strong>
+      <div class="article-nav-title">非コンバーチブル型の端末のタスクバーのすぐ上のエリアがマウス操作できなくなる動作について</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">カテゴリ</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Activation/">Activation</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Activation/ESU/">ESU</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Activation/security-SPP/">security-SPP</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/">Active Directory</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Authentication/">Authentication</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/DFSR/">DFSR</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/FunctionalLevel/">FunctionalLevel</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Group-Policy/">Group Policy</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Promotion-and-Demotion/">Promotion and Demotion</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/User-Profile/">User Profile</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Windows-Hello/">Windows Hello</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Windows-Time-Service/">Windows Time Service</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/AppLocker/">AppLocker</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/AppLocker/Active-Directory/">Active Directory</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/AppLocker/Microsoft-Intune/">Microsoft Intune</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/BitLocker/">BitLocker</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Deployment/">Deployment</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Deployment/Feature-on-demand/">Feature on demand</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Deployment/Sysprep/">Sysprep</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Failover-Clustering/">Failover Clustering</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Failover-Clustering/Azure-Local/">Azure Local</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Failover-Clustering/Configuration-and-Management/">Configuration and Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Failover-Clustering/Windows-Server-2025/">Windows Server 2025</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/FileServices/">FileServices</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/FileServices/FTP/">FTP</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/FileServices/SMB/">SMB</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Hyper-V/">Hyper-V</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Hyper-V/Configuration-and-Management/">Configuration and Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Hyper-V/Migration/">Migration</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Microsoft-Connected-Cache/">Microsoft Connected Cache</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/">Networking</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/BITS/">BITS</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/Bluetooth/">Bluetooth</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/DHCP/">DHCP</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/DNS/">DNS</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/Firewall/">Firewall</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/LBFO/">LBFO</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/NCSI/">NCSI</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/NetworkInterface/">NetworkInterface</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/Proxy/">Proxy</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/TCPIP/">TCPIP</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/OpenSSH/">OpenSSH</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/">Performance</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/Hang-up-BSoD/">Hang-up/BSoD</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/No-Boot/">No Boot</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/Slow-Response/">Slow Response</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/System-Resource/">System Resource</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/Tools/">Tools</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/">Public Key Infrastructure</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Certificate-Authority/">Certificate Authority</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Certificate-Management/">Certificate Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Code-Signing/">Code Signing</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Fundamental/">Fundamental</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/SSL-TLS-Communication/">SSL TLS Communication</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/SSL-TLS-Connection/">SSL TLS Connection</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Smart-Card-Logon/">Smart Card Logon</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/">Remote Desktop</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/Azure-Virtual-Desktop-AVD/">Azure Virtual Desktop (AVD)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/Remote-Desktop-Service-RDS/">Remote Desktop Service (RDS)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/Windows-Virtual-Desktop-WVD/">Windows Virtual Desktop (WVD)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/RemoteAccess/">RemoteAccess</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/RemoteAccess/%E3%83%80%E3%82%A4%E3%83%A4%E3%83%AB%E3%82%A2%E3%83%83%E3%83%97%E6%8E%A5%E7%B6%9A/">ダイヤルアップ接続</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Security/">Security</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Security/WDAC/">WDAC</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Setup/">Setup</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Setup/Feature-Update-FU/">Feature Update (FU)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Shell/">Shell</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Shell/Explorer/">Explorer</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Shell/StartMenu/">StartMenu</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/">Storage</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/Backup/">Backup</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/FSRM/">FSRM</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/Management/">Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/StorageMigrationService/">StorageMigrationService</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Support-Request/">Support Request</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/UEFI/">UEFI</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/UEFI/Secure-Boot/">Secure Boot</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/">User Interface and Apps</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Command-Prompt/">Command Prompt</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/EventLog/">EventLog</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Installer/">Installer</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Language-Support/">Language Support</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Microsoft-Store/">Microsoft Store</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Performance/">Performance</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/PowerShell/">PowerShell</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Printing-%E5%8D%B0%E5%88%B7/">Printing (印刷)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Server-Management/">Server Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Taskscheduler/">Taskscheduler</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Windows-Management-Instrumentation/">Windows Management Instrumentation</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps-Language-support/">User Interface and Apps - Language support</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-365/">Windows 365</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Admin-Center/">Windows Admin Center</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Search/">Windows Search</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/">Windows Update</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Delivery-Optimization-DO/">Delivery Optimization (DO)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Feature-Update-FU/">Feature Update (FU)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Quality-Update-QU/">Quality Update (QU)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Windows-Update-Agent/">Windows Update Agent</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Windows-Update-Agent-WUA/">Windows Update Agent (WUA)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/">WirelessNetwork</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/NPS/">NPS</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/Wi-Fi/">Wi-Fi</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/%E3%83%A2%E3%83%90%E3%82%A4%E3%83%AB-%E3%83%96%E3%83%AD%E3%83%BC%E3%83%89%E3%83%90%E3%83%B3%E3%83%89%E6%8E%A5%E7%B6%9A-LTE/">モバイル ブロードバンド接続 (LTE)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/shell/">shell</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/%E7%B5%84%E7%B9%94%E7%B4%B9%E4%BB%8B%E3%83%96%E3%83%AD%E3%82%B0%EF%BC%88Windows-Commercial%EF%BC%89/">組織紹介ブログ（Windows Commercial）</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最近の投稿</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/blog/2026/10/23/ActiveDirectory/GroupPolicy/Enhancements-to-Group-Policy-2026-2/">Group Policy の強化 (2026.02)</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/09/14/Shell/MistakesLaptopForTablet/MistakesLaptopForTablet/">非コンバーチブル型の端末のタスクバーのすぐ上のエリアがマウス操作できなくなる動作について</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/09/13/Hyper-V/ConfigurationAndManagement/hyper-v-numa-vcpu-overcommit/">Windows Server 2025 で NUMA スパンニングを無効にした場合の Hyper-V 仮想マシン起動動作について</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/09/07/Networking/LBFO/LBFO-TeamNIC-Unavailable-After-Startup/">OS 起動時に LBFO のチーミング アダプターが起動失敗する事象について</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/09/03/UserInterfaceAndApps/Installer/Installer/">Windows Installer キャッシュの削除可否について</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">アーカイブ</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2026/10/">2026 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2026/09/">2026 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2026/08/">2026 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2026/07/">2026 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2026/06/">2026 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2026/05/">2026 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2026/04/">2026 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2026/03/">2026 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2026/02/">2026 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2026/01/">2026 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/12/">2025 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/11/">2025 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/10/">2025 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/09/">2025 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/08/">2025 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/07/">2025 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/06/">2025 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/05/">2025 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/04/">2025 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/03/">2025 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/02/">2025 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/01/">2025 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/12/">2024 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/11/">2024 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/10/">2024 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/09/">2024 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/08/">2024 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/07/">2024 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/06/">2024 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/05/">2024 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/04/">2024 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/03/">2024 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/02/">2024 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/01/">2024 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/12/">2023 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/11/">2023 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/10/">2023 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/09/">2023 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/08/">2023 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/07/">2023 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/06/">2023 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/05/">2023 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/04/">2023 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/03/">2023 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/02/">2023 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/01/">2023 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/12/">2022 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/11/">2022 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/10/">2022 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/09/">2022 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/08/">2022 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/07/">2022 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/06/">2022 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/05/">2022 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/04/">2022 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/03/">2022 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/02/">2022 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/01/">2022 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/12/">2021 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/11/">2021 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/10/">2021 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/09/">2021 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/08/">2021 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/07/">2021 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/06/">2021 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/05/">2021 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/04/">2021 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/03/">2021 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/02/">2021 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/01/">2021 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/12/">2020 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/11/">2020 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/10/">2020 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/07/">2020 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/03/">2020 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2019/03/">2019 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/11/">2018 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/10/">2018 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/09/">2018 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/08/">2018 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/07/">2018 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/06/">2018 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/04/">2018 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/02/">2018 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/12/">2017 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/11/">2017 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/09/">2017 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/05/">2017 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/03/">2017 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/02/">2017 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2016/08/">2016 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2016/05/">2016 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2014/03/">2014 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2012/02/">2012 / 02</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2026 Microsoft Japan Windows Technology Support Team<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/blog/" class="mobile-nav-link">Home</a>
+  
+    <a href="/blog/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+<script src="/blog/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

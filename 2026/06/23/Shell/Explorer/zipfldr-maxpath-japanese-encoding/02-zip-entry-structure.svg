@@ -1,0 +1,91 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 420" width="820" height="420" font-family="'Segoe UI','Yu Gothic UI',sans-serif">
+  <rect width="820" height="420" fill="#ffffff" rx="8"/>
+  <text x="410" y="32" text-anchor="middle" font-size="16" font-weight="bold" fill="#333">ZIP Local File Header の構造と UTF-8 フラグ</text>
+  <!-- Header fields as blocks -->
+  <g transform="translate(40, 55)">
+    <!-- Row 1 -->
+    <rect x="0" y="0" width="120" height="45" rx="4" fill="#e3f2fd" stroke="#42a5f5" stroke-width="1.5"/>
+    <text x="60" y="18" text-anchor="middle" font-size="10" fill="#1565c0">Signature</text>
+    <text x="60" y="35" text-anchor="middle" font-size="11" font-family="monospace" fill="#333">0x04034b50</text>
+    <rect x="125" y="0" width="100" height="45" rx="4" fill="#e3f2fd" stroke="#42a5f5" stroke-width="1.5"/>
+    <text x="175" y="18" text-anchor="middle" font-size="10" fill="#1565c0">Version</text>
+    <text x="175" y="35" text-anchor="middle" font-size="11" fill="#333">2 bytes</text>
+    <!-- General Purpose Bit Flag - HIGHLIGHTED -->
+    <rect x="230" y="0" width="200" height="45" rx="4" fill="#fff3e0" stroke="#ff9800" stroke-width="3"/>
+    <text x="330" y="18" text-anchor="middle" font-size="10" font-weight="bold" fill="#e65100">General Purpose Bit Flag</text>
+    <text x="330" y="35" text-anchor="middle" font-size="11" font-weight="bold" fill="#e65100">2 bytes ★</text>
+    <rect x="435" y="0" width="100" height="45" rx="4" fill="#e3f2fd" stroke="#42a5f5" stroke-width="1.5"/>
+    <text x="485" y="18" text-anchor="middle" font-size="10" fill="#1565c0">Compression</text>
+    <text x="485" y="35" text-anchor="middle" font-size="11" fill="#333">2 bytes</text>
+    <rect x="540" y="0" width="100" height="45" rx="4" fill="#e3f2fd" stroke="#42a5f5" stroke-width="1.5"/>
+    <text x="590" y="18" text-anchor="middle" font-size="10" fill="#1565c0">Mod Time</text>
+    <text x="590" y="35" text-anchor="middle" font-size="11" fill="#333">2 bytes</text>
+    <rect x="645" y="0" width="95" height="45" rx="4" fill="#e3f2fd" stroke="#42a5f5" stroke-width="1.5"/>
+    <text x="692" y="18" text-anchor="middle" font-size="10" fill="#1565c0">Mod Date</text>
+    <text x="692" y="35" text-anchor="middle" font-size="11" fill="#333">2 bytes</text>
+    <!-- Row 2 -->
+    <rect x="0" y="55" width="150" height="45" rx="4" fill="#e3f2fd" stroke="#42a5f5" stroke-width="1.5"/>
+    <text x="75" y="73" text-anchor="middle" font-size="10" fill="#1565c0">CRC-32</text>
+    <text x="75" y="90" text-anchor="middle" font-size="11" fill="#333">4 bytes</text>
+    <rect x="155" y="55" width="150" height="45" rx="4" fill="#e3f2fd" stroke="#42a5f5" stroke-width="1.5"/>
+    <text x="230" y="73" text-anchor="middle" font-size="10" fill="#1565c0">Compressed Size</text>
+    <text x="230" y="90" text-anchor="middle" font-size="11" fill="#333">4 bytes</text>
+    <rect x="310" y="55" width="150" height="45" rx="4" fill="#e3f2fd" stroke="#42a5f5" stroke-width="1.5"/>
+    <text x="385" y="73" text-anchor="middle" font-size="10" fill="#1565c0">Uncompressed Size</text>
+    <text x="385" y="90" text-anchor="middle" font-size="11" fill="#333">4 bytes</text>
+    <!-- File Name Length - HIGHLIGHTED -->
+    <rect x="465" y="55" width="135" height="45" rx="4" fill="#e1f5fe" stroke="#0288d1" stroke-width="2.5"/>
+    <text x="532" y="73" text-anchor="middle" font-size="10" font-weight="bold" fill="#01579b">File Name Length</text>
+    <text x="532" y="90" text-anchor="middle" font-size="11" font-weight="bold" fill="#01579b">2 bytes (= n)</text>
+    <rect x="605" y="55" width="135" height="45" rx="4" fill="#e3f2fd" stroke="#42a5f5" stroke-width="1.5"/>
+    <text x="672" y="73" text-anchor="middle" font-size="10" fill="#1565c0">Extra Field Length</text>
+    <text x="672" y="90" text-anchor="middle" font-size="11" fill="#333">2 bytes</text>
+    <!-- Row 3: File Name field -->
+    <rect x="0" y="115" width="740" height="50" rx="4" fill="#c8e6c9" stroke="#43a047" stroke-width="2.5"/>
+    <text x="370" y="138" text-anchor="middle" font-size="13" font-weight="bold" fill="#1b5e20">File Name (n bytes) — zipfldr.dll はここのバイト長を MAX_PATH と比較する</text>
+    <text x="370" y="157" text-anchor="middle" font-size="11" fill="#2e7d32">UTF-8 フラグ ON → UTF-8 バイト列 / OFF → OEM (Shift_JIS 等) バイト列</text>
+  </g>
+  <!-- Bit Flag detail -->
+  <g transform="translate(40, 240)">
+    <text x="0" y="0" font-size="13" font-weight="bold" fill="#e65100">General Purpose Bit Flag の詳細 (bit 11 = Language Encoding Flag)</text>
+    <g transform="translate(0, 15)">
+      <!-- 16 bit boxes -->
+      <rect x="0" y="0" width="42" height="35" rx="3" fill="#f5f5f5" stroke="#bdbdbd" stroke-width="1"/>
+      <text x="21" y="15" text-anchor="middle" font-size="9" fill="#999">bit 15</text>
+      <text x="21" y="30" text-anchor="middle" font-size="11" fill="#aaa">0</text>
+      <rect x="44" y="0" width="42" height="35" rx="3" fill="#f5f5f5" stroke="#bdbdbd" stroke-width="1"/>
+      <text x="65" y="15" text-anchor="middle" font-size="9" fill="#999">14</text>
+      <text x="65" y="30" text-anchor="middle" font-size="11" fill="#aaa">0</text>
+      <rect x="88" y="0" width="42" height="35" rx="3" fill="#f5f5f5" stroke="#bdbdbd" stroke-width="1"/>
+      <text x="109" y="15" text-anchor="middle" font-size="9" fill="#999">13</text>
+      <text x="109" y="30" text-anchor="middle" font-size="11" fill="#aaa">0</text>
+      <rect x="132" y="0" width="42" height="35" rx="3" fill="#f5f5f5" stroke="#bdbdbd" stroke-width="1"/>
+      <text x="153" y="15" text-anchor="middle" font-size="9" fill="#999">12</text>
+      <text x="153" y="30" text-anchor="middle" font-size="11" fill="#aaa">0</text>
+      <!-- Bit 11 - HIGHLIGHTED -->
+      <rect x="176" y="0" width="56" height="35" rx="3" fill="#ff9800" stroke="#e65100" stroke-width="2.5"/>
+      <text x="204" y="15" text-anchor="middle" font-size="9" font-weight="bold" fill="#fff">bit 11</text>
+      <text x="204" y="30" text-anchor="middle" font-size="12" font-weight="bold" fill="#fff">1</text>
+      <rect x="234" y="0" width="42" height="35" rx="3" fill="#f5f5f5" stroke="#bdbdbd" stroke-width="1"/>
+      <text x="255" y="15" text-anchor="middle" font-size="9" fill="#999">10</text>
+      <text x="255" y="30" text-anchor="middle" font-size="11" fill="#aaa">0</text>
+      <rect x="278" y="0" width="42" height="35" rx="3" fill="#f5f5f5" stroke="#bdbdbd" stroke-width="1"/>
+      <text x="299" y="15" text-anchor="middle" font-size="9" fill="#999">9</text>
+      <text x="299" y="30" text-anchor="middle" font-size="11" fill="#aaa">0</text>
+      <rect x="322" y="0" width="42" height="35" rx="3" fill="#f5f5f5" stroke="#bdbdbd" stroke-width="1"/>
+      <text x="343" y="15" text-anchor="middle" font-size="9" fill="#999">8</text>
+      <text x="343" y="30" text-anchor="middle" font-size="11" fill="#aaa">0</text>
+      <!-- bits 7-0 as a single block -->
+      <rect x="366" y="0" width="170" height="35" rx="3" fill="#f5f5f5" stroke="#bdbdbd" stroke-width="1"/>
+      <text x="451" y="15" text-anchor="middle" font-size="9" fill="#999">bits 7-0</text>
+      <text x="451" y="30" text-anchor="middle" font-size="11" fill="#aaa">...</text>
+    </g>
+    <!-- Annotation for bit 11 -->
+    <line x1="204" y1="55" x2="204" y2="75" stroke="#e65100" stroke-width="2"/>
+    <line x1="204" y1="75" x2="560" y2="75" stroke="#e65100" stroke-width="2"/>
+    <text x="560" y="70" font-size="12" fill="#e65100" font-weight="bold">← bit 11 = 1: UTF-8 エンコード (0x0800)</text>
+    <text x="560" y="88" font-size="12" fill="#666">   bit 11 = 0: OEM コードページ (Shift_JIS 等)</text>
+    <!-- Bottom note -->
+    <text x="0" y="120" font-size="12" fill="#555">APPNOTE.TXT 6.3.0 (2006 年) で追加。現在の Windows エクスプローラーは ZIP 作成時にこのフラグを設定する。</text>
+  </g>
+</svg>

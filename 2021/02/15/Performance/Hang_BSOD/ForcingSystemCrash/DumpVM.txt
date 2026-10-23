@@ -1,0 +1,448 @@
+'****************************************************************************
+'                            DISCLAIMER
+'
+'		This script is not supported under any Microsoft standard support program
+'		or service and is provided AS IS without warranty of any kind
+'		Microsoft further disclaims all implied warranties including, without
+'		limitation, any implied warranties of merchantability or of fitness for a 
+'		particular purpose. 
+'
+'****************************************************************************
+'==========================================================================
+'
+' NAME: DumpVM.vbs
+'
+' AUTHOR: Steve Paruszkiewicz, Microsoft(R)
+' DATE  : 04/01/2008
+'
+' COMMENT:  Attaches to a Hyper-V guest's virtual keyboard and sends the key
+'           sequence, RIGHT_CTRL, SCROLL, SCROLL to initiate a crashdump
+'           for troubleshooting purposes.
+'
+'
+' 	Description:
+' 	  DumpVM.vbs attaches to a Hyper-V guest's keyboard and sends the
+' 	  Right_Control-Scroll-Scroll key sequence to initiate a crash dump
+' 	  The guest must be configured with the CrashOnCtrlScroll registry
+' 	  value documented in Microsoft(R) KB Article 244139 for this to work.
+'
+'	Requirements:
+'     You must be able to attach to the root\virtualization namespace and
+'     access the following WMI classes on the target Hyper-V server: 
+'                                      Msvm_ComputerSystem
+'                                      Msvm_Keyboard
+'
+' 	
+' 	Usage: DumpVM.vbs -s [ServerName] -v [Virtual Machine Name] 
+' 		   DumpVM.vbs -l -s [ServerName]
+'
+' 	        -l      Displays a list of Virtual Machine names running on
+' 	                the server that can be used with the -v switch.
+' 	
+' 	        -s      The name of the Hyper-V server hosting the VM.
+' 	                If no server is specified the local box is assumed.
+' 	
+' 	        -v      The name of the Hyper-V Guest to send the key sequence to.
+'			If the VM name contains spaces place double quotes around it 	
+'               -i      Runs the script in interactive mode, which will prompt you
+'                       for the VM to dump via a numbered menu.  If you do not pass
+'                       the -s switch, you will also be prompted for the Hyper-V
+'                       server name
+' 
+'
+'   Example:  dumpVM.vbs -s Server1 -v XPSP3-VM
+'             dumpVM.vbs -s VM_Server2 -v "My Vista VM"
+'             dumpVM.vbs -i
+'
+'
+'	Change log:
+'       4/9/08   v 1.1 added interactive switch and more verbose error msgs
+'       4/11/08	 corrected Interactive code to quit if no VMs are running
+'==========================================================================
+RunMeWithCscript()
+Const LAST_MODIFIED = "04/11/2008"
+Dim versionString : versionString = "v1.1"
+Dim WMI_CONNECT_ERROR_MSG
+Dim strScriptHeader
+strScriptHeader = VbCrLf & "DumpVM.vbs " & versionString & " - Sends RIGHT_CTRL SCROLL to a VM" & VbCrLf
+strScriptHeader = strScriptHeader & "Last Modified: " & LAST_MODIFIED & VbCrLf 
+WScript.Echo strScriptHeader
+
+Dim g_Server, g_VM, Net, Shell, g_ThisComputer
+Set Net = CreateObject("Wscript.Network")
+Set Shell = CreateObject("Wscript.Shell") 
+g_ThisComputer = ucase(Net.ComputerName)
+g_Server = ""
+g_VM = ""
+
+ParseArgs()			'will populate g_Server and g_VM if -s and -v were passed
+
+WScript.Echo VbCrLf & "DumpVM.vbs has completed." & VbCrLf
+
+'******************************************************************************************
+
+'parses the command-line arguments and sets globals, then calls the appropriate functions
+Sub ParseArgs()
+	
+	On Error Resume Next
+	Dim arg, Args, x, ShowList, DoShowUsage, RunInteractive
+	ShowList = False
+	DoShowUsage = False
+	RunInteractive = False
+			
+	If WScript.Arguments.Count = 0 Then DoShowUsage = True
+	Set Args = Wscript.Arguments
+	
+	x = 0	
+	For each arg in Args						
+		
+		arg = UCase(arg)
+		
+		Select Case arg
+			
+			Case "-?"
+				DoShowUsage = True
+			
+			Case "/?" 
+				DoShowUsage = True
+			
+			Case "-HELP"
+				DoShowUsage = True
+				
+			Case "-S"
+				g_Server = Args(x+1)		
+				
+			Case "-V"
+				g_VM = Args(x+1)
+				
+			Case "-L"
+				ShowList = True
+				
+			Case "-I"
+				RunInteractive = True
+				
+		End Select
+		If Err.Number <> 0 Then ShowError "INVALID_ARGS",Err.Number,Err.Description
+		
+		x = x + 1
+			
+	Next
+	
+	If DoShowUsage Then ShowUsage()		'ShowUsage Exits once complete
+	
+	If ShowList Then ShowVMList(g_Server)	'ShowList Exits once complete
+	
+	If RunInteractive Then DisplayInteractiveMenu(g_Server)
+	
+	If (g_VM <> "") Then SendCtrlScrollToVM g_Server, g_VM	'VM was passed, send the keys
+	
+	
+
+End Sub
+
+'Displays usage information for the script
+Sub ShowUsage()
+	
+	
+	Dim msg
+			
+	  msg = msg & "Description:" & VbCrLf &VbCrLf 
+	  msg = msg & "  DumpVM.vbs attaches to a Hyper-V guest's keyboard and sends the" & VbCrLf
+	  msg = msg & "  Right_Control-Scroll-Scroll key sequence to initiate a crash dump." & VbCrLf
+	  msg = msg & "  The guest must be preconfigured with the CrashOnCtrlScroll registry" & VbCrLf
+	  msg = msg & "  value documented in Microsoft(R) KB Article 244139 for the dump to occur." & VbCrLf & VbCrLf 
+	  msg = msg & "Usage: DumpVM.vbs -s [ServerName] -v [Virtual Machine Name]" & VbCrLf
+	  msg = msg & "       DumpVM.vbs -l -s [ServerName]" & VbCrLf
+	  msg = msg & "       DumpVM.vbs -i -s [ServerName]" & VbCrLf & VbCrLf 
+	  msg = msg & vbTab & "-l" & vbTab & "Displays a list of Virtual Machine names running on" & VbCrLf
+	  msg = msg & vbTab & "  " & vbTab & "the server that can be used with the -v switch." & VbCrLf & VbCrLf
+	  msg = msg & vbTab & "-s" & vbTab & "The name of the Hyper-V server hosting the VM." & VbCrLf
+	  msg = msg & vbTab & "  " & vbTab & "If no server is specified the local box is assumed." & VbCrLf & VbCrLf 
+	  msg = msg & vbTab & "-v" & vbTab & "The name of the Hyper-V Guest to send the key sequence to." & VbCrLf & VbCrLf
+	  msg = msg & vbTab & "-i" & vbTab & "Runs the script in interactive mode, which will prompt you" & VbCrLf
+	  msg = msg & vbTab & "  " & vbTab & "for the VM to dump via a numbered menu.  If you do not pass" & VbCrLf
+	  msg = msg & vbTab & "  " & vbTab & "the -s switch, you will also be prompted for the Hyper-V" & VbCrLf
+	  msg = msg & vbTab & "  " & vbTab & "server name." & VbCrLf &VbCrLf
+	  msg = msg & "Example:  dumpVM.vbs -s Server1 -v XPSP3-VM" & VbCrLf
+	  msg = msg & "          dumpVM.vbs -s VM_Server2 -v ""My Vista VM""" & VbCrLf
+	  msg = msg & "          dumpVM.vbs -i -s VM_Server2" & VbCrLf
+	  msg = msg & "          dumpVM.vbs -i" & VbCrLf
+
+	WScript.Echo msg
+	WScript.quit
+End Sub
+
+'Displays error message output
+Sub ShowError(strErrType, errNum, errDesc)
+	
+	Dim SHOW_COMMON_ERR : SHOW_COMMON_ERR = True
+	
+	If g_Server = "" Then g_Server = g_ThisComputer
+	g_Server = UCase(g_Server)
+		
+	Select Case strErrType
+		
+		Case "WMI_CONNECT"
+			ERROR_MSG = "[** ERROR **]" & VbCrLf &  "WMI Could not attach to root\virtualization namespace on " & g_Server & VbCrLf
+			
+					
+		Case "VM_QUERY"
+			ERROR_MSG = "[** ERROR **]" & VbCrLf &  "WMI Could not enumerate running virtual machines on " & g_Server & VbCrLf
+						
+		Case "VM_KEYBOARD"
+			ERROR_MSG = "[** ERROR **]" & VbCrLf &  "WMI Could not attach to the virtual keyboard for " & g_VM & VbCrLf
+		
+		Case "INVALID_ARGS"
+			ERROR_MSG = "[** ERROR **]" & VbCrLf &  "The arguments passed are not valid.  Please check usage information." & VbCrLf
+			SHOW_COMMON_ERR = False
+								
+		Case Else
+			'This shouldn't run unless someone changes the script
+			ERROR_MSG = "An unknown fatal error has occurred and the script has exited."
+			
+	End Select
+
+	If SHOW_COMMON_ERR Then
+		'Add common error text
+		ERROR_MSG = ERROR_MSG &  "Error Number: " & errNum & " - " & errDesc & VbCrLf & VbCrLf 
+		ERROR_MSG = ERROR_MSG &  "The target system may not be running Hyper-V, may be offline, or you may " & vbcrlf
+		ERROR_MSG = ERROR_MSG &  "not have permission to perform the requested action.  If running locally " & VbCrLf
+		ERROR_MSG = ERROR_MSG &  "on a Hyper-V server, you may need to run this script from an elevated" & vbcrLf
+		ERROR_MSG = ERROR_MSG &  "command prompt." & VbCrLf & VbCrLf
+		ERROR_MSG = ERROR_MSG &  "NOTE: Access to the root\virtualization WMI namespace on " & g_Server & VbCrLf
+		ERROR_MSG = ERROR_MSG &  "as well as access to the Msvm_ComputerSystem and Msvm_Keyboard classes" & VbCrLf
+		ERROR_MSG = ERROR_MSG &  "is required for this script to function.  Access to these classes can" & VbCrLf
+		ERROR_MSG = ERROR_MSG &  "be tested by using the WBEMTEST utility."
+	
+	Else
+	
+		ERROR_MSG = ERROR_MSG &  "Error Number: " & errNum & " - " & errDesc & VbCrLf & VbCrLf 	
+	
+	End If
+
+	WScript.Echo ERROR_MSG
+	WScript.Quit
+
+End Sub
+
+'Displays the list of running virtual machines on the target
+Sub ShowVMList(strServer)
+	
+	On Error Resume Next
+	Dim strComputer, VMName, objWMIService, propValue
+	Dim objItem, SWBemlocator, UserName, Password, intLineLength
+	Dim objVM, colItems, vmCount, vmList
+	
+	vmCount = 0
+	intLineLength = 0
+	
+	UserName = ""
+	Password = ""
+	
+	If strServer = "" Then strServer = g_ThisComputer
+	
+	Set SWBemlocator = CreateObject("WbemScripting.SWbemLocator")
+	Set objWMIService = SWBemlocator.ConnectServer(strServer,"root\virtualization",UserName,Password)
+	If Err.Number <> 0 Then ShowError "WMI_CONNECT", Err.Number, Err.Description
+		
+	'Get the running VMs and exclude the VM Server
+	Set objVM = objWMIService.ExecQuery("Select * from Msvm_ComputerSystem where not ProcessID = '' and EnabledState = 2" & _ 
+	" and not ElementName = '" & strServer & "'",,48)
+	If err.Number <> 0 Then ShowError "VM_QUERY",Err.Number, Err.Description
+	
+	For Each objItem In objVM
+			VMName = objItem.ElementName
+			vmList = vmList & VbCrLf & vbTab & VMName
+			vmCount = vmCount + 1
+	Next
+		
+	If vmCount = 0 Then
+		WScript.Echo "No Running VMs were found on " & UCase(strServer)
+	Else	
+		
+		intLineLength = 31 + Len(strServer)
+		
+		WScript.Echo vbTab & "VMs Running on " & ucase(strServer)
+		WScript.Echo LineString("=", intLineLength)
+		WScript.Echo vmList
+		
+	End If
+	
+	WScript.Quit
+	
+End Sub
+
+
+'Displays the list of running virtual machines in an interactive menu
+Sub DisplayInteractiveMenu(strServer)
+	
+	On Error Resume Next
+	Dim strComputer, VMName, objWMIService, propValue
+	Dim objItem, SWBemlocator, UserName, Password, intLineLength
+	Dim objVM, colItems, vmCount, vmList, strVM	
+	Dim VMArray : Set VMArray = CreateObject("Scripting.Dictionary")
+	
+	vmCount = 0
+	
+	UserName = ""
+	Password = ""
+	
+	If strServer = "" Then 
+		WScript.Echo "Please Enter the name of the Hyper-V server to connect to"
+		WScript.Echo "or press [ENTER] for this computer (" & g_ThisComputer & "): "
+		strServer = Trim(WScript.StdIn.ReadLine)
+		If strServer = "" Then strServer = g_ThisComputer
+	End If
+	
+	WScript.Echo VbCrLf & "Connecting to " & strServer & "..." & vbCrLf
+	
+	Set SWBemlocator = CreateObject("WbemScripting.SWbemLocator")
+	Set objWMIService = SWBemlocator.ConnectServer(strServer,"root\virtualization",UserName,Password)
+	If Err.Number <> 0 Then ShowError "WMI_CONNECT", Err.Number, Err.Description
+		
+	'Get the running VMs and exclude the VM Server
+	Set objVM = objWMIService.ExecQuery("Select * from Msvm_ComputerSystem where not ProcessID = '' and EnabledState = 2" & _ 
+	" and not ElementName = '" & strServer & "'",,48)
+	If err.Number <> 0 Then ShowError "VM_QUERY",Err.Number, Err.Description
+	
+	'build the list of VMs and add them to the dictionary
+	For Each objItem In objVM
+			vmCount = vmCount + 1
+			VMName = objItem.ElementName
+			
+			VMArray.Add Cstr(vmCount), VMName
+			vmList = vmList & VbCrLf & vbTab & vmCount & vbTab & VMName
+	Next
+		
+	If vmCount = 0 Then
+		WScript.Echo "No Running VMs were found on " & UCase(strServer)
+		WScript.Quit
+	Else	
+		
+		intLineLength = 31 + Len(strServer)
+		
+		WScript.Echo vbTab & "VMs Running on " & ucase(strServer)
+		WScript.Echo LineString("=", intLineLength)
+		WScript.Echo vmList
+		
+	End If
+	
+	WScript.Echo VbCrLf & "Enter the Number of the VM that you would like to BugCheck: " 
+	VMNum = Trim(WScript.StdIn.ReadLine)
+	
+	If VMArray.Exists(VMNum) Then
+		strVM = VMArray.Item(VMNum) 
+	Else
+		WScript.Echo VbCrLf & "'" & VMNum & "' is not a valid selection.  Script Exiting!"
+		WScript.Quit
+	End If
+	
+	WScript.Echo VbCrLf & "****  Are you sure that you want to BugCheck: " & strVM & "  ****"
+	WScript.Echo "(Y/N)"
+	
+	If Ucase(WScript.StdIn.Read(1)) = "Y" Then
+		SendCtrlScrollToVM strServer, strVM
+	Else
+		WScript.Echo VbCrLf & "Action cancelled.  Script Exiting!"
+		WScript.Quit
+	End If
+	
+End Sub
+
+Function LineString(strChar, intNum)
+
+	Dim outputString
+	Do Until intNum = 0
+		outputString = outputString & strChar
+		intNum = intNum - 1
+	Loop
+	
+	LineString = outputString
+	
+End Function
+
+'Attaches the the virtual keyboard for the specified VM and sends the RT-CTRL-SCRL-SCRL key sequence
+Sub SendCtrlScrollToVM(strServer, strVMName)
+
+	On Error Resume Next
+	Const RIGHT_CTRL = 163 
+	Const SCROLL_LOCK = 145
+
+	Dim VMName, objWMIService, propValue
+	Dim objItem, SWBemlocator, UserName, Password
+	Dim objVM, colItems
+	
+	UserName = ""
+	Password = ""
+	If strServer = "" Then strServer = "."
+	
+	
+	Set SWBemlocator = CreateObject("WbemScripting.SWbemLocator")
+	Set objWMIService = SWBemlocator.ConnectServer(strServer,"root\virtualization",UserName,Password)
+	If Err.Number <> 0 Then	ShowError "WMI_CONNECT", Err.Number, Err.Description
+		
+	'Get the right VM name so we can get the keyboard
+	Set objVM = objWMIService.ExecQuery("Select * from Msvm_ComputerSystem where ElementName = '" & strVMName & "'",,48)
+	If Err.Number <> 0 Then ShowError "VM_QUERY",Err.Number, Err.Description
+		
+	For Each objItem In objVM
+		VMName = objItem.Name
+	Next
+	
+
+	'Get the keyboard for the VM
+	Set objKeyboard = objWMIService.ExecQuery("Select * from Msvm_Keyboard where SystemName = '" & VMName & "'",,48)
+	If err.Number <> 0 Then ShowError "VM_KEYBOARD", Err.Number, Err.Description
+	
+	For Each objItem In objKeyboard
+			
+			objItem.PressKey(RIGHT_CTRL)
+			objItem.PressKey(SCROLL_LOCK)
+			objItem.ReleaseKey(SCROLL_LOCK)
+			objItem.PressKey(SCROLL_LOCK)
+			objItem.ReleaseKey(SCROLL_LOCK)
+			objItem.ReleaseKey(RIGHT_CTRL)
+	Next
+	
+	WScript.Echo VbCrLf & "[RIGHT_CTRL -> SCROLL LOCK -> SCROLL LOCK]  - Has been sent."
+
+End Sub
+
+
+
+'
+'	Sub Attempts to call the script with its original arguments.  Arguments that contain a space
+'	will be wrapped in double quotes when the script calls itself again.
+'	To verify your command string you can echo out the scriptCommand variable
+'	Output is piped through MORE in case it scrolls off the screen (set USEMORE = False to overide)	
+'
+'	Usage:  Add a call to this sub (RunMeWithCscript) to the beggining of your script to ensure
+'	        that cscript.exe is used as the script engine
+'**********************************************************************************		
+Sub RunMeWithCscript()
+
+	Dim scriptEngine, engineFolder, Args, scriptName, argString, scriptCommand
+	scriptEngine = Ucase(Mid(Wscript.FullName,InstrRev(Wscript.FullName,"\")+1))
+	engineFolder = Left(Wscript.FullName,InstrRev(Wscript.FullName,"\"))
+	argString = ""
+	
+	If scriptEngine = "WSCRIPT.EXE" Then	
+		Dim Shell : Set Shell = CreateObject("Wscript.Shell")
+		Set Args = Wscript.Arguments
+		
+		For each arg in Args						'loop though argument array as a collection to rebuild argument String
+			If instr(arg," ") > 0 Then arg = """" & arg & """"	'if the argument contains a space wrap it in double quotes
+			argString = argString & " " & Arg 
+		Next
+
+		'Create a persistent command prompt for the cscript output window and call the script with its original arguments	
+		scriptCommand = "cmd.exe /k " & engineFolder & "cscript.exe //nologo """ & Wscript.ScriptFullName & """" & argString
+		
+		Shell.Run scriptCommand,,False
+		Wscript.Quit
+	Else
+		Exit Sub					'Already Running with Cscript Exit this Subroutine
+	End If
+
+
+End Sub
