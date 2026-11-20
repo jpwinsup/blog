@@ -1,0 +1,78 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720" role="img" aria-labelledby="title desc">
+  <title id="title">Windows セキュリティの英語表示が KB5007651 で日本語表示へ改善する流れ</title>
+  <desc id="desc">クリーン インストール直後は Windows のほかの画面が日本語でも Windows セキュリティだけ英語表示となり、KB5007651 の適用後に日本語表示へ改善することを示す図です。</desc>
+  <defs>
+    <pattern id="grid" width="32" height="32" patternUnits="userSpaceOnUse">
+      <path d="M 32 0 L 0 0 0 32" fill="none" stroke="#d8e0e8" stroke-width="1" opacity="0.45"/>
+    </pattern>
+    <marker id="arrow" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+      <path d="M0,0 L12,6 L0,12 Z" fill="#40576d"/>
+    </marker>
+  </defs>
+  <rect width="1280" height="720" fill="#f7f9fc"/>
+  <rect width="1280" height="720" fill="url(#grid)"/>
+  <rect x="0" y="0" width="760" height="10" fill="#00796b"/>
+  <rect x="760" y="0" width="520" height="10" fill="#e5a000"/>
+
+  <text x="64" y="78" font-family="Segoe UI, Yu Gothic UI, sans-serif" font-size="44" font-weight="700" fill="#172a3a">なぜ Windows セキュリティだけ英語になる?</text>
+  <text x="66" y="119" font-family="Segoe UI, Yu Gothic UI, sans-serif" font-size="23" fill="#506577">表示言語の設定と、アプリ固有の表示用リソースは別々に更新されます</text>
+
+  <rect x="58" y="168" width="390" height="438" rx="8" fill="#ffffff" stroke="#c8d3dd" stroke-width="2"/>
+  <rect x="58" y="168" width="390" height="66" rx="8" fill="#eef3f7"/>
+  <rect x="58" y="226" width="390" height="8" fill="#eef3f7"/>
+  <text x="88" y="211" font-family="Segoe UI, Yu Gothic UI, sans-serif" font-size="25" font-weight="700" fill="#23394c">クリーン インストール直後</text>
+
+  <rect x="103" y="268" width="300" height="169" rx="8" fill="#263b4c"/>
+  <rect x="119" y="284" width="268" height="131" rx="4" fill="#f7fafc"/>
+  <rect x="219" y="437" width="68" height="22" fill="#637789"/>
+  <rect x="182" y="459" width="142" height="12" rx="6" fill="#8092a1"/>
+  <rect x="142" y="310" width="220" height="28" rx="6" fill="#dcefe9"/>
+  <circle cx="160" cy="324" r="7" fill="#16856d"/>
+  <text x="177" y="331" font-family="Segoe UI, Yu Gothic UI, sans-serif" font-size="17" fill="#225348">エクスプローラー: 日本語</text>
+  <rect x="142" y="349" width="220" height="28" rx="6" fill="#dcefe9"/>
+  <circle cx="160" cy="363" r="7" fill="#16856d"/>
+  <text x="177" y="370" font-family="Segoe UI, Yu Gothic UI, sans-serif" font-size="17" fill="#225348">設定: 日本語</text>
+  <rect x="142" y="388" width="220" height="44" rx="6" fill="#fff0dc" stroke="#e5a000"/>
+  <circle cx="160" cy="410" r="7" fill="#d97b00"/>
+  <text x="177" y="406" font-family="Segoe UI, Yu Gothic UI, sans-serif" font-size="16" font-weight="700" fill="#784700">Windows セキュリティ</text>
+  <text x="177" y="425" font-family="Segoe UI, Yu Gothic UI, sans-serif" font-size="15" fill="#784700">English へフォールバック</text>
+
+  <text x="91" y="515" font-family="Segoe UI, Yu Gothic UI, sans-serif" font-size="20" font-weight="700" fill="#334d61">Windows の主な画面は日本語</text>
+  <text x="91" y="550" font-family="Segoe UI, Yu Gothic UI, sans-serif" font-size="18" fill="#5a6e7e">アプリ固有の日本語表示用リソースが</text>
+  <text x="91" y="579" font-family="Segoe UI, Yu Gothic UI, sans-serif" font-size="18" fill="#5a6e7e">まだ適用されていない状態</text>
+
+  <line x1="475" y1="383" x2="790" y2="383" stroke="#40576d" stroke-width="5" marker-end="url(#arrow)"/>
+  <circle cx="626" cy="383" r="92" fill="#ffffff" stroke="#00796b" stroke-width="5"/>
+  <path d="M626 322 L674 342 L666 403 C660 440 635 461 626 466 C617 461 592 440 586 403 L578 342 Z" fill="#00796b"/>
+  <path d="M604 387 L620 403 L650 366" fill="none" stroke="#ffffff" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
+  <rect x="513" y="497" width="226" height="58" rx="8" fill="#173f3a"/>
+  <text x="626" y="523" text-anchor="middle" font-family="Segoe UI, Yu Gothic UI, sans-serif" font-size="18" fill="#d8f3ed">Windows Security platform</text>
+  <text x="626" y="546" text-anchor="middle" font-family="Segoe UI, Yu Gothic UI, sans-serif" font-size="23" font-weight="700" fill="#ffffff">KB5007651</text>
+
+  <rect x="831" y="168" width="390" height="438" rx="8" fill="#ffffff" stroke="#9fcfc5" stroke-width="3"/>
+  <rect x="831" y="168" width="390" height="66" rx="8" fill="#e6f4f0"/>
+  <rect x="831" y="226" width="390" height="8" fill="#e6f4f0"/>
+  <text x="861" y="211" font-family="Segoe UI, Yu Gothic UI, sans-serif" font-size="25" font-weight="700" fill="#174d43">更新後</text>
+
+  <rect x="876" y="268" width="300" height="169" rx="8" fill="#263b4c"/>
+  <rect x="892" y="284" width="268" height="131" rx="4" fill="#f7fafc"/>
+  <rect x="992" y="437" width="68" height="22" fill="#637789"/>
+  <rect x="955" y="459" width="142" height="12" rx="6" fill="#8092a1"/>
+  <rect x="915" y="310" width="220" height="28" rx="6" fill="#dcefe9"/>
+  <circle cx="933" cy="324" r="7" fill="#16856d"/>
+  <text x="950" y="331" font-family="Segoe UI, Yu Gothic UI, sans-serif" font-size="17" fill="#225348">エクスプローラー: 日本語</text>
+  <rect x="915" y="349" width="220" height="28" rx="6" fill="#dcefe9"/>
+  <circle cx="933" cy="363" r="7" fill="#16856d"/>
+  <text x="950" y="370" font-family="Segoe UI, Yu Gothic UI, sans-serif" font-size="17" fill="#225348">設定: 日本語</text>
+  <rect x="915" y="388" width="220" height="44" rx="6" fill="#dcefe9" stroke="#16856d"/>
+  <circle cx="933" cy="410" r="7" fill="#16856d"/>
+  <text x="950" y="406" font-family="Segoe UI, Yu Gothic UI, sans-serif" font-size="16" font-weight="700" fill="#225348">Windows セキュリティ</text>
+  <text x="950" y="425" font-family="Segoe UI, Yu Gothic UI, sans-serif" font-size="15" fill="#225348">日本語表示</text>
+
+  <text x="864" y="515" font-family="Segoe UI, Yu Gothic UI, sans-serif" font-size="20" font-weight="700" fill="#174d43">表示用リソースを更新</text>
+  <text x="864" y="550" font-family="Segoe UI, Yu Gothic UI, sans-serif" font-size="18" fill="#4d6b64">言語設定をやり直さずに</text>
+  <text x="864" y="579" font-family="Segoe UI, Yu Gothic UI, sans-serif" font-size="18" fill="#4d6b64">Windows セキュリティを日本語化</text>
+
+  <rect x="58" y="637" width="1163" height="48" rx="8" fill="#253b4c"/>
+  <text x="640" y="669" text-anchor="middle" font-family="Segoe UI, Yu Gothic UI, sans-serif" font-size="21" font-weight="600" fill="#ffffff">言語パックを入れ直す前に、Windows セキュリティ アプリの更新状態を確認します</text>
+</svg>

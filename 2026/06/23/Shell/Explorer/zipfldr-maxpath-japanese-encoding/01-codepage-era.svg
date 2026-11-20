@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 380" width="820" height="380" font-family="'Segoe UI','Yu Gothic UI',sans-serif">
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto"><polygon points="0 0, 10 3.5, 0 7" fill="#555"/></marker>
+  </defs>
+  <!-- Background -->
+  <rect width="820" height="380" fill="#ffffff" rx="8"/>
+  <!-- Title -->
+  <text x="410" y="32" text-anchor="middle" font-size="16" font-weight="bold" fill="#333">コードページ時代の「文字化け」の仕組み</text>
+  <!-- Japan PC -->
+  <rect x="40" y="60" width="280" height="260" rx="12" fill="#e8f4fd" stroke="#90caf9" stroke-width="2"/>
+  <text x="180" y="90" text-anchor="middle" font-size="14" font-weight="bold" fill="#1565c0">🖥 日本の PC</text>
+  <text x="180" y="115" text-anchor="middle" font-size="12" fill="#555">エンコーディング: Shift_JIS (CP932)</text>
+  <rect x="60" y="135" width="240" height="40" rx="6" fill="#fff" stroke="#90caf9" stroke-width="1"/>
+  <text x="180" y="160" text-anchor="middle" font-size="13" fill="#333">ファイル名: 報告書.docx</text>
+  <rect x="60" y="190" width="240" height="55" rx="6" fill="#fff3e0" stroke="#ffb74d" stroke-width="1"/>
+  <text x="180" y="210" text-anchor="middle" font-size="11" fill="#e65100">Shift_JIS バイト列:</text>
+  <text x="180" y="232" text-anchor="middle" font-size="11" font-family="monospace" fill="#bf360c">95 F1 8D 90 8F 91 2E 64 6F 63 78</text>
+  <text x="180" y="300" text-anchor="middle" font-size="11" fill="#777">ZIP 作成 → Shift_JIS で格納</text>
+  <!-- Arrow -->
+  <line x1="330" y1="190" x2="490" y2="190" stroke="#555" stroke-width="2" marker-end="url(#arrow)"/>
+  <rect x="355" y="165" width="110" height="28" rx="6" fill="#fff9c4" stroke="#f9a825" stroke-width="1"/>
+  <text x="410" y="184" text-anchor="middle" font-size="12" font-weight="bold" fill="#f57f17">📦 ZIP ファイル</text>
+  <text x="410" y="210" text-anchor="middle" font-size="10" fill="#888">エンコーディング情報なし</text>
+  <!-- US PC -->
+  <rect x="500" y="60" width="280" height="260" rx="12" fill="#fce4ec" stroke="#ef9a9a" stroke-width="2"/>
+  <text x="640" y="90" text-anchor="middle" font-size="14" font-weight="bold" fill="#c62828">🖥 米国の PC</text>
+  <text x="640" y="115" text-anchor="middle" font-size="12" fill="#555">エンコーディング: CP437</text>
+  <rect x="520" y="135" width="240" height="40" rx="6" fill="#fff" stroke="#ef9a9a" stroke-width="1"/>
+  <text x="640" y="160" text-anchor="middle" font-size="13" fill="#c62828">ファイル名: ò±ìÉÅæ.docx 💥</text>
+  <rect x="520" y="190" width="240" height="55" rx="6" fill="#ffebee" stroke="#ef9a9a" stroke-width="1"/>
+  <text x="640" y="210" text-anchor="middle" font-size="11" fill="#c62828">CP437 として解釈:</text>
+  <text x="640" y="232" text-anchor="middle" font-size="11" font-family="monospace" fill="#b71c1c">95 F1 8D 90 8F 91 → ò±ìÉÅæ</text>
+  <text x="640" y="300" text-anchor="middle" font-size="11" fill="#777">同じバイト列を CP437 で解釈</text>
+  <!-- Bottom note -->
+  <text x="410" y="358" text-anchor="middle" font-size="12" fill="#666">ZIP に「どのコードページで書かれたか」の情報がないため、受信側の OS の既定コードページで解釈してしまう</text>
+</svg>

@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-180187723-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-180187723-1');
+</script>
+<!-- End Google Analytics -->
+
+  
+  <title>Windows タイム サービスの時刻同期間隔を変更する方法 | Microsoft Japan Windows Technology Support Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="本記事はマイクロソフト社員によって公開されております。こんにちは。Windows Commercial Support Directory Services チームです。 今回は、Windows タイム サービス (W32Time) により、NTP クライアントが NTP サーバーに時刻サンプルを要求する間隔の変更方法についてご紹介いたします。 Windows タイム サービスでは、時刻同期方式や">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Windows タイム サービスの時刻同期間隔を変更する方法">
+<meta property="og:url" content="https://jpwinsup.github.io/blog/2026/11/19/ActiveDirectory/WindowsTimeService/w32time-polling-interval/index.html">
+<meta property="og:site_name" content="Microsoft Japan Windows Technology Support Blog">
+<meta property="og:description" content="本記事はマイクロソフト社員によって公開されております。こんにちは。Windows Commercial Support Directory Services チームです。 今回は、Windows タイム サービス (W32Time) により、NTP クライアントが NTP サーバーに時刻サンプルを要求する間隔の変更方法についてご紹介いたします。 Windows タイム サービスでは、時刻同期方式や">
+<meta property="og:locale" content="ja_JP">
+<meta property="article:published_time" content="2026-11-19T00:00:00.000Z">
+<meta property="article:modified_time" content="2026-11-20T04:12:56.395Z">
+<meta property="article:author" content="Microsoft Japan Windows Technology Support Team">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/blog/atom.xml" title="Microsoft Japan Windows Technology Support Blog" type="application/atom+xml">
+  
+
+  <link rel="icon" href="/blog/favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="/blog/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/blog/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/blog/favicon-16x16.png">
+  <link rel="manifest" href="/blog/site.webmanifest">
+  <link rel="mask-icon" href="/blog/safari-pinned-tab.svg" color="#5bbad5">
+  <meta name="msapplication-TileColor" content="#ffffff">
+  <meta name="theme-color" content="#ffffff">
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/blog/css/style.css">
+
+<meta name="generator" content="Hexo 5.2.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="site-header-logo"></div>
+  <div id="site-header-blog-wrapper"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        <div id="ms-logo"></div>
+        
+          <a class="main-nav-link" href="/blog/">Home</a>
+        
+          <a class="main-nav-link" href="/blog/archives">Archives</a>
+        
+        <a class="main-nav-link" target="_blank" rel="noopener" href="https://cssjpn.github.io/">サポート情報</a>
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/blog/atom.xml" title="RSSフィード"></a>
+        
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//www.bing.com/search" method="get" accept-charset="UTF-8" name="bing-search" onsubmit="var f=this;if(f['q'].value){var searchUrl =  'https://www.bing.com/search?q=' +  encodeURIComponent(f['q'].value + ' site:' + f['sitesearch'].value) ;window.open(searchUrl, 'blank') };return false;" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="検索"><button type="submit" id="nav-search-btn" class="search-form-submit"></button><input type="hidden" name="sitesearch" value="https://jpwinsup.github.io/blog"></form>
+      </div>
+    </div>
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/blog/" id="logo">Microsoft Japan Windows Technology Support Blog</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/blog/" id="subtitle">日本マイクロソフト Windows Support チームによる、サポート情報 Blog です。</a>
+        </h2>
+      
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-ActiveDirectory/WindowsTimeService/w32time-polling-interval" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    
+    
+      <header class="article-header-single">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Windows タイム サービスの時刻同期間隔を変更する方法
+    </h1>
+  
+
+      </header>
+      <div class="article-share">
+        Published Date: 
+        <a href="/blog/2026/11/19/ActiveDirectory/WindowsTimeService/w32time-polling-interval/" class="article-date-single">
+  <time datetime="2026-11-19T00:00:00.000Z" itemprop="datePublished">2026-11-19</time>
+</a>
+        
+  <div class="article-category">
+    <a class="article-category-link" href="/blog/categories/Active-Directory/">Active Directory</a>►<a class="article-category-link" href="/blog/categories/Active-Directory/Windows-Time-Service/">Windows Time Service</a>
+  </div>
+
+        
+        <a href="https://github.com/jpwinsup/blog/issues/new?title=&body=%EF%BB%BF%0A%0A---%0A%0A%23%23%23%23+Document+Details%0A%0A*+Article+ID%3A+736f63d4-ec9c-5d2c-b313-227dbba00fdd%0A*+TITLE%3A+Windows+%E3%82%BF%E3%82%A4%E3%83%A0+%E3%82%B5%E3%83%BC%E3%83%93%E3%82%B9%E3%81%AE%E6%99%82%E5%88%BB%E5%90%8C%E6%9C%9F%E9%96%93%E9%9A%94%E3%82%92%E5%A4%89%E6%9B%B4%E3%81%99%E3%82%8B%E6%96%B9%E6%B3%95%0A*+URL+https%3A%2F%2Fjpwinsup.github.io%2Fblog%2F2026%2F11%2F19%2FActiveDirectory%2FWindowsTimeService%2Fw32time-polling-interval%2F%0A*+SourceFileName%3A+source%2F_posts%2FActiveDirectory%2FWindowsTimeService%2Fw32time-polling-interval.md%0A" class="article-github-issue-link" target="_blank" rel="noopener noreferrer">feedback</a>
+        
+        <a data-url="https://jpwinsup.github.io/blog/2026/11/19/ActiveDirectory/WindowsTimeService/w32time-polling-interval/" data-id="cmwoh0ajh008lx24y1swdgq4w" class="article-share-link">共有</a>
+      </div>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>本記事はマイクロソフト社員によって公開されております。<br>こんにちは。Windows Commercial Support Directory Services チームです。</p>
+<p>今回は、Windows タイム サービス (W32Time) により、NTP クライアントが NTP サーバーに時刻サンプルを要求する間隔の変更方法についてご紹介いたします。</p>
+<p>Windows タイム サービスでは、時刻同期方式や同期先に指定したフラグによって、同期間隔の決定に使用される情報が異なります。<br>そのため、同期間隔を変更する際には、まず現在の構成を確認し、変更対象となる設定を判断する必要があります。</p>
+<p>本記事では、同期間隔を制御する各パラメーターの役割と、構成に応じた変更手順についておまとめいたします。</p>
+<div style="background-color:#f3f3f3; border-left:4px solid #bbb; padding:12px 16px; margin:12px 0; font-style:normal;">
+
+<p><strong>注意:</strong></p>
+<p>本記事では、Windows タイム サービスが既定で使用するレジストリ設定をご紹介します。<br>Windows タイム サービスの設定をグループ ポリシーで設定している場合、既定で使用するレジストリでの設定よりもグループ ポリシーの設定が優先されます。<br>また、グループ ポリシーで設定した値は、本記事で紹介するレジストリ キーとは別のレジストリ キーの配下に保存されます。<br>そのため、グループ ポリシーで設定を行われている場合には該当する設定をご確認のうえ、必要に応じて変更してください。<br>また、Intune の設定カタログや CSP を使用して Windows タイム サービスの設定をポリシーとして配布している場合も、本記事で紹介するレジストリ設定よりポリシーの設定が優先されます。その場合は、Intune 側の該当するポリシーをご確認のうえ、必要に応じて変更してください。<br>※ 現在、ポリシーで制御されている設定があるかどうかについては、後述の「現在の設定の確認方法」に記載の方法でご確認ください。</p>
+<p>Windows タイム サービスの設定に対応するグループ ポリシーのパスは、以下のとおりです。</p>
+<ul>
+<li>[コンピューターの構成] - [管理用テンプレート] - [システム] - [Windows タイム サービス] - [グローバル構成設定]</li>
+<li>[コンピューターの構成] - [管理用テンプレート] - [システム] - [Windows タイム サービス] - [タイム プロバイダー] - [Windows NTP クライアントを構成する]</li>
+</ul>
+<p>グループ ポリシーとレジストリ設定の関係については、以下の弊社公開情報をご参照ください。</p>
+<p><a target="_blank" rel="noopener" href="https://learn.microsoft.com/ja-jp/windows-server/networking/windows-time-service/windows-time-service-tools-and-settings#use-local-group-policy-editor">Windows タイム サービスのツールと設定 - ローカル グループ ポリシー エディターの使用</a></p>
+</div>
+
+<h1 id="時刻同期間隔を制御する値について"><a href="#時刻同期間隔を制御する値について" class="headerlink" title="時刻同期間隔を制御する値について"></a>時刻同期間隔を制御する値について</h1><p>時刻同期間隔を制御する値は、<code>w32tm /query /configuration</code> コマンドで確認できる Windows タイム サービスの時刻同期方式を示す Type と、同期先を示す NtpServer に指定されたフラグによって決まります。<br>具体的には、各設定に従い、MinPollInterval / MaxPollInterval という値の範囲内で間隔を動的に調整する方式と、SpecialPollInterval という値を利用して秒単位で間隔を指定する方式があります。<br>まずは各値の役割をご説明し、その後に現在の設定の確認方法と、構成に応じた変更対象の判断方法をご紹介いたします。</p>
+<p>時刻同期間隔に関連する主な値は、以下の 3 つです。</p>
+<table>
+<thead>
+<tr>
+<th>値の名前</th>
+<th>役割</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>MinPollInterval</td>
+<td>ポーリング間隔の下限を指定します。</td>
+</tr>
+<tr>
+<td>MaxPollInterval</td>
+<td>ポーリング間隔の上限を指定します。</td>
+</tr>
+<tr>
+<td>SpecialPollInterval</td>
+<td>手動で指定した時刻ソースに対するポーリング間隔を秒単位で指定します。<br> NtpServer のフラグに 0x1 が含まれる場合に使用されます。</td>
+</tr>
+</tbody></table>
+<h3 id="MinPollInterval-MaxPollInterval"><a href="#MinPollInterval-MaxPollInterval" class="headerlink" title="MinPollInterval / MaxPollInterval"></a>MinPollInterval / MaxPollInterval</h3><p>MinPollInterval と MaxPollInterval は以下のレジストリで設定されています。</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">レジストリ キー: HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\W32Time\Config</span><br><span class="line">値の名前: MinPollInterval</span><br><span class="line">値の名前: MaxPollInterval</span><br></pre></td></tr></table></figure>
+
+
+<p>これらの値は秒数を直接指定するものではなく、設定値を指数とする 2 のべき乗秒でポーリング間隔を表します。</p>
+<p>例えば、MinPollInterval が <code>6</code>、MaxPollInterval が <code>10</code> の場合、下限は 2^6 = 64 秒、上限は 2^10 = 1024 秒となります。<br>MinPollInterval と MaxPollInterval を利用する場合、Windows タイム サービスは、時刻差や同期の状態などに応じて、この範囲でポーリング間隔を動的に調整します。</p>
+<h3 id="SpecialPollInterval"><a href="#SpecialPollInterval" class="headerlink" title="SpecialPollInterval"></a>SpecialPollInterval</h3><p>SpecialPollInterval は以下のレジストリで設定されています。</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">レジストリ キー: HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\W32Time\TimeProviders\NtpClient</span><br><span class="line">値の名前: SpecialPollInterval</span><br></pre></td></tr></table></figure>
+
+<p>こちらの値は、ポーリング間隔を秒単位で直接指定します。例えば、<code>3600</code> (10 進数) を指定すると、1 時間に相当します。</p>
+<p>ただし、Windows 10 バージョン 1703 以降では、SpecialPollInterval は、MinPollInterval および MaxPollInterval を秒数に換算した範囲内である必要があります。<br>※ 設定値が範囲外の場合は、範囲内で最も近い値が選択されます。</p>
+<p>例えば、MinPollInterval が <code>6</code> (64 秒)、MaxPollInterval が <code>10</code> (1024 秒) の場合、SpecialPollInterval の値は <code>64</code> から <code>1024</code> の間である必要があります。<br>この場合、仮に SpecialPollInterval が、<code>3600</code> に設定されていたとしても、定期的な時刻同期間隔は、1024 秒となります。<br>そのため、SpecialPollInterval に設定した間隔でポーリングが行われない場合には、MinPollInterval および MaxPollInterval の値の範囲内であるかご確認ください。</p>
+<p>各値の説明については、以下の弊社公開情報でもご案内しておりますので必要に応じてご参照ください。</p>
+<p><a target="_blank" rel="noopener" href="https://learn.microsoft.com/ja-jp/windows-server/networking/windows-time-service/windows-time-service-tools-and-settings#w32time-registry-reference">Windows タイム サービスのツールと設定 - W32Time レジストリ リファレンス</a></p>
+<h1 id="現在の設定の確認方法と構成別の時刻同期間隔の決まり方"><a href="#現在の設定の確認方法と構成別の時刻同期間隔の決まり方" class="headerlink" title="現在の設定の確認方法と構成別の時刻同期間隔の決まり方"></a>現在の設定の確認方法と構成別の時刻同期間隔の決まり方</h1><h2 id="現在の設定の確認方法"><a href="#現在の設定の確認方法" class="headerlink" title="現在の設定の確認方法"></a>現在の設定の確認方法</h2><p>管理者権限でコマンド プロンプトを開き、以下のコマンドを実行します。</p>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">w32tm /query /configuration</span><br></pre></td></tr></table></figure>
+
+<p>出力結果から、Type、NtpServer、MinPollInterval、MaxPollInterval、SpecialPollInterval を確認します。</p>
+<p>各設定値の末尾には、設定の取得元が表示されます。<br>Intune やグループ ポリシーから適用された設定値には「(ポリシー)」、ポリシーが適用されておらず、ローカルのレジストリ設定を使用している値には「(ローカル)」と表示されます。</p>
+<p>構成確認コマンドについては、以下の弊社ブログをご参照ください。</p>
+<p><a href="https://jpwinsup.github.io/blog/2026/05/28/ActiveDirectory/WindowsTimeService/w32time-Introduction/#Windows-Time-%E3%82%B5%E3%83%BC%E3%83%93%E3%82%B9%E3%81%AE%E6%A7%8B%E6%88%90%E3%82%92%E7%A2%BA%E8%AA%8D%E3%81%99%E3%82%8B%E3%82%B3%E3%83%9E%E3%83%B3%E3%83%89">Windows Time サービスによる時刻同期の基本と w32tm.exe コマンドについて - Windows Time サービスの構成を確認するコマンド</a></p>
+<h2 id="時刻同期間隔の決まり方"><a href="#時刻同期間隔の決まり方" class="headerlink" title="時刻同期間隔の決まり方"></a>時刻同期間隔の決まり方</h2><p>同期間隔の制御に SpecialPollInterval を使用するか、MinPollInterval / MaxPollInterval を使用するかは、先ほど確認した Type と、NtpServer に指定されたフラグに応じて決定されます。<br>対応を以下の表におまとめしております。</p>
+<table>
+<thead>
+<tr>
+<th align="center">Type</th>
+<th>NtpServer の <br> フラグ</th>
+<th>同期間隔を制御する設定</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">NT5DS</td>
+<td>-</td>
+<td>MinPollInterval / MaxPollInterval を使用します。</td>
+</tr>
+<tr>
+<td align="center">NTP</td>
+<td>0x1 を含まない</td>
+<td>MinPollInterval / MaxPollInterval を使用します。</td>
+</tr>
+<tr>
+<td align="center">NTP</td>
+<td>0x1 を含む</td>
+<td>SpecialPollInterval を使用します。</td>
+</tr>
+<tr>
+<td align="center">AllSync</td>
+<td>0x1 を含まない</td>
+<td>MinPollInterval / MaxPollInterval を使用します。</td>
+</tr>
+<tr>
+<td align="center">AllSync</td>
+<td>0x1 を含む</td>
+<td>ドメイン階層による同期と手動ピアによる同期の両方を考慮し、<br> MinPollInterval / MaxPollInterval と SpecialPollInterval を確認します。</td>
+</tr>
+</tbody></table>
+<p>※ Type が NT5DS の場合、NtpServer のフラグは同期間隔の決定に使用されないため、表では「-」としています。</p>
+<p>フラグはビット単位で組み合わせて指定します。例えば、<code>0x9</code> は <code>0x8</code> (Client) と <code>0x1</code> (SpecialInterval) の組み合わせのため、SpecialPollInterval を使用する構成です。<br>一方、<code>0x8</code> のみの場合は <code>0x1</code> を含まないため、MinPollInterval / MaxPollInterval を使用します。</p>
+<p>Type やフラグの詳細については、以下の弊社ブログも併せてご参照ください。</p>
+<p><a href="https://jpwinsup.github.io/blog/2026/05/28/ActiveDirectory/WindowsTimeService/w32time-Parameters/">Windows タイム サービスの Parameters レジストリ パラメーターについて</a></p>
+<h1 id="時刻同期間隔を変更する方法"><a href="#時刻同期間隔を変更する方法" class="headerlink" title="時刻同期間隔を変更する方法"></a>時刻同期間隔を変更する方法</h1><p>ポーリング間隔を短くすると、同期先への問い合わせ頻度が増加します。多数のコンピューターに設定する際には、時刻精度の要件と同期先・ネットワークへの負荷を考慮し、事前に検証することをお勧めいたします。</p>
+<h2 id="MinPollInterval-MaxPollInterval-を使用する場合の変更手順"><a href="#MinPollInterval-MaxPollInterval-を使用する場合の変更手順" class="headerlink" title="MinPollInterval / MaxPollInterval を使用する場合の変更手順"></a>MinPollInterval / MaxPollInterval を使用する場合の変更手順</h2><p>ドメイン階層に従って同期する NT5DS の構成や、手動ピアのフラグに <code>0x1</code> を含まない構成では、以下の手順で同期間隔を変更します。</p>
+<ol>
+<li><p>対象のコンピューターに管理者権限を持つアカウントでログオンし、レジストリ エディターを起動します。</p>
+</li>
+<li><p>変更前の値を記録し、変更対象のキーをエクスポートするなど、復元できるよう準備します。</p>
+</li>
+<li><p>以下のレジストリ キーに移動します。</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\W32Time\Config</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>MinPollInterval および MaxPollInterval を編集し、目的の値を入力します。例えば、64 秒から 1024 秒の範囲にする場合は、以下のように設定します。</p>
+<table>
+<thead>
+<tr>
+<th>値の名前</th>
+<th>設定値 (10 進数)</th>
+<th>対応する間隔</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>MinPollInterval</td>
+<td>6</td>
+<td>64 秒</td>
+</tr>
+<tr>
+<td>MaxPollInterval</td>
+<td>10</td>
+<td>1024 秒</td>
+</tr>
+</tbody></table>
+</li>
+<li><p>レジストリ エディターを閉じ、管理者権限でコマンド プロンプトを開きます。<br>以下のコマンドを実行し、Windows タイム サービスに設定の変更を通知して反映します。<br>こちらのコマンドの代わりに Windows タイム サービスのサービスを再起動していただいても設定を反映できます。</p>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">w32tm /config /update</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>後述の「変更後の確認方法」に従い、設定内容と同期状態を確認します。</p>
+</li>
+</ol>
+<h2 id="SpecialPollInterval-を使用する場合の変更手順"><a href="#SpecialPollInterval-を使用する場合の変更手順" class="headerlink" title="SpecialPollInterval を使用する場合の変更手順"></a>SpecialPollInterval を使用する場合の変更手順</h2><p>手動ピアのフラグに <code>0x1</code> が含まれる場合は、以下の手順で同期間隔を変更します。</p>
+<p>ここでは、Type が NTP、対象の手動ピアのフラグが <code>0x9</code> である構成を前提に、ポーリング間隔を 3600 秒 (1 時間) にする例をご紹介します。</p>
+<ol>
+<li><p>対象のコンピューターに管理者権限を持つアカウントでログオンし、レジストリ エディターを起動します。</p>
+</li>
+<li><p>変更前の値を記録し、変更対象のキーをエクスポートするなど、復元できるよう準備します。</p>
+</li>
+<li><p>以下のレジストリ キーに移動し、MinPollInterval / MaxPollInterval を確認します。3600 秒が上下限の範囲に含まれるよう、必要に応じて値を変更します。</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\W32Time\Config</span><br></pre></td></tr></table></figure>
+
+<table>
+<thead>
+<tr>
+<th>値の名前</th>
+<th>設定値の例 (10 進数)</th>
+<th>対応する間隔</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>MinPollInterval</td>
+<td>10</td>
+<td>1024 秒</td>
+</tr>
+<tr>
+<td>MaxPollInterval</td>
+<td>12</td>
+<td>4096 秒</td>
+</tr>
+</tbody></table>
+</li>
+<li><p>以下のレジストリ キーに移動します。</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\W32Time\TimeProviders\NtpClient</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>SpecialPollInterval を編集し、10 進数で <code>3600</code> を入力します。</p>
+</li>
+<li><p>レジストリ エディターを閉じ、管理者権限でコマンド プロンプトを開きます。<br>以下のコマンドを実行し、Windows タイム サービスに設定の変更を通知して反映します。<br>こちらのコマンドの代わりに Windows タイム サービスのサービスを再起動していただいても設定を反映できます。</p>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">w32tm /config /update</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>後述の「変更後の確認方法」に従い、設定内容と同期状態を確認します。</p>
+</li>
+</ol>
+<h2 id="変更後の確認方法"><a href="#変更後の確認方法" class="headerlink" title="変更後の確認方法"></a>変更後の確認方法</h2><h3 id="構成内容の確認"><a href="#構成内容の確認" class="headerlink" title="構成内容の確認"></a>構成内容の確認</h3><p>管理者権限のコマンド プロンプトで、以下のコマンドを実行します。</p>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">w32tm /query /configuration</span><br></pre></td></tr></table></figure>
+
+<p>Type、NtpServer のフラグ、および変更した各設定値を確認します。SpecialPollInterval を使用する場合は、MinPollInterval / MaxPollInterval の範囲も併せて確認してください。</p>
+<p>コマンドの詳細については、以下の弊社ブログをご参照ください。</p>
+<p><a href="https://jpwinsup.github.io/blog/2026/05/28/ActiveDirectory/WindowsTimeService/w32time-Introduction/#Windows-Time-%E3%82%B5%E3%83%BC%E3%83%93%E3%82%B9%E3%81%AE%E6%A7%8B%E6%88%90%E3%82%92%E7%A2%BA%E8%AA%8D%E3%81%99%E3%82%8B%E3%82%B3%E3%83%9E%E3%83%B3%E3%83%89">Windows Time サービスによる時刻同期の基本と w32tm.exe コマンドについて - Windows Time サービスの構成を確認するコマンド</a></p>
+<h3 id="時刻同期状態の確認"><a href="#時刻同期状態の確認" class="headerlink" title="時刻同期状態の確認"></a>時刻同期状態の確認</h3><p>以下のコマンドを実行し、想定した時刻同期先の NTP サーバーと時刻同期が成功していることを確認します。</p>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">w32tm /resync /rediscover</span><br><span class="line">w32tm /query /status</span><br></pre></td></tr></table></figure>
+
+<p><code>w32tm /resync /rediscover</code> は、同期先の再探索を行ったうえで時刻同期を行うコマンドです。<br><code>w32tm /query /status</code> は、現在の時刻同期状態を確認するコマンドです。<br>これらのコマンドを実行し、時刻同期が成功することをご確認ください。</p>
+<p>各コマンドの詳細については、以下の弊社ブログをご参照ください。</p>
+<p><a href="https://jpwinsup.github.io/blog/2026/05/28/ActiveDirectory/WindowsTimeService/w32time-Introduction/#%E7%8F%BE%E5%9C%A8%E3%81%AE%E6%99%82%E5%88%BB%E5%90%8C%E6%9C%9F%E7%8A%B6%E6%85%8B%E3%82%92%E7%A2%BA%E8%AA%8D%E3%81%99%E3%82%8B%E3%82%B3%E3%83%9E%E3%83%B3%E3%83%89">Windows Time サービスによる時刻同期の基本と w32tm.exe コマンドについて - 現在の時刻同期状態を確認するコマンド</a></p>
+<p>今回の記事が少しでも皆様のお役に立てば幸いでございます。</p>
+<p>※ 本記事内容は、今後予告なく変更される場合があります。変更時には、更新履歴にて変更内容を記載いたします。</p>
+<h2 id="更新履歴"><a href="#更新履歴" class="headerlink" title="更新履歴"></a>更新履歴</h2><p>2026/11/19 : 本ブログの公開</p>
+
+      
+      
+    </div>
+    <footer class="article-footer">
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/blog/2026/11/20/WindowsUpdate/FU/EKB-support/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">次の記事</strong>
+      <div class="article-nav-title">
+        
+          有効化パッケージ (eKB) の入手方法とサポートについて
+        
+      </div>
+    </a>
+  
+  
+    <a href="/blog/2026/11/18/SupportRequest/AIReadySupportRequests/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">前の記事</strong>
+      <div class="article-nav-title">迅速なサポートにつながるお問い合わせ記載方法</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">カテゴリ</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Activation/">Activation</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Activation/ESU/">ESU</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Activation/security-SPP/">security-SPP</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/">Active Directory</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Authentication/">Authentication</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/DFSR/">DFSR</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/FunctionalLevel/">FunctionalLevel</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Group-Policy/">Group Policy</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Promotion-and-Demotion/">Promotion and Demotion</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/User-Profile/">User Profile</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Windows-Hello/">Windows Hello</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Active-Directory/Windows-Time-Service/">Windows Time Service</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/AppLocker/">AppLocker</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/AppLocker/Active-Directory/">Active Directory</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/AppLocker/Microsoft-Intune/">Microsoft Intune</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/BitLocker/">BitLocker</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Deployment/">Deployment</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Deployment/Feature-on-demand/">Feature on demand</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Deployment/Sysprep/">Sysprep</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Failover-Clustering/">Failover Clustering</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Failover-Clustering/Azure-Local/">Azure Local</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Failover-Clustering/Configuration-and-Management/">Configuration and Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Failover-Clustering/Windows-Server-2025/">Windows Server 2025</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/FileServices/">FileServices</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/FileServices/FTP/">FTP</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/FileServices/SMB/">SMB</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Hyper-V/">Hyper-V</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Hyper-V/Configuration-and-Management/">Configuration and Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Hyper-V/Migration/">Migration</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Microsoft-Connected-Cache/">Microsoft Connected Cache</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/">Networking</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/BITS/">BITS</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/Bluetooth/">Bluetooth</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/DHCP/">DHCP</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/DNS/">DNS</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/Firewall/">Firewall</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/LBFO/">LBFO</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/NCSI/">NCSI</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/NetworkInterface/">NetworkInterface</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/Proxy/">Proxy</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Networking/TCPIP/">TCPIP</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/OpenSSH/">OpenSSH</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/">Performance</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/Hang-up-BSoD/">Hang-up/BSoD</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/No-Boot/">No Boot</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/Slow-Response/">Slow Response</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/System-Resource/">System Resource</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Performance/Tools/">Tools</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/">Public Key Infrastructure</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Certificate-Authority/">Certificate Authority</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Certificate-Management/">Certificate Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Code-Signing/">Code Signing</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Fundamental/">Fundamental</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/SSL-TLS-Communication/">SSL TLS Communication</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/SSL-TLS-Connection/">SSL TLS Connection</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Public-Key-Infrastructure/Smart-Card-Logon/">Smart Card Logon</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/">Remote Desktop</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/Azure-Virtual-Desktop-AVD/">Azure Virtual Desktop (AVD)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/Remote-Desktop-Service-RDS/">Remote Desktop Service (RDS)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Remote-Desktop/Windows-Virtual-Desktop-WVD/">Windows Virtual Desktop (WVD)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/RemoteAccess/">RemoteAccess</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/RemoteAccess/%E3%83%80%E3%82%A4%E3%83%A4%E3%83%AB%E3%82%A2%E3%83%83%E3%83%97%E6%8E%A5%E7%B6%9A/">ダイヤルアップ接続</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Security/">Security</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Security/WDAC/">WDAC</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Setup/">Setup</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Setup/Feature-Update-FU/">Feature Update (FU)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Shell/">Shell</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Shell/Explorer/">Explorer</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Shell/StartMenu/">StartMenu</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/">Storage</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/Backup/">Backup</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/FSRM/">FSRM</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/Management/">Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Storage/StorageMigrationService/">StorageMigrationService</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Support-Request/">Support Request</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/UEFI/">UEFI</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/UEFI/Secure-Boot/">Secure Boot</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/">User Interface and Apps</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Command-Prompt/">Command Prompt</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/EventLog/">EventLog</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Installer/">Installer</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Language-Support/">Language Support</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Microsoft-Store/">Microsoft Store</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Performance/">Performance</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/PowerShell/">PowerShell</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Printing-%E5%8D%B0%E5%88%B7/">Printing (印刷)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Server-Management/">Server Management</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Taskscheduler/">Taskscheduler</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps/Windows-Management-Instrumentation/">Windows Management Instrumentation</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/User-Interface-and-Apps-Language-support/">User Interface and Apps - Language support</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-365/">Windows 365</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Admin-Center/">Windows Admin Center</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Search/">Windows Search</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/">Windows Update</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Delivery-Optimization-DO/">Delivery Optimization (DO)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Feature-Update-FU/">Feature Update (FU)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Quality-Update-QU/">Quality Update (QU)</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Windows-Update-Agent/">Windows Update Agent</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/Windows-Update/Windows-Update-Agent-WUA/">Windows Update Agent (WUA)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/">WirelessNetwork</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/NPS/">NPS</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/Wi-Fi/">Wi-Fi</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/WirelessNetwork/%E3%83%A2%E3%83%90%E3%82%A4%E3%83%AB-%E3%83%96%E3%83%AD%E3%83%BC%E3%83%89%E3%83%90%E3%83%B3%E3%83%89%E6%8E%A5%E7%B6%9A-LTE/">モバイル ブロードバンド接続 (LTE)</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/shell/">shell</a></li><li class="category-list-item"><a class="category-list-link" href="/blog/categories/%E7%B5%84%E7%B9%94%E7%B4%B9%E4%BB%8B%E3%83%96%E3%83%AD%E3%82%B0%EF%BC%88Windows-Commercial%EF%BC%89/">組織紹介ブログ（Windows Commercial）</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最近の投稿</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/blog/2026/11/20/WindowsUpdate/FU/EKB-support/">有効化パッケージ (eKB) の入手方法とサポートについて</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/11/19/ActiveDirectory/WindowsTimeService/w32time-polling-interval/">Windows タイム サービスの時刻同期間隔を変更する方法</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/11/18/SupportRequest/AIReadySupportRequests/">迅速なサポートにつながるお問い合わせ記載方法</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/11/09/UserInterfaceAndApps/LanguageSupport_IME/windows-display-language-english/">Windows の表示言語を変更しても一部の画面やアプリが英語のまま表示される場合の確認ポイント</a>
+          </li>
+        
+          <li>
+            <a href="/blog/2026/10/26/PublicKeyInfrastructure/Fundamental/pki-fundamental-02/">デジタル証明書の記載内容と証明書検証</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">アーカイブ</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2026/11/">2026 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2026/10/">2026 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2026/09/">2026 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2026/08/">2026 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2026/07/">2026 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2026/06/">2026 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2026/05/">2026 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2026/04/">2026 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2026/03/">2026 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2026/02/">2026 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2026/01/">2026 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/12/">2025 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/11/">2025 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/10/">2025 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/09/">2025 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/08/">2025 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/07/">2025 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/06/">2025 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/05/">2025 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/04/">2025 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/03/">2025 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/02/">2025 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2025/01/">2025 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/12/">2024 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/11/">2024 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/10/">2024 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/09/">2024 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/08/">2024 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/07/">2024 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/06/">2024 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/05/">2024 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/04/">2024 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/03/">2024 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/02/">2024 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/01/">2024 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/12/">2023 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/11/">2023 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/10/">2023 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/09/">2023 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/08/">2023 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/07/">2023 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/06/">2023 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/05/">2023 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/04/">2023 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/03/">2023 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/02/">2023 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2023/01/">2023 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/12/">2022 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/11/">2022 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/10/">2022 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/09/">2022 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/08/">2022 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/07/">2022 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/06/">2022 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/05/">2022 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/04/">2022 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/03/">2022 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/02/">2022 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2022/01/">2022 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/12/">2021 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/11/">2021 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/10/">2021 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/09/">2021 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/08/">2021 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/07/">2021 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/06/">2021 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/05/">2021 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/04/">2021 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/03/">2021 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/02/">2021 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2021/01/">2021 / 01</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/12/">2020 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/11/">2020 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/10/">2020 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/07/">2020 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2020/03/">2020 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2019/03/">2019 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/11/">2018 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/10/">2018 / 10</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/09/">2018 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/08/">2018 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/07/">2018 / 07</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/06/">2018 / 06</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/04/">2018 / 04</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2018/02/">2018 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/12/">2017 / 12</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/11/">2017 / 11</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/09/">2017 / 09</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/05/">2017 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/03/">2017 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2017/02/">2017 / 02</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2016/08/">2016 / 08</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2016/05/">2016 / 05</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2014/03/">2014 / 03</a></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2012/02/">2012 / 02</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2026 Microsoft Japan Windows Technology Support Team<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/blog/" class="mobile-nav-link">Home</a>
+  
+    <a href="/blog/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+<script src="/blog/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

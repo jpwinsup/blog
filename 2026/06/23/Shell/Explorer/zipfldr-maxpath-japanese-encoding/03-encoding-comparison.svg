@@ -1,0 +1,130 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 400" width="820" height="400" font-family="'Segoe UI','Yu Gothic UI',sans-serif">
+  <rect width="820" height="400" fill="#ffffff" rx="8"/>
+  <text x="410" y="32" text-anchor="middle" font-size="16" font-weight="bold" fill="#333">同じファイル名の UTF-8 / Shift_JIS / 文字数の比較</text>
+  <text x="410" y="55" text-anchor="middle" font-size="12" fill="#777">ファイル名: 報告書_最終版_v2.docx</text>
+  <!-- Legend -->
+  <g transform="translate(550, 70)">
+    <rect x="0" y="0" width="14" height="14" rx="2" fill="#1565c0"/>
+    <text x="20" y="12" font-size="11" fill="#555">日本語文字 (CJK)</text>
+    <rect x="140" y="0" width="14" height="14" rx="2" fill="#66bb6a"/>
+    <text x="160" y="12" font-size="11" fill="#555">ASCII 文字</text>
+  </g>
+  <!-- UTF-8 row -->
+  <g transform="translate(40, 95)">
+    <text x="0" y="20" font-size="13" font-weight="bold" fill="#333">UTF-8</text>
+    <text x="0" y="38" font-size="11" fill="#777">(現在の標準)</text>
+    <!-- 報 3bytes -->
+    <rect x="110" y="2" width="36" height="40" rx="3" fill="#1565c0" stroke="#0d47a1" stroke-width="1"/>
+    <text x="128" y="27" text-anchor="middle" font-size="12" fill="#fff">報</text>
+    <!-- 告 3bytes -->
+    <rect x="149" y="2" width="36" height="40" rx="3" fill="#1565c0" stroke="#0d47a1" stroke-width="1"/>
+    <text x="167" y="27" text-anchor="middle" font-size="12" fill="#fff">告</text>
+    <!-- 書 3bytes -->
+    <rect x="188" y="2" width="36" height="40" rx="3" fill="#1565c0" stroke="#0d47a1" stroke-width="1"/>
+    <text x="206" y="27" text-anchor="middle" font-size="12" fill="#fff">書</text>
+    <!-- _ 1byte -->
+    <rect x="227" y="2" width="12" height="40" rx="3" fill="#66bb6a" stroke="#388e3c" stroke-width="1"/>
+    <text x="233" y="27" text-anchor="middle" font-size="10" fill="#fff">_</text>
+    <!-- 最 3bytes -->
+    <rect x="242" y="2" width="36" height="40" rx="3" fill="#1565c0" stroke="#0d47a1" stroke-width="1"/>
+    <text x="260" y="27" text-anchor="middle" font-size="12" fill="#fff">最</text>
+    <!-- 終 3bytes -->
+    <rect x="281" y="2" width="36" height="40" rx="3" fill="#1565c0" stroke="#0d47a1" stroke-width="1"/>
+    <text x="299" y="27" text-anchor="middle" font-size="12" fill="#fff">終</text>
+    <!-- 版 3bytes -->
+    <rect x="320" y="2" width="36" height="40" rx="3" fill="#1565c0" stroke="#0d47a1" stroke-width="1"/>
+    <text x="338" y="27" text-anchor="middle" font-size="12" fill="#fff">版</text>
+    <!-- _ 1byte -->
+    <rect x="359" y="2" width="12" height="40" rx="3" fill="#66bb6a" stroke="#388e3c" stroke-width="1"/>
+    <text x="365" y="27" text-anchor="middle" font-size="10" fill="#fff">_</text>
+    <!-- v 1byte -->
+    <rect x="374" y="2" width="12" height="40" rx="3" fill="#66bb6a" stroke="#388e3c" stroke-width="1"/>
+    <text x="380" y="27" text-anchor="middle" font-size="10" fill="#fff">v</text>
+    <!-- 2 1byte -->
+    <rect x="389" y="2" width="12" height="40" rx="3" fill="#66bb6a" stroke="#388e3c" stroke-width="1"/>
+    <text x="395" y="27" text-anchor="middle" font-size="10" fill="#fff">2</text>
+    <!-- . 1byte -->
+    <rect x="404" y="2" width="12" height="40" rx="3" fill="#66bb6a" stroke="#388e3c" stroke-width="1"/>
+    <text x="410" y="27" text-anchor="middle" font-size="10" fill="#fff">.</text>
+    <!-- d 1byte -->
+    <rect x="419" y="2" width="12" height="40" rx="3" fill="#66bb6a" stroke="#388e3c" stroke-width="1"/>
+    <text x="425" y="27" text-anchor="middle" font-size="10" fill="#fff">d</text>
+    <!-- o 1byte -->
+    <rect x="434" y="2" width="12" height="40" rx="3" fill="#66bb6a" stroke="#388e3c" stroke-width="1"/>
+    <text x="440" y="27" text-anchor="middle" font-size="10" fill="#fff">o</text>
+    <!-- c 1byte -->
+    <rect x="449" y="2" width="12" height="40" rx="3" fill="#66bb6a" stroke="#388e3c" stroke-width="1"/>
+    <text x="455" y="27" text-anchor="middle" font-size="10" fill="#fff">c</text>
+    <!-- x 1byte -->
+    <rect x="464" y="2" width="12" height="40" rx="3" fill="#66bb6a" stroke="#388e3c" stroke-width="1"/>
+    <text x="470" y="27" text-anchor="middle" font-size="10" fill="#fff">x</text>
+    <!-- Total -->
+    <text x="500" y="20" font-size="13" font-weight="bold" fill="#c62828">= 27 バイト</text>
+    <text x="500" y="38" font-size="11" fill="#888">(3×6 + 1×9)</text>
+  </g>
+  <!-- Shift_JIS row -->
+  <g transform="translate(40, 170)">
+    <text x="0" y="20" font-size="13" font-weight="bold" fill="#333">Shift_JIS</text>
+    <text x="0" y="38" font-size="11" fill="#777">(旧来の標準)</text>
+    <!-- 報 2bytes -->
+    <rect x="110" y="2" width="24" height="40" rx="3" fill="#1565c0" stroke="#0d47a1" stroke-width="1"/>
+    <text x="122" y="27" text-anchor="middle" font-size="12" fill="#fff">報</text>
+    <!-- 告 2bytes -->
+    <rect x="137" y="2" width="24" height="40" rx="3" fill="#1565c0" stroke="#0d47a1" stroke-width="1"/>
+    <text x="149" y="27" text-anchor="middle" font-size="12" fill="#fff">告</text>
+    <!-- 書 2bytes -->
+    <rect x="164" y="2" width="24" height="40" rx="3" fill="#1565c0" stroke="#0d47a1" stroke-width="1"/>
+    <text x="176" y="27" text-anchor="middle" font-size="12" fill="#fff">書</text>
+    <!-- _ 1byte -->
+    <rect x="191" y="2" width="12" height="40" rx="3" fill="#66bb6a" stroke="#388e3c" stroke-width="1"/>
+    <text x="197" y="27" text-anchor="middle" font-size="10" fill="#fff">_</text>
+    <!-- 最 2bytes -->
+    <rect x="206" y="2" width="24" height="40" rx="3" fill="#1565c0" stroke="#0d47a1" stroke-width="1"/>
+    <text x="218" y="27" text-anchor="middle" font-size="12" fill="#fff">最</text>
+    <!-- 終 2bytes -->
+    <rect x="233" y="2" width="24" height="40" rx="3" fill="#1565c0" stroke="#0d47a1" stroke-width="1"/>
+    <text x="245" y="27" text-anchor="middle" font-size="12" fill="#fff">終</text>
+    <!-- 版 2bytes -->
+    <rect x="260" y="2" width="24" height="40" rx="3" fill="#1565c0" stroke="#0d47a1" stroke-width="1"/>
+    <text x="272" y="27" text-anchor="middle" font-size="12" fill="#fff">版</text>
+    <!-- _ 1byte -->
+    <rect x="287" y="2" width="12" height="40" rx="3" fill="#66bb6a" stroke="#388e3c" stroke-width="1"/>
+    <text x="293" y="27" text-anchor="middle" font-size="10" fill="#fff">_</text>
+    <!-- v 1byte -->
+    <rect x="302" y="2" width="12" height="40" rx="3" fill="#66bb6a" stroke="#388e3c" stroke-width="1"/>
+    <text x="308" y="27" text-anchor="middle" font-size="10" fill="#fff">v</text>
+    <!-- 2 1byte -->
+    <rect x="317" y="2" width="12" height="40" rx="3" fill="#66bb6a" stroke="#388e3c" stroke-width="1"/>
+    <text x="323" y="27" text-anchor="middle" font-size="10" fill="#fff">2</text>
+    <!-- . 1byte -->
+    <rect x="332" y="2" width="12" height="40" rx="3" fill="#66bb6a" stroke="#388e3c" stroke-width="1"/>
+    <text x="338" y="27" text-anchor="middle" font-size="10" fill="#fff">.</text>
+    <!-- d 1byte -->
+    <rect x="347" y="2" width="12" height="40" rx="3" fill="#66bb6a" stroke="#388e3c" stroke-width="1"/>
+    <text x="353" y="27" text-anchor="middle" font-size="10" fill="#fff">d</text>
+    <!-- o 1byte -->
+    <rect x="362" y="2" width="12" height="40" rx="3" fill="#66bb6a" stroke="#388e3c" stroke-width="1"/>
+    <text x="368" y="27" text-anchor="middle" font-size="10" fill="#fff">o</text>
+    <!-- c 1byte -->
+    <rect x="377" y="2" width="12" height="40" rx="3" fill="#66bb6a" stroke="#388e3c" stroke-width="1"/>
+    <text x="383" y="27" text-anchor="middle" font-size="10" fill="#fff">c</text>
+    <!-- x 1byte -->
+    <rect x="392" y="2" width="12" height="40" rx="3" fill="#66bb6a" stroke="#388e3c" stroke-width="1"/>
+    <text x="398" y="27" text-anchor="middle" font-size="10" fill="#fff">x</text>
+    <!-- Total -->
+    <text x="420" y="20" font-size="13" font-weight="bold" fill="#1565c0">= 21 バイト</text>
+    <text x="420" y="38" font-size="11" fill="#888">(2×6 + 1×9)</text>
+  </g>
+  <!-- Comparison callout -->
+  <g transform="translate(40, 260)">
+    <rect x="70" y="0" width="680" height="55" rx="8" fill="#fff3e0" stroke="#ff9800" stroke-width="2"/>
+    <text x="410" y="22" text-anchor="middle" font-size="13" font-weight="bold" fill="#e65100">同じファイル名 (15 文字) でも、UTF-8 では 27 バイト、Shift_JIS では 21 バイト</text>
+    <text x="410" y="43" text-anchor="middle" font-size="12" fill="#bf360c">日本語 1 文字あたり UTF-8 = 3 バイト、Shift_JIS = 2 バイト → UTF-8 は 1.5 倍のサイズ</text>
+  </g>
+  <!-- Impact on MAX_PATH -->
+  <g transform="translate(40, 335)">
+    <rect x="70" y="0" width="680" height="55" rx="8" fill="#ffebee" stroke="#ef5350" stroke-width="2"/>
+    <text x="410" y="22" text-anchor="middle" font-size="13" font-weight="bold" fill="#c62828">MAX_PATH (260 バイト) に到達する文字数の目安</text>
+    <text x="410" y="43" text-anchor="middle" font-size="12" fill="#c62828">ASCII のみ → 259 文字 / 日本語のみ → 約 86 文字 / 混在 → 日本語 1 文字 ≒ ASCII 3 文字で換算</text>
+  </g>
+</svg>
